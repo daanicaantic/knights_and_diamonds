@@ -1,0 +1,122 @@
+/* .pom
+{
+    
+}
+.card-cotnainer
+{
+    width: 160px;
+    height: 300px;
+    transform: scale(0.7) translate(-9px,-48px);
+} */
+small
+{
+    color: rgb(173, 170, 170);
+}
+p,h2{
+    padding: 0px;
+    margin: 0px;
+}
+.checkboxdiv{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+.form_field6{
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    padding: 12px;
+    color: #495057;
+}
+.formconteiner {
+    display: flex;
+    border: #495057 2px solid;
+    margin-left: 10px;
+    padding: 10px;
+    border-radius: 6px;
+    background-color: rgb(255, 255, 255);
+}
+.card-creator
+{
+    display: flex;
+    margin: 10px;
+    justify-content: center;
+}
+.form{
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+
+
+}
+.form_field
+{
+    display: flex;
+    flex-direction: column;
+}
+.dataField
+{
+    width: 250px;
+}
+.smallDataField
+{
+    width: 100px;
+}
+.file-upload
+{
+    display: none;
+}
+.atkdefspan
+{
+    display: flex;
+    justify-content: space-between;
+}
+.atkdefcontainer
+{
+    display: flex;
+    flex-direction: column;
+}
+.p-dropdown
+{
+    width: inherit;
+}
+.inputfile{
+    cursor: pointer;
+}
+.chosee-file-button{
+    height: 47px;
+    width: 160px;
+    background-color: white;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    padding-left: 8px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size: 1rem;
+    color: #495057;
+    border: 1px solid #ced4da;
+    justify-content: space-between;
+    /* padding-right: 60px; */
+}
+.pom{
+    background-color: #ced4da;
+    border-radius: 5px;
+    padding: 5px;
+    border: 1px solid #495057;
+    
+}
+.text-conteiner{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    word-wrap:break-word;
+    max-width: 300px;
+    min-width: 300px;
+
+    border: #495057 2px solid;
+    margin-left: 10px;
+    padding: 10px;
+    border-radius: 6px;
+    background-color: rgb(255, 255, 255);
+    height: 100%;
+}
+

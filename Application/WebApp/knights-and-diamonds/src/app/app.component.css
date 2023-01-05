@@ -1,0 +1,22 @@
+app-card{
+    margin: 10px;
+}
+.pom{
+    display: flex;
+}
+.pom2
+{
+    width: 130px;
+    height: 200px;
+    font-size:  0.45em;
+}
+.pom1{
+    width: 260px;
+    height: 400px;
+}
+.pom3
+{
+    width: 80px;
+    height: 150px;
+    font-size: 0.3em;
+}

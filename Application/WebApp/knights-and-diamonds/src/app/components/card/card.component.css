@@ -1,0 +1,217 @@
+/* h3{
+    margin: 0px;
+
+}
+.card{
+    width: 100%;
+    height: inherit;
+    width: 230px;
+    height: 400px;
+    background-color: #e28743;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding-left: 5%;
+    padding-right: 5%;
+    border: 2px solid #873e23;
+}
+.card-header
+{
+    align-items: center;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    padding: 1%;
+    border: #873e23 solid 2px;
+    margin: 1%;
+}
+.card-type
+{
+    width: 10%;
+    align-items: center;
+    display: flex;
+    padding-right: 1%;
+}
+.photo-container{
+    width: 85%;
+    height: 50%;
+    border: 2px solid #873e23;
+    margin-bottom: 2%; 
+}
+.card-description-cotainer{
+    width: 100%;
+    height: 100%;
+    min-height: 25px;
+    margin-bottom: 5%;
+    background-color: #eab676;
+    border: 2px solid #873e23;
+    word-break:break-all;
+    overflow: hidden;
+    padding: 1%;
+    line-height: 0.9em;
+    justify-content: space-between;
+    display: flex;
+    flex-direction: column;
+}
+.points-container{
+    width: 100%;
+    height: 20%;
+    border-top: #873e23 2px solid;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position:relative;
+    
+}
+.card-rating
+{
+    display: flex;
+    justify-content: end;
+    width: 100%;
+}
+p,h3{
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    margin: 0vh;
+    overflow: hidden;
+    font-size:initial
+}
+.picture{
+    width: 100%;
+    height: 100%;
+}  */
+p,h3,h4
+{
+    margin: 0px;
+    padding: 0px;
+}
+.card,.monster_card ,.spell_card ,.trap_card{
+    width: 320px;
+    height: 520px;
+    padding: 10px;
+    border: 3px solid black;
+}
+.monster_card
+{
+    background-color: #e28743;
+    box-shadow: 20px 20px 50px 10px #8b5023 inset;
+}
+.trap_card
+{
+    background-color: #9e0b79;
+    box-shadow: 20px 20px 50px 10px #fc00bd inset;
+}
+.spell_card
+{
+    background-color: #60d48d;
+    box-shadow: 20px 20px 50px 10px #379b5d inset;
+}
+.card-header,.trap_header,.spell_header,.monster_header
+{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    height: 50px;
+    padding: 3px;
+    
+    /* background-color: yellow; */
+
+}
+.trap_header
+{
+    box-shadow:3px 3px 2px 2px #4d093c;
+    border: 2px rgb(100, 9, 81) solid;
+}
+.monster_header
+{
+    box-shadow:3px 3px 2px 2px rgb(77, 42, 17);
+
+}
+.spell_header
+{
+  
+    box-shadow:3px 3px 2px 2px  #2c9152;
+}
+.card-name-container
+{
+    width: 250px;
+    height: 50px;
+    margin-right: 10px;
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    /* background-color: red; */
+}
+
+.card-type
+{
+    height: 42px;
+    width: 42px;
+    /* background-color: blue; */
+}
+.card-rating
+{
+    display: flex;
+    justify-content: end;
+    margin: 5px;
+    margin-top: 10px;
+    height: 18px;
+}
+.photo-container,.monster_photo,.spell_photo,.trap_photo{
+    width: 260px;
+    height: 260px;
+}
+.monster_photo,.monster_description,.monster_header
+{
+    border: 2px solid #873e23;
+}
+.spell_photo,.spell_description,.spell_header
+{
+    border: 2px solid #25663e;
+}
+
+.picture{
+    width: 100%;
+    height: 100%;
+} 
+.main-container
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.description{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    word-wrap:break-word;
+}
+.card-description-cotainer,.monster_description,.spell_description,.trap_description
+{
+    width: 100%;
+    height: 150px;
+    margin-top: 5px;
+    padding: 3px;
+    display: flex;
+    flex-direction: column;
+
+}
+.trap_photo,.trap_description,.trap_header
+{
+    border: 2px rgb(100, 9, 81) solid;
+}
+.points-container
+{
+    width: 100%;
+    border-top: 2px solid #873e23;
+    display: flex;
+    justify-content: end;
+}
+.description{
+    flex-grow: 8;
+}
