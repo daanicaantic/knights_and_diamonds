@@ -32,14 +32,11 @@ namespace Entities.Migrations
                     b.Property<string>("CardName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("CardPosition")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("CardType")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Discriminator")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Effect")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImgPath")
@@ -63,7 +60,6 @@ namespace Entities.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("MonsterType")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("NumberOfStars")

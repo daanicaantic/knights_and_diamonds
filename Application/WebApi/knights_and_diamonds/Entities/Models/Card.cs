@@ -8,24 +8,13 @@ using System.Threading.Tasks;
 
 namespace Entities.Models
 {
-	public enum Mode
-	{
-		Attack,
-		Defense
-	}
-	public enum Face
-	{
-		Up,
-		Down
-	}
 	public class Card
 	{
 		[Key]
 		public int ID { get; set; }
 		public string? CardName { get; set; }
-		public string? CardType { get; set; }
-		public bool CardPosition { get; set; }
 		public string? ImgPath { get; set; }
-		public Effect Effect{ get; set; }
+		public string? Effect { get; set; }
+
 	}
 }

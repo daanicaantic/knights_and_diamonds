@@ -1,0 +1,15 @@
+C:\Fax\AIPS\knights_and_diamonds\Application\WebApi\knights_and_diamonds\Contracts\bin\Debug\net6.0\Contracts.deps.json
+C:\Fax\AIPS\knights_and_diamonds\Application\WebApi\knights_and_diamonds\Contracts\bin\Debug\net6.0\Contracts.dll
+C:\Fax\AIPS\knights_and_diamonds\Application\WebApi\knights_and_diamonds\Contracts\bin\Debug\net6.0\Contracts.pdb
+C:\Fax\AIPS\knights_and_diamonds\Application\WebApi\knights_and_diamonds\Contracts\bin\Debug\net6.0\Entities.dll
+C:\Fax\AIPS\knights_and_diamonds\Application\WebApi\knights_and_diamonds\Contracts\bin\Debug\net6.0\Entities.pdb
+C:\Fax\AIPS\knights_and_diamonds\Application\WebApi\knights_and_diamonds\Contracts\obj\Debug\net6.0\Contracts.csproj.AssemblyReference.cache
+C:\Fax\AIPS\knights_and_diamonds\Application\WebApi\knights_and_diamonds\Contracts\obj\Debug\net6.0\Contracts.GeneratedMSBuildEditorConfig.editorconfig
+C:\Fax\AIPS\knights_and_diamonds\Application\WebApi\knights_and_diamonds\Contracts\obj\Debug\net6.0\Contracts.AssemblyInfoInputs.cache
+C:\Fax\AIPS\knights_and_diamonds\Application\WebApi\knights_and_diamonds\Contracts\obj\Debug\net6.0\Contracts.AssemblyInfo.cs
+C:\Fax\AIPS\knights_and_diamonds\Application\WebApi\knights_and_diamonds\Contracts\obj\Debug\net6.0\Contracts.csproj.CoreCompileInputs.cache
+C:\Fax\AIPS\knights_and_diamonds\Application\WebApi\knights_and_diamonds\Contracts\obj\Debug\net6.0\Contracts.csproj.CopyComplete
+C:\Fax\AIPS\knights_and_diamonds\Application\WebApi\knights_and_diamonds\Contracts\obj\Debug\net6.0\Contracts.dll
+C:\Fax\AIPS\knights_and_diamonds\Application\WebApi\knights_and_diamonds\Contracts\obj\Debug\net6.0\refint\Contracts.dll
+C:\Fax\AIPS\knights_and_diamonds\Application\WebApi\knights_and_diamonds\Contracts\obj\Debug\net6.0\Contracts.pdb
+C:\Fax\AIPS\knights_and_diamonds\Application\WebApi\knights_and_diamonds\Contracts\obj\Debug\net6.0\ref\Contracts.dll
