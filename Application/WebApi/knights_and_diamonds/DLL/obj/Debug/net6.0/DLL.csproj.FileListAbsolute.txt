@@ -1,0 +1,14 @@
+C:\Fax\AIPS\knights_and_diamonds\Application\WebApi\knights_and_diamonds\DLL\bin\Debug\net6.0\DLL.deps.json
+C:\Fax\AIPS\knights_and_diamonds\Application\WebApi\knights_and_diamonds\DLL\bin\Debug\net6.0\DLL.runtimeconfig.json
+C:\Fax\AIPS\knights_and_diamonds\Application\WebApi\knights_and_diamonds\DLL\bin\Debug\net6.0\DLL.dll
+C:\Fax\AIPS\knights_and_diamonds\Application\WebApi\knights_and_diamonds\DLL\bin\Debug\net6.0\DLL.pdb
+C:\Fax\AIPS\knights_and_diamonds\Application\WebApi\knights_and_diamonds\DLL\obj\Debug\net6.0\DLL.csproj.AssemblyReference.cache
+C:\Fax\AIPS\knights_and_diamonds\Application\WebApi\knights_and_diamonds\DLL\obj\Debug\net6.0\DLL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Fax\AIPS\knights_and_diamonds\Application\WebApi\knights_and_diamonds\DLL\obj\Debug\net6.0\DLL.AssemblyInfoInputs.cache
+C:\Fax\AIPS\knights_and_diamonds\Application\WebApi\knights_and_diamonds\DLL\obj\Debug\net6.0\DLL.AssemblyInfo.cs
+C:\Fax\AIPS\knights_and_diamonds\Application\WebApi\knights_and_diamonds\DLL\obj\Debug\net6.0\DLL.csproj.CoreCompileInputs.cache
+C:\Fax\AIPS\knights_and_diamonds\Application\WebApi\knights_and_diamonds\DLL\obj\Debug\net6.0\DLL.dll
+C:\Fax\AIPS\knights_and_diamonds\Application\WebApi\knights_and_diamonds\DLL\obj\Debug\net6.0\refint\DLL.dll
+C:\Fax\AIPS\knights_and_diamonds\Application\WebApi\knights_and_diamonds\DLL\obj\Debug\net6.0\DLL.pdb
+C:\Fax\AIPS\knights_and_diamonds\Application\WebApi\knights_and_diamonds\DLL\obj\Debug\net6.0\DLL.genruntimeconfig.cache
+C:\Fax\AIPS\knights_and_diamonds\Application\WebApi\knights_and_diamonds\DLL\obj\Debug\net6.0\ref\DLL.dll

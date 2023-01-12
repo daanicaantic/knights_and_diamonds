@@ -1,4 +1,9 @@
-using Entities.Models;
+using DAL.DataContext;
+using DAL.Repositories;
+using DAL.Repositories.Contracts;
+using BLL.Services.Contracts;
+using BLL.Services;
+
 using Microsoft.EntityFrameworkCore;
 
 
@@ -14,6 +19,9 @@ builder.Services.AddSwaggerGen();
 
 //connectig your database
 builder.Services.AddDbContext<KnightsAndDiamondsContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("Konekcija")));
+builder.Services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+
+builder.Services.AddScoped(typeof(ICardService),typeof(CardService));
 
 var app = builder.Build();
 

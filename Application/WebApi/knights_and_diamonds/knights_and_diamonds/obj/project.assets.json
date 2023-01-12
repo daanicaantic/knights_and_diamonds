@@ -870,7 +870,20 @@
           }
         }
       },
-      "Entities/1.0.0": {
+      "BLL/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "dependencies": {
+          "DAL": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/BLL.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/BLL.dll": {}
+        }
+      },
+      "DAL/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
         "dependencies": {
@@ -878,10 +891,10 @@
           "Microsoft.EntityFrameworkCore.SqlServer": "6.0.12"
         },
         "compile": {
-          "bin/placeholder/Entities.dll": {}
+          "bin/placeholder/DAL.dll": {}
         },
         "runtime": {
-          "bin/placeholder/Entities.dll": {}
+          "bin/placeholder/DAL.dll": {}
         }
       }
     }
@@ -2230,15 +2243,20 @@
         "version.txt"
       ]
     },
-    "Entities/1.0.0": {
+    "BLL/1.0.0": {
       "type": "project",
-      "path": "../Entities/Entities.csproj",
-      "msbuildProject": "../Entities/Entities.csproj"
+      "path": "../BLL/BLL.csproj",
+      "msbuildProject": "../BLL/BLL.csproj"
+    },
+    "DAL/1.0.0": {
+      "type": "project",
+      "path": "../DLL/DAL.csproj",
+      "msbuildProject": "../DLL/DAL.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net6.0": [
-      "Entities >= 1.0.0",
+      "BLL >= 1.0.0",
       "Microsoft.EntityFrameworkCore >= 6.0.12",
       "Microsoft.EntityFrameworkCore.Design >= 6.0.12",
       "Microsoft.EntityFrameworkCore.SqlServer >= 6.0.12",
@@ -2273,8 +2291,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\Fax\\AIPS\\knights_and_diamonds\\Application\\WebApi\\knights_and_diamonds\\Entities\\Entities.csproj": {
-              "projectPath": "C:\\Fax\\AIPS\\knights_and_diamonds\\Application\\WebApi\\knights_and_diamonds\\Entities\\Entities.csproj"
+            "C:\\Fax\\AIPS\\knights_and_diamonds\\Application\\WebApi\\knights_and_diamonds\\BLL\\BLL.csproj": {
+              "projectPath": "C:\\Fax\\AIPS\\knights_and_diamonds\\Application\\WebApi\\knights_and_diamonds\\BLL\\BLL.csproj"
             }
           }
         }

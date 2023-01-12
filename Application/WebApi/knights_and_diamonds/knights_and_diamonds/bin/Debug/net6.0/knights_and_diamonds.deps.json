@@ -8,7 +8,7 @@
     ".NETCoreApp,Version=v6.0": {
       "knights_and_diamonds/1.0.0": {
         "dependencies": {
-          "Entities": "1.0.0",
+          "BLL": "1.0.0",
           "Microsoft.EntityFrameworkCore": "6.0.12",
           "Microsoft.EntityFrameworkCore.Design": "6.0.12",
           "Microsoft.EntityFrameworkCore.SqlServer": "6.0.12",
@@ -489,13 +489,21 @@
           }
         }
       },
-      "Entities/1.0.0": {
+      "BLL/1.0.0": {
+        "dependencies": {
+          "DAL": "1.0.0"
+        },
+        "runtime": {
+          "BLL.dll": {}
+        }
+      },
+      "DAL/1.0.0": {
         "dependencies": {
           "Microsoft.EntityFrameworkCore": "6.0.12",
           "Microsoft.EntityFrameworkCore.SqlServer": "6.0.12"
         },
         "runtime": {
-          "Entities.dll": {}
+          "DAL.dll": {}
         }
       }
     }
@@ -849,7 +857,12 @@
       "path": "system.windows.extensions/4.7.0",
       "hashPath": "system.windows.extensions.4.7.0.nupkg.sha512"
     },
-    "Entities/1.0.0": {
+    "BLL/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "DAL/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
