@@ -1,64 +1,63 @@
 
 <div class="card-creator" >
-    <div class="card-cotnainer">
+    <div class="card-container">
         <app-card></app-card>
     </div>
-    <div class="formconteiner">
-    <div class="form"[formGroup]="form">
-        <span class="form_field">
-            <small>Card Name</small>
-            <input class="dataField"formControlName="card_name" placeholder='Card Name' type="text" pInputText (input)="onSearchChange()"  />
-        </span>
-        <span class="form_field">
-            <small>Card Type</small>
-            <p-dropdown class="dataField" formControlName="ddCardType" [options]="cardType"  optionLabel="name" (onChange)="onChange()" [style]="{'minWidth':'100%'}"></p-dropdown>
-        </span>
-        <span class="form_field">
-            <small>Card Description</small>
-            <input class="dataField"formControlName="card_description" placeholder='Card Description' type="text" pInputText (input)="onSearchChange()"  />
-        </span>
-
-        <span class="form_field form_field3">
-            <small>Card Photo</small>
-            <label class="inputfile">
-                <div class="chosee-file-button">
-                    <p class="pom">Choose File</p>
-                    <i class="pi pi-paperclip" style="font-size: 2rem; color : #ced4da"></i>
-                </div>
-                <input type="file" class="file-upload" (change)="onFileSelected($event)">
-            </label>
-        </span>
-        
-    </div>
-    <div class="form"[formGroup]="form"  *ngIf="card.card_type=='MonsterCard'">
- 
-        <span class="form_field">
-            <small>Card Element</small>
-            <p-dropdown class="dataField" formControlName="ddElementType" [options]="elementType"  optionLabel="name" (onChange)="onChangeElement()" [style]="{'minWidth':'100%'}"></p-dropdown>
-        </span>
-        <span class="form_field">
-            <small>Card Level</small>
-            <input class="dataField"  formControlName="number_of_stars" placeholder="Card Level" type="number" pInputText (input)="onSearchChangeLevel()"  />
-        </span>
-        <span class="form_field">
-            <small>Monster Type</small>
-            <p-dropdown class="dataField" formControlName="ddMonsterType" [options]="monsterType"  optionLabel="name" (onChange)="onChangeMonsterType()" [style]="{'minWidth':'100%'}"></p-dropdown>
-        </span>
-        <span class="atkdefspan">
-            <div class="atkdefcontainer" >
-                <small>ATK</small>
-                <input class="smallDataField"formControlName="card_description" placeholder='Attack' type="text" pInputText (input)="onSearchChange()"  />
+    <div class="form-layout">
+        <div class="form-container">
+            <div class="form card-view" [formGroup]="form">
+                <span class="form_field">
+                    <small>Card Name</small>
+                    <input class="dataField" formControlName="cardName" placeholder='Card Name' type="text" pInputText (input)="onSearchChange()"  />
+                </span>
+                <span class="form_field">
+                    <small>Card Type</small>
+                    <p-dropdown class="dataField" formControlName="cardType" [options]="cardType" optionValue="code" optionLabel="name" (onChange)="onChange()" [style]="{'minWidth':'100%'}"></p-dropdown>
+                </span>
+                <span class="form_field">
+                    <small>Card Description</small>
+                    <input class="dataField" formControlName="effect" placeholder='Card Description' type="text" pInputText (input)="onSearchChange()"  />
+                </span>
+                <span class="form_field form_field3">
+                    <small>Card Photo</small>
+                    <label class="inputfile">
+                        <div class="choose-file-button">
+                            <p class="pom">Choose File</p>
+                            <i class="pi pi-paperclip" style="font-size: 2rem; color : #ced4da"></i>
+                        </div>
+                        <input type="file" class="file-upload" (change)="onFileSelected($event)">
+                    </label>
+                </span>
             </div>
-            <div class="atkdefcontainer">
-                <small>DEF</small>
-                <input class="smallDataField"formControlName="card_description" placeholder='Defence' type="text" pInputText (input)="onSearchChange()"  />
+            <div class="form" [formGroup]="form" *ngIf="card.cardType=='MonsterCard'">
+                <span class="form_field">
+                    <small>Card Element</small>
+                    <p-dropdown class="dataField" formControlName="elementType" [options]="elementType" optionValue="code" optionLabel="name" (onChange)="onChangeElement()" [style]="{'minWidth':'100%'}"></p-dropdown>
+                </span>
+                <span class="form_field">
+                    <small>Card Level</small>
+                    <input class="dataField" formControlName="numberOfStars" placeholder="Card Level" type="number" [min]="0" [max]="11" [maxlength]="2" pInputText (input)="onSearchChangeLevel()"  />
+                </span>
+                <span class="form_field">
+                    <small>Monster Type</small>
+                    <p-dropdown class="dataField" formControlName="monsterType" [options]="monsterType" optionValue="code" optionLabel="name" (onChange)="onChangeMonsterType()" [style]="{'minWidth':'100%'}"></p-dropdown>
+                </span>
+                <span class="atkdefspan">
+                    <div class="atkdefcontainer" >
+                        <small>ATK</small>
+                        <input class="smallDataField" formControlName="attackPoints" placeholder='Attack' type="number" [min]="0" [max]="9999" [maxlength]="4" pInputText (input)="onAttackChange()"  />
+                    </div>
+                    <div class="atkdefcontainer">
+                        <small>DEF</small>
+                        <input class="smallDataField" formControlName="defencePoints" placeholder='Defence' type="number" [min]="0" [max]="9999" [maxlength]="4" pInputText (input)="onDefenceChange()"  />
+                    </div>
+                </span>
             </div>
-        </span>
+        </div>
+        <div>
+            <span class="buttonspan">
+                <button pButton label="Click" class="p-button-secondary" [disabled]="!form.valid" (click)="handleClick()"></button>
+            </span>
+        </div>
     </div>
 </div>
-<div>
-    <h2 class="text-conteiner">{{card.card_description}}</h2>
-</div>
-</div>
-
-

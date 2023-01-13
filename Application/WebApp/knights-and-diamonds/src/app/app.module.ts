@@ -13,6 +13,11 @@ import {FileUploadModule} from 'primeng/fileupload';
 import {DropdownModule} from 'primeng/dropdown';
 import {RatingModule} from 'primeng/rating';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {ToastModule} from 'primeng/toast';
+import {ConfirmDialogModule} from 'primeng/confirmdialog';
+import {MessagesModule} from 'primeng/messages';
+import {MessageModule} from 'primeng/message';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @NgModule({
   declarations: [
@@ -20,8 +25,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     CardComponent,
     DeckComponent,
     CardCreateComponent,
-    
-
   ],
   imports: [
     BrowserModule,
@@ -34,9 +37,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     FileUploadModule,
     DropdownModule,
     RatingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ToastModule,
+    ConfirmDialogModule,
+    MessagesModule,
+    MessageModule
   ],
-  providers: [],
+  providers: [MessageService, ConfirmationService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

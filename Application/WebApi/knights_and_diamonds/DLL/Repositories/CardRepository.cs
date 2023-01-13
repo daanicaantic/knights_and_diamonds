@@ -9,14 +9,13 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
-	public class CardRepository : Repository<Card>,ICardRepository
+	public class CardRepository : Repository<Card>, ICardRepository
 	{
 		
 		public CardRepository(KnightsAndDiamondsContext context) : base(context)
 		{
 			
 		}
-
 		public IEnumerable<Card> GetCardsPerPage(int pageIndex, int pageSize)
 		{
 			return Context.Cards

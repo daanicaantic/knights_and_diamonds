@@ -26,7 +26,6 @@ namespace DAL.Repositories
 		{
 			return _context.Set<T>().ToList();
 		}
-
 		public IEnumerable<T> Find(Expression<Func<T, bool>> predicate)
 		{
 			return _context.Set<T>().Where(predicate);
@@ -44,7 +43,5 @@ namespace DAL.Repositories
 		{
 			this._context.Set<T>().Update(obj);
 		}
-
-	
 	}
 }

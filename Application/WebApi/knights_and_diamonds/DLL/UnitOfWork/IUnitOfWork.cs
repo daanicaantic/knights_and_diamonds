@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 
 namespace DAL.UnitOfWork
 {
-	public interface IUnitOfWork:IDisposable
+	public interface IUnitOfWork : IDisposable
 	{
 		ICardRepository Card { get; }
+		IDeckRepository Deck { get; }
+
 		int Complete();
 	}
 }

@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories.Contracts
 {
-	public interface ICardRepository : IRepository<Card>
-	{
-		IEnumerable<Card> GetCardsPerPage(int pageIndex,int pageSize);
-	}
+    public interface IDeckRepository : IRepository<Deck>
+    {
+        void AddCardToDeck(Card card, Deck deck);
+    }
 }
