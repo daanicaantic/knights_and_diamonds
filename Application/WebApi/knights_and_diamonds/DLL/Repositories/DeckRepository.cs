@@ -14,6 +14,7 @@ namespace DAL.Repositories
     {
         public DeckRepository(KnightsAndDiamondsContext context) : base(context)
         {
+
         }
         public void AddCardToDeck(Card card, Deck d)
         {

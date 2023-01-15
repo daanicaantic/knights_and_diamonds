@@ -14,8 +14,8 @@ namespace DAL.Repositories
     {
         public UserRepository(KnightsAndDiamondsContext context) : base(context)
         {
-        }
 
+        }
         public KnightsAndDiamondsContext Context
         {
             get { return Context as KnightsAndDiamondsContext; }

@@ -26,7 +26,7 @@ namespace DAL.Models
 		{
 
 		}
-		public User(string name,string surname,string email,string password,string username,string role)
+		public User(string name, string surname, string email, string password, string username, string role)
 		{
 			this.Name = name;
 			this.SurName = surname;

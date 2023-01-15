@@ -25,7 +25,7 @@ namespace BLL.Services
         {
             try
             {
-                var user = new User(u.Name,u.SurName,u.Email,u.Password,u.UserName,u.Role);
+                var user = new User(u.Name, u.SurName, u.Email, u.Password, u.UserName, u.Role);
                 
                 this.unitOfWork.User.Add(user);
                 this.unitOfWork.Complete();

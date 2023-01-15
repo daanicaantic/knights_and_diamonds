@@ -10,7 +10,6 @@ namespace DAL.Models
 	public class Deck
 	{
 		public int ID { get; set; }
-		
 		public List<Card>? ListOfCards { get; set; }
         public Deck()
         {
