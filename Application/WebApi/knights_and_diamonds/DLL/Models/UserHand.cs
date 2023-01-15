@@ -9,8 +9,8 @@ namespace DAL.Models
 	public class UserHand
 	{
 		public int ID { get; set; }
-		public User User { get; set; }
-		public Deck Deck { get; set; }
-		public List<Card> Cards { get; set; }
+		public User? User { get; set; }
+		public Deck? Deck { get; set; }
+		public List<Card>? Cards { get; set; }
 	}
 }

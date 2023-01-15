@@ -7,7 +7,7 @@ export const cardType: CardType[] = [
     },
     {
         name: "Trap Card",
-        code: "TrapCard",
+        code: 'TrapCard',
     },
     {
         name: "Spell Card",

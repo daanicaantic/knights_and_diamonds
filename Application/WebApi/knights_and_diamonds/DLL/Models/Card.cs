@@ -21,11 +21,11 @@ namespace DAL.Models
 		public string? CardName { get; set; }
 		public string? ImgPath { get; set; }
 		public string? Effect { get; set; }
-		public int NumberOfStars { get; set; }
-		public int AttackPoints { get; set; }
-		public int DefencePoints { get; set; }
+		public int? NumberOfStars { get; set; }
+		public int? AttackPoints { get; set; }
+		public int? DefencePoints { get; set; }
 		public string? MonsterType { get; set; }
-		public string? cardtype { get; set; }
-
-	}
+		public string? CardType { get; set; }
+        public string? ElementType { get; set; }
+    }
 }

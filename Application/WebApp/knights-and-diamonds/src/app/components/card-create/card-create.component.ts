@@ -3,10 +3,12 @@ import { card } from 'src/classes/card-data';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Card } from 'src/classes/card';
+import { CardType } from 'src/classes/card-type';
 import { cardType } from 'src/classes/card-types-data';
 import { elementType } from 'src/classes/element-type-datas';
 import { monserType } from 'src/classes/monster-type-data';
-
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { Message } from 'primeng//api';
 
 @Component({
   selector: 'app-card-create',
@@ -15,71 +17,107 @@ import { monserType } from 'src/classes/monster-type-data';
 })
 export class CardCreateComponent implements OnInit {
   card=card;
-  form!: FormGroup;
+  form!:FormGroup;
   cardType=cardType;
   elementType=elementType;
   monsterType=monserType;
+  isDisabled=false;
+
   constructor(private fb: FormBuilder, 
-    private httpClient:HttpClient) 
+    private httpClient:HttpClient,
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService) 
     { 
 
     }
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      card_name:'',
-      number_of_stars:'',
-      ddCardType:"",
-      ddElementType:"",
-      ddMonsterType:"",
-      card_description:"",
-
+      cardName: '',
+      cardType: "MonsterCard",
+      effect: "",
+      elementType: "",
+      numberOfStars: ['', [Validators.min(0), Validators.max(11), Validators.maxLength(2)]],
+      monsterType: "Dragon",
+      attackPoints: ['', [Validators.min(0), Validators.max(9999), Validators.maxLength(4)]],
+      defencePoints: ['', [Validators.min(0), Validators.max(9999), Validators.maxLength(4)]]
     })
-    this.form.value['ddElementType'].name;
+    this.form.value['elementType'].name;
   }
-  onSearchChange(): void {  
-    this.card.card_name=this.form.value['card_name'];
-    this.card.card_description=this.form.value['card_description'];
 
-    console.log(this.form.value['number_of_stars'])    
+  onSearchChange(): void {  
+    this.card.cardName=this.form.value['cardName'];
+    this.card.effect=this.form.value['effect']; 
   }
   onSearchChangeLevel()
   {
-    this.card.number_of_stars=this.form.value['number_of_stars'];
+    this.card.numberOfStars=this.form.value['numberOfStars'];
   }
   onFileSelected(event:any) {
     const file:File = event.target.files[0];
     const pom=file.name
-    this.card.card_photo="../../../assets/"+pom;
+    this.card.imgPath="../../../assets/"+pom;
   }
   onChange()
   {
-    this.card.card_type=this.form.value['ddCardType'].code;
-    elementTypePom:this.card.element_type
-    if(this.form.value['ddCardType'].code=="TrapCard")
+    console.log(this.card.cardType)
+
+    this.card.cardType=this.form.value['cardType'];
+    elementTypePom:this.card.elementType
+    if(this.form.value['cardType']=="TrapCard")
     {
-      this.card.element_type="../../../assets/Trap.png";
+      this.card.elementType="../../../assets/Trap.png";
     }
-    if(this.form.value['ddCardType'].code=="SpellCard")
+    if(this.form.value['cardType']=="SpellCard")
     {
-      this.card.element_type="../../../assets/Spell.png";
+      this.card.elementType="../../../assets/Spell.png";
     }
-    if(this.form.value['ddCardType'].code=="MonsterCard")
+    if(this.form.value['cardType'].code=="MonsterCard")
     {
-      this.card.element_type=this.form.value['ddElementType'].code;
-      if(this.form.value['ddElementType'].code==undefined)
+      this.card.elementType=this.form.value['elementType'].code;
+      if(this.form.value['elementType'].code==undefined)
       {
-        this.card.element_type="../../../assets/fire.png"
+        this.card.elementType="../../../assets/fire.png"
       }
     }
-    this.card.number_of_stars=11
+    this.card.numberOfStars=11
   }
   onChangeElement()
   {
-    this.card.element_type=this.form.value['ddElementType'].code
+    console.log(this.card.elementType)
+    this.card.elementType=this.form.value['elementType']
+
   }
   onChangeMonsterType()
   {
-    this.card.monster_type=this.form.value['ddMonsterType'].code
+    this.card.monsterType=this.form.value['monsterType'].code
+  }
+  onAttackChange()
+  {
+    this.card.attackPoints=this.form.value['attackPoints']
+  }
+  onDefenceChange()
+  {
+    this.card.defencePoints=this.form.value['defencePoints']
+  }
+  handleClick()
+  {
+    console.log("ovde")
+    console.log(this.form.getRawValue())
+    this.httpClient.post("https://localhost:7250/Card/AddCard",this.form.getRawValue()).subscribe({
+      next: res=>{
+      this.messageService.add({key: 'br', severity:'success', summary: 'Uspešno', detail: 'Dodali ste kartu!'});
+      },
+      error: err=>{
+      this.messageService.add({key: 'br', severity:'error', summary: 'Neuspešno', detail: 'Pokušajte ponovo, došlo je do greške!'});
+      }
+    });
+    
+    // this.confirmationService.confirm({
+    //   message: 'Da li ste sigurni da želite da izvršite ovu radnju?',
+    //   accept: () => {
+       
+    //   }
+    // });
   }
 }

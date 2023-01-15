@@ -1,52 +1,51 @@
-/* .pom
+.card-container
 {
-    
-}
-.card-cotnainer
-{
-    width: 160px;
+    /* width: 160px;
     height: 300px;
-    transform: scale(0.7) translate(-9px,-48px);
-} */
+    transform: scale(0.7) translate(-9px,-48px); */
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 1rem;
+}
 small
 {
     color: rgb(173, 170, 170);
 }
-p,h2{
+p,h2
+{
     padding: 0px;
     margin: 0px;
 }
-.checkboxdiv{
+.checkboxdiv
+{
     display: flex;
     justify-content: start;
     align-items: center;
 }
-.form_field6{
+.form_field6
+{
     border: 1px solid #ced4da;
     border-radius: 6px;
     padding: 12px;
     color: #495057;
 }
-.formconteiner {
+.form-container
+{
     display: flex;
-    border: #495057 2px solid;
-    margin-left: 10px;
-    padding: 10px;
-    border-radius: 6px;
-    background-color: rgb(255, 255, 255);
+    flex-wrap: wrap;
 }
 .card-creator
 {
     display: flex;
+    flex-wrap: wrap;
     margin: 10px;
     justify-content: center;
 }
-.form{
+.form
+{
     display: flex;
     flex-direction: column;
     margin: 10px;
-
-
 }
 .form_field
 {
@@ -79,10 +78,12 @@ p,h2{
 {
     width: inherit;
 }
-.inputfile{
+.inputfile
+{
     cursor: pointer;
 }
-.chosee-file-button{
+.choose-file-button
+{
     height: 47px;
     width: 160px;
     background-color: white;
@@ -96,22 +97,21 @@ p,h2{
     color: #495057;
     border: 1px solid #ced4da;
     justify-content: space-between;
-    /* padding-right: 60px; */
 }
-.pom{
+.pom
+{
     background-color: #ced4da;
     border-radius: 5px;
     padding: 5px;
     border: 1px solid #495057;
-    
 }
-.text-conteiner{
+.text-conteiner
+{
     text-overflow: ellipsis;
     overflow: hidden;
     word-wrap:break-word;
     max-width: 300px;
     min-width: 300px;
-
     border: #495057 2px solid;
     margin-left: 10px;
     padding: 10px;
@@ -119,4 +119,33 @@ p,h2{
     background-color: rgb(255, 255, 255);
     height: 100%;
 }
+.buttonspan
+{
+    display: flex;
+    justify-content: flex-start;
+    margin-left: 10px;
+}
+.card-view
+{
+    display: flex;
+}
+.form-layout
+{
+    display: flex;
+    flex-direction: column;
+    border: #495057 2px solid;
+    margin-left: 10px;
+    padding: 10px;
+    border-radius: 6px;
+    background-color: rgb(255, 255, 255);
+    margin-bottom: 1rem;
+}
 
+@media (max-width: 625px) {
+    .form-container{
+      width: 320px;
+    }
+    .form-layout{
+        margin-left: 0px;
+    }
+}

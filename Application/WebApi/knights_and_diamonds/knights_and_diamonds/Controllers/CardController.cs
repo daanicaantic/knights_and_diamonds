@@ -14,7 +14,8 @@ namespace knights_and_diamonds.Controllers
 	{
 		/*
 				private readonly KnightsAndDiamondsContext context;
-				public UnitOfWork unitOfWork { get; set; }*/
+				public UnitOfWork unitOfWork { get; set; }
+		*/
 		private readonly KnightsAndDiamondsContext context;
 		public ICardService _cardService { get; set; }
 		public CardController(KnightsAndDiamondsContext context)
@@ -23,9 +24,9 @@ namespace knights_and_diamonds.Controllers
 			_cardService = new CardService(this.context);
 		}
 
-		[Route("AddMonsterCard")]
+		[Route("AddCard")]
 		[HttpPost]
-		public async Task<IActionResult> AddMonsterCard([FromBody] Card card)
+		public async Task<IActionResult> AddCard([FromBody] Card card)
 		{
 			try
 			{

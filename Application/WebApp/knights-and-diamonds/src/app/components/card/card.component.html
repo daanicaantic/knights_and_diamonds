@@ -1,31 +1,31 @@
 
-    <div [class.monster_card]="card.card_type=='MonsterCard'" [class.trap_card]="card.card_type=='TrapCard'" [class.spell_card]="card.card_type=='SpellCard'">
-        <div [class.monster_header]="card.card_type=='MonsterCard'" [class.trap_header]="card.card_type=='TrapCard'" [class.spell_header]="card.card_type=='SpellCard'">
+    <div [class.monster_card]="card.cardType=='MonsterCard'" [class.trap_card]="card.cardType=='TrapCard'" [class.spell_card]="card.cardType=='SpellCard'">
+        <div [class.monster_header]="card.cardType=='MonsterCard'" [class.trap_header]="card.cardType=='TrapCard'" [class.spell_header]="card.cardType=='SpellCard'">
             <div class="card-name-container">
-                <h3>{{card.card_name}}</h3>
+                <h3>{{card.cardName}}</h3>
             </div>
             <div class="card-type">
-                <img src="{{card.element_type}}" alt="" class="picture">
+                <img src="{{card.elementType}}" alt="" class="picture">
             </div>
         </div>
         <div class="card-rating">
-            <h4 *ngIf="card.card_type=='TrapCard'">[Trap Card]</h4>
-            <h4 *ngIf="card.card_type=='SpellCard'">[Spell Card]</h4>
-            <p-rating *ngIf="card.card_type=='MonsterCard'" [(ngModel)]=card.number_of_stars [stars]=card.number_of_stars [readonly]="true" [iconOffStyle]="{'display':'none'}" [iconOnStyle]="{'color':'#DEE239','cursor':'auto'}" [cancel]="false"></p-rating>
+            <h4 *ngIf="card.cardType=='TrapCard'">[Trap Card]</h4>
+            <h4 *ngIf="card.cardType=='SpellCard'">[Spell Card]</h4>
+            <p-rating *ngIf="card.cardType=='MonsterCard'" [(ngModel)]=card.numberOfStars [stars]=card.numberOfStars [readonly]="true" [iconOffStyle]="{'display':'none'}" [iconOnStyle]="{'color':'#DEE239','cursor':'auto'}" [cancel]="false"></p-rating>
         </div>
         <div class="main-container">
-            <div [class.monster_photo]="card.card_type=='MonsterCard'" [class.trap_photo]="card.card_type=='TrapCard'" [class.spell_photo]="card.card_type=='SpellCard'">
-                <img src={{card.card_photo}} alt="Girl in a jacket" class="picture">
+            <div [class.monster_photo]="card.cardType=='MonsterCard'" [class.trap_photo]="card.cardType=='TrapCard'" [class.spell_photo]="card.cardType=='SpellCard'">
+                <img src={{card.imgPath}} alt="Name name name" class="picture">
             </div>
              
-            <div  [class.monster_description]="card.card_type=='MonsterCard'" [class.trap_description]="card.card_type=='TrapCard'" [class.spell_description]="card.card_type=='SpellCard'">
+            <div  [class.monster_description]="card.cardType=='MonsterCard'" [class.trap_description]="card.cardType=='TrapCard'" [class.spell_description]="card.cardType=='SpellCard'">
                 <div class="description">
-                    <p *ngIf="card.card_type=='MonsterCard'">[{{card.monster_type}} / Effect]</p>
-                    <p class="p">{{card.card_description}}</p>
+                    <p *ngIf="card.cardType=='MonsterCard'">[{{card.monsterType}} / Effect]</p>
+                    <p class="p">{{card.effect}}</p>
                 </div>
-                <div *ngIf="card.card_type=='MonsterCard'" class="points-container">
-                    <p>ATK/3000 &nbsp;</p>
-                    <p>DEF/3000</p>
+                <div *ngIf="card.cardType=='MonsterCard'" class="points-container">
+                    <p>ATK/{{card.attackPoints}} &nbsp;</p>
+                    <p>DEF/{{card.defencePoints}}</p>
                 </div>
             </div>
         </div>  
