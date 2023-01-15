@@ -22,6 +22,7 @@ namespace knights_and_diamonds.Controllers
             this.context = context;
             _deckService = new DeckService(this.context);
         }
+
         [Route("AddDeck")]
         [HttpPost]
         public async Task<IActionResult> AddDeck([FromBody] Deck deck)
@@ -36,7 +37,6 @@ namespace knights_and_diamonds.Controllers
                 return BadRequest(e);
             }
         }
-
         [Route("AddCardToDeck")]
         [HttpPut]
         public async Task<IActionResult> AddCardToDeck(int cardID,int deckID)

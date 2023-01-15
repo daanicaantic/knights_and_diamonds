@@ -18,11 +18,14 @@ namespace DAL.UnitOfWork
 			_context = context;
 			Card = new CardRepository(_context);
             Deck = new DeckRepository(_context);
+			User = new UserRepository(_context);
         }
 
 		public ICardRepository Card { get; private set; }
 
         public IDeckRepository Deck { get; private set; }
+
+		public IUserRepository User { get; private set; }
 
         public int Complete()
 		{

@@ -1,5 +1,6 @@
 ﻿using BLL.Services.Contracts;
 using DAL.DataContext;
+using DAL.DTOs;
 using DAL.Models;
 using DAL.UnitOfWork;
 using System;
@@ -7,23 +8,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace BLL.Services
 {
-    public class DeckService : IDeckService
+    public class UserService : IUserService
     {
         private readonly KnightsAndDiamondsContext _context;
         public UnitOfWork unitOfWork { get; set; }
-        public DeckService(KnightsAndDiamondsContext context)
+        public UserService(KnightsAndDiamondsContext context)
         {
             this._context = context;
             unitOfWork = new UnitOfWork(_context);
         }
-        public void AddDeck(Deck deck)
+        public void AddUser(UserDTO u)
         {
             try
             {
-                this.unitOfWork.Deck.Add(deck);
+                var user = new User(u.Name,u.SurName,u.Email,u.Password,u.UserName,u.Role);
+                
+                this.unitOfWork.User.Add(user);
                 this.unitOfWork.Complete();
             }
             catch
@@ -31,27 +35,16 @@ namespace BLL.Services
                 throw;
             }
         }
-        public void AddCardToDeck(int cardID, int deckID)
+        public User GetUserByID(int id)
         {
-            Card c = this.unitOfWork.Card.GetOne(cardID);
-            Deck d = this.unitOfWork.Deck.GetOne(deckID);
-            this.unitOfWork.Deck.AddCardToDeck(c, d);
-         
-            this.unitOfWork.Complete();
+            return(this.unitOfWork.User.GetOne(id));
         }
 
-        public List<Card> GetDeck(int id)
+        public IEnumerable<User> GetUser(string email, string password)
         {
             try
             {
-                Deck d = this.unitOfWork.Deck.GetOne(id);
-
-                List<Card> cards = new List<Card>();
-                foreach (Card c in d.ListOfCards)
-                {
-                    cards.Add(c);
-                }
-                return cards;
+                return this.unitOfWork.User.Find(x => x.Email == email && x.Password == password);
             }
             catch
             {

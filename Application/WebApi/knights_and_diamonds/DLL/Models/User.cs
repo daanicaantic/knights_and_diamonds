@@ -21,5 +21,19 @@ namespace DAL.Models
 		public string? UserName { get; set; }
 		public string? Role { get; set; }
 		public List<Deck>? Decks { get; set; }
+
+		public User()
+		{
+
+		}
+		public User(string name,string surname,string email,string password,string username,string role)
+		{
+			this.Name = name;
+			this.SurName = surname;
+			this.Email = email;
+			this.Password = password;
+			this.UserName = username;
+			this.Role = role;
+		}
 	}
 }

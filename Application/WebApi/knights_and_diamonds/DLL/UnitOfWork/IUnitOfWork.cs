@@ -11,6 +11,7 @@ namespace DAL.UnitOfWork
 	{
 		ICardRepository Card { get; }
 		IDeckRepository Deck { get; }
+		IUserRepository User { get; }
 
 		int Complete();
 	}
