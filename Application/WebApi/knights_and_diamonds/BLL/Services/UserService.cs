@@ -35,7 +35,7 @@ namespace BLL.Services
                 throw;
             }
         }
-        public User GetUserByID(int id)
+        public User GetUser(int id)
         {
             return(this.unitOfWork.User.GetOne(id));
         }

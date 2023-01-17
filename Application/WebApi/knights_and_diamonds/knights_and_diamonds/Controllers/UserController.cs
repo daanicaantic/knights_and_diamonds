@@ -2,9 +2,11 @@
 using BLL.Services;
 using DAL.DataContext;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Cors;
 using System.IdentityModel.Tokens.Jwt;
 using DAL.Models;
 using DAL.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace knights_and_diamonds.Controllers
 {
@@ -39,6 +41,7 @@ namespace knights_and_diamonds.Controllers
             }
         }
 
+        [AllowAnonymous]
         [Route("GetUser")]
         [HttpGet]
         public async Task<IActionResult> GetUser(int id)
@@ -47,7 +50,7 @@ namespace knights_and_diamonds.Controllers
             {
                 if (id > 0)
                 {
-                    return new JsonResult(this._userService.GetUserByID(id));
+                    return new JsonResult(this._userService.GetUser(id));
                 }
                 else
                 {

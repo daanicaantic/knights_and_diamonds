@@ -4,7 +4,7 @@ import * as signalR from '@aspnet/signalr';
 @Injectable({
   providedIn: 'root'
 })
-export class SignalrServiceService {
+export class SignalrService {
 
   constructor() { }
 
@@ -23,15 +23,14 @@ export class SignalrServiceService {
       .then(() => {
           console.log('Hub Connection Started!');
       })
-      .catch(err => console.log('Error while starting connection: ' + err))
+      .catch(err => console.log('Error while starting connection: ' + err));
   }
-
 
   askServer() {
       this.hubConnection.invoke("askServer", "hy")
           .catch(err => console.error(err));
   }
-  
+
   askServerListener() {
       this.hubConnection.on("askServerResponse", (someText) => {
           console.log(someText);
