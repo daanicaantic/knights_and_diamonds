@@ -19,15 +19,19 @@ namespace DAL.UnitOfWork
 			Card = new CardRepository(_context);
             Deck = new DeckRepository(_context);
 			User = new UserRepository(_context);
-        }
+			CardInDeck = new CardInDeckRepository(_context);
+
+		}
 
 		public ICardRepository Card { get; private set; }
 
         public IDeckRepository Deck { get; private set; }
 
 		public IUserRepository User { get; private set; }
+		public ICardInDeckRepository CardInDeck { get; private set; }
 
-        public int Complete()
+
+		public int Complete()
 		{
 			return _context.SaveChanges();
 		}

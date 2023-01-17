@@ -11,7 +11,7 @@ namespace BLL.Services.Contracts
     public interface IUserService
     {
         void AddUser(UserDTO user);
-        User GetUserByID(int id);
+        Task<User> GetUserByID(int id);
         IEnumerable<User> GetUser(string email, string password);
     }
 }

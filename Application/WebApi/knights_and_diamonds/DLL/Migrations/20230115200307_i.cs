@@ -2,24 +2,12 @@
 
 #nullable disable
 
-namespace Entities.Migrations
+namespace DAL.Migrations
 {
-    public partial class v4 : Migration
+    public partial class i : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
-                name: "DeckID",
-                table: "Cards",
-                type: "int",
-                nullable: true);
-
-            migrationBuilder.AddColumn<int>(
-                name: "UserHandID",
-                table: "Cards",
-                type: "int",
-                nullable: true);
-
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
@@ -62,8 +50,8 @@ namespace Entities.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserID = table.Column<int>(type: "int", nullable: false),
-                    DeckID = table.Column<int>(type: "int", nullable: false)
+                    UserID = table.Column<int>(type: "int", nullable: true),
+                    DeckID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -72,19 +60,73 @@ namespace Entities.Migrations
                         name: "FK_Hands_Decks_DeckID",
                         column: x => x.DeckID,
                         principalTable: "Decks",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ID");
                     table.ForeignKey(
                         name: "FK_Hands_Users_UserID",
                         column: x => x.UserID,
                         principalTable: "Users",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ID");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Cards",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CardName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImgPath = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Effect = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NumberOfStars = table.Column<int>(type: "int", nullable: true),
+                    AttackPoints = table.Column<int>(type: "int", nullable: true),
+                    DefencePoints = table.Column<int>(type: "int", nullable: true),
+                    MonsterType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CardType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ElementType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserHandID = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cards", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Cards_Hands_UserHandID",
+                        column: x => x.UserHandID,
+                        principalTable: "Hands",
+                        principalColumn: "ID");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CardInDecks",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CardID = table.Column<int>(type: "int", nullable: true),
+                    DeckID = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CardInDecks", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_CardInDecks_Cards_CardID",
+                        column: x => x.CardID,
+                        principalTable: "Cards",
+                        principalColumn: "ID");
+                    table.ForeignKey(
+                        name: "FK_CardInDecks_Decks_DeckID",
+                        column: x => x.DeckID,
+                        principalTable: "Decks",
+                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cards_DeckID",
-                table: "Cards",
+                name: "IX_CardInDecks_CardID",
+                table: "CardInDecks",
+                column: "CardID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CardInDecks_DeckID",
+                table: "CardInDecks",
                 column: "DeckID");
 
             migrationBuilder.CreateIndex(
@@ -106,31 +148,15 @@ namespace Entities.Migrations
                 name: "IX_Hands_UserID",
                 table: "Hands",
                 column: "UserID");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Cards_Decks_DeckID",
-                table: "Cards",
-                column: "DeckID",
-                principalTable: "Decks",
-                principalColumn: "ID");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Cards_Hands_UserHandID",
-                table: "Cards",
-                column: "UserHandID",
-                principalTable: "Hands",
-                principalColumn: "ID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Cards_Decks_DeckID",
-                table: "Cards");
+            migrationBuilder.DropTable(
+                name: "CardInDecks");
 
-            migrationBuilder.DropForeignKey(
-                name: "FK_Cards_Hands_UserHandID",
-                table: "Cards");
+            migrationBuilder.DropTable(
+                name: "Cards");
 
             migrationBuilder.DropTable(
                 name: "Hands");
@@ -140,22 +166,6 @@ namespace Entities.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Cards_DeckID",
-                table: "Cards");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Cards_UserHandID",
-                table: "Cards");
-
-            migrationBuilder.DropColumn(
-                name: "DeckID",
-                table: "Cards");
-
-            migrationBuilder.DropColumn(
-                name: "UserHandID",
-                table: "Cards");
         }
     }
 }

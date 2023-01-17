@@ -11,6 +11,7 @@ namespace DAL.DataContext
 		public DbSet<Deck>? Decks { get; set; }
 		public DbSet<User>? Users { get; set; }
 		public DbSet<UserHand>? Hands { get; set; }
+		public DbSet<CardInDeck>? CardInDecks { get; set; }
 
 
 

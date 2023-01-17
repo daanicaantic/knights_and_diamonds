@@ -38,7 +38,7 @@ namespace knights_and_diamonds.Controllers
             }
         }
         [Route("AddCardToDeck")]
-        [HttpPut]
+        [HttpPost]
         public async Task<IActionResult> AddCardToDeck(int cardID,int deckID)
         {
             try
@@ -59,7 +59,8 @@ namespace knights_and_diamonds.Controllers
             {
                 if (id > 0)
                 {
-                    return new JsonResult(this._deckService.GetDeck(id));
+                    var c=await this._deckService.GetCards(id);
+                    return new JsonResult(c);
                 }
                 else
                 {

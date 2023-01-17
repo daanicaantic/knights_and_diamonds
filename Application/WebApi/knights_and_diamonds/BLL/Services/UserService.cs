@@ -35,9 +35,9 @@ namespace BLL.Services
                 throw;
             }
         }
-        public User GetUserByID(int id)
+        public async Task<User> GetUserByID(int id)
         {
-            return(this.unitOfWork.User.GetOne(id));
+            return await this.unitOfWork.User.GetOne(id);
         }
 
         public IEnumerable<User> GetUser(string email, string password)

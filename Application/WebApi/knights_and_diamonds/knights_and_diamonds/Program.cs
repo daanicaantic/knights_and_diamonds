@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using DAL.Models;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -66,6 +67,7 @@ builder.Services.AddSwaggerGen();
 //connectig your database
 builder.Services.AddDbContext<KnightsAndDiamondsContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("Konekcija")));
 builder.Services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+
 
 builder.Services.AddScoped(typeof(ICardService),typeof(CardService));
 

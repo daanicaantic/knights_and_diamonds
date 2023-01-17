@@ -32,7 +32,7 @@ namespace knights_and_diamonds.Controllers
                 || string.IsNullOrEmpty(userInfo.Password))
                 return BadRequest("Data not valid!");
 
-            var user = this._userService.GetUser(userInfo.Email, userInfo.Password).FirstOrDefault();
+            var user =  this._userService.GetUser(userInfo.Email, userInfo.Password).FirstOrDefault();
 
             var claims = new List<Claim>();
 
