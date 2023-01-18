@@ -4,7 +4,7 @@ using DAL.Repositories.Contracts;
 using BLL.Services.Contracts;
 using BLL.Services;
 using SignalR.HubConfig;
-
+using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -23,7 +23,14 @@ builder.Services.AddCors(options =>
                           policy.WithOrigins
                           (
                               "http://localhost:4200",
-                              "https://localhost:4200"
+                              "https://localhost:4200",
+                              "http://127.0.0.1:4200",
+                              "https://127.0.0.1:4200",
+                              "http://localhost:1200",
+                              "https://localhost:1200",
+                              "http://127.0.0.1:1200",
+                              "https://127.0.0.1:1200"
+
                            )
                           .AllowAnyHeader()
                           .AllowAnyMethod()
@@ -79,24 +86,18 @@ if (app.Environment.IsDevelopment())
 {
 	app.UseSwagger();
 	app.UseSwaggerUI();
-    app.UseCors("AllowAllHeaders");
     app.UseRouting();
+    app.UseCors(MyAllowSpecificOrigins);
+    app.UseAuthentication();
+    app.UseAuthorization();
     app.UseEndpoints(endpoints =>
     {
         endpoints.MapControllers();
         endpoints.MapHub<MyHub>("/toastr");
-    });   
+    });
 }
 
 app.UseHttpsRedirection();
-
-app.UseCors(MyAllowSpecificOrigins);
-
-app.UseRouting();
-
-app.UseAuthentication();
-
-app.UseAuthorization();
 
 app.MapControllers();
 

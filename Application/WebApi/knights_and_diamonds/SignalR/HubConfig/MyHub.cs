@@ -22,5 +22,9 @@ namespace SignalR.HubConfig
 			}
 			await Clients.Clients(this.Context.ConnectionId).SendAsync("askServerResponse",tempstring);
 		}
+		public void Echo(string message)
+		{
+			Clients.All.SendAsync("Send", message);
+		}
 	}
 }

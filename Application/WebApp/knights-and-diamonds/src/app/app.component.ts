@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { SignalrServiceService } from './services/SignalR/signalr-service.service';
+import { SignalrService } from './services/signalr.service';
 
 @Component({
   selector: 'app-root',
@@ -9,21 +9,16 @@ import { SignalrServiceService } from './services/SignalR/signalr-service.servic
 export class AppComponent {
   title = 'knights-and-diamonds';
   constructor( 
-    public signalrService: SignalrServiceService
+    public signalr: SignalrService
   ) 
   {}
 
   ngOnInit() {
-    this.signalrService.startConnection();
-
-    setTimeout(() => {
-      this.signalrService.askServerListener();
-      this.signalrService.askServer();
-    }, 2000);
+    this.signalr.startConnection();
   }
 
   
   ngOnDestroy() {
-    this.signalrService.hubConnection.off("askServerResponse");
+    this.signalr.hubConnection.off("askServerResponse");
   }
 }
