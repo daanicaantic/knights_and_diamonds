@@ -45,7 +45,15 @@ namespace knights_and_diamonds.Controllers
 			try
 			{
 				if(id > 0) {
-					return new JsonResult(this._cardService.GetCard(id));
+					var card=await this._cardService.GetCard(id);
+					if (card != null)
+					{
+						return new JsonResult(card);
+					}
+					else
+					{
+						return NotFound("Card with this id dosent exist");
+					}
 				}
 				else
 				{
@@ -76,10 +84,11 @@ namespace knights_and_diamonds.Controllers
 		{
 			try
 			{
-				Card c=this._cardService.GetCard(id);
-				if (c != null) { 
+				var c = await this._cardService.GetCard(id);
+				if (c != null)
+				{
 					this._cardService.RemoveCard(c);
-					return Ok();
+					return Ok(c);
 				}
 				else
 				{
@@ -97,7 +106,14 @@ namespace knights_and_diamonds.Controllers
 		{
 			try
 			{
-				this._cardService.UpdateCard(card);
+				if (card != null)
+				{
+					this._cardService.UpdateCard(card);
+				}
+				else 
+				{
+					return NotFound("This card dosent exist");
+				}
 				return Ok();
 			}
 			catch (Exception e)

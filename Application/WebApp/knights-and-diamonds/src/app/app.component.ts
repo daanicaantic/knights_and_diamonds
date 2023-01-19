@@ -15,11 +15,6 @@ export class AppComponent {
 
   ngOnInit() {
     this.signalr.startConnection();
-
-    setTimeout(() => {
-      this.signalr.askServerListener();
-      this.signalr.askServer();
-    }, 2000);
   }
 
   

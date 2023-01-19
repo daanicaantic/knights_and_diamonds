@@ -19,11 +19,11 @@ namespace BLL.Services
 			this._context = context;
 			unitOfWork = new UnitOfWork(_context);
 		}
-		public Card GetCard(int id)
+		public async Task<Card> GetCard(int id)
 		{
 			try
 			{
-				return this.unitOfWork.Card.GetOne(id);
+				return await this.unitOfWork.Card.GetOne(id);
 			}
 			catch
 			{

@@ -33,30 +33,26 @@ namespace BLL.Services
         }
         public void AddCardToDeck(int cardID, int deckID)
         {
-            Card c = this.unitOfWork.Card.GetOne(cardID);
-            Deck d = this.unitOfWork.Deck.GetOne(deckID);
-            this.unitOfWork.Deck.AddCardToDeck(c, d);
-         
-            this.unitOfWork.Complete();
+        /*    CardInDeck cardInDeck = new CardInDeck();
+            var c = this.unitOfWork.Card.GetOne(cardID);
+            var d = this.unitOfWork.Deck.GetOne(deckID);
+            cardInDeck.Card = c;
+            cardInDeck.Deck = d;
+            this.unitOfWork.CardInDeck.Add(cardInDeck);
+            this.unitOfWork.Complete();*/
         }
-
-        public List<Card> GetDeck(int id)
+        public async Task<IList<CardInDeck>> GetCards(int id) 
         {
             try
             {
-                Deck d = this.unitOfWork.Deck.GetOne(id);
-
-                List<Card> cards = new List<Card>();
-                foreach (Card c in d.ListOfCards)
-                {
-                    cards.Add(c);
-                }
-                return cards;
+                return await this.unitOfWork.Deck.GetCardsFromDeck(id);
             }
-            catch
+            catch 
             {
                 throw;
             }
         }
+
+  
     }
 }

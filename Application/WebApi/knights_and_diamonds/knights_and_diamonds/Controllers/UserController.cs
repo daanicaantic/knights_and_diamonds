@@ -50,8 +50,16 @@ namespace knights_and_diamonds.Controllers
             {
                 if (id > 0)
                 {
-                    return new JsonResult(this._userService.GetUser(id));
-                }
+                    var user = await this._userService.GetUserByID(id);
+                    if (user != null) 
+                    { 
+					    return new JsonResult(user);
+					}
+                    else 
+                    {
+                        return NotFound("User dosent exist");
+                    }
+				}
                 else
                 {
                     return BadRequest("ID must be bigger than 0");

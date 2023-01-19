@@ -18,15 +18,15 @@ namespace DAL.Repositories
 		{
 			this._context = context;
 		}
-		public virtual T GetOne(int id)
+		public async Task<T> GetOne(int id)
 		{
-			return this._context.Set<T>().Find(id);
+			return await this._context.Set<T>().FindAsync(id);
 		}
 		public IEnumerable<T> GetAll()
 		{
 			return _context.Set<T>().ToList();
 		}
-		public IEnumerable<T> Find(Expression<Func<T, bool>> predicate)
+		public virtual IEnumerable<T> Find(Expression<Func<T, bool>> predicate)
 		{
 			return _context.Set<T>().Where(predicate);
 		}

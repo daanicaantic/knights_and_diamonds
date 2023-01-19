@@ -9,7 +9,7 @@ namespace BLL.Services.Contracts
 {
 	public interface ICardService
 	{
-		Card GetCard(int id);
+		Task<Card> GetCard(int id);
 		void AddCard(Card card);
 		void RemoveCard(Card card);
 		void UpdateCard(Card card);

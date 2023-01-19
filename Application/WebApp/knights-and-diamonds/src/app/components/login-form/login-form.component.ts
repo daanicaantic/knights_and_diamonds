@@ -41,12 +41,14 @@ export class LoginFormComponent implements OnInit, OnDestroy {
         next: (res: any)=>{
           this.router.navigate(['/home']);
           this.messageService.add({key: 'br', severity:'success', summary: 'Uspešno', detail: 'Prijava je uspela!'});
+          console.log("ovdee",this.authService?.userValue?.id);`1`
         },
         error: err=>{
           this.messageService.add({key: 'br', severity:'error', summary: 'Neuspešno', detail: 'Pokušajte ponovo, došlo je do greške.'});
         }
       })
     )
+
   }
 
   onRegistration(){

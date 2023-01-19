@@ -23,6 +23,7 @@ import { MenubarModule } from 'primeng/menubar';
 import { LoginFormComponent } from './components/login-form/login-form.component';
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import { AppRoutingModule } from './app-routing.module';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { AppRoutingModule } from './app-routing.module';
     CardCreateComponent,
     MenubarComponent,
     LoginFormComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,

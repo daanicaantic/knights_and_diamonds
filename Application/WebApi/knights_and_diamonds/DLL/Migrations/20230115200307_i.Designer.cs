@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Entities.Migrations
+namespace DAL.Migrations
 {
     [DbContext(typeof(KnightsAndDiamondsContext))]
-    [Migration("20230112204437_new")]
-    partial class @new
+    [Migration("20230115200307_i")]
+    partial class i
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,7 +32,7 @@ namespace Entities.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
 
-                    b.Property<int>("AttackPoints")
+                    b.Property<int?>("AttackPoints")
                         .HasColumnType("int");
 
                     b.Property<string>("CardName")
@@ -41,10 +41,7 @@ namespace Entities.Migrations
                     b.Property<string>("CardType")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("DeckID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DefencePoints")
+                    b.Property<int?>("DefencePoints")
                         .HasColumnType("int");
 
                     b.Property<string>("Effect")
@@ -59,7 +56,7 @@ namespace Entities.Migrations
                     b.Property<string>("MonsterType")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("NumberOfStars")
+                    b.Property<int?>("NumberOfStars")
                         .HasColumnType("int");
 
                     b.Property<int?>("UserHandID")
@@ -67,11 +64,32 @@ namespace Entities.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("DeckID");
-
                     b.HasIndex("UserHandID");
 
                     b.ToTable("Cards");
+                });
+
+            modelBuilder.Entity("DAL.Models.CardInDeck", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
+
+                    b.Property<int?>("CardID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DeckID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("CardID");
+
+                    b.HasIndex("DeckID");
+
+                    b.ToTable("CardInDecks");
                 });
 
             modelBuilder.Entity("DAL.Models.Deck", b =>
@@ -131,10 +149,10 @@ namespace Entities.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
 
-                    b.Property<int>("DeckID")
+                    b.Property<int?>("DeckID")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserID")
+                    b.Property<int?>("UserID")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
@@ -148,13 +166,24 @@ namespace Entities.Migrations
 
             modelBuilder.Entity("DAL.Models.Card", b =>
                 {
-                    b.HasOne("DAL.Models.Deck", null)
-                        .WithMany("ListOfCards")
-                        .HasForeignKey("DeckID");
-
                     b.HasOne("DAL.Models.UserHand", null)
                         .WithMany("Cards")
                         .HasForeignKey("UserHandID");
+                });
+
+            modelBuilder.Entity("DAL.Models.CardInDeck", b =>
+                {
+                    b.HasOne("DAL.Models.Card", "Card")
+                        .WithMany("CardInDecks")
+                        .HasForeignKey("CardID");
+
+                    b.HasOne("DAL.Models.Deck", "Deck")
+                        .WithMany("CardsInDeck")
+                        .HasForeignKey("DeckID");
+
+                    b.Navigation("Card");
+
+                    b.Navigation("Deck");
                 });
 
             modelBuilder.Entity("DAL.Models.Deck", b =>
@@ -168,24 +197,25 @@ namespace Entities.Migrations
                 {
                     b.HasOne("DAL.Models.Deck", "Deck")
                         .WithMany()
-                        .HasForeignKey("DeckID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DeckID");
 
                     b.HasOne("DAL.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserID");
 
                     b.Navigation("Deck");
 
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("DAL.Models.Card", b =>
+                {
+                    b.Navigation("CardInDecks");
+                });
+
             modelBuilder.Entity("DAL.Models.Deck", b =>
                 {
-                    b.Navigation("ListOfCards");
+                    b.Navigation("CardsInDeck");
                 });
 
             modelBuilder.Entity("DAL.Models.User", b =>
