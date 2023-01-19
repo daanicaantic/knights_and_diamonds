@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
@@ -9,22 +10,23 @@ import { AuthService } from 'src/app/services/auth.service';
   templateUrl: './login-form.component.html',
   styleUrls: ['./login-form.component.css']
 })
-export class LoginFormComponent implements OnInit {
+export class LoginFormComponent implements OnInit, OnDestroy {
     form!: FormGroup;
+    subscriptions: Subscription[] = [];
     loading = false;
     submitted = false;
-    subscriptions: Subscription[] = []
-
+    
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
-      email: '',
-      password: ''
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]]
   });
   }
 
@@ -32,20 +34,12 @@ export class LoginFormComponent implements OnInit {
     this.subscriptions.forEach(sub=>sub.unsubscribe())
   }
 
-  onSubmit() {
-    this.submitted = true;
-
-    // stop here if form is invalid
-    if (this.form.invalid) {
-        return;
-    }
-  }
-
-  onLogin(){
+  onSubmit(){
     const userData = this.form.getRawValue();
     this.subscriptions.push(
       this.authService.login(userData).subscribe({
         next: (res: any)=>{
+          this.router.navigate(['/home']);
           this.messageService.add({key: 'br', severity:'success', summary: 'Uspešno', detail: 'Prijava je uspela!'});
         },
         error: err=>{
@@ -53,6 +47,10 @@ export class LoginFormComponent implements OnInit {
         }
       })
     )
+  }
+
+  onRegistration(){
+    
   }
   
 }

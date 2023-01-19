@@ -25,28 +25,28 @@ export class MenubarComponent implements OnInit {
 
   ngOnInit(): void {
 
-    console.log("ovdee:",this.authService.userValue)
+    console.log("ovdee user value:",this.authService.userValue)
 
     this.authService.loginStatusChange().subscribe(userSubject=>{
 
-    this.items = [
-      {
-          label: 'O nama', routerLink:['/home']
-      },
-      {
-          label: 'Predavanja', routerLink:['/predavanja']
-      },
-      {
-          label: 'Predavači', routerLink:['/predavaci']
-      },
-    ];
+      this.items = [
+        {
+            label: 'Homepage', routerLink:['/home']
+        },
+        {
+            label: 'Cards'
+        },
+        {
+            label: 'Rules'
+        },
+      ];
     })
   }
 
   onClick()
   {
     this.confirmationService.confirm({
-      message: 'Da li ste sigurni da želite da se odjavite?',
+      message: 'Are you sure you want to log out?',
       accept: () => {
         this.authService.logout();
         console.log('OVO JE IZ HOME',this.authService.userValue)

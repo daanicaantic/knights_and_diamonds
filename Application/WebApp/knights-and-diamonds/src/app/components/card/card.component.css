@@ -66,7 +66,7 @@ p,h3,h4
 .card-rating
 {
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     margin: 5px;
     margin-top: 10px;
     height: 18px;
@@ -120,7 +120,7 @@ p,h3,h4
     width: 100%;
     border-top: 2px solid #873e23;
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
 }
 .description
 {

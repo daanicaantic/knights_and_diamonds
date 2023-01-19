@@ -1,21 +1,25 @@
 <p-menubar [model]="items">
-    <div>
         <ng-template
             pTemplate="end">
-                <button class="button" (click)="onClick()" *ngIf="authService?.userValue?.role==='Admin' 
-                                                            ||   authService?.userValue?.role==='Player'"
+                <button class="button" (click)="onClick()"
+                        *ngIf="authService?.userValue?.role==='Admin' ||
+                               authService?.userValue?.role==='Player'"
                 pButton label="Logout"></button>
-                <button class="buttonProfile" [routerLink]="['/profil', authService.userValue?.id]"
-                        type="button" icon="pi pi-user" class="p-button-rounded ml-2"
+
+                <button class="buttonProfile"
+                        type="button" icon="pi pi-user" class="p-button-rounded"
                         *ngIf="authService?.userValue?.role==='Admin'"
                 pButton pRipple></button>
-                <button class="buttonProfile" [routerLink]="['/profil/me', authService.userValue?.id]"
-                        type="button" icon="pi pi-user" class="p-button-rounded ml-2"
+
+                <!-- <button class="buttonProfile"
+                        [routerLink]="['/profil/player', authService?.userValue?.id]"
+                        type="button" icon="pi pi-user" class="p-button-rounded"
                         *ngIf="authService?.userValue?.role==='Player'"
-                pButton pRipple></button>
-                <button (click)="onLogin()" [routerLink]="['/login']" *ngIf="authService?.userValue?.role!=='Admin' &&
-                                                                            authService?.userValue?.role!=='Player'"
+                pButton pRipple></button> -->
+
+                <button class="button" (click)="onLogin()"
+                        [routerLink]="['/login']" *ngIf="authService?.userValue?.role!=='Admin' &&
+                                                         authService?.userValue?.role!=='Player'"
                 pButton label="Login"></button>
         </ng-template>
-    </div>
 </p-menubar>
