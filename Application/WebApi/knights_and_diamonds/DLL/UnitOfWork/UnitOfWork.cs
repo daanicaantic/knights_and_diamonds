@@ -20,6 +20,7 @@ namespace DAL.UnitOfWork
             Deck = new DeckRepository(_context);
 			User = new UserRepository(_context);
 			CardInDeck = new CardInDeckRepository(_context);
+			Connection=new ConnectionRepository(_context);
 
 		}
 
@@ -29,6 +30,8 @@ namespace DAL.UnitOfWork
 
 		public IUserRepository User { get; private set; }
 		public ICardInDeckRepository CardInDeck { get; private set; }
+		public IConnectionRepository Connection { get; private set; }
+
 
 
 		public int Complete()

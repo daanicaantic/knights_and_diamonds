@@ -8,6 +8,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using DAL.DTOs;
+using DAL.Migrations;
+using DAL.Models;
 
 namespace knights_and_diamonds.Controllers
 {
@@ -16,14 +18,54 @@ namespace knights_and_diamonds.Controllers
         private readonly IConfiguration _config;
         private readonly KnightsAndDiamondsContext context;
         public IUserService _userService { get; set; }
-        public LoginController(KnightsAndDiamondsContext context, IConfiguration config)
+		public IConnectionService _connetionService { get; set; }
+
+		public LoginController(KnightsAndDiamondsContext context, IConfiguration config)
         {
             this.context = context;
             _userService = new UserService(this.context);
-            _config = config;
+			_connetionService=new ConnectionService(this.context);
+			_config = config;
         }
 
-        [HttpPost]
+        public static long CheckLoginToken(string token) 
+        {
+			var handler = new JwtSecurityTokenHandler();
+			var jwtSecurityToken = handler.ReadJwtToken(token);
+			var tokenExp = jwtSecurityToken.Claims.First(claim => claim.Type.Equals("exp")).Value;
+			var ticks = long.Parse(tokenExp);
+            return ticks;
+        }
+		[HttpGet]
+		[Route("checkLoginToken")]
+		public async Task<IActionResult> CheckTokenIsValid(string token)
+		{
+			var tokenTicks = CheckLoginToken(token);
+			var tokenDate = DateTimeOffset.FromUnixTimeSeconds(tokenTicks).UtcDateTime;
+
+			var now = DateTime.Now.ToUniversalTime();
+            var valid = tokenDate;
+			if (valid >= now)
+            {
+				return Ok(true);
+			}
+            else
+            {
+                return Ok(false) ;
+            }
+
+			
+		}
+        [HttpGet]
+        [Route("getConnection")]
+        public async Task<IActionResult> getConnection(int id)
+        {
+            var c = await this._connetionService.GetConnection(id);
+            return new JsonResult(c);
+
+        }
+
+		[HttpPost]
         [Route("LogIn")]
         public async Task<IActionResult> LogIn([FromBody] UserInfoDTO userInfo)
         {
@@ -55,10 +97,48 @@ namespace knights_and_diamonds.Controllers
                 t.Role = user.Role;
                 t.ID = user.ID;
 
+                Connection c = new Connection();
+                c.UserID = user.ID;
+                c.isStillLogeniIn = DateTime.UtcNow;
+
+                Console.WriteLine(c.isStillLogeniIn);
+
+				this._connetionService.AddConnection(c);
                 return Ok(t);
             }
 
             return NotFound("This user does not exists!");
         }
-    }
+		[HttpDelete]
+		[Route("LogOut")]
+		public async Task<IActionResult> LogOut(int userID)
+		{
+            try
+            {
+                var c = await this._connetionService.GetConnectionByUser(userID);
+                this._connetionService.RemoveConnection(c);
+                return Ok(c);
+            }
+            catch 
+            {
+                return BadRequest();
+            }
+		}
+
+		[HttpGet]
+		[Route("GetAllConection")]
+		public async Task<IActionResult> GetConnection()
+		{
+			try
+			{
+				var c = await this._connetionService.GetAllConnections();
+
+                return new JsonResult(c);
+			}
+			catch
+			{
+				return BadRequest();
+			}
+		}
+	}
 }

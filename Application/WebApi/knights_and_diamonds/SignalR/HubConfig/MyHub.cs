@@ -1,4 +1,10 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using BLL.Services;
+using BLL.Services.Contracts;
+using DAL.DataContext;
+using DAL.DTOs;
+using DAL.Models;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +15,16 @@ namespace SignalR.HubConfig
 {
 	public class MyHub:Hub
 	{
+		private readonly KnightsAndDiamondsContext context;
+		public IUserService _userService { get; set; }
+		public IConnectionService _connetionService { get; set; }
+
+		public MyHub(KnightsAndDiamondsContext context)
+		{
+			this.context = context;
+			_userService = new UserService(this.context);
+			_connetionService = new ConnectionService(this.context);
+		}
 		public async Task askServer(string someTextForClient) 
 		{
 			string tempstring;
@@ -25,6 +41,29 @@ namespace SignalR.HubConfig
 		public void Echo(string message)
 		{
 			Clients.All.SendAsync("Send", message);
+		}
+		public async Task getOnlineUsers()
+		{
+			var c = await this._connetionService.GetAllConnections();
+			var users = new List<OnlineUserDto>();
+			foreach (var item in c)
+			{
+				var time = item.isStillLogeniIn.AddHours(1);
+				if (DateTime.UtcNow>time) 
+				{
+					Console.WriteLine(item.isStillLogeniIn.AddHours(1));
+					Console.WriteLine(DateTime.UtcNow);
+					c = c.Where(p => p != item);
+					this._connetionService.RemoveConnection(item);
+				}
+				else
+				{
+					var user = await this._userService.GetUserByID(item.UserID);
+					var onlineuserDTO = new OnlineUserDto(user.ID, user.Name, user.SurName, user.UserName);
+					users.Add(onlineuserDTO);
+				}
+			}
+			await Clients.Others.SendAsync("GetUsersFromHub", users);
 		}
 	}
 }

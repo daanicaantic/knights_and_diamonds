@@ -12,7 +12,7 @@ namespace DAL.Repositories.Contracts
 	public interface IRepository<T> where T : class
 	{
 		Task<T> GetOne(int id);
-		IEnumerable<T> GetAll();
+		Task<IEnumerable<T>> GetAll();
 		IEnumerable<T> Find(Expression<Func<T, bool>> predicate);
 		void Add(T obj);
 		void Delete(T obj);

@@ -1,0 +1,4 @@
+.pom{
+    display: flex;
+    flex-direction:column;
+}

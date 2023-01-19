@@ -9,3 +9,12 @@ export class User
         connId: string
     ){}
 }
+
+export interface OnlineUsers
+{
+    id: number,
+    name: string,
+    surName: string,
+    userName: string,
+
+}

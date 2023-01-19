@@ -1,3 +1,6 @@
-<input type="text" name="massage" [(ngModel)]="message"/>
+<!-- <input type="text" name="massage" [(ngModel)]="message"/>
 <button (click)="echo()">echo</button>
-<p *ngFor="let m of messages">{{m}}</p>
+<p *ngFor="let m of messages">{{m}}</p> -->
+<div class="pom" *ngFor="let onlineuser of usersOnline">
+    <p *ngIf='onlineuser.id!==5'>{{onlineuser.userName}}</p>
+</div>

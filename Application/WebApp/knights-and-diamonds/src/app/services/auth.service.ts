@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 //import { HttpClient } from '@aspnet/signalr';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, map, Observable } from 'rxjs';
+import { HomeComponent } from '../home/home.component';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,7 @@ export class AuthService {
   public user!: Observable<any>
 
   constructor(private http: HttpClient) { 
+    
     this.userSubject = new BehaviorSubject<any>(
       JSON.parse(localStorage.getItem('user') || '{}')
     );
