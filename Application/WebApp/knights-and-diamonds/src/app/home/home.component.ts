@@ -48,6 +48,7 @@ import { HubConnection } from '@aspnet/signalr';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { Connection } from 'src/classes/connection';
 import { OnlineUsers } from 'src/classes/user';
+import { AuthService } from '../services/auth.service';
 import { OnelineusersService } from '../services/onelineusers.service';
 
 @Component({
@@ -60,20 +61,23 @@ export class HomeComponent implements OnInit, OnDestroy {
   public message: string = '';
   public messages: string[] = [];
   usersOnline:Array<OnlineUsers>=new Array<OnlineUsers>();
-
-
   subscripions: Subscription[] = []
- 
-  constructor( public onelineusers:OnelineusersService ) { 
-    
-  }
+  userID=this.authService?.userValue?.id
+  empty:any;
+
+  constructor( public onelineusers:OnelineusersService, 
+    private authService: AuthService,) { }
 
   ngOnInit(): void {
+    console.log("usero",this.userID)
     this.onelineusers.startConnection();
     this.subscripions.push(
       this.onelineusers.connectionsObs.subscribe(res=>{
+        res=res.filter(u=>u.id!==this.userID);
         this.usersOnline=res; 
-      }))
+      }
+      ))
+      
     }
 
     ngOnDestroy(): void {

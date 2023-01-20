@@ -63,7 +63,7 @@ namespace SignalR.HubConfig
 					users.Add(onlineuserDTO);
 				}
 			}
-			await Clients.Others.SendAsync("GetUsersFromHub", users);
+			await Clients.All.SendAsync("GetUsersFromHub", users);
 		}
 	}
 }

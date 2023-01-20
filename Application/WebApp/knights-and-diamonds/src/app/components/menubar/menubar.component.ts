@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
+import { OnelineusersService } from 'src/app/services/onelineusers.service';
 
 @Component({
   selector: 'app-menubar',
@@ -20,7 +21,8 @@ export class MenubarComponent implements OnInit {
   constructor(
     public authService: AuthService,
     private router: Router,
-    private confirmationService: ConfirmationService)
+    private confirmationService: ConfirmationService,
+    public onelineusers:OnelineusersService)
   { }
 
   ngOnInit(): void {
@@ -50,6 +52,7 @@ export class MenubarComponent implements OnInit {
       accept: () => {
         this.authService.logout();
         console.log('OVO JE IZ HOME',this.authService.userValue)
+        
         this.router.navigate(['/home']);
       }
     });
