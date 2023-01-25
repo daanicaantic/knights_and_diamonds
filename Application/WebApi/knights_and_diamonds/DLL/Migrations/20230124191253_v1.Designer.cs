@@ -4,6 +4,7 @@ using DAL.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(KnightsAndDiamondsContext))]
-    partial class KnightsAndDiamondsContextModelSnapshot : ModelSnapshot
+    [Migration("20230124191253_v1")]
+    partial class v1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -127,7 +129,7 @@ namespace DAL.Migrations
                     b.ToTable("Decks");
                 });
 
-            modelBuilder.Entity("DAL.Models.PreGameSession", b =>
+            modelBuilder.Entity("DAL.Models.Game", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -135,10 +137,23 @@ namespace DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
 
-                    b.Property<int?>("Play")
+                    b.HasKey("ID");
+
+                    b.ToTable("Games");
+                });
+
+            modelBuilder.Entity("DAL.Models.PreGameGame", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("RPSGameID")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
+
+                    b.Property<int?>("GameID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Play")
                         .HasColumnType("int");
 
                     b.Property<int?>("UserID")
@@ -146,24 +161,11 @@ namespace DAL.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("RPSGameID");
+                    b.HasIndex("GameID");
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("PreGameSessions");
-                });
-
-            modelBuilder.Entity("DAL.Models.RockPaperScissorsGame", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
-
-                    b.HasKey("ID");
-
-                    b.ToTable("RockPaperScissorsGames");
+                    b.ToTable("PreGameGames");
                 });
 
             modelBuilder.Entity("DAL.Models.User", b =>
@@ -251,17 +253,17 @@ namespace DAL.Migrations
                         .HasForeignKey("UserID");
                 });
 
-            modelBuilder.Entity("DAL.Models.PreGameSession", b =>
+            modelBuilder.Entity("DAL.Models.PreGameGame", b =>
                 {
-                    b.HasOne("DAL.Models.RockPaperScissorsGame", "RPSGame")
+                    b.HasOne("DAL.Models.Game", "Game")
                         .WithMany("Players")
-                        .HasForeignKey("RPSGameID");
+                        .HasForeignKey("GameID");
 
                     b.HasOne("DAL.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserID");
 
-                    b.Navigation("RPSGame");
+                    b.Navigation("Game");
 
                     b.Navigation("User");
                 });
@@ -291,7 +293,7 @@ namespace DAL.Migrations
                     b.Navigation("CardsInDeck");
                 });
 
-            modelBuilder.Entity("DAL.Models.RockPaperScissorsGame", b =>
+            modelBuilder.Entity("DAL.Models.Game", b =>
                 {
                     b.Navigation("Players");
                 });

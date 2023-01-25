@@ -22,6 +22,7 @@ namespace DAL.Models
 		public string? Role { get; set; }
 		public List<Deck>? Decks { get; set; }
 
+
 		public User()
 		{
 

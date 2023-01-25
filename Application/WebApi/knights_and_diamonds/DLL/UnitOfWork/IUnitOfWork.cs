@@ -12,6 +12,10 @@ namespace DAL.UnitOfWork
 		ICardRepository Card { get; }
 		IDeckRepository Deck { get; }
 		IUserRepository User { get; }
+		IRPSGameRepository RPSGame { get; }
+		IConnectionRepository Connection { get; }
+		ICardInDeckRepository CardInDeck { get; }
+		IPreGameRepository PreGame { get; }
 
 		int Complete();
 	}

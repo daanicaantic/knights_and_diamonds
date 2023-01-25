@@ -30,7 +30,7 @@ namespace BLL.Services
 				throw;
 			}
 		}
-		public void AddCard(Card card)
+		public  void AddCard(Card card)
 		{
 			try
 			{
