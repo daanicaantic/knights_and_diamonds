@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 //import { HttpClient } from '@aspnet/signalr';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, map, Observable } from 'rxjs';
-import { HomeComponent } from '../home/home.component';
+import { HomeComponent } from '../components/home/home.component';
 import { Router } from '@angular/router';
-import { OnelineusersService } from './onelineusers.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +16,7 @@ export class AuthService {
 
 
 
-  constructor(private http: HttpClient,
-              public onelineusers:OnelineusersService) { 
+  constructor(private http: HttpClient,) { 
     
     this.userSubject = new BehaviorSubject<any>(
       JSON.parse(localStorage.getItem('user') || '{}')
@@ -34,8 +32,6 @@ export class AuthService {
 
         localStorage.setItem('user',JSON.stringify(user))
         this.userSubject.next(user)
-        
-
     }))
   }
 
@@ -44,8 +40,6 @@ export class AuthService {
       next: res=>{
         localStorage.removeItem('user');
         this.userSubject.next(null);
-        this.onelineusers.startConnection();
-
       },
       error: err=>{
      

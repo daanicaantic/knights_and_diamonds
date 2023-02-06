@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import * as signalR from '@aspnet/signalr';
+import * as signalR from "@microsoft/signalr";
 import { MessageService } from 'primeng/api';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,11 @@ export class SignalrService {
   constructor(private messageService: MessageService,) { }
 
   hubConnection!: signalR.HubConnection;
+    
+  ssSubj = new Subject<any>();
+  ssObs(): Observable<any> {
+    return this.ssSubj.asObservable();
+  }
 
   startConnection = () => {
       this.hubConnection = new signalR.HubConnectionBuilder()
@@ -19,34 +25,32 @@ export class SignalrService {
           transport: signalR.HttpTransportType.WebSockets
       })
       .build();
-  
+
       this.hubConnection
       .start()
       .then(() => {
-          console.log('Hub Connection Started!');
-          this.askServerListener();
-          this.askServer();
+         this.ssSubj.next({type:"HubConnStarted"})
       })
       .catch(err => console.log('Error while starting connection: ' + err));
   }
-  async askServer() {
-    console.log("askServerStart");
+//   async askServer() {
+//     console.log("askServerStart");
 
-    await this.hubConnection.invoke("askServer", "hi")
-        .then(() => {
-            console.log("askServer.then");
-        })
-        .catch(err => console.error(err));
+//     await this.hubConnection.invoke("askServer", "hi")
+//         .then(() => {
+//             console.log("askServer.then");
+//         })
+//         .catch(err => console.error(err));
 
-    console.log("This is the final prompt");
-}
+//     console.log("This is the final prompt");
+// }
 
-askServerListener() {
-    console.log("askServerListenerStart");
+// askServerListener() {
+//     console.log("askServerListenerStart");
 
-    this.hubConnection.on("askServerResponse", (someText) => {
-        console.log("askServer.listener");
-        this.messageService.add({key: 'br', severity:'success', summary: 'Uspešno', detail: someText});
-    })
-}
+//     this.hubConnection.on("askServerResponse", (someText) => {
+//         console.log("askServer.listener");
+//         this.messageService.add({key: 'br', severity:'success', summary: 'Uspešno', detail: someText});
+//     })
+// }
 }

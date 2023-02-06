@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using DAL.Models;
+using SignalR.GameHub;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -94,7 +95,8 @@ if (app.Environment.IsDevelopment())
     {
         endpoints.MapControllers();
         endpoints.MapHub<MyHub>("/toastr");
-    });
+
+	});
 }
 
 app.UseHttpsRedirection();

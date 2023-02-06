@@ -1,4 +1,5 @@
-﻿using DAL.Models;
+﻿using DAL.DTOs;
+using DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +13,11 @@ namespace BLL.Services.Contracts
 		Task<Connection> GetConnection(int id);
 		Task<Connection> GetConnectionByUser(int Userid);
 		Task<IEnumerable<Connection>> GetAllConnections();
+		Task<List<OnlineUserDto>> GetOnlineUsers();
 		void AddConnection(Connection connection);
+		void AddUserIDtoList(int userID);
 		void RemoveConnection(Connection connection);
+		void RemoveUserFromOnlineUsers(int userID);
 		void UpdateConnection(Connection connection);
 	}
 }

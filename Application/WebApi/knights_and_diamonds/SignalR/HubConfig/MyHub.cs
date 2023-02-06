@@ -18,12 +18,16 @@ namespace SignalR.HubConfig
 		private readonly KnightsAndDiamondsContext context;
 		public IUserService _userService { get; set; }
 		public IConnectionService _connetionService { get; set; }
+		public IRPSGamaeService _gameService { get; set; }
+		public ConnectionsHub _connectedUsers { get; set; }
 
 		public MyHub(KnightsAndDiamondsContext context)
 		{
 			this.context = context;
 			_userService = new UserService(this.context);
 			_connetionService = new ConnectionService(this.context);
+			_gameService = new RPSGameService(this.context);
+			_connectedUsers = ConnectionsHub.GetInstance();
 		}
 		public async Task askServer(string someTextForClient) 
 		{
@@ -42,28 +46,17 @@ namespace SignalR.HubConfig
 		{
 			Clients.All.SendAsync("Send", message);
 		}
-		public async Task getOnlineUsers()
+
+		public async Task GetOnlineUsers()
 		{
-			var c = await this._connetionService.GetAllConnections();
-			var users = new List<OnlineUserDto>();
-			foreach (var item in c)
-			{
-				var time = item.isStillLogeniIn.AddHours(1);
-				if (DateTime.UtcNow>time) 
-				{
-					Console.WriteLine(item.isStillLogeniIn.AddHours(1));
-					Console.WriteLine(DateTime.UtcNow);
-					c = c.Where(p => p != item);
-					this._connetionService.RemoveConnection(item);
-				}
-				else
-				{
-					var user = await this._userService.GetUserByID(item.UserID);
-					var onlineuserDTO = new OnlineUserDto(user.ID, user.Name, user.SurName, user.UserName);
-					users.Add(onlineuserDTO);
-				}
-			}
-			await Clients.All.SendAsync("GetUsersFromHub", users);
+			var onlineUsers = await this._connetionService.GetOnlineUsers();
+			await Clients.All.SendAsync("GetUsersFromHub", onlineUsers);
+		}
+
+		public async Task GetPossibleLobbiesForUser(int userID)
+		{
+			var games = await this._gameService.LobbiesPerUser(userID);
+			await Clients.All.SendAsync("GetUsersFromHub", games);
 		}
 	}
 }

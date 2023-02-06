@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
-import { OnelineusersService } from 'src/app/services/onelineusers.service';
 
 @Component({
   selector: 'app-login-form',
@@ -21,7 +20,6 @@ export class LoginFormComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private messageService: MessageService,
-    public onelineusers:OnelineusersService,
     private router: Router
   ) { }
 
@@ -44,7 +42,6 @@ export class LoginFormComponent implements OnInit, OnDestroy {
           this.router.navigate(['/home']);
           this.messageService.add({key: 'br', severity:'success', summary: 'Uspešno', detail: 'Prijava je uspela!'});
           console.log("ovdee",this.authService?.userValue?.id);`1`
-          // this.onelineusers.startConnection();
         },
         error: err=>{
           this.messageService.add({key: 'br', severity:'error', summary: 'Neuspešno', detail: 'Pokušajte ponovo, došlo je do greške.'});

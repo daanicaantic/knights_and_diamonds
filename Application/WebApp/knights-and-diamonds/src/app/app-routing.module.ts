@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginFormComponent } from './components/login-form/login-form.component';
 import { AuthGuard } from './services/auth.guard';
 import { CardCreateComponent } from './components/card-create/card-create.component';
-import { HomeComponent } from './home/home.component';
+import { HomeComponent } from './components/home/home.component';
 
 
 const routes: Routes = [

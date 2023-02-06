@@ -17,8 +17,21 @@ namespace DAL.Models
 	{
 		public int ID { get; set; }
 		public Play? Play { get; set; }
-		public User? User { get; set; }
+		public int RPSGameID { get; set; }
 		public RockPaperScissorsGame? RPSGame { get; set; }
+		public int UserID { get; set; }
+		public User? User { get; set; }
 
+		public PreGameSession() 
+		{ 
+		
+		}
+		public PreGameSession(RockPaperScissorsGame? rPSGame,User? user)
+		{
+			RPSGameID = rPSGame.ID;
+			RPSGame = rPSGame;
+			UserID = user.ID;
+			User = user;
+		}
 	}
 }

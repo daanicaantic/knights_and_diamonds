@@ -115,9 +115,8 @@ namespace knights_and_diamonds.Controllers
 		{
             try
             {
-                var c = await this._connetionService.GetConnectionByUser(userID);
-                this._connetionService.RemoveConnection(c);
-                return Ok(c);
+                this._connetionService.RemoveUserFromOnlineUsers(userID);
+                return Ok();
             }
             catch 
             {
@@ -134,6 +133,21 @@ namespace knights_and_diamonds.Controllers
 				var c = await this._connetionService.GetAllConnections();
 
                 return new JsonResult(c);
+			}
+			catch
+			{
+				return BadRequest();
+			}
+		}
+		[HttpGet]
+		[Route("GetOnlineUsers")]
+		public async Task<IActionResult> GetOnlineUsers()
+		{
+			try
+			{
+				var c = await this._connetionService.GetOnlineUsers();
+
+				return new JsonResult(c);
 			}
 			catch
 			{

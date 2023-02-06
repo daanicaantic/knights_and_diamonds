@@ -20,5 +20,19 @@ namespace DAL.Repositories
 		{
 			get { return _context as KnightsAndDiamondsContext; }
 		}
+
+		public async Task<IEnumerable<RockPaperScissorsGame>> GetGamesWithPlayers()
+		{
+			try
+			{
+				return await this.Context.RockPaperScissorsGames
+					.Include(x=>x.Players)
+					.ToListAsync();
+			}
+			catch
+			{
+				throw;
+			}
+		}
 	}
 }
