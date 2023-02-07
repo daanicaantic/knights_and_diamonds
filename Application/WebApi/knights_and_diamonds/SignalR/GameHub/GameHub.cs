@@ -23,8 +23,8 @@ namespace SignalR.GameHub
 		}
 		public async Task GetPossibleLobbiesForUser(int userID)
 		{
-			var games =await this._gameService.LobbiesPerUser(userID);
-			await Clients.All.SendAsync("GetUsersFromHub", games);
+			/*var games =await this._gameService.LobbiesPerUser(userID);*/
+			/*await Clients.All.SendAsync("GetUsersFromHub", games);*/
 		}
 	}
 }

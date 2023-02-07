@@ -1,4 +1,5 @@
-﻿using DAL.Models;
+﻿using DAL.DTOs;
+using DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,10 @@ namespace BLL.Services.Contracts
 {
 	public interface IRPSGamaeService
 	{
-		void NewLobby(User user,User challengedUser);
+		void NewLobby(OnlineUserDto user, OnlineUserDto challengedUser);
 		Task StartGame(int gameID);
 		Task<Dictionary<int, List<int>>> GetGames();
-		Task<Dictionary<int, List<int>>> LobbiesPerUser(int userID);
+		Task<Dictionary<int, List<OnlineUserDto>>> LobbiesPerUser(OnlineUserDto user);
 
 	}
 }

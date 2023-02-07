@@ -11,8 +11,7 @@ using DAL.DesignPatterns;
 using System.Numerics;
 using System.Collections;
 using static System.Text.Json.JsonSerializer;
-
-
+using DAL.DTOs;
 
 namespace BLL.Services
 {
@@ -29,19 +28,19 @@ namespace BLL.Services
 		}
 
 
-		public void NewLobby(User user, User challengedUser)
+		public void NewLobby(OnlineUserDto user, OnlineUserDto challengedUser)
 		{
 			if (!this._usersingame.UsersInGame.Contains(user.ID) && !this._usersingame.UsersInGame.Contains(challengedUser.ID))
 			{
-				List<int> usersIDs;
+				List<OnlineUserDto> users;
 				int lobbyID =this._usersingame.lobbyID++;
 
 				if (!this._usersingame.LobbyIDs.ContainsKey(lobbyID))
 				{
-					usersIDs = new List<int>();
-					usersIDs.Add(user.ID);
-					usersIDs.Add(challengedUser.ID);
-					this._usersingame.LobbyIDs.Add(lobbyID, usersIDs);
+					users = new List<OnlineUserDto>();
+					users.Add(user);
+					users.Add(challengedUser);
+					this._usersingame.LobbyIDs.Add(lobbyID, users);
 					Console.WriteLine(Serialize(this._usersingame.LobbyIDs.ToList()));
 				}
 				else
@@ -62,21 +61,23 @@ namespace BLL.Services
 			if (this._usersingame.LobbyIDs.ContainsKey(lobbyID)) 
 			{
 				PreGameSession player;
-				List<int> usersIDs;
+				List<OnlineUserDto> users;
+				List<int> usersIDs=new List<int>();
 
 				var game = new RockPaperScissorsGame();
 				this.unitOfWork.RPSGame.Add(game);
 
 
-				usersIDs = this._usersingame.LobbyIDs[lobbyID].ToList();
-				Console.WriteLine(Serialize(usersIDs));
+				users = this._usersingame.LobbyIDs[lobbyID].ToList();
+				Console.WriteLine(Serialize(users));
 				
-				foreach (var userID in usersIDs)
+				foreach (var u in users)
 				{
-					var user=await this.unitOfWork.User.GetOne(userID);
+					var user=await this.unitOfWork.User.GetOne(u.ID);
 					if(user != null) 
 					{ 
 						this._usersingame.UsersInGame.Add(user.ID);
+						usersIDs.Add(user.ID);
 					}
 					else
 					{
@@ -109,17 +110,18 @@ namespace BLL.Services
 				throw;
 			}
 		}
-		public async Task<Dictionary<int, List<int>>> LobbiesPerUser(int userID)
+		public async Task<Dictionary<int, List<OnlineUserDto>>> LobbiesPerUser(OnlineUserDto user)
 		{
 			try
 			{
-				Dictionary<int,List<int>> pom;
-				pom = new Dictionary<int, List<int>>();
+				Dictionary<int,List<OnlineUserDto>> pom;
+				List<OnlineUserDto> onlineUsers;
+				pom = new Dictionary<int, List<OnlineUserDto>>();
 				foreach (var item in this._usersingame.LobbyIDs)
 				{
-					if (item.Value.Contains(userID)) 
-					{
-						pom.Add(item.Key,item.Value);
+					if(item.Value.Any(x=>x.ID == user.ID)) 
+					{ 
+						pom.Add(item.Key, item.Value);
 					}
 				}
 				return pom;

@@ -1,7 +1,8 @@
 <!-- <input type="text" name="massage" [(ngModel)]="message"/>
 <button (click)="echo()">echo</button>
 <p *ngFor="let m of messages">{{m}}</p> -->
-<div class="pom">
+<div class="onlineusersContainer">
+    <div class="pom">
     <div class="message" *ngIf='usersOnline.length===0'>
         <h1 >All users are offline</h1>
     </div>
@@ -14,4 +15,6 @@
         </div>
         <button (click)="ChallangePlayer(userID,onlineuser.id)">Challange</button>
     </div>
+    </div>
 </div>
+<!-- <div *ngFor="let c of dictionary"><p>{{c.key}} {{c.code[0].userName}}</p></div> -->

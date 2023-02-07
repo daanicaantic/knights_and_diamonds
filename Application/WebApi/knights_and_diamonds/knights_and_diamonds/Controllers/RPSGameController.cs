@@ -5,7 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using DAL.Models;
 using DAL.DesignPatterns;
 using static System.Text.Json.JsonSerializer;
-
+using System.Runtime.Intrinsics.X86;
+using DAL.DTOs;
 
 namespace knights_and_diamonds.Controllers
 {
@@ -41,9 +42,13 @@ namespace knights_and_diamonds.Controllers
 
 				var user = await this._userService.GetUserByID(userID);
 				var challengedUser = await this._userService.GetUserByID(challengedUserID);
+
+				var player1 = new OnlineUserDto(user.ID, user.Name, user.SurName, user.UserName);
+				var player2 = new OnlineUserDto(challengedUser.ID, challengedUser.Name, challengedUser.SurName, challengedUser.UserName);
+
 				if (user != null && challengedUser!=null)
 				{
-					this._pregameservice.NewLobby(user,challengedUser);
+					this._pregameservice.NewLobby(player1, player2);
 					return Ok();
 				}
 				else 
@@ -94,8 +99,10 @@ namespace knights_and_diamonds.Controllers
 		{
 			try
 			{
+				var user = await this._userService.GetUserByID(userID);
 
-				var games =await this._pregameservice.LobbiesPerUser(userID);
+				var player1 = new OnlineUserDto(user.ID, user.Name, user.SurName, user.UserName);
+				var games =await this._pregameservice.LobbiesPerUser(player1);
 				return new JsonResult(games);
 			}
 			catch (Exception e)

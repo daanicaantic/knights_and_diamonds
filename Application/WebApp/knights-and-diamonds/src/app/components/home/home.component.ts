@@ -46,11 +46,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import * as signalR from "@microsoft/signalr";
 import { HubConnection } from '@aspnet/signalr';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, elementAt, Subscription } from 'rxjs';
 import { Connection } from 'src/classes/connection';
 import { OnlineUsers } from 'src/classes/user';
 import { AuthService } from '../../services/auth.service';
 import { SignalrService } from 'src/app/services/signalr.service';
+import { Dictionary } from 'src/classes/dictionary';
 
 @Component({
   selector: 'app-home',
@@ -62,9 +63,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   public message: string = '';
   public messages: string[] = [];
   usersOnline:Array<OnlineUsers>=new Array<OnlineUsers>();
+  dictionary!:Array<Dictionary>;
+  diction!:Dictionary;
   subscripions: Subscription[] = []
   userID=this.authService?.userValue?.id
   empty:any;
+  users:any[]=[];
   pomocna:boolean=false;
 
   constructor( 
@@ -75,15 +79,18 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     console.log("idusera",this.userID)
     this.getOnlineUsersList();
+    this.getGameRequestsList();
     
     if(this.userID!=undefined){
       if (this.signalrService.hubConnection.state=="Connected") {
         this.getOnlineUsersInv();
+        this.getGameRequestsInv(this.userID);
       }
       else{
         this.signalrService.ssSubj.subscribe((obj: any) => {
           if (obj.type == "HubConnStarted") {
             this.getOnlineUsersInv();
+            this.getGameRequestsInv(this.userID);
           }
         });
       }
@@ -95,6 +102,44 @@ export class HomeComponent implements OnInit, OnDestroy {
     .catch(err => console.error(err));
   }
 
+  addUserInv(user1:number,user2:number): void {
+    console.log("moja braca su u lovi",user1,user2)
+    this.signalrService.hubConnection.invoke("CreateLobby",user1,user2)
+    .catch(err => console.error(err));
+
+  }
+
+  getGameRequestsInv(user1:number): void {
+    console.log("moja braca su u lovi",user1)
+    this.signalrService.hubConnection.invoke("GamesRequests",user1)
+    .catch(err => console.error(err));
+  }
+
+  getGameRequestsList()
+  {
+    this.signalrService.hubConnection.on("GetGamesRequests", (users:any[]) => {
+      console.log("ovdeeeeeeee",users)
+      this.dictionary=new Array<Dictionary>;
+
+      for (let c in users) {
+        this.diction=new Dictionary(c,users[c])
+        console.log(users[c][1].id);
+        if(!this.dictionary.includes(this.diction))
+        {
+          this.dictionary.push(this.diction)
+        }
+      }
+      if(this.userID!==undefined){
+        this.dictionary=this.dictionary.filter(x=>x.code[0].id !== this.userID)
+      }
+      console.log(this.dictionary)
+    });
+  }
+
+  addUsersToLobby(user1:any,user2:any)
+  {
+    // this.signalrService.hubConnection.on("AddUsersToLobby",(user1,user2))
+  }
   private getOnlineUsersList(): void
   {
     this.signalrService.hubConnection.on("GetUsersFromHub", (users: Array<OnlineUsers>) => {
@@ -108,6 +153,13 @@ export class HomeComponent implements OnInit, OnDestroy {
   ChallangePlayer(user1:any,user2:any)
   {
     console.log(user1,user2);
+    if (this.signalrService.hubConnection.state=="Connected") {
+        this.addUserInv(user1,user2);
+
+        this.getGameRequestsInv(this.userID);
+        this.getGameRequestsList();
+        console.log("blabal")
+    }
   }
   
   ngOnDestroy(): void {
