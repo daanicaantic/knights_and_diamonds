@@ -32,20 +32,25 @@ namespace BLL.Services
 		{
 			if (!this._usersingame.UsersInGame.Contains(user.ID) && !this._usersingame.UsersInGame.Contains(challengedUser.ID))
 			{
-				List<OnlineUserDto> users;
+				Lobby lobby;
+				var lobbies = this._usersingame.Lobbies;
 				int lobbyID =this._usersingame.lobbyID++;
+				
+				/*ovo odkomentarisati kasnije*/
 
-				if (!this._usersingame.LobbyIDs.ContainsKey(lobbyID))
+			/*	if(lobbies.Any(x=>x.User1.ID==user.ID && x.User2.ID == challengedUser.ID)) 
 				{
-					users = new List<OnlineUserDto>();
-					users.Add(user);
-					users.Add(challengedUser);
-					this._usersingame.LobbyIDs.Add(lobbyID, users);
-					Console.WriteLine(Serialize(this._usersingame.LobbyIDs.ToList()));
+					throw new Exception("You allready challenge this player");
+				}*/
+
+				if (!lobbies.Any(x=>x.ID==lobbyID))
+				{
+					lobby = new Lobby(lobbyID, user, challengedUser);
+					lobbies.Add(lobby);
 				}
 				else
 				{
-					throw new Exception("There is not game with this ID");
+					throw new Exception("There is already lobby with this ID");
 				}
 
 			}
@@ -58,46 +63,35 @@ namespace BLL.Services
 
 		public async Task StartGame(int lobbyID)
 		{
-			if (this._usersingame.LobbyIDs.ContainsKey(lobbyID)) 
+			var lobbies = this._usersingame.Lobbies;
+			if (!lobbies.Any(x => x.ID == lobbyID))
 			{
-				PreGameSession player;
-				List<OnlineUserDto> users;
-				List<int> usersIDs=new List<int>();
-
-				var game = new RockPaperScissorsGame();
-				this.unitOfWork.RPSGame.Add(game);
-
-
-				users = this._usersingame.LobbyIDs[lobbyID].ToList();
-				Console.WriteLine(Serialize(users));
-				
-				foreach (var u in users)
-				{
-					var user=await this.unitOfWork.User.GetOne(u.ID);
-					if(user != null) 
-					{ 
-						this._usersingame.UsersInGame.Add(user.ID);
-						usersIDs.Add(user.ID);
-					}
-					else
-					{
-						throw new Exception("There is no user with this ID");
-					}
-					player = new PreGameSession(game, user);
-					this.unitOfWork.PreGame.Add(player);
-				}
-				this.unitOfWork.Complete();
-				this._usersingame.GamesIDs.Add(game.ID, usersIDs);
-				this._usersingame.LobbyIDs.Remove(lobbyID);
-
-				Console.WriteLine(Serialize(this._usersingame.GamesIDs.ToList()));
-				Console.WriteLine(Serialize(this._usersingame.UsersInGame));
+				throw new Exception("There is no lobby with this ID");
 			}
-			else 
+
+			Lobby lobby = lobbies.Find(x => x.ID == lobbyID);
+
+			if (lobby.User1 == null && lobby.User2 == null)
 			{
-				throw new Exception("There is no lobby with this lobbyID");
+				throw new Exception("There is no users in this lobby");
 			}
-			
+
+			RockPaperScissorsGame game = new RockPaperScissorsGame();
+			this.unitOfWork.RPSGame.Add(game);
+
+			var user1 = await this.unitOfWork.User.GetOne(lobby.User1.ID);
+			var user2 = await this.unitOfWork.User.GetOne(lobby.User2.ID);
+
+			PreGameSession player1 = new PreGameSession(game, user1);
+			PreGameSession player2 = new PreGameSession(game, user2);
+
+			this._usersingame.UsersInGame.Add(user1.ID);
+			this._usersingame.UsersInGame.Add(user2.ID);
+
+			this.unitOfWork.PreGame.Add(player1);
+			this.unitOfWork.PreGame.Add(player2);
+			this.unitOfWork.Complete();
+
 		}
 		public async Task<Dictionary<int,List<int>>> GetGames()
 		{
@@ -110,26 +104,10 @@ namespace BLL.Services
 				throw;
 			}
 		}
-		public async Task<Dictionary<int, List<OnlineUserDto>>> LobbiesPerUser(OnlineUserDto user)
+		public async Task<List<Lobby>> LobbiesPerUser(int userID)
 		{
-			try
-			{
-				Dictionary<int,List<OnlineUserDto>> pom;
-				List<OnlineUserDto> onlineUsers;
-				pom = new Dictionary<int, List<OnlineUserDto>>();
-				foreach (var item in this._usersingame.LobbyIDs)
-				{
-					if(item.Value.Any(x=>x.ID == user.ID)) 
-					{ 
-						pom.Add(item.Key, item.Value);
-					}
-				}
-				return pom;
-			}
-			catch
-			{
-				throw;
-			}
+			var lobbies=this._usersingame.Lobbies.Where(x=>x.User2.ID==userID).ToList();
+			return (lobbies);
 		}
 	}
 }

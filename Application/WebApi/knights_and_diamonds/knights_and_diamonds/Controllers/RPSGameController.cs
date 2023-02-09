@@ -7,6 +7,7 @@ using DAL.DesignPatterns;
 using static System.Text.Json.JsonSerializer;
 using System.Runtime.Intrinsics.X86;
 using DAL.DTOs;
+using Microsoft.AspNetCore.Identity;
 
 namespace knights_and_diamonds.Controllers
 {
@@ -100,10 +101,15 @@ namespace knights_and_diamonds.Controllers
 			try
 			{
 				var user = await this._userService.GetUserByID(userID);
-
-				var player1 = new OnlineUserDto(user.ID, user.Name, user.SurName, user.UserName);
-				var games =await this._pregameservice.LobbiesPerUser(player1);
-				return new JsonResult(games);
+				if (user != null)
+				{
+					var games = await this._pregameservice.LobbiesPerUser(userID);
+					return new JsonResult(games);
+				}
+				else 
+				{
+					return BadRequest("User is not found");
+				}
 			}
 			catch (Exception e)
 			{

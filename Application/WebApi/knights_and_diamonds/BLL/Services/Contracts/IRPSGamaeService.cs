@@ -1,4 +1,5 @@
-﻿using DAL.DTOs;
+﻿using DAL.DesignPatterns;
+using DAL.DTOs;
 using DAL.Models;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace BLL.Services.Contracts
 		void NewLobby(OnlineUserDto user, OnlineUserDto challengedUser);
 		Task StartGame(int gameID);
 		Task<Dictionary<int, List<int>>> GetGames();
-		Task<Dictionary<int, List<OnlineUserDto>>> LobbiesPerUser(OnlineUserDto user);
+		Task<List<Lobby>> LobbiesPerUser(int userID);
 
 	}
 }

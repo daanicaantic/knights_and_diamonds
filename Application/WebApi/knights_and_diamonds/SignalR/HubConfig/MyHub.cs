@@ -3,6 +3,7 @@ using BLL.Services.Contracts;
 using DAL.DataContext;
 using DAL.DTOs;
 using DAL.Models;
+using Microsoft.AspNetCore.Connections;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -42,6 +43,11 @@ namespace SignalR.HubConfig
 				tempstring = "NEHI";
 			}
 			await Clients.Clients(this.Context.ConnectionId).SendAsync("askServerResponse",tempstring);
+			Console.WriteLine(this.Context.ConnectionId);
+		}
+		public async Task GetConnection() 
+		{
+			await Clients.Caller.SendAsync("GetConnectionID", this.Context.ConnectionId);
 		}
 		public void Echo(string message)
 		{
@@ -69,10 +75,9 @@ namespace SignalR.HubConfig
 
 		public async Task GamesRequests(int userID)
 		{
-			var user = await this._userService.GetUserByID(userID);
-			var player = new OnlineUserDto(user.ID, user.Name, user.SurName, user.UserName);
-			var games = await this._gameService.LobbiesPerUser(player);
+			var games = await this._gameService.LobbiesPerUser(userID);
 			await Clients.Caller.SendAsync("GetGamesRequests", games);
+			Console.WriteLine(this.Context.ConnectionId);
 		}
 	}
 }

@@ -12,7 +12,7 @@ namespace DAL.DesignPatterns
 		private InGameUsers() {
 
 			GamesIDs = new Dictionary<int, List<int>>();
-			LobbyIDs = new Dictionary<int, List<OnlineUserDto>>();
+			Lobbies = new List<Lobby>();
 			UsersInGame = new List<int>();
 			lobbyID = 0;
 
@@ -36,7 +36,7 @@ namespace DAL.DesignPatterns
 			return _instance;
 		}
 		public int lobbyID  { get; set; }
-		public Dictionary<int, List<OnlineUserDto>> LobbyIDs { get; set; }
+		public List<Lobby> Lobbies { get; set; }
 		public Dictionary<int, List<int>> GamesIDs { get; set; }
 
 		public List<int> UsersInGame { get; set; }

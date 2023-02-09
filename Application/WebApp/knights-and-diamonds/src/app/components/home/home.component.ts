@@ -52,6 +52,7 @@ import { OnlineUsers } from 'src/classes/user';
 import { AuthService } from '../../services/auth.service';
 import { SignalrService } from 'src/app/services/signalr.service';
 import { Dictionary } from 'src/classes/dictionary';
+import { ConnectionService } from 'src/app/services/connection.service';
 
 @Component({
   selector: 'app-home',
@@ -74,23 +75,27 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor( 
     private authService: AuthService,
     private signalrService:SignalrService,
+    private connectionService:ConnectionService,
     ) { }
   
   ngOnInit(): void {
     console.log("idusera",this.userID)
     this.getOnlineUsersList();
     this.getGameRequestsList();
+    this.connectionService.getConnectionID();
     
     if(this.userID!=undefined){
       if (this.signalrService.hubConnection.state=="Connected") {
         this.getOnlineUsersInv();
         this.getGameRequestsInv(this.userID);
+        this.connectionService.getConnectionIDInv();
       }
       else{
         this.signalrService.ssSubj.subscribe((obj: any) => {
           if (obj.type == "HubConnStarted") {
             this.getOnlineUsersInv();
             this.getGameRequestsInv(this.userID);
+            this.connectionService.getConnectionIDInv();
           }
         });
       }
@@ -118,21 +123,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   getGameRequestsList()
   {
     this.signalrService.hubConnection.on("GetGamesRequests", (users:any[]) => {
-      console.log("ovdeeeeeeee",users)
-      this.dictionary=new Array<Dictionary>;
-
-      for (let c in users) {
-        this.diction=new Dictionary(c,users[c])
-        console.log(users[c][1].id);
-        if(!this.dictionary.includes(this.diction))
-        {
-          this.dictionary.push(this.diction)
-        }
-      }
-      if(this.userID!==undefined){
-        this.dictionary=this.dictionary.filter(x=>x.code[0].id !== this.userID)
-      }
-      console.log(this.dictionary)
+      console.log("ovdeeeeeeee",this.userID,users)
     });
   }
 
