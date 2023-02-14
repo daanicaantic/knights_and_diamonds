@@ -10,6 +10,8 @@ using System.Text;
 using DAL.DTOs;
 using DAL.Migrations;
 using DAL.Models;
+using Microsoft.AspNetCore.SignalR;
+using SignalR.HubConfig;
 
 namespace knights_and_diamonds.Controllers
 {
@@ -18,17 +20,21 @@ namespace knights_and_diamonds.Controllers
         private readonly IConfiguration _config;
         private readonly KnightsAndDiamondsContext context;
         public IUserService _userService { get; set; }
+		public ILoginService _loginService { get; set; }
+
 		public IConnectionService _connetionService { get; set; }
 
-		public LoginController(KnightsAndDiamondsContext context, IConfiguration config)
+		public LoginController(KnightsAndDiamondsContext context, IConfiguration config,IHubContext<MyHub> HubContext)
         {
             this.context = context;
             _userService = new UserService(this.context);
 			_connetionService=new ConnectionService(this.context);
 			_config = config;
-        }
+			_loginService = new LoginService(this.context, this._config);
 
-        public static long CheckLoginToken(string token) 
+		}
+
+		public static long CheckLoginToken(string token) 
         {
 			var handler = new JwtSecurityTokenHandler();
 			var jwtSecurityToken = handler.ReadJwtToken(token);
@@ -56,58 +62,21 @@ namespace knights_and_diamonds.Controllers
 
 			
 		}
-        [HttpGet]
-        [Route("getConnection")]
-        public async Task<IActionResult> getConnection(int id)
-        {
-            var c = await this._connetionService.GetConnection(id);
-            return new JsonResult(c);
-
-        }
-
 		[HttpPost]
         [Route("LogIn")]
         public async Task<IActionResult> LogIn([FromBody] UserInfoDTO userInfo)
         {
-            TokenDTO t = new TokenDTO();
-            if (userInfo == null || string.IsNullOrEmpty(userInfo.Email)
-                || string.IsNullOrEmpty(userInfo.Password))
-                return BadRequest("Data not valid!");
-
-            var user =  this._userService.GetUser(userInfo.Email, userInfo.Password).FirstOrDefault();
-
-            var claims = new List<Claim>();
-
-            if (user != null)
+            try
             {
-                claims.Add(new Claim("ID", user.ID.ToString()));
-                claims.Add(new Claim(ClaimTypes.Name, user.Name));
-                claims.Add(new Claim(ClaimTypes.Email, user.Email));
-                claims.Add(new Claim(ClaimTypes.Role, user.Role));
 
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-                var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-                var token = new JwtSecurityToken(
-                    _config["Jwt:Issuer"],
-                    _config["Jwt:Audience"],
-                    claims,
-                    expires: DateTime.UtcNow.AddHours(1),
-                    signingCredentials: signIn);
-                t.Token = new JwtSecurityTokenHandler().WriteToken(token);
-                t.Role = user.Role;
-                t.ID = user.ID;
-
-                Connection c = new Connection();
-                c.UserID = user.ID;
-                c.isStillLogeniIn = DateTime.UtcNow;
-
-                Console.WriteLine(c.isStillLogeniIn);
-
-				this._connetionService.AddConnection(c);
-                return Ok(t);
+				var t=await this._loginService.Login(userInfo);
+				return Ok(t);
+                
             }
-
-            return NotFound("This user does not exists!");
+            catch(Exception e) 
+            {
+                return BadRequest(e.Message);
+            }
         }
 		[HttpDelete]
 		[Route("LogOut")]
@@ -123,29 +92,14 @@ namespace knights_and_diamonds.Controllers
                 return BadRequest();
             }
 		}
-
+	
 		[HttpGet]
-		[Route("GetAllConection")]
-		public async Task<IActionResult> GetConnection()
+		[Route("GetConnectionPerUser")]
+		public async Task<IActionResult> GetConnectionPerUser(int UserID)
 		{
 			try
 			{
-				var c = await this._connetionService.GetAllConnections();
-
-                return new JsonResult(c);
-			}
-			catch
-			{
-				return BadRequest();
-			}
-		}
-		[HttpGet]
-		[Route("GetOnlineUsers")]
-		public async Task<IActionResult> GetOnlineUsers()
-		{
-			try
-			{
-				var c = await this._connetionService.GetOnlineUsers();
+				var c = await this._connetionService.GetConnectionByUser(UserID);
 
 				return new JsonResult(c);
 			}
@@ -154,5 +108,7 @@ namespace knights_and_diamonds.Controllers
 				return BadRequest();
 			}
 		}
+
+		
 	}
 }

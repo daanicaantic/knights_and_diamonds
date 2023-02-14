@@ -1,9 +1,11 @@
 ﻿using BLL.Services;
 using BLL.Services.Contracts;
 using DAL.DataContext;
+using DAL.DesignPatterns;
 using DAL.DTOs;
 using DAL.Models;
 using Microsoft.AspNetCore.Connections;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -17,18 +19,23 @@ namespace SignalR.HubConfig
 {
 	public class MyHub:Hub
 	{
+		private readonly IConfiguration _config;
+
 		private readonly KnightsAndDiamondsContext context;
 		public IUserService _userService { get; set; }
 		public IConnectionService _connetionService { get; set; }
 		public IRPSGamaeService _gameService { get; set; }
+		public ILoginService _loginService { get; set; }
 		public ConnectionsHub _connectedUsers { get; set; }
 
-		public MyHub(KnightsAndDiamondsContext context)
+		public MyHub(KnightsAndDiamondsContext context,IConfiguration config)
 		{
 			this.context = context;
+			this._config = config;
 			_userService = new UserService(this.context);
 			_connetionService = new ConnectionService(this.context);
 			_gameService = new RPSGameService(this.context);
+			_loginService = new LoginService(this.context, this._config);
 			_connectedUsers = ConnectionsHub.GetInstance();
 		}
 		public async Task askServer(string someTextForClient) 
@@ -48,6 +55,16 @@ namespace SignalR.HubConfig
 		public async Task GetConnection() 
 		{
 			await Clients.Caller.SendAsync("GetConnectionID", this.Context.ConnectionId);
+		}
+		public async Task AddConnection(int userID) 
+		{
+			this._connetionService.AddOnlineUser(userID, this.Context.ConnectionId);
+			Console.WriteLine("Konaa" + this.context.ContextId);	
+		}
+		public async Task LogIn(UserInfoDTO userInfo)
+		{
+			var t = await this._loginService.Login(userInfo);
+			await Clients.Caller.SendAsync("GetUserToken", t);
 		}
 		public void Echo(string message)
 		{
@@ -76,8 +93,11 @@ namespace SignalR.HubConfig
 		public async Task GamesRequests(int userID)
 		{
 			var games = await this._gameService.LobbiesPerUser(userID);
-			await Clients.Caller.SendAsync("GetGamesRequests", games);
-			Console.WriteLine(this.Context.ConnectionId);
+			var connections = await this._connetionService.GetConnectionByUser(userID);
+			foreach (var con in connections)
+			{
+				await Clients.Client(con).SendAsync("GetGamesRequests", games);
+			}
 		}
 	}
 }

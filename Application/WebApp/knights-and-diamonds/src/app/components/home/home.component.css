@@ -60,3 +60,17 @@ p,h1,h3{
     align-items: center;
     color: rgb(187, 187, 187);
 }
+.gamerequests
+{
+    padding: 2px;
+    width: 100%;
+}
+.gamerequest
+{
+    background-color: rgb(28, 28, 29);
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color:wheat
+}

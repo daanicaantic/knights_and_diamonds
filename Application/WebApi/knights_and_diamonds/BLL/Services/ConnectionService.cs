@@ -5,6 +5,7 @@ using DAL.DTOs;
 using DAL.Models;
 using DAL.Repositories.Contracts;
 using DAL.UnitOfWork;
+using Microsoft.AspNetCore.Server.IIS.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,111 +26,59 @@ namespace BLL.Services
 			unitOfWork = new UnitOfWork(_context);
 			_onlineUsers = OnlineUsers.GetInstance();
 		}
-		public async Task<Connection> GetConnection(int id)
-		{
-			try
-			{
-				return await this.unitOfWork.Connection.GetOne(id);
-			}
-			catch
-			{
-				throw;
-			}
-		}
-		public async Task<Connection> GetConnectionByUser(int Userid)
-		{
-			try
-			{
-				return await this.unitOfWork.Connection.GetConnectionByUser(Userid);
-			}
-			catch
-			{
-				throw;
-			}
-		}
 
-		public async Task<IEnumerable<Connection>> GetAllConnections()
+		public void AddOnlineUser(int userID, string connectionId)
 		{
-			try 
+			List<string> connectionsIDs;
+			if (_onlineUsers.ConnectedUsers.Count < 0)
 			{
-				return await this.unitOfWork.Connection.GetAll();
+				throw new Exception("No one is logedin");
 			}
-			catch 
+			if (!_onlineUsers.ConnectedUsers.ContainsKey(userID))
 			{
-				throw;
-			}
-		}
-
-		public async Task<List<OnlineUserDto>> GetOnlineUsers()
-		{
-			try
-			{
-				OnlineUserDto userDTO;
-				List<OnlineUserDto> ListOfOnlineUsers = new List<OnlineUserDto>();
-				foreach (var userID in this._onlineUsers.ConnectedUsers)
-				{
-					var user=await this.unitOfWork.User.GetOne(userID);
-					if (user != null) 
-					{
-						userDTO = new OnlineUserDto(user.ID, user.Name, user.SurName, user.UserName);
-						ListOfOnlineUsers.Add(userDTO);
-					}
-				}
-				return ListOfOnlineUsers;
-			}
-			catch
-			{
-				throw;
-			}
-		}
-
-		public void RemoveConnection(Connection connection)
-		{
-			try
-			{
-				this.unitOfWork.Connection.Delete(connection);
-				this.unitOfWork.Complete();
-			}
-			catch
-			{
-				throw;
-			}
-		}
-
-		public void RemoveUserFromOnlineUsers(int userID)
-		{
-			if (_onlineUsers.ConnectedUsers.Contains(userID)) 
-			{ 
-				this._onlineUsers.ConnectedUsers.Remove(userID);
-			}
-		}
-		public void AddConnection(Connection connection)
-		{
-			if (!_onlineUsers.ConnectedUsers.Contains(connection.UserID))
-			{
-				this.unitOfWork.Connection.Add(connection);
-				this._onlineUsers.ConnectedUsers.Add(connection.UserID);
-				this.unitOfWork.Complete();
+				connectionsIDs = new List<string>();
+				connectionsIDs.Add(connectionId);
+				_onlineUsers.ConnectedUsers.Add(userID, connectionsIDs);
 			}
 			else
 			{
-				throw new Exception("User is already logedin");
+				_onlineUsers.ConnectedUsers[userID].Add(connectionId);
 			}
 		}
-		/*koristimo funkciju ukoliko jos uvek nije istekla 
-		 * prethodna konekcija korisnkia,*/
-		public void AddUserIDtoList(int userID) 
+		public async Task<List<string>> GetConnectionByUser(int UserID)
 		{
-			if (!_onlineUsers.ConnectedUsers.Contains(userID)) 
+			var cons = new List<string>();
+			if (_onlineUsers.ConnectedUsers.ContainsKey(UserID)) 
 			{ 
-				this._onlineUsers.ConnectedUsers.Add(userID);
+				cons=_onlineUsers.ConnectedUsers[UserID].ToList();
 			}
+			return cons ;
 		}
-
-		public void UpdateConnection(Connection connection)
+		public async Task<List<OnlineUserDto>> GetOnlineUsers()
 		{
-			this.unitOfWork.Connection.Update(connection);
-			this.unitOfWork.Complete();
+			OnlineUserDto onlineUserDto;
+			List<OnlineUserDto> ListOfOnlineUsers = new List<OnlineUserDto>();
+			foreach (var userID in this._onlineUsers.ConnectedUsers.Keys)
+			{
+				var user = await this.unitOfWork.User.GetOne(userID);
+				if (user != null)
+				{
+					onlineUserDto = new OnlineUserDto(user.ID, user.Name, user.SurName, user.UserName);
+					ListOfOnlineUsers.Add(onlineUserDto);
+				}
+				else 
+				{
+					throw new Exception("This" + user.ID.ToString() + "dosenot exsist");
+				}
+			}
+			return ListOfOnlineUsers;
+		}
+		public void RemoveUserFromOnlineUsers(int userID)
+		{
+			if (_onlineUsers.ConnectedUsers.ContainsKey(userID))
+			{
+				this._onlineUsers.ConnectedUsers.Remove(userID);
+			}
 		}
 
 	}

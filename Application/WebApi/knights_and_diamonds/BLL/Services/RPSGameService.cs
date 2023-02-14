@@ -34,7 +34,7 @@ namespace BLL.Services
 			{
 				Lobby lobby;
 				var lobbies = this._usersingame.Lobbies;
-				int lobbyID =this._usersingame.lobbyID++;
+				int lobbyID = this._usersingame.lobbyID++;
 				
 				/*ovo odkomentarisati kasnije*/
 
@@ -106,7 +106,7 @@ namespace BLL.Services
 		}
 		public async Task<List<Lobby>> LobbiesPerUser(int userID)
 		{
-			var lobbies=this._usersingame.Lobbies.Where(x=>x.User2.ID==userID).ToList();
+			var lobbies = this._usersingame.Lobbies.Where(x => x.User2.ID == userID).ToList();
 			return (lobbies);
 		}
 	}

@@ -9,5 +9,6 @@ namespace DAL.Repositories.Contracts
 {
     public interface IUserRepository : IRepository<User>
     {
+        /*Task<User> FindUser(string email,string password);*/
     }
 }

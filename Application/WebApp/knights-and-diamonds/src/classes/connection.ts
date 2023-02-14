@@ -1,7 +1,10 @@
 export interface Connection {
-    id?: number;
-    userID: number;
-    isStillLogeniIn: string;
-
+    id:number
+    name:string
+    signalrID:string
+    surName:string
+    timeStamp:string
+    userID:number
+    userName:string
 }
   

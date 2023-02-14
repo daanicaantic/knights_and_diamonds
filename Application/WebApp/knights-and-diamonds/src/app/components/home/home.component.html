@@ -3,6 +3,11 @@
 <p *ngFor="let m of messages">{{m}}</p> -->
 <div class="onlineusersContainer">
     <div class="pom">
+        <div class="gamerequests" *ngFor="let c of gameRequests">
+            <div class="gamerequest">
+                <p>{{c.user1.userName}}</p>
+            </div>
+        </div>
     <div class="message" *ngIf='usersOnline.length===0'>
         <h1 >All users are offline</h1>
     </div>
@@ -15,6 +20,7 @@
         </div>
         <button (click)="ChallangePlayer(userID,onlineuser.id)">Challange</button>
     </div>
+    
     </div>
 </div>
-<!-- <div *ngFor="let c of dictionary"><p>{{c.key}} {{c.code[0].userName}}</p></div> -->
+

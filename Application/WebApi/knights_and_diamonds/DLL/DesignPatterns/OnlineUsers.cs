@@ -10,7 +10,7 @@ namespace DAL.DesignPatterns
 	{
 		private OnlineUsers()
 		{
-			ConnectedUsers = new List<int>();
+			ConnectedUsers = new Dictionary<int, List<string>>();
 		}
 
 		private static readonly object _lock = new object();
@@ -30,6 +30,6 @@ namespace DAL.DesignPatterns
 			}
 			return _instance;
 		}
-		public List<int> ConnectedUsers { get; set; }
+		public Dictionary<int,List<string>> ConnectedUsers { get; set; }
 	}
 }

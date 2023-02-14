@@ -6,20 +6,21 @@ import { SignalrService } from 'src/app/services/signalr.service';
   providedIn: 'root'
 })
 export class ConnectionService {
-  connectionID:any;
+  connectionID: any
     
-  constructor(private signalrService:SignalrService,) { }
+  constructor(private signalrService:SignalrService) { }
 
   getConnectionIDInv(): void {
     this.signalrService.hubConnection.invoke("GetConnection")
     .catch(err => console.error(err));
   }
 
-  getConnectionID()
+  public getConnectionID()
   {
     this.signalrService.hubConnection.on("GetConnectionID", (connecionID:any) => {
       console.log("connectionID",connecionID)
-      this.connectionID=connecionID;
     });
+    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",this.signalrService.hubConnection.connectionId)
   }
+
 }

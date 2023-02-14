@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import * as signalR from "@microsoft/signalr";
 import { MessageService } from 'primeng/api';
 import { Observable, Subject } from 'rxjs';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,9 +10,11 @@ import { Observable, Subject } from 'rxjs';
 })
 export class SignalrService {
 
-  constructor(private messageService: MessageService,) { }
+  constructor(private messageService: MessageService
+  ) { }
 
   hubConnection!: signalR.HubConnection;
+  
     
   ssSubj = new Subject<any>();
   ssObs(): Observable<any> {
@@ -29,10 +32,13 @@ export class SignalrService {
       this.hubConnection
       .start()
       .then(() => {
-         this.ssSubj.next({type:"HubConnStarted"})
+        this.ssSubj.next({type:"HubConnStarted"})
+        console.log("dfhasdkjlfbjsdafsajdj",this.hubConnection.connectionId)
+        
       })
       .catch(err => console.log('Error while starting connection: ' + err));
   }
+
 //   async askServer() {
 //     console.log("askServerStart");
 

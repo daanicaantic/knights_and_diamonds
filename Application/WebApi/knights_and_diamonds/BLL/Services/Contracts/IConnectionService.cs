@@ -10,14 +10,9 @@ namespace BLL.Services.Contracts
 {
 	public interface IConnectionService
 	{
-		Task<Connection> GetConnection(int id);
-		Task<Connection> GetConnectionByUser(int Userid);
-		Task<IEnumerable<Connection>> GetAllConnections();
+		Task<List<string>> GetConnectionByUser(int Userid);
 		Task<List<OnlineUserDto>> GetOnlineUsers();
-		void AddConnection(Connection connection);
-		void AddUserIDtoList(int userID);
-		void RemoveConnection(Connection connection);
+		void AddOnlineUser(int userID,string connectionID);
 		void RemoveUserFromOnlineUsers(int userID);
-		void UpdateConnection(Connection connection);
 	}
 }

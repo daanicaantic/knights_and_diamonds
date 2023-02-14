@@ -20,7 +20,6 @@ namespace DAL.UnitOfWork
             Deck = new DeckRepository(_context);
 			User = new UserRepository(_context);
 			CardInDeck = new CardInDeckRepository(_context);
-			Connection=new ConnectionRepository(_context);
 			RPSGame = new RPSGameRepository(_context);
 			PreGame = new PreGameRepository(_context);
 
@@ -34,8 +33,6 @@ namespace DAL.UnitOfWork
 		public IUserRepository User { get; private set; }
 
 		public ICardInDeckRepository CardInDeck { get; private set; }
-
-		public IConnectionRepository Connection { get; private set; }
 
 		public IRPSGameRepository RPSGame { get; private set; }
 
