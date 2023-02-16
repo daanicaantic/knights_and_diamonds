@@ -52,7 +52,7 @@ namespace knights_and_diamonds.Controllers
 					}
 					else
 					{
-						return NotFound("Card with this id dosent exist");
+						return NotFound("Card with this id doesnt exist");
 					}
 				}
 				else
@@ -92,7 +92,7 @@ namespace knights_and_diamonds.Controllers
 				}
 				else
 				{
-					return NotFound("Card with this ID dosent exist");
+					return NotFound("Card with this ID doesnt exist");
 				}
 			}
 			catch (Exception e)
@@ -112,9 +112,9 @@ namespace knights_and_diamonds.Controllers
 				}
 				else 
 				{
-					return NotFound("This card dosent exist");
+					return NotFound("This card doesnt exist");
 				}
-				return Ok();
+				return Ok(card);
 			}
 			catch (Exception e)
 			{

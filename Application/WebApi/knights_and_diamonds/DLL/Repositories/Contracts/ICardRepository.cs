@@ -9,6 +9,6 @@ namespace DAL.Repositories.Contracts
 {
 	public interface ICardRepository : IRepository<Card>
 	{
-		IEnumerable<Card> GetCardsPerPage(int pageIndex, int pageSize);
+		IQueryable<Card> GetCardsPerPage(int pageIndex, int pageSize);
 	}
 }

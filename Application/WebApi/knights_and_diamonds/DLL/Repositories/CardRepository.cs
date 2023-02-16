@@ -16,9 +16,9 @@ namespace DAL.Repositories
 		{
 			
 		}
-		public IEnumerable<Card> GetCardsPerPage(int pageIndex, int pageSize)
+		public IQueryable<Card> GetCardsPerPage(int pageIndex, int pageSize)
 		{
-			return Context.Cards
+			return (IQueryable<Card>)Context.Cards
 				.Skip((pageIndex - 1) * pageSize)
 				.Take(pageSize)
 				.ToList();

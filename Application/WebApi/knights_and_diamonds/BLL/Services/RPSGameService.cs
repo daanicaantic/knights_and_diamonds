@@ -12,6 +12,7 @@ using System.Numerics;
 using System.Collections;
 using static System.Text.Json.JsonSerializer;
 using DAL.DTOs;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BLL.Services
 {
@@ -27,43 +28,48 @@ namespace BLL.Services
 			_usersingame = InGameUsers.GetInstance();
 		}
 
-
-		public void NewLobby(OnlineUserDto user, OnlineUserDto challengedUser)
+		public async Task<int> NewLobby(OnlineUserDto user, OnlineUserDto challengedUser)
 		{
 			if (!this._usersingame.UsersInGame.Contains(user.ID) && !this._usersingame.UsersInGame.Contains(challengedUser.ID))
 			{
 				Lobby lobby;
 				var lobbies = this._usersingame.Lobbies;
-				int lobbyID = this._usersingame.lobbyID++;
-				
-				/*ovo odkomentarisati kasnije*/
 
-			/*	if(lobbies.Any(x=>x.User1.ID==user.ID && x.User2.ID == challengedUser.ID)) 
+				if (lobbies.Any(x => x.User1.ID == user.ID && x.User2.ID == challengedUser.ID))
 				{
-					throw new Exception("You allready challenge this player");
-				}*/
+					throw new Exception("You have allready challenged this player");
+				}
 
-				if (!lobbies.Any(x=>x.ID==lobbyID))
+                if (lobbies.Any(x => x.User1.ID == challengedUser.ID && x.User2.ID == user.ID))
+                {
+                    throw new Exception("This user allready challenged you");
+                }
+
+                int lobbyID = this._usersingame.lobbyID++;
+
+                if (!lobbies.Any(x=>x.ID==lobbyID))
 				{
 					lobby = new Lobby(lobbyID, user, challengedUser);
 					lobbies.Add(lobby);
 				}
+
 				else
 				{
 					throw new Exception("There is already lobby with this ID");
 				}
 
+				return lobby.ID;
 			}
 			else 
 			{ 
 				throw new Exception("One or both users are already in game");
 			}
-
 		}
 
-		public async Task StartGame(int lobbyID)
+		public async Task<int> StartGame(int lobbyID)
 		{
 			var lobbies = this._usersingame.Lobbies;
+
 			if (!lobbies.Any(x => x.ID == lobbyID))
 			{
 				throw new Exception("There is no lobby with this ID");
@@ -92,8 +98,24 @@ namespace BLL.Services
 			this.unitOfWork.PreGame.Add(player2);
 			this.unitOfWork.Complete();
 
+			return game.ID;
 		}
-		public async Task<Dictionary<int,List<int>>> GetGames()
+        public async Task<int> DenyGame(int lobbyID)
+        {
+            var lobbies = this._usersingame.Lobbies;
+
+            if (!lobbies.Any(x => x.ID == lobbyID))
+            {
+                throw new Exception("There is no lobby with this ID");
+            }
+
+            Lobby lobby = lobbies.Find(x => x.ID == lobbyID);
+
+            lobbies.Remove(lobby);
+
+            return lobby.ID;
+        }
+        public async Task<Dictionary<int,List<int>>> GetGames()
 		{
 			try
 			{
@@ -103,6 +125,21 @@ namespace BLL.Services
 			{
 				throw;
 			}
+		}
+		public async Task<List<int>> RedirectToGame(int gameID) 
+		{
+			List<int> usersIDs=new List<int>(); 
+			var game = await this.unitOfWork.RPSGame.GetGamesWithPlayers(gameID);
+			if (game == null)
+			{
+				throw new Exception("There is no game with this ID");
+			}
+		
+			foreach (var player in game.Players)
+			{
+				usersIDs.Add(player.UserID);
+			}
+			return usersIDs;
 		}
 		public async Task<List<Lobby>> LobbiesPerUser(int userID)
 		{

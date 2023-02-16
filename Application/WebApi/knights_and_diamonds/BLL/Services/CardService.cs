@@ -67,7 +67,7 @@ namespace BLL.Services
 			}
 		}
 
-		public IEnumerable<Card> FindCardByName(string name)
+		public IQueryable<Card> FindCardByName(string name)
 		{
 			try
 			{

@@ -32,7 +32,7 @@ namespace BLL.Services
 			List<string> connectionsIDs;
 			if (_onlineUsers.ConnectedUsers.Count < 0)
 			{
-				throw new Exception("No one is logedin");
+				throw new Exception("No one is logged in.");
 			}
 			if (!_onlineUsers.ConnectedUsers.ContainsKey(userID))
 			{
@@ -50,9 +50,9 @@ namespace BLL.Services
 			var cons = new List<string>();
 			if (_onlineUsers.ConnectedUsers.ContainsKey(UserID)) 
 			{ 
-				cons=_onlineUsers.ConnectedUsers[UserID].ToList();
+				cons = _onlineUsers.ConnectedUsers[UserID].ToList();
 			}
-			return cons ;
+			return cons;
 		}
 		public async Task<List<OnlineUserDto>> GetOnlineUsers()
 		{
@@ -68,7 +68,7 @@ namespace BLL.Services
 				}
 				else 
 				{
-					throw new Exception("This" + user.ID.ToString() + "dosenot exsist");
+					throw new Exception("This" + user.ID.ToString() + "does not exsists.");
 				}
 			}
 			return ListOfOnlineUsers;
@@ -80,6 +80,5 @@ namespace BLL.Services
 				this._onlineUsers.ConnectedUsers.Remove(userID);
 			}
 		}
-
 	}
 }

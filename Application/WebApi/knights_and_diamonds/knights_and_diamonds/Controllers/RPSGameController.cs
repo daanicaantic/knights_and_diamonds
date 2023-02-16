@@ -32,25 +32,30 @@ namespace knights_and_diamonds.Controllers
 		}
 		[Route("NewLobby")]
 		[HttpPost]
-		public async Task<IActionResult> NewLobby(int userID,int challengedUserID)
+		public async Task<IActionResult> NewLobby(int userID, int challengedUserID)
 		{
 			try
 			{
 				if (userID == challengedUserID)
 				{
-					return BadRequest("Users IDs are the same,you cannot play against yourself!!");
+					return BadRequest("Users IDs are the same, you cannot play against yourself!!");
 				}
 
 				var user = await this._userService.GetUserByID(userID);
 				var challengedUser = await this._userService.GetUserByID(challengedUserID);
 
-				var player1 = new OnlineUserDto(user.ID, user.Name, user.SurName, user.UserName);
+                if (user == null || challengedUser == null)
+                {
+					return NotFound("User does not exists.");
+                }
+
+                var player1 = new OnlineUserDto(user.ID, user.Name, user.SurName, user.UserName);
 				var player2 = new OnlineUserDto(challengedUser.ID, challengedUser.Name, challengedUser.SurName, challengedUser.UserName);
 
 				if (user != null && challengedUser!=null)
 				{
-					this._pregameservice.NewLobby(player1, player2);
-					return Ok();
+					var lobbyID = await this._pregameservice.NewLobby(player1, player2);
+					return Ok(lobbyID);
 				}
 				else 
 				{
@@ -63,14 +68,14 @@ namespace knights_and_diamonds.Controllers
 			}
 		}
 
-		[Route("StartGame")]
+		[Route("StartGame/{lobbyID}")]
 		[HttpPost]
 		public async Task<IActionResult> StartGame(int lobbyID)
 		{
 			try
 			{
-				await this._pregameservice.StartGame(lobbyID);
-				return Ok();
+				var game = await this._pregameservice.StartGame(lobbyID);
+				return Ok(game);
 			}
 			catch (Exception e)
 			{
@@ -84,8 +89,7 @@ namespace knights_and_diamonds.Controllers
 		{
 			try
 			{
-
-				var games = await this._pregameservice.GetGames() ;
+				var games = await this._pregameservice.GetGames();
 				return new JsonResult(games);
 			}
 			catch (Exception e)
@@ -116,5 +120,35 @@ namespace knights_and_diamonds.Controllers
 				return BadRequest(e);
 			}
 		}
-	}
+
+		[Route("DenyGame/{lobbyID}")]
+		[HttpDelete]
+		public async Task<IActionResult> DenyGame(int lobbyID)
+		{
+            try
+            {
+				var game = await this._pregameservice.DenyGame(lobbyID);
+				return Ok(game);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [Route("Redirect")]
+        [HttpGet]
+        public async Task<IActionResult> Redirect(int gameID)
+        {
+            try
+            {
+                var userIDs = await this._pregameservice.RedirectToGame(gameID);
+                return Ok(userIDs);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+    }
 }

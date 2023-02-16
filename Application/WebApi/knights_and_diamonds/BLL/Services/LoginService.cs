@@ -24,7 +24,6 @@ namespace BLL.Services
 		public OnlineUsers _onlineUsers { get; set; }
 		private readonly IConfiguration _config;
 
-
 		public LoginService(KnightsAndDiamondsContext context, IConfiguration config)
 		{
 			this._context = context;
@@ -67,7 +66,6 @@ namespace BLL.Services
 				throw new Exception("Error");
 
 			}
-
 		}
 	} 
 } 

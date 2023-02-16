@@ -6,6 +6,8 @@ import { AuthService } from '../../services/auth.service';
 import { SignalrService } from 'src/app/services/signalr.service';
 import { ConnectionService } from 'src/app/services/connection.service';
 import { OnlineusersService } from 'src/app/services/onlineusers.service';
+import { GamesRequestsService } from 'src/app/services/games-requests.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -20,14 +22,16 @@ export class HomeComponent implements OnInit, OnDestroy {
   subscripions: Subscription[] = []
   userID=this.authService?.userValue?.id
   gameRequests!:any[];
-
-
+  game:any;
 
   constructor( 
     private authService: AuthService,
     private signalrService:SignalrService,
     private connectionService:ConnectionService,
     private onlineUsersService:OnlineusersService,
+    private gr:GamesRequestsService,
+    private router: Router
+
     ) { }
   
   ngOnInit(): void {
@@ -42,6 +46,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.addConncectionInv(this.userID);
         this.onlineUsersService.getOnlineUsersInv();
         // this.getOnlineUsersInv();
+        
         this.getGameRequestsInv(this.userID);
       }
       else{
@@ -50,7 +55,6 @@ export class HomeComponent implements OnInit, OnDestroy {
             this.connectionService.getConnectionIDInv();
             this.addConncectionInv(this.userID);
             this.onlineUsersService.getOnlineUsersInv();
-
             // this.getOnlineUsersInv();
             this.getGameRequestsInv(this.userID);
           }
@@ -74,7 +78,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   getGameRequestsInv(user1:number): void {
-    this.signalrService.hubConnection.invoke("GamesRequests",user1)
+    this.signalrService.hubConnection.invoke("GamesRequests", user1)
     .catch(err => console.error(err));
   }
 
@@ -88,7 +92,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   addUserInv(user1:number,user2:number): void {
     console.log("moja braca su u lovi",user1,user2)
-    this.signalrService.hubConnection.invoke("CreateLobby",user1,user2)
+    this.signalrService.hubConnection.invoke("CreateLobby", user1, user2)
     .catch(err => console.error(err));
 
   }
@@ -101,14 +105,57 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.signalrService.hubConnection.invoke("AddConnection",userID)
     .catch(err => console.error(err));
   }
+  startGameInv(gameID:any)
+  {
+    this.signalrService.hubConnection.invoke("StartGame",gameID)
+    .catch(err => console.error(err));
+  }
+  startGameResponse()
+  {
+    this.signalrService.hubConnection.on("GameStarted", (game:any) => {
+      console.log("bla")
+      this.router.navigate(['/game']);
+    });
+  }
 
-  ChallangePlayer(user1:any,user2:any)
+  challangePlayer(user1:any,user2:any)
   {
     if (this.signalrService.hubConnection.state=="Connected") {
         this.addUserInv(user1,user2);
         this.getGameRequestsInv(user2);
         this.getGameRequestsList();
     }
+  }
+
+  acceptGameRequest(lobbyID:any)
+  {
+    console.log("accepted", lobbyID)
+    this.gr.startGame(lobbyID).subscribe({
+      next: res=> {
+        console.log("uspesno prihvacen zahtev")
+        this.startGameResponse();
+        this.startGameInv(res);
+        
+      },
+      error: err=> {
+        console.log("neuspesno")
+      }
+    });
+  }
+
+  denyGameRequest(lobbyID:any)
+  {
+    console.log("dennied", lobbyID)
+    this.gr.denyGame(lobbyID).subscribe({
+      next: res=> {
+        console.log("uspesno odbijen zahtev")
+        this.getGameRequestsInv(this.userID);
+        this.getGameRequestsList();
+      },
+      error: err=> {
+        console.log("neuspesno odbijen zahtev")
+      }
+    })
   }
   
   ngOnDestroy(): void {

@@ -28,7 +28,7 @@ namespace DAL.Repositories
         {
             try
             {
-                return await this.Context.CardInDecks.Where(x => x.Deck.ID == DeckId)
+                return await Context.CardInDecks.Where(x => x.Deck.ID == DeckId)
                     .Include(x => x.Card)
                     .Include(x => x.Deck)
                     .ToListAsync();

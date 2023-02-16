@@ -59,8 +59,6 @@ namespace knights_and_diamonds.Controllers
             {
                 return Ok(false) ;
             }
-
-			
 		}
 		[HttpPost]
         [Route("LogIn")]
@@ -69,7 +67,7 @@ namespace knights_and_diamonds.Controllers
             try
             {
 
-				var t=await this._loginService.Login(userInfo);
+				var t = await this._loginService.Login(userInfo);
 				return Ok(t);
                 
             }

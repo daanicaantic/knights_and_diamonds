@@ -97,7 +97,18 @@ namespace SignalR.HubConfig
 			foreach (var con in connections)
 			{
 				await Clients.Client(con).SendAsync("GetGamesRequests", games);
-			}
+            }
 		}
-	}
+
+        public async Task StartGame(int gameID)
+        {
+			var userIDs = await this._gameService.RedirectToGame(gameID);
+            var connections = await this._connetionService.GetConnectionByUser(userIDs[0]);
+			foreach (var con in connections)
+			{
+                await Clients.Clients(con).SendAsync("GameStarted", gameID);
+            }
+
+        }
+    }
 }

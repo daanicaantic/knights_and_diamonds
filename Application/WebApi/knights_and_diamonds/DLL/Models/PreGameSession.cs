@@ -26,7 +26,7 @@ namespace DAL.Models
 		{ 
 		
 		}
-		public PreGameSession(RockPaperScissorsGame? rPSGame,User? user)
+		public PreGameSession(RockPaperScissorsGame ?rPSGame, User ?user)
 		{
 			RPSGameID = rPSGame.ID;
 			RPSGame = rPSGame;

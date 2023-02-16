@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories.Contracts
 {
-	public interface IRPSGameRepository:IRepository<RockPaperScissorsGame>
+	public interface IRPSGameRepository : IRepository<RockPaperScissorsGame>
 	{
-		Task<IEnumerable<RockPaperScissorsGame>> GetGamesWithPlayers();
-
-	}
+        Task<RockPaperScissorsGame> GetGamesWithPlayers(int gameID);
+    }
 }

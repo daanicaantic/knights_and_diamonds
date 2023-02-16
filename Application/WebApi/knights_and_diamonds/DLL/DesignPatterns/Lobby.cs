@@ -10,8 +10,8 @@ namespace DAL.DesignPatterns
 	public class Lobby
 	{
 		public int ID { get; set; }
-		public OnlineUserDto User1 { get; set; }
-		public OnlineUserDto User2 { get; set; }
+		public OnlineUserDto ?User1 { get; set; }
+		public OnlineUserDto ?User2 { get; set; }
 		public Lobby() 
 		{ 
 		

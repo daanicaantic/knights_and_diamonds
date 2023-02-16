@@ -5,6 +5,7 @@ import { LoginFormComponent } from './components/login-form/login-form.component
 import { AuthGuard } from './services/auth.guard';
 import { CardCreateComponent } from './components/card-create/card-create.component';
 import { HomeComponent } from './components/home/home.component';
+import { CardComponent } from './components/card/card.component';
 
 
 const routes: Routes = [
@@ -15,6 +16,10 @@ const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent
+  },
+  {
+    path: 'game',
+    component: CardComponent
   }
 ]
 
