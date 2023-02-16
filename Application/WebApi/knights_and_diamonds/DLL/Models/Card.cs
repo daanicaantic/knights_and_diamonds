@@ -11,9 +11,9 @@ namespace DAL.Models
 {
 	public enum MonsterTP
 	{
-		spellcaster,
-		dragon,
-		knight
+		Spellcaster,
+		Dragon,
+		Knight
 	}
 	public class Card
 	{
