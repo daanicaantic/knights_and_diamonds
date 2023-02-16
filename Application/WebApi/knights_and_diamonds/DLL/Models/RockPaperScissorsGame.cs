@@ -11,7 +11,6 @@ namespace DAL.Models
 	{
 		public int ID { get; set; }
 		[JsonIgnore]
-		public List<PreGameSession> Players { get; set; }
-
+		public List<PreGameSession> ?Players { get; set; }
 	}
 }

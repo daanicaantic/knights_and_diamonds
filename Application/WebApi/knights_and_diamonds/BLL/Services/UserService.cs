@@ -40,7 +40,7 @@ namespace BLL.Services
             return await this.unitOfWork.User.GetOne(id);
         }
 
-        public IEnumerable<User> GetUser(string email, string password)
+        public IQueryable<User> GetUser(string email, string password)
         {
             try
             {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories.Contracts
 {
-	public interface ICardInDeckRepository:IRepository<CardInDeck>
+	public interface ICardInDeckRepository : IRepository<CardInDeck>
 	{
 
 	}

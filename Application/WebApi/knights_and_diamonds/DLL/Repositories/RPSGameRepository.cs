@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,13 +22,12 @@ namespace DAL.Repositories
 			get { return _context as KnightsAndDiamondsContext; }
 		}
 
-		public async Task<IEnumerable<RockPaperScissorsGame>> GetGamesWithPlayers()
+		public async Task<RockPaperScissorsGame> GetGamesWithPlayers(int gameID)
 		{
 			try
 			{
-				return await this.Context.RockPaperScissorsGames
-					.Include(x=>x.Players)
-					.ToListAsync();
+				var game = await this.Context.RockPaperScissorsGames.Include(x => x.Players).Where(x => x.ID == gameID).FirstOrDefaultAsync();
+				return game;
 			}
 			catch
 			{

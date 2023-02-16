@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SignalrService } from 'src/app/services/signalr.service';
 
-
 @Injectable({
   providedIn: 'root'
 })

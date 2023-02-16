@@ -67,10 +67,19 @@ p,h1,h3{
 }
 .gamerequest
 {
-    background-color: rgb(28, 28, 29);
+    background-color: rgb(59,130,246);
+    color: white;
     padding: 8px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    color:wheat
+    justify-content: space-between;
+}
+.gamerequest-user
+{
+
+}
+.gamerequest-actions
+{
+    display: flex;
+    align-self: flex-end;
 }

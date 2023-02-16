@@ -11,10 +11,12 @@ namespace BLL.Services.Contracts
 {
 	public interface IRPSGamaeService
 	{
-		void NewLobby(OnlineUserDto user, OnlineUserDto challengedUser);
-		Task StartGame(int gameID);
-		Task<Dictionary<int, List<int>>> GetGames();
+        Task<int> NewLobby(OnlineUserDto user, OnlineUserDto challengedUser);
+        Task<int> StartGame(int lobbyID);
+        Task<int> DenyGame(int lobbyID);
+        Task<Dictionary<int, List<int>>> GetGames();
 		Task<List<Lobby>> LobbiesPerUser(int userID);
+        Task<List<int>> RedirectToGame(int gameID);
 
-	}
+    }
 }

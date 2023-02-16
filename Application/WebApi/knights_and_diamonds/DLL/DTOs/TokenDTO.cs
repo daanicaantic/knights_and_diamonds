@@ -8,8 +8,8 @@ namespace DAL.DTOs
 {
     public class TokenDTO
     {
-        public string Token { get; set; }
+        public string ?Token { get; set; }
         public int ID { get; set; }
-        public string Role { get; set; }
+        public string ?Role { get; set; }
     }
 }

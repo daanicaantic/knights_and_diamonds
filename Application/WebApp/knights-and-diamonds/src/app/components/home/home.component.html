@@ -5,7 +5,13 @@
     <div class="pom">
         <div class="gamerequests" *ngFor="let c of gameRequests">
             <div class="gamerequest">
-                <p>{{c.user1.userName}}</p>
+                <div class="gamerequest-user">
+                    <p>{{c.user1.userName}}</p>
+                </div>
+                <div class="gamerequest-actions">
+                    <i class="pi pi-check" style="margin-right: 4px" (click)="acceptGameRequest(c.id)"></i>
+                    <i class="pi pi-times" style="margin-left: 4px" (click)="denyGameRequest(c.id)"></i>
+                </div>
             </div>
         </div>
     <div class="message" *ngIf='usersOnline.length===0'>
@@ -18,7 +24,7 @@
         <div class="username">
             <h3>{{onlineuser.userName}}</h3>
         </div>
-        <button (click)="ChallangePlayer(userID,onlineuser.id)">Challange</button>
+        <button (click)="challangePlayer(userID,onlineuser.id)">Challange</button>
     </div>
     
     </div>

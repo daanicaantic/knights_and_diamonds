@@ -12,8 +12,8 @@ namespace DAL.Repositories.Contracts
 	public interface IRepository<T> where T : class
 	{
 		Task<T> GetOne(int id);
-		Task<IEnumerable<T>> GetAll();
-		IEnumerable<T> Find(Expression<Func<T, bool>> predicate);
+		Task<IQueryable<T>> GetAll();
+		IQueryable<T> Find(Expression<Func<T, bool>> predicate);
 		void Add(T obj);
 		void Delete(T obj);
 		void Update(T obj);

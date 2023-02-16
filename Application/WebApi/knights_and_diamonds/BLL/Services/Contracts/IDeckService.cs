@@ -12,9 +12,5 @@ namespace BLL.Services.Contracts
         void AddDeck(Deck deck);
         void AddCardToDeck(int cardID, int deckID);
         public Task<IList<CardInDeck>> GetCards(int id);
-
-
-
-
 	}
 }

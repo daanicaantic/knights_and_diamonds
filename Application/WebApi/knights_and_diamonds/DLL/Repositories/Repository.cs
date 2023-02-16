@@ -22,11 +22,11 @@ namespace DAL.Repositories
 		{
 			return await this._context.Set<T>().FindAsync(id);
 		}
-		public async Task<IEnumerable<T>> GetAll()
+		public async Task<IQueryable<T>> GetAll()
 		{
-			return await _context.Set<T>().ToListAsync();
+			return (IQueryable<T>)await _context.Set<T>().ToListAsync();
 		}
-		public virtual IEnumerable<T> Find(Expression<Func<T, bool>> predicate)
+		public virtual IQueryable<T> Find(Expression<Func<T, bool>> predicate)
 		{
 			return _context.Set<T>().Where(predicate);
 		}

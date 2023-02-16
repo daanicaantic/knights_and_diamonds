@@ -13,6 +13,6 @@ namespace BLL.Services.Contracts
 		void AddCard(Card card);
 		void RemoveCard(Card card);
 		void UpdateCard(Card card);
-		IEnumerable<Card> FindCardByName(string name);
+		IQueryable<Card> FindCardByName(string name);
 	}
 }
