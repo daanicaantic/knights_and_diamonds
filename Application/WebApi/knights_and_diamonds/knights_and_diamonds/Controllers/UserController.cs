@@ -32,12 +32,12 @@ namespace knights_and_diamonds.Controllers
         {
             try
             {
-                this._userService.AddUser(user);
+                await this._userService.AddUser(user);
                 return Ok(user);
             }
             catch (Exception e)
             {
-                return BadRequest(e);
+                return BadRequest(e.Message);
             }
         }
 

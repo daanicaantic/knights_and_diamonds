@@ -1,0 +1,58 @@
+*{
+    font-family: 'Roboto', sans-serif;
+}
+.background {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+}
+.item-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+h1 {
+    font-weight: 900;
+}
+.item-form {
+    display: flex;
+    justify-content: center;
+}
+.button-submit {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    width: 18rem;
+    height: 2.5rem;
+
+    background-image: linear-gradient(to right, #24C6DC 0%, #514A9D  51%, #24C6DC  100%);
+    margin: 10px;
+    /* padding: 15px 45px; */
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;            
+    box-shadow: 0 0 20px #eee;
+    border-radius: 10px;
+    display: block;
+    }
+    .btn-grad:hover {
+        background-position: right center; /* change the direction of the change here */
+        color: #fff;
+        text-decoration: none;
+}
+.button-submit-div {
+    display: flex;
+    justify-content: space-around;
+}
+.registration {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.registration-field {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}

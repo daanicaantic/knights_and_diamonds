@@ -6,12 +6,17 @@ import { AuthGuard } from './services/auth.guard';
 import { CardCreateComponent } from './components/card-create/card-create.component';
 import { HomeComponent } from './components/home/home.component';
 import { CardComponent } from './components/card/card.component';
+import { RegistrationFormComponent } from './components/registration-form/registration-form.component';
 
 
 const routes: Routes = [
   {
     path: 'login',
     component: LoginFormComponent
+  },
+  {
+    path: 'register',
+    component: RegistrationFormComponent
   },
   {
     path: 'home',

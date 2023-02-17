@@ -24,6 +24,7 @@ import { LoginFormComponent } from './components/login-form/login-form.component
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './components/home/home.component';
+import { RegistrationFormComponent } from './components/registration-form/registration-form.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { HomeComponent } from './components/home/home.component';
     MenubarComponent,
     LoginFormComponent,
     HomeComponent,
+    RegistrationFormComponent,
   ],
   imports: [
     BrowserModule,

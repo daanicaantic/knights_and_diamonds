@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
-	public class RPSGameRepository: Repository<RockPaperScissorsGame>,IRPSGameRepository
+	public class RPSGameRepository: Repository<RockPaperScissorsGame>, IRPSGameRepository
 	{
 		public RPSGameRepository(KnightsAndDiamondsContext context) : base(context)
 		{
