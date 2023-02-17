@@ -3,6 +3,7 @@ using BLL.Services.Contracts;
 using DAL.DataContext;
 using DAL.DesignPatterns;
 using DAL.DTOs;
+using DAL.Migrations;
 using DAL.Models;
 using Microsoft.AspNetCore.Connections;
 using Microsoft.AspNetCore.Mvc;
@@ -100,15 +101,19 @@ namespace SignalR.HubConfig
             }
 		}
 
-        public async Task StartGame(int gameID)
-        {
+		public async Task StartGame(int gameID)
+		{
 			var userIDs = await this._gameService.RedirectToGame(gameID);
-            var connections = await this._connetionService.GetConnectionByUser(userIDs[0]);
-			foreach (var con in connections)
+			foreach (var userID in userIDs)
 			{
-                await Clients.Clients(con).SendAsync("GameStarted", gameID);
-            }
+				var connections = await this._connetionService.GetConnectionByUser(userID);
+				foreach (var con in connections)
+				{
+					await Clients.Client(con).SendAsync("GameStarted", gameID);
+				}
 
-        }
-    }
+			}
+		}
+
+	}
 }
