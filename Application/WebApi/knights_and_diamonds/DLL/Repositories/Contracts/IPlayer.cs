@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories.Contracts
 {
-	public interface IPreGameRepository:IRepository<PreGameSession>
+	public interface IPlayer:IRepository<Models.Player>
 	{
 	}
 }

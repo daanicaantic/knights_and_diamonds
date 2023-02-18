@@ -88,14 +88,14 @@ namespace BLL.Services
 			var user1 = await this.unitOfWork.User.GetOne(lobby.User1.ID);
 			var user2 = await this.unitOfWork.User.GetOne(lobby.User2.ID);
 
-			PreGameSession player1 = new PreGameSession(game, user1);
-			PreGameSession player2 = new PreGameSession(game, user2);
+			Player player1 = new Player(game, user1);
+			Player player2 = new Player(game, user2);
 
 			this._usersingame.UsersInGame.Add(user1.ID);
 			this._usersingame.UsersInGame.Add(user2.ID);
 
-			this.unitOfWork.PreGame.Add(player1);
-			this.unitOfWork.PreGame.Add(player2);
+			this.unitOfWork.Player.Add(player1);
+			this.unitOfWork.Player.Add(player2);
 			this.unitOfWork.Complete();
 
 			return game.ID;
@@ -146,5 +146,6 @@ namespace BLL.Services
 			var lobbies = this._usersingame.Lobbies.Where(x => x.User2.ID == userID).ToList();
 			return (lobbies);
 		}
+
 	}
 }

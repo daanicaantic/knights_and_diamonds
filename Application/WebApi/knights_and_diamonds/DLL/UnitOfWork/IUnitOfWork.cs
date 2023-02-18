@@ -14,7 +14,7 @@ namespace DAL.UnitOfWork
 		IUserRepository User { get; }
 		IRPSGameRepository RPSGame { get; }
 		ICardInDeckRepository CardInDeck { get; }
-		IPreGameRepository PreGame { get; }
+		IPlayer Player { get; }
 
 		int Complete();
 	}

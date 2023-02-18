@@ -13,7 +13,7 @@ namespace DAL.Models
 		Paper,
 		Scissors
 	}
-	public class PreGameSession
+	public class Player
 	{
 		public int ID { get; set; }
 		public Play? Play { get; set; }
@@ -22,11 +22,11 @@ namespace DAL.Models
 		public int UserID { get; set; }
 		public User? User { get; set; }
 
-		public PreGameSession() 
+		public Player() 
 		{ 
 		
 		}
-		public PreGameSession(RockPaperScissorsGame ?rPSGame, User ?user)
+		public Player(RockPaperScissorsGame ?rPSGame, User ?user)
 		{
 			RPSGameID = rPSGame.ID;
 			RPSGame = rPSGame;
