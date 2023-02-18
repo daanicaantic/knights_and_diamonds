@@ -1,0 +1,36 @@
+<div class="background">
+    <div class="item-container border-round">
+      <div class="item-header">
+        <h1>Register</h1>
+      </div>
+      <div class="item-form">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <div class="registration">
+                <div class="registration-field">
+                    <label>Name</label>
+                    <input class="field" formControlName="name" type="text" pInputText />
+                </div>
+                <div class="registration-field">
+                    <label>Surname</label>
+                    <input class="field" formControlName="surname" type="text" pInputText />
+                </div>
+                <div class="registration-field">
+                    <label>Username</label>
+                    <input class="field" formControlName="username" type="text" pInputText />
+                </div>
+                <div class="registration-field">
+                    <label>Email</label>
+                    <input class="field" formControlName="email" type="text" pInputText />
+                </div>
+                <div class="registration-field">
+                    <label>Password</label>
+                    <input class="field" formControlName="password" type="password" pPassword pInputText/>
+                </div>
+                <div class="button-submit-div">
+                    <button class="button-submit p-button-rounded" pButton type="button" label="REGISTER" (click)="onSubmit()"></button>
+                </div>
+            </div>
+        </form>
+      </div>
+    </div>
+</div>

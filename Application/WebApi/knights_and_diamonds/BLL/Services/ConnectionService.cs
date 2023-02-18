@@ -19,12 +19,14 @@ namespace BLL.Services
 		private readonly KnightsAndDiamondsContext _context;
 		public UnitOfWork unitOfWork { get; set; }
 		public OnlineUsers _onlineUsers { get; set; }
+		public InGameUsers _inGameUsers { get; set; }
 
-		public ConnectionService(KnightsAndDiamondsContext context)
+        public ConnectionService(KnightsAndDiamondsContext context)
 		{
 			this._context = context;
 			unitOfWork = new UnitOfWork(_context);
 			_onlineUsers = OnlineUsers.GetInstance();
+			_inGameUsers = InGameUsers.GetInstance();
 		}
 
 		public void AddOnlineUser(int userID, string connectionId)
@@ -78,6 +80,11 @@ namespace BLL.Services
 			if (_onlineUsers.ConnectedUsers.ContainsKey(userID))
 			{
 				this._onlineUsers.ConnectedUsers.Remove(userID);
+				var lobbies = this._inGameUsers.Lobbies.Where(x => x.User1.ID == userID).ToList();
+				foreach (var lobby in lobbies)
+				{
+					this._inGameUsers.Lobbies.Remove(lobby);
+				}
 			}
 		}
 	}

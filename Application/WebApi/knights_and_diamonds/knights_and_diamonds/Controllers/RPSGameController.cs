@@ -20,7 +20,7 @@ namespace knights_and_diamonds.Controllers
 				public UnitOfWork unitOfWork { get; set; }
         */
 		private readonly KnightsAndDiamondsContext context;
-		public IRPSGamaeService _pregameservice { get; set; }
+		public IRPSGameService _pregameservice { get; set; }
 		public IUserService _userService { get; set; }
 
 		public RPSGameController(KnightsAndDiamondsContext context)

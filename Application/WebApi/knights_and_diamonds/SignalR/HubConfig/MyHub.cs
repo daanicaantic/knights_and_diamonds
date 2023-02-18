@@ -24,17 +24,17 @@ namespace SignalR.HubConfig
 
 		private readonly KnightsAndDiamondsContext context;
 		public IUserService _userService { get; set; }
-		public IConnectionService _connetionService { get; set; }
-		public IRPSGamaeService _gameService { get; set; }
+		public IConnectionService _connectionService { get; set; }
+		public IRPSGameService _gameService { get; set; }
 		public ILoginService _loginService { get; set; }
 		public ConnectionsHub _connectedUsers { get; set; }
 
-		public MyHub(KnightsAndDiamondsContext context,IConfiguration config)
+		public MyHub(KnightsAndDiamondsContext context, IConfiguration config)
 		{
 			this.context = context;
 			this._config = config;
 			_userService = new UserService(this.context);
-			_connetionService = new ConnectionService(this.context);
+			_connectionService = new ConnectionService(this.context);
 			_gameService = new RPSGameService(this.context);
 			_loginService = new LoginService(this.context, this._config);
 			_connectedUsers = ConnectionsHub.GetInstance();
@@ -59,7 +59,7 @@ namespace SignalR.HubConfig
 		}
 		public async Task AddConnection(int userID) 
 		{
-			this._connetionService.AddOnlineUser(userID, this.Context.ConnectionId);
+			this._connectionService.AddOnlineUser(userID, this.Context.ConnectionId);
 			Console.WriteLine("Konaa" + this.context.ContextId);	
 		}
 		public async Task LogIn(UserInfoDTO userInfo)
@@ -74,7 +74,7 @@ namespace SignalR.HubConfig
 
 		public async Task GetOnlineUsers()
 		{
-			var onlineUsers = await this._connetionService.GetOnlineUsers();
+			var onlineUsers = await this._connectionService.GetOnlineUsers();
 			await Clients.All.SendAsync("GetUsersFromHub", onlineUsers);
 		}
 
@@ -94,7 +94,7 @@ namespace SignalR.HubConfig
 		public async Task GamesRequests(int userID)
 		{
 			var games = await this._gameService.LobbiesPerUser(userID);
-			var connections = await this._connetionService.GetConnectionByUser(userID);
+			var connections = await this._connectionService.GetConnectionByUser(userID);
 			foreach (var con in connections)
 			{
 				await Clients.Client(con).SendAsync("GetGamesRequests", games);
@@ -106,12 +106,11 @@ namespace SignalR.HubConfig
 			var userIDs = await this._gameService.RedirectToGame(gameID);
 			foreach (var userID in userIDs)
 			{
-				var connections = await this._connetionService.GetConnectionByUser(userID);
+				var connections = await this._connectionService.GetConnectionByUser(userID);
 				foreach (var con in connections)
 				{
 					await Clients.Client(con).SendAsync("GameStarted", gameID);
 				}
-
 			}
 		}
 

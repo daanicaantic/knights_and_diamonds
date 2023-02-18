@@ -10,7 +10,7 @@ namespace BLL.Services.Contracts
 {
     public interface IUserService
     {
-        void AddUser(UserDTO user);
+        Task AddUser(UserDTO user);
         Task<User> GetUserByID(int id);
         IQueryable<User> GetUser(string email, string password);
     }

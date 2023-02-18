@@ -18,13 +18,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   hubConnection!: signalR.HubConnection;
   public message: string = '';
   public messages: string[] = [];
-  usersOnline:Array<OnlineUsers>=new Array<OnlineUsers>();;
+  usersOnline:Array<OnlineUsers>=new Array<OnlineUsers>();
   subscripions: Subscription[] = []
   userID=this.authService?.userValue?.id
   gameRequests!:any[];
-
-
-
 
   constructor( 
     private authService: AuthService,

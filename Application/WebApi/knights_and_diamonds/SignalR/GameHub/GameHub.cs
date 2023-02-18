@@ -14,7 +14,7 @@ namespace SignalR.GameHub
 	public class GameHub:Hub
 	{
 		private readonly KnightsAndDiamondsContext context;
-		public IRPSGamaeService _gameService { get; set; }
+		public IRPSGameService _gameService { get; set; }
 
 		public GameHub(KnightsAndDiamondsContext context)
 		{

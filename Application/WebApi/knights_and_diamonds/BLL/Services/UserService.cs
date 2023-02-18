@@ -21,19 +21,24 @@ namespace BLL.Services
             this._context = context;
             unitOfWork = new UnitOfWork(_context);
         }
-        public void AddUser(UserDTO u)
+        public async Task AddUser(UserDTO u)
         {
-            try
+            var userFound = await this.unitOfWork.User.GetUserByEmail(u.Email);
+            if(userFound != null)
             {
-                var user = new User(u.Name, u.SurName, u.Email, u.Password, u.UserName, u.Role);
-                
-                this.unitOfWork.User.Add(user);
-                this.unitOfWork.Complete();
+                throw new Exception("User with this email already exists.");
             }
-            catch
+
+            userFound = await this.unitOfWork.User.GetUserByUsername(u.UserName);
+            if(userFound != null )
             {
-                throw;
+                throw new Exception("User with this username already exists.");
             }
+
+            var user = new User(u.Name, u.SurName, u.Email, u.Password, u.UserName, u.Role);
+
+            this.unitOfWork.User.Add(user);
+            this.unitOfWork.Complete();
         }
         public async Task<User> GetUserByID(int id)
         {

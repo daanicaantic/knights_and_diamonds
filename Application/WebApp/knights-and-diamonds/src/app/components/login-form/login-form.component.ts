@@ -13,7 +13,6 @@ import { AuthService } from 'src/app/services/auth.service';
 export class LoginFormComponent implements OnInit, OnDestroy {
     form!: FormGroup;
     subscriptions: Subscription[] = [];
-    loading = false;
     submitted = false;
     
   constructor(
@@ -48,11 +47,18 @@ export class LoginFormComponent implements OnInit, OnDestroy {
         }
       })
     )
-
   }
 
   onRegistration(){
     
+  }
+
+  onMouseEnter(hoverName: HTMLElement) {
+    hoverName.style.color = "blue";
+  }
+
+  onMouseOut(hoverName: HTMLElement) {
+    hoverName.style.color = "black";
   }
   
 }

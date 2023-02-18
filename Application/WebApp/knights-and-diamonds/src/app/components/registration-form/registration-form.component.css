@@ -4,13 +4,7 @@
 .background {
     display: flex;
     justify-content: center;
-    margin-top: 2rem;
-}
-.item-container {
-    width: 350px;
-    /* box-shadow: 10px 5px 5px gray;
-    border: 1px solid gray; */
-    border-radius: 20px;
+    margin-top: 1rem;
 }
 .item-header {
     display: flex;
@@ -23,9 +17,6 @@ h1 {
 .item-form {
     display: flex;
     justify-content: center;
-}
-.field {
-    padding: 1rem;
 }
 .button-submit {
     margin-top: 1rem;
@@ -54,18 +45,14 @@ h1 {
     display: flex;
     justify-content: space-around;
 }
-.login-field {
+.registration {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.registration-field {
     padding: 1rem;
-    width: 20rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-}
-.reg-field {
-    padding: 1rem;
-    display: flex;
-    justify-content: space-around;
-}
-.reg-link {
-    cursor: pointer;
 }

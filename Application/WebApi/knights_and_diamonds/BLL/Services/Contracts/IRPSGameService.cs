@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BLL.Services.Contracts
 {
-	public interface IRPSGamaeService
+	public interface IRPSGameService
 	{
         Task<int> NewLobby(OnlineUserDto user, OnlineUserDto challengedUser);
         Task<int> StartGame(int lobbyID);
@@ -17,6 +17,6 @@ namespace BLL.Services.Contracts
         Task<Dictionary<int, List<int>>> GetGames();
 		Task<List<Lobby>> LobbiesPerUser(int userID);
         Task<List<int>> RedirectToGame(int gameID);
-
+        Task<List<Player>> GetPlayersPerGame(int gameID);
     }
 }

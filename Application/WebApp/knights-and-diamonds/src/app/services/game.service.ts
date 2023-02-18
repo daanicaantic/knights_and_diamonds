@@ -34,8 +34,8 @@ export class GameService {
     .catch(err => console.error(err));
   }
   startGameResponse() {
-    this.signalrService.hubConnection.on("GameStarted", (game:any) => {
-      this.router.navigate(['/game']);
+    this.signalrService.hubConnection.on("GameStarted", (gameID: any) => {
+      this.router.navigate(['/game', gameID]);
     });
   }
 }
