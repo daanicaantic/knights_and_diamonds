@@ -14,11 +14,5 @@ namespace DAL.DataContext
 		public DbSet<CardInDeck>? CardInDecks { get; set; }
 		public DbSet<RockPaperScissorsGame>? RockPaperScissorsGames { get; set; }
 		public DbSet<PreGameSession>? PreGameSessions { get; set; }
-
-
-
-
-
-
 	}
 }

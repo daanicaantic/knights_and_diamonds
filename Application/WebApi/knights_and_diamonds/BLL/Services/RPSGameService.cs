@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BLL.Services
 {
-	public class RPSGameService : IRPSGamaeService
+	public class RPSGameService : IRPSGameService
 	{
 		private readonly KnightsAndDiamondsContext _context;
 		public UnitOfWork unitOfWork { get; set; }
@@ -82,11 +82,22 @@ namespace BLL.Services
 				throw new Exception("There is no users in this lobby");
 			}
 
-			RockPaperScissorsGame game = new RockPaperScissorsGame();
-			this.unitOfWork.RPSGame.Add(game);
+            var user1 = await this.unitOfWork.User.GetOne(lobby.User1.ID);
+            
+            if (this._usersingame.UsersInGame.Contains(user1.ID))
+			{
+				throw new Exception(user1.UserName + "is already in game.");
+			}
 
-			var user1 = await this.unitOfWork.User.GetOne(lobby.User1.ID);
-			var user2 = await this.unitOfWork.User.GetOne(lobby.User2.ID);
+            var user2 = await this.unitOfWork.User.GetOne(lobby.User2.ID);
+
+            if (this._usersingame.UsersInGame.Contains(user2.ID))
+            {
+                throw new Exception(user2.UserName + "is already in game.");
+            }
+
+            RockPaperScissorsGame game = new RockPaperScissorsGame();
+			this.unitOfWork.RPSGame.Add(game);
 
 			PreGameSession player1 = new PreGameSession(game, user1);
 			PreGameSession player2 = new PreGameSession(game, user2);
@@ -96,6 +107,9 @@ namespace BLL.Services
 
 			this.unitOfWork.PreGame.Add(player1);
 			this.unitOfWork.PreGame.Add(player2);
+
+			this._usersingame.Lobbies.Remove(lobby);
+
 			this.unitOfWork.Complete();
 
 			return game.ID;
@@ -146,5 +160,10 @@ namespace BLL.Services
 			var lobbies = this._usersingame.Lobbies.Where(x => x.User2.ID == userID).ToList();
 			return (lobbies);
 		}
-	}
+
+        public Task<List<PreGameSession>> GetPlayersPerGame(int gameID)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

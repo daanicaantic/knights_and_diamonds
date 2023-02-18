@@ -23,9 +23,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   userID=this.authService?.userValue?.id
   gameRequests!:any[];
 
-
-
-
   constructor( 
     private authService: AuthService,
     private signalrService:SignalrService,
