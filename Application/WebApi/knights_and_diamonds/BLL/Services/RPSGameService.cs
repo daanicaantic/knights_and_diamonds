@@ -13,6 +13,7 @@ using System.Collections;
 using static System.Text.Json.JsonSerializer;
 using DAL.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using DAL.Migrations;
 
 namespace BLL.Services
 {
@@ -47,7 +48,7 @@ namespace BLL.Services
 
                 int lobbyID = this._usersingame.lobbyID++;
 
-                if (!lobbies.Any(x=>x.ID==lobbyID))
+                if (!lobbies.Any(x => x.ID == lobbyID))
 				{
 					lobby = new Lobby(lobbyID, user, challengedUser);
 					lobbies.Add(lobby);
@@ -143,6 +144,7 @@ namespace BLL.Services
 		{
 			List<int> usersIDs=new List<int>(); 
 			var game = await this.unitOfWork.RPSGame.GetGamesWithPlayers(gameID);
+
 			if (game == null)
 			{
 				throw new Exception("There is no game with this ID");
@@ -162,7 +164,106 @@ namespace BLL.Services
         public Task<List<Player>> GetPlayersPerGame(int gameID)
         {
             throw new NotImplementedException();
-		
 		}
+		public async Task PlayMove(int playerID, string moveName)
+		{
+			var player = await this.unitOfWork.Player.GetOne(playerID);
+
+			if (player == null)
+			{
+				throw new Exception("Player is undefined.");
+			}
+
+			if (moveName == "Rock") 
+			{
+				player.Play = Play.Rock;
+			}
+			else if (moveName == "Paper")
+			{
+				player.Play = Play.Paper;
+            }
+			else if (moveName == "Scissors")
+			{
+				player.Play = Play.Scissors;
+			}
+			else 
+			{
+				throw new Exception("Move is undefined.");
+			}
+
+			this.unitOfWork.Player.Update(player);
+			this.unitOfWork.Complete();
+        }
+		public async Task<string> CheckRPSWinner(int RPSgameID)
+		{
+            var game = await this.unitOfWork.RPSGame.GetGamesWithPlayers(RPSgameID);
+
+			List<Player> players = game.Players;
+
+			if (game == null)
+			{
+				throw new Exception("RPS game not found.");
+			}
+
+			if (players[0].Play == players[1].Play) 
+			{
+				return "Draw";
+			}
+			else if (players[0].Play == null)
+			{
+				return "Player2 wins";
+			}
+			else if (players[1].Play == null) 
+			{ 
+				return "Player1 wins";
+            }
+            else if (players[0].Play == Play.Rock)
+			{
+				if (players[1].Play == Play.Paper)
+				{
+					return "Player2 wins";
+				}
+				else if (players[1].Play == Play.Scissors)
+				{
+					return "Player1 wins";
+				}
+				else
+				{
+					throw new Exception("Player move is undefined");
+				}
+			}
+			else if (players[0].Play == Play.Scissors)
+			{
+				if (players[1].Play == Play.Rock)
+				{
+					return "Player2 wins";
+				}
+				else if (players[1].Play == Play.Paper)
+				{
+					return "Player1 wins";
+				}
+				else
+				{
+					throw new Exception("Player move is undefined");
+				}
+			}
+			else if (players[0].Play == Play.Paper)
+			{
+				if (players[1].Play == Play.Scissors)
+				{
+					return "Player2 wins";
+				}
+				else if (players[1].Play == Play.Rock)
+				{
+					return "Player1 wins";
+				}
+				else
+				{
+					throw new Exception("Player move is undefined");
+				}
+			}
+
+			throw new Exception("Players moves are undefined");
+        }
 	}
 }

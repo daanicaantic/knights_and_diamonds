@@ -114,5 +114,19 @@ namespace SignalR.HubConfig
 			}
 		}
 
-	}
+        public async Task CheckRPSWinner(int gameID)
+        {
+			var RPSwinner = await this._gameService.CheckRPSWinner(gameID);
+            var userIDs = await this._gameService.RedirectToGame(gameID);
+            foreach (var userID in userIDs)
+            {
+                var connections = await this._connectionService.GetConnectionByUser(userID);
+                foreach (var con in connections)
+                {
+                    await Clients.Client(con).SendAsync("GetRPSWinner", RPSwinner);
+                }
+            }
+        }
+
+    }
 }

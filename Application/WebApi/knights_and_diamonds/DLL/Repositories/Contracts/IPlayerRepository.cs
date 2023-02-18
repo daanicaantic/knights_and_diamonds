@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories.Contracts
 {
-	public interface IPlayer:IRepository<Models.Player>
+	public interface IPlayerRepository:IRepository<Models.Player>
 	{
 	}
 }

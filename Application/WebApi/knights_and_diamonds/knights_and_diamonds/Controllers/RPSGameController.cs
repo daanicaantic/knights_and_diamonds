@@ -150,5 +150,35 @@ namespace knights_and_diamonds.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+		[Route("PlayMove")]
+		[HttpPut]
+		public async Task<IActionResult> PlayMove(int playerID, string moveName)
+		{
+            try
+            {
+                await this._pregameservice.PlayMove(playerID, moveName);
+				return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [Route("CheckRPSWinner")]
+        [HttpGet]
+        public async Task<IActionResult> CheckRPSWinner(int gameID)
+        {
+            try
+            {
+				var winner = await this._pregameservice.CheckRPSWinner(gameID);
+                return Ok(winner);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

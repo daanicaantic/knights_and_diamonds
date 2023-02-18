@@ -39,7 +39,7 @@ namespace BLL.Services
 			if (!_onlineUsers.ConnectedUsers.ContainsKey(userID))
 			{
 				connectionsIDs = new List<string>();
-				connectionsIDs.Add(connectionId);
+                connectionsIDs.Add(connectionId);
 				_onlineUsers.ConnectedUsers.Add(userID, connectionsIDs);
 			}
 			else

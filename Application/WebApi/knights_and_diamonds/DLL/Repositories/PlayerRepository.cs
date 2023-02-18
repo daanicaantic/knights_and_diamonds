@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
-	public class Player:Repository<Models.Player>,IPlayer
+	public class PlayerRepository:Repository<Models.Player>,IPlayerRepository
 	{
-		public Player(KnightsAndDiamondsContext context) : base(context)
+		public PlayerRepository(KnightsAndDiamondsContext context) : base(context)
 		{
 
 		}
