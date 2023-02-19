@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { timer } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -17,8 +18,17 @@ export class GameComponent implements OnInit {
     private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.gameID = this.route.snapshot.params['GameID']
+    this.gameID = this.route.snapshot.params['gameID']
     console.log('ID GAME',this.gameID)
+
+    const ons$ = timer(5000,1000)
+    ons$.subscribe((d)=>{
+      console.log(d)
+      if(d==10)
+      {
+        
+      }
+    })
   }
 
 }
