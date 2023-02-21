@@ -74,12 +74,15 @@ p,h1,h3{
     align-items: center;
     justify-content: space-between;
 }
-.gamerequest-user
+/* .gamerequest-user
 {
 
-}
+} */
 .gamerequest-actions
 {
     display: flex;
     align-self: flex-end;
+}
+.dugme{
+    cursor: pointer;
 }

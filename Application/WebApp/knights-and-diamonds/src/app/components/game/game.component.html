@@ -1,2 +1,39 @@
-<p>game works!</p>
-<p>{{gameID}}</p>
+<body>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap"rel="stylesheet"/>
+<div class="body-circular-progress" *ngIf="gameStarted===false">
+    <div  class="container">
+        <div class="circular-progress" [ngStyle]="{background:loadingBar}">
+            <div class="value-container"><b>{{progressValue}}%</b></div>
+        </div>
+    </div>
+</div>
+<div  *ngIf="gameStarted===true" class="rps-game-container">
+    <div>
+    <div class="message-container">
+        <h1>SELLECT YOUR HAND</h1>
+    </div>
+    <div class="progression-bar">
+        <div class="moving-part" [ngStyle]="{width:timerCountDown}">
+            <!-- <h1 class="t">{{timer}}</h1> -->
+        </div>
+    </div>
+    </div>
+  
+    <div class="moves-container">
+        <div class="move-container rock" (click)="ChooseMove('Rock')">
+            <img src="../../../assets/diamond.png" alt="Name name name" class="picture">
+            <h1>ROCK</h1>
+        </div>
+        <div class="move-container papper" (click)="ChooseMove('Papper')">
+            <img src="../../../assets/checklist.png" alt="Name name name" class="picture">
+            <h1>PAPPER</h1>
+
+        </div>
+        <div class="move-container scisorss" (click)="ChooseMove('Scissors')">
+            <img src="../../../assets/scissor.png" alt="Name name name" class="picture">
+            <h1>SCISSOR</h1>
+
+        </div>
+    </div>
+</div>
+</body>
