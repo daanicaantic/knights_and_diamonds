@@ -194,7 +194,7 @@ namespace BLL.Services
 			this.unitOfWork.Player.Update(player);
 			this.unitOfWork.Complete();
         }
-		public async Task<string> CheckRPSWinner(int RPSgameID)
+		public async Task<int> CheckRPSWinner(int RPSgameID)
 		{
             var game = await this.unitOfWork.RPSGame.GetGamesWithPlayers(RPSgameID);
 
@@ -205,29 +205,34 @@ namespace BLL.Services
 				throw new Exception("RPS game not found.");
 			}
 
-			if (players[0].Play == players[1].Play) 
+			if (players[0].Play == players[1].Play)
 			{
-				return "Draw";
+				return 0;
+				//nereseno
 			}
 			else if (players[0].Play == null)
 			{
-				return "Player2 wins";
+				return players[1].ID;
+				//izazvani je pobednik (player2)
 			}
-			else if (players[1].Play == null) 
+			else if (players[1].Play == null)
 			{ 
-				return "Player1 wins";
+				return players[0].ID;
+				//izazivac je pobednik (player1)
             }
             else if (players[0].Play == Play.Rock)
 			{
 				if (players[1].Play == Play.Paper)
 				{
-					return "Player2 wins";
-				}
-				else if (players[1].Play == Play.Scissors)
+                    return players[1].ID;
+                    //izazvani je pobednik (player2)
+                }
+                else if (players[1].Play == Play.Scissors)
 				{
-					return "Player1 wins";
-				}
-				else
+                    return players[0].ID;
+                    //izazivac je pobednik (player1)
+                }
+                else
 				{
 					throw new Exception("Player move is undefined");
 				}
@@ -236,13 +241,15 @@ namespace BLL.Services
 			{
 				if (players[1].Play == Play.Rock)
 				{
-					return "Player2 wins";
-				}
-				else if (players[1].Play == Play.Paper)
+                    return players[1].ID;
+                    //izazvani je pobednik (player2)
+                }
+                else if (players[1].Play == Play.Paper)
 				{
-					return "Player1 wins";
-				}
-				else
+                    return players[0].ID;
+                    //izazivac je pobednik (player1)
+                }
+                else
 				{
 					throw new Exception("Player move is undefined");
 				}
@@ -251,13 +258,15 @@ namespace BLL.Services
 			{
 				if (players[1].Play == Play.Scissors)
 				{
-					return "Player2 wins";
-				}
-				else if (players[1].Play == Play.Rock)
+                    return players[1].ID;
+                    //izazvani je pobednik (player2)
+                }
+                else if (players[1].Play == Play.Rock)
 				{
-					return "Player1 wins";
-				}
-				else
+                    return players[0].ID;
+                    //izazivac je pobednik (player1)
+                }
+                else
 				{
 					throw new Exception("Player move is undefined");
 				}
@@ -265,5 +274,27 @@ namespace BLL.Services
 
 			throw new Exception("Players moves are undefined");
         }
-	}
+
+        public async Task<Player> GetPlayer(int gameID, int userID)
+        {
+			var player = await this.unitOfWork.Player.GetPlayer(gameID, userID);
+			if (player == null)
+			{
+				throw new Exception("Player is undefined.");
+			}
+			return player;
+        }
+
+        public async Task RemoveUserFromUsersInGame(int userID)
+        {
+			if(this._usersingame.UsersInGame.Contains(userID))
+			{
+                this._usersingame.UsersInGame.Remove(userID);
+            }
+			else
+			{
+				throw new Exception("User with this ID is not in a game.");
+			}
+        }
+    }
 }

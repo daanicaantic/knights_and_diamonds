@@ -94,6 +94,7 @@
     border: 5px solid #231c3d ;
     border-bottom:none;
     border-collapse: collapse;
+    text-align: center;
 }
 .progression-bar
 {
@@ -101,12 +102,12 @@
   /* background-color: red; */
   border: 5px solid #231c3d ;
   border-collapse: collapse;
-
-  
 }
 .moving-part{
   background-color: rgb(167, 255, 36);
   height: 10px;
   /* padding: 10px; */
-
+}
+.winner-div{
+  border-bottom: 5px solid #231c3d ;
 }

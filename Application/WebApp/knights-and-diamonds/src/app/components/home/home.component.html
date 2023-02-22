@@ -1,6 +1,3 @@
-<!-- <input type="text" name="massage" [(ngModel)]="message"/>
-<button (click)="echo()">echo</button>
-<p *ngFor="let m of messages">{{m}}</p> -->
 <div class="onlineusersContainer">
     <div class="pom">
         <div class="gamerequests" *ngFor="let c of gameRequests">
@@ -14,19 +11,17 @@
                 </div>
             </div>
         </div>
-    <div class="message" *ngIf='usersOnline.length===0'>
-        <h1 >All users are offline</h1>
-    </div>
-    <div  class="user"*ngFor="let onlineuser of usersOnline">
-        <div class="avatar">
-            <h1>{{onlineuser.name[0]}}{{onlineuser.surName[0]}}</h1>
+        <div class="message" *ngIf='usersOnline.length===0'>
+            <h1>All users are offline</h1>
         </div>
-        <div class="username">
-            <h3>{{onlineuser.userName}}</h3>
+        <div class="user" *ngFor="let onlineuser of usersOnline">
+            <div class="avatar">
+                <h1>{{onlineuser.name[0]}}{{onlineuser.surName[0]}}</h1>
+            </div>
+            <div class="username">
+                <h3>{{onlineuser.userName}}</h3>
+            </div>
+            <button class="dugme" (click)="challangePlayer(userID, onlineuser.id)">Challange</button>
         </div>
-        <button class="dugme" (click)="challangePlayer(userID,onlineuser.id)">Challange</button>
-    </div>
-    
     </div>
 </div>
-

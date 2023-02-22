@@ -13,29 +13,41 @@ const httpOptions = {
 @Injectable({
   providedIn: 'root'
 })
-export class GameService {  
-  constructor(private httpClient:HttpClient,
-    private signalrService:SignalrService,
+export class GameService {
+  constructor(private httpClient: HttpClient,
+    private signalrService: SignalrService,
     private router: Router
+  ) { }
 
-    ) { }
-  
-  startGame(lobbyID:any) {
-    return this.httpClient.post(`https://localhost:7250/RPSGame/StartGame/`+`${lobbyID}`,{responseType:'text'});
+  startGame(lobbyID: any) {
+    return this.httpClient.post(`https://localhost:7250/RPSGame/StartGame/` + `${lobbyID}`, { responseType: 'text' });
   }
-  
-  denyGame(lobbyID:any) {
+
+  denyGame(lobbyID: any) {
     console.log(lobbyID)
-    return this.httpClient.delete(`https://localhost:7250/RPSGame/DenyGame/`+`${lobbyID}`);
+    return this.httpClient.delete(`https://localhost:7250/RPSGame/DenyGame/` + `${lobbyID}`);
   }
 
-  startGameInv(gameID:any) {
-    this.signalrService.hubConnection.invoke("StartGame",gameID)
-    .catch(err => console.error(err));
+  startGameInv(gameID: any) {
+    this.signalrService.hubConnection.invoke("StartGame", gameID)
+      .catch(err => console.error(err));
   }
+
   startGameResponse() {
     this.signalrService.hubConnection.on("GameStarted", (gameID: any) => {
       this.router.navigate(['/game', gameID]);
     });
+  }
+
+  getPlayer(gameID: any, userID: any) {
+    return this.httpClient.get(`https://localhost:7250/RPSGame/GetPlayer/` + `${gameID}` + `/` + `${userID}`);
+  }
+
+  removeUserFromUsersInGame(userID: any) {
+    return this.httpClient.delete(`https://localhost:7250/RPSGame/RemoveUserFromUsersInGame/` + `${userID}`);
+  }
+
+  playMove(playerID: any, moveName: string) {
+    return this.httpClient.put(`https://localhost:7250/RPSGame/PlayMove/` + `${playerID}` + `/` + `${moveName}`, { responseType: 'text' });
   }
 }

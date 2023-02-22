@@ -114,7 +114,7 @@ namespace SignalR.HubConfig
 			}
 		}
 
-        public async Task CheckRPSWinner(int gameID)
+        public async Task CheckWinner(int gameID)
         {
 			var RPSwinner = await this._gameService.CheckRPSWinner(gameID);
             var userIDs = await this._gameService.RedirectToGame(gameID);

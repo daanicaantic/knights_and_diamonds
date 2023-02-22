@@ -7,19 +7,10 @@ import { SignalrService } from 'src/app/services/signalr.service';
 export class ConnectionService {
   connectionID: any
     
-  constructor(private signalrService:SignalrService) { }
+  constructor(private signalrService: SignalrService) { }
 
-  getConnectionIDInv(): void {
-    this.signalrService.hubConnection.invoke("GetConnection")
+  addConnectionInv(userID:any): void {
+    this.signalrService.hubConnection.invoke("AddConnection", userID)
     .catch(err => console.error(err));
   }
-
-  public getConnectionID()
-  {
-    this.signalrService.hubConnection.on("GetConnectionID", (connecionID:any) => {
-      console.log("connectionID",connecionID)
-    });
-    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",this.signalrService.hubConnection.connectionId)
-  }
-
 }

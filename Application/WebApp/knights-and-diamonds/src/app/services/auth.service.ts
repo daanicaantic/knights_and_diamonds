@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-//import { HttpClient } from '@aspnet/signalr';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, map, Observable, Subscription } from 'rxjs';
-import { HomeComponent } from '../components/home/home.component';
 import { Router } from '@angular/router';
 import { SignalrService } from './signalr.service';
 import { OnlineUsers, User } from 'src/classes/user';
 import { OnlineusersService } from './onlineusers.service';
+import { ConnectionService } from './connection.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +22,8 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private signalrService:SignalrService,
-    private onlineUsersService:OnlineusersService,) { 
+    private onlineUsersService:OnlineusersService,
+    private connectionService: ConnectionService) { 
     
     this.userSubject = new BehaviorSubject<any>(
       JSON.parse(localStorage.getItem('user') || '{}')
@@ -38,6 +38,7 @@ export class AuthService {
       console.log(user)
       localStorage.setItem('user',JSON.stringify(user))
       this.userSubject.next(user)
+      this.connectionService.addConnectionInv(this.userValue.id);
     }))
   }
 
@@ -60,11 +61,6 @@ export class AuthService {
   
   loginStatusChange(): Observable<boolean> {
       return this.userSubject.asObservable();
-  }
-
-  addConncectionInv(userID:any): void {
-    this.signalrService.hubConnection.invoke("AddConnection",userID)
-    .catch(err => console.error(err));
   }
 
   getOnlineUsersList()

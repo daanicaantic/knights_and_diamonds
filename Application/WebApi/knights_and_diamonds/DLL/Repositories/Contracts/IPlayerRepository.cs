@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories.Contracts
 {
-	public interface IPlayerRepository:IRepository<Models.Player>
+	public interface IPlayerRepository : IRepository<Player>
 	{
+		Task<Player> GetPlayer(int gameID, int userID);
 	}
 }

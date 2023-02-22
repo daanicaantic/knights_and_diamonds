@@ -19,6 +19,8 @@ namespace BLL.Services.Contracts
         Task<List<int>> RedirectToGame(int gameID);
         Task<List<Player>> GetPlayersPerGame(int gameID);
         Task PlayMove(int playerID, string moveName);
-        Task<string> CheckRPSWinner(int RPSgameID);
+        Task<int> CheckRPSWinner(int RPSgameID);
+        Task<Player> GetPlayer(int gameID, int userID);
+        Task RemoveUserFromUsersInGame(int userID);
     }
 }

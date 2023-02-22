@@ -1,16 +1,19 @@
-p,h1,h3{
-    margin:0px;
-    padding:0px;
+p,
+h1,
+h3 {
+    margin: 0px;
+    padding: 0px;
     font-family: Arial, Helvetica, sans-serif;
 }
-.onlineusersContainer
-{
+
+.onlineusersContainer {
     display: flex;
     justify-content: end;
 }
-.pom{
+
+.pom {
     display: flex;
-    flex-direction:column;
+    flex-direction: column;
     background-color: rgb(240, 240, 240);
     height: 100vh;
     overflow: hidden;
@@ -18,11 +21,12 @@ p,h1,h3{
     padding: 10px;
     margin-top: 30px;
 }
-.user{
+
+.user {
     /* padding: 10px; */
     margin: 10px;
     width: 180px;
-    background-color:white;
+    background-color: white;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -31,20 +35,22 @@ p,h1,h3{
     border-radius: 5px;
     align-items: center;
 }
-.avatar{
+
+.avatar {
     display: flex;
     flex-direction: row;
-    width:100px;
+    width: 100px;
     height: 100px;
     /* background-color: aquamarine; */
     border-radius: 100%;
     border: 2px solid black;
-    background-image:linear-gradient(to right, #24C6DC 0%, #514A9D  100%, #24C6DC  100%);
+    background-image: linear-gradient(to right, #24C6DC 0%, #514A9D 100%, #24C6DC 100%);
     justify-content: center;
     align-items: center;
 }
-.username{
-    background-image:linear-gradient(to right, #24C6DC 0%, #514A9D  100%, #24C6DC  100%);
+
+.username {
+    background-image: linear-gradient(to right, #24C6DC 0%, #514A9D 100%, #24C6DC 100%);
     width: 100%;
     display: flex;
     align-items: center;
@@ -52,37 +58,40 @@ p,h1,h3{
     border-radius: 1px;
     border: 1px solid black;
 }
-.message{
-    width:100%;
+
+.message {
+    width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     color: rgb(187, 187, 187);
 }
-.gamerequests
-{
+
+.gamerequests {
     padding: 2px;
     width: 100%;
 }
-.gamerequest
-{
-    background-color: rgb(59,130,246);
+
+.gamerequest {
+    background-color: rgb(59, 130, 246);
     color: white;
     padding: 8px;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
-/* .gamerequest-user
-{
 
-} */
-.gamerequest-actions
-{
+.gamerequest-actions {
     display: flex;
     align-self: flex-end;
 }
-.dugme{
+
+.dugme {
+    cursor: pointer;
+}
+
+.pi-check,
+.pi-times {
     cursor: pointer;
 }

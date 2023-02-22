@@ -42,8 +42,8 @@ namespace BLL.Services
                 connectionsIDs.Add(connectionId);
 				_onlineUsers.ConnectedUsers.Add(userID, connectionsIDs);
 			}
-			else
-			{
+			else if (!_onlineUsers.ConnectedUsers[userID].Contains(connectionId))
+            {
 				_onlineUsers.ConnectedUsers[userID].Add(connectionId);
 			}
 		}

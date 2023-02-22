@@ -1,4 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { AuthService } from './services/auth.service';
+import { ConnectionService } from './services/connection.service';
 import { SignalrService } from './services/signalr.service';
 
 @Component({
@@ -8,17 +10,34 @@ import { SignalrService } from './services/signalr.service';
 })
 export class AppComponent {
   title = 'knights-and-diamonds';
-  constructor( 
-    public signalr: SignalrService
-  ) 
-  {}
+  userID=this.authService?.userValue?.id
+
+  constructor(public signalrService: SignalrService,
+    public authService: AuthService,
+    public connectionService: ConnectionService) { }
 
   ngOnInit() {
-    this.signalr.startConnection();
+    this.signalrService.startConnection();
+    if(this.userID!=undefined){
+      if (this.signalrService.hubConnection.state=="Connected") {
+        this.connectionService.addConnectionInv(this.userID);
+      }
+      else{
+        this.signalrService.ssSubj.subscribe((obj: any) => {
+          if (obj.type == "HubConnStarted") {
+            this.connectionService.addConnectionInv(this.userID);
+          }
+        });
+      }
+    }
   }
 
-  
   ngOnDestroy() {
-    this.signalr.hubConnection.off("askServerResponse");
+    this.signalrService.hubConnection.off("askServerResponse");
+  }
+
+  addConncectionInv(userID:any): void {
+    this.signalrService.hubConnection.invoke("AddConnection",userID)
+    .catch(err => console.error(err));
   }
 }

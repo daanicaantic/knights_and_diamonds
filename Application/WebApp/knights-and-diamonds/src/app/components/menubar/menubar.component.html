@@ -11,11 +11,11 @@
                         *ngIf="authService?.userValue?.role==='Admin'"
                 pButton pRipple></button>
 
-                <!-- <button class="buttonProfile"
-                        [routerLink]="['/profil/player', authService?.userValue?.id]"
+                <button class="buttonProfile"
+                        [routerLink]="['/profil/player', authService.userValue.id]"
                         type="button" icon="pi pi-user" class="p-button-rounded"
                         *ngIf="authService?.userValue?.role==='Player'"
-                pButton pRipple></button> -->
+                pButton pRipple></button>
 
                 <button class="button" (click)="onLogin()"
                         [routerLink]="['/login']" *ngIf="authService?.userValue?.role!=='Admin' &&

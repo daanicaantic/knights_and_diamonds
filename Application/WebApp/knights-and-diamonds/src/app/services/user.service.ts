@@ -14,8 +14,7 @@ export class UserService {
 
   constructor(private httpClient: HttpClient) { }
 
-  addUser(user: any):any
-  { 
+  addUser(user: any): any {
     return this.httpClient.post(`https://localhost:7250/User/AddUser`, user);
   }
 }

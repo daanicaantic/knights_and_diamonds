@@ -151,7 +151,7 @@ namespace knights_and_diamonds.Controllers
             }
         }
 
-		[Route("PlayMove")]
+		[Route("PlayMove/{playerID}/{moveName}")]
 		[HttpPut]
 		public async Task<IActionResult> PlayMove(int playerID, string moveName)
 		{
@@ -175,6 +175,36 @@ namespace knights_and_diamonds.Controllers
 				var winner = await this._pregameservice.CheckRPSWinner(gameID);
                 return Ok(winner);
             }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+		[Route("GetPlayer/{gameID}/{userID}")]
+		[HttpGet]
+		public async Task<IActionResult> GetPlayer(int gameID, int userID)
+		{
+			try
+			{
+				var player = await this._pregameservice.GetPlayer(gameID, userID);
+				return Ok(player);
+			}
+			catch (Exception e)
+			{
+				return BadRequest(e.Message);
+			}
+		}
+
+		[Route("RemoveUserFromUsersInGame/{userID}")]
+		[HttpDelete]
+		public async Task<IActionResult> RemoveUserFromUsersInGame(int userID)
+		{
+			try
+			{
+				await this._pregameservice.RemoveUserFromUsersInGame(userID);
+				return Ok();
+			}
             catch (Exception e)
             {
                 return BadRequest(e.Message);
