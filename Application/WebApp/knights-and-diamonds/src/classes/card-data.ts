@@ -10,4 +10,3 @@ export const card: Card = {
     attackPoints: 0,
     defencePoints: 0,
 };
-  

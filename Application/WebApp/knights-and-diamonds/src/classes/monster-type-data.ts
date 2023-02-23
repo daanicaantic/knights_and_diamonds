@@ -1,4 +1,3 @@
-
 import { CardType } from "./card-type";
 
 export const monserType: CardType[] = [

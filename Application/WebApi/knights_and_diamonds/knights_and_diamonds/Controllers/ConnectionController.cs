@@ -24,7 +24,6 @@ namespace knights_and_diamonds.Controllers
 			_connectionService = new ConnectionService(this.context);
 		}
 
-
 		[HttpPost]
 		[Route("AddOnlineUser")]
 		public async Task<IActionResult> AddOnlineUser(int userID, string connID)

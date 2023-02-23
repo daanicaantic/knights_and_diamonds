@@ -4,7 +4,7 @@ import { BehaviorSubject, map, Observable, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { SignalrService } from './signalr.service';
 import { OnlineUsers, User } from 'src/classes/user';
-import { OnlineusersService } from './onlineusers.service';
+import { OnlineUsersService } from './online-users.service';
 import { ConnectionService } from './connection.service';
 
 @Injectable({
@@ -22,7 +22,7 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private signalrService:SignalrService,
-    private onlineUsersService:OnlineusersService,
+    private onlineUsersService:OnlineUsersService,
     private connectionService: ConnectionService) { 
     
     this.userSubject = new BehaviorSubject<any>(

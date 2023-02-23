@@ -20,6 +20,7 @@ namespace knights_and_diamonds.Controllers
         */
         private readonly KnightsAndDiamondsContext context;
         public IUserService _userService { get; set; }
+
         public UserController(KnightsAndDiamondsContext context)
         {
             this.context = context;

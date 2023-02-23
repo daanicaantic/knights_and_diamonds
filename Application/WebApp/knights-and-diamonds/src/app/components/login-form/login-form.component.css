@@ -1,5 +1,9 @@
 *{
     font-family: 'Roboto', sans-serif;
+    color: #231c3d;
+}
+label {
+    color: #231c3d;
 }
 .background {
     display: flex;
@@ -18,7 +22,7 @@
     justify-content: center;
 }
 h1 {
-    font-weight: 900;
+    font-weight: bolder;
 }
 .item-form {
     display: flex;

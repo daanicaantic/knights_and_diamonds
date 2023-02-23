@@ -3,9 +3,9 @@ import { BehaviorSubject, elementAt, Observable, Subject, Subscription } from 'r
 import { OnlineUsers } from 'src/classes/user';
 import { AuthService } from '../../services/auth.service';
 import { SignalrService } from 'src/app/services/signalr.service';
-import { OnlineusersService } from 'src/app/services/onlineusers.service';
-import { GameService } from 'src/app/services/game.service';
+import { OnlineUsersService } from 'src/app/services/online-users.service';
 import { Router } from '@angular/router';
+import { RpsGameService } from 'src/app/services/rps-game.service';
 
 @Component({
   selector: 'app-home',
@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit, OnDestroy {
+
   public message: string = '';
   public messages: string[] = [];
   usersOnline:Array<OnlineUsers>=new Array<OnlineUsers>();
@@ -23,8 +24,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor( 
     private authService: AuthService,
     private signalrService:SignalrService,
-    private onlineUsersService:OnlineusersService,
-    private gameService:GameService,
+    private onlineUsersService:OnlineUsersService,
+    private rpsGameService:RpsGameService,
     private router: Router
     ) {}
   
@@ -32,7 +33,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.onlineUsersService.getOnlineUsersList();
     this.getOnlineUsers();
     this.getGameRequestsList();
-    this.gameService.startGameResponse();
+    this.rpsGameService.startGameResponse();
  
     if(this.userID!=undefined){
       if (this.signalrService.hubConnection.state=="Connected") {
@@ -67,8 +68,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   getGameRequestsList() {
-    this.signalrService.hubConnection.on("GetGamesRequests", (users:any[]) => {
-      this.gameRequests=users;
+    this.signalrService.hubConnection.on("GetGamesRequests", (gameRequests:any[]) => {
+      this.gameRequests=gameRequests;
+      console.log(gameRequests);
     });
   }
 
@@ -85,9 +87,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   acceptGameRequest(lobbyID:any) {
-    this.gameService.startGame(lobbyID).subscribe({
+    this.rpsGameService.startGame(lobbyID).subscribe({
       next: res=> {
-        this.gameService.startGameInv(res);        
+        this.rpsGameService.startGameInv(res);
       },
       error: err=> {
         console.log("neuspesno")
@@ -96,7 +98,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   denyGameRequest(lobbyID:any) {
-    this.gameService.denyGame(lobbyID).subscribe({
+    this.rpsGameService.denyGame(lobbyID).subscribe({
       next: res=> {
         this.getGameRequestsInv(this.userID);
       },

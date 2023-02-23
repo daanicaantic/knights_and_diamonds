@@ -25,7 +25,7 @@ namespace SignalR.HubConfig
 		private readonly KnightsAndDiamondsContext context;
 		public IUserService _userService { get; set; }
 		public IConnectionService _connectionService { get; set; }
-		public IRPSGameService _gameService { get; set; }
+		public IRPSGameService _rpsGameService { get; set; }
 		public ILoginService _loginService { get; set; }
 		public ConnectionsHub _connectedUsers { get; set; }
 
@@ -35,7 +35,7 @@ namespace SignalR.HubConfig
 			this._config = config;
 			_userService = new UserService(this.context);
 			_connectionService = new ConnectionService(this.context);
-			_gameService = new RPSGameService(this.context);
+			_rpsGameService = new RPSGameService(this.context);
 			_loginService = new LoginService(this.context, this._config);
 			_connectedUsers = ConnectionsHub.GetInstance();
 		}
@@ -78,22 +78,22 @@ namespace SignalR.HubConfig
 			await Clients.All.SendAsync("GetUsersFromHub", onlineUsers);
 		}
 
-		public async Task CreateLobby(int player1ID,int player2ID) 
+		public async Task CreateLobby(int player1ID, int player2ID) 
 		{
-			var user1=await this._userService.GetUserByID(player1ID);
+			var user1 = await this._userService.GetUserByID(player1ID);
 			var user2 = await this._userService.GetUserByID(player2ID);
 
 			var player1 = new OnlineUserDto(user1.ID, user1.Name, user1.SurName, user1.UserName);
 			var player2 = new OnlineUserDto(user2.ID, user2.Name, user2.SurName, user2.UserName);
 
-			this._gameService.NewLobby(player1, player2);
+			this._rpsGameService.NewLobby(player1, player2);
 
 			await Clients.All.SendAsync("AddUsersToLobby");
 		}
 
 		public async Task GamesRequests(int userID)
 		{
-			var games = await this._gameService.LobbiesPerUser(userID);
+			var games = await this._rpsGameService.LobbiesPerUser(userID);
 			var connections = await this._connectionService.GetConnectionByUser(userID);
 			foreach (var con in connections)
 			{
@@ -101,23 +101,23 @@ namespace SignalR.HubConfig
             }
 		}
 
-		public async Task StartGame(int gameID)
+		public async Task StartRPSGame(int rpsGameID)
 		{
-			var userIDs = await this._gameService.RedirectToGame(gameID);
+			var userIDs = await this._rpsGameService.RedirectToGame(rpsGameID);
 			foreach (var userID in userIDs)
 			{
 				var connections = await this._connectionService.GetConnectionByUser(userID);
 				foreach (var con in connections)
 				{
-					await Clients.Client(con).SendAsync("GameStarted", gameID);
+					await Clients.Client(con).SendAsync("RPSGameStarted", rpsGameID);
 				}
 			}
 		}
 
-        public async Task CheckWinner(int gameID)
+        public async Task CheckRPSWinner(int rpsGameID)
         {
-			var RPSwinner = await this._gameService.CheckRPSWinner(gameID);
-            var userIDs = await this._gameService.RedirectToGame(gameID);
+			var RPSwinner = await this._rpsGameService.CheckRPSWinner(rpsGameID);
+            var userIDs = await this._rpsGameService.RedirectToGame(rpsGameID);
             foreach (var userID in userIDs)
             {
                 var connections = await this._connectionService.GetConnectionByUser(userID);
