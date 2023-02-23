@@ -26,6 +26,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './components/home/home.component';
 import { RegistrationFormComponent } from './components/registration-form/registration-form.component';
 import { GameComponent } from './components/game/game.component';
+import { RpsGameComponent } from './components/rps-game/rps-game.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { GameComponent } from './components/game/game.component';
     HomeComponent,
     RegistrationFormComponent,
     GameComponent,
+    RpsGameComponent,
   ],
   imports: [
     BrowserModule,

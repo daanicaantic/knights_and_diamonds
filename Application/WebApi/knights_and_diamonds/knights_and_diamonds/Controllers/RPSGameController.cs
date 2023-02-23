@@ -28,8 +28,8 @@ namespace knights_and_diamonds.Controllers
 			this.context = context;
 			_pregameservice = new RPSGameService(this.context);
 			_userService = new UserService(this.context);
-
 		}
+
 		[Route("NewLobby")]
 		[HttpPost]
 		public async Task<IActionResult> NewLobby(int userID, int challengedUserID)

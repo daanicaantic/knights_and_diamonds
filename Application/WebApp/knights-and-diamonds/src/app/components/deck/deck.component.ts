@@ -12,6 +12,7 @@ export class DeckComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    
   }
 
 }

@@ -20,9 +20,11 @@ namespace BLL.Services
 	public class LoginService : ILoginService
 	{
 		private readonly KnightsAndDiamondsContext _context;
-		public UnitOfWork unitOfWork { get; set; }
+
+        private readonly IConfiguration _config;
+
+        public UnitOfWork unitOfWork { get; set; }
 		public OnlineUsers _onlineUsers { get; set; }
-		private readonly IConfiguration _config;
 
 		public LoginService(KnightsAndDiamondsContext context, IConfiguration config)
 		{

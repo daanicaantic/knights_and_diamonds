@@ -12,6 +12,7 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./registration-form.component.css']
 })
 export class RegistrationFormComponent implements OnInit {
+  
   form!: FormGroup;
   subscriptions: Subscription[] = [];
   submitted = false;

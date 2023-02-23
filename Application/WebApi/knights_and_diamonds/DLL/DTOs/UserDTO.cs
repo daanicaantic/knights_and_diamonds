@@ -22,7 +22,7 @@ namespace DAL.DTOs
 		public string? SurName { get; set; }
 		public string? UserName { get; set; }
 
-        public OnlineUserDto(int id,string name,string surname,string username) 
+        public OnlineUserDto(int id, string name, string surname, string username) 
         {
             this.ID = id;
             this.Name = name;

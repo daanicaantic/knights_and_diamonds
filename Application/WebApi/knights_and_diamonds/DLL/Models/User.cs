@@ -24,7 +24,6 @@ namespace DAL.Models
 		[JsonIgnore]
 		public List<Deck>? Decks { get; set; }
 
-
 		public User()
 		{
 

@@ -7,6 +7,7 @@ import { card } from 'src/classes/card-data';
   styleUrls: ['./card.component.css']
 })
 export class CardComponent implements OnInit {
+  
   card=card;
   
   constructor() { }

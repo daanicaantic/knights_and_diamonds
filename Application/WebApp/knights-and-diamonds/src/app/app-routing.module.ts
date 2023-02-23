@@ -8,6 +8,7 @@ import { HomeComponent } from './components/home/home.component';
 import { CardComponent } from './components/card/card.component';
 import { RegistrationFormComponent } from './components/registration-form/registration-form.component';
 import { GameComponent } from './components/game/game.component';
+import { RpsGameComponent } from './components/rps-game/rps-game.component';
 
 
 const routes: Routes = [
@@ -24,8 +25,8 @@ const routes: Routes = [
     component: HomeComponent
   },
   {
-    path: 'game/:gameID',
-    component: GameComponent
+    path: 'rpsGame/:rpsGameID',
+    component: RpsGameComponent
   }
 ]
 

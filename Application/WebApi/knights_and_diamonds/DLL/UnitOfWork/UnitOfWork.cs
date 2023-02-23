@@ -22,6 +22,7 @@ namespace DAL.UnitOfWork
 			CardInDeck = new CardInDeckRepository(_context);
 			RPSGame = new RPSGameRepository(_context);
 			Player = new PlayerRepository(_context);
+			Game = new GameRepository(_context);
 		}
 
 		public ICardRepository Card { get; private set; }
@@ -36,7 +37,9 @@ namespace DAL.UnitOfWork
 
 		public IPlayerRepository Player { get; private set; }
 
-		public int Complete()
+        public IGameRepository Game { get; private set; }
+
+        public int Complete()
 		{
 			return _context.SaveChanges();
 		}

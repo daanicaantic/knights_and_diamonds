@@ -21,7 +21,6 @@ namespace knights_and_diamonds.Controllers
         private readonly KnightsAndDiamondsContext context;
         public IUserService _userService { get; set; }
 		public ILoginService _loginService { get; set; }
-
 		public IConnectionService _connetionService { get; set; }
 
 		public LoginController(KnightsAndDiamondsContext context, IConfiguration config,IHubContext<MyHub> HubContext)

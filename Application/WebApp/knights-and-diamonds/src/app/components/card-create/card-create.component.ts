@@ -16,6 +16,7 @@ import { Message } from 'primeng//api';
   styleUrls: ['./card-create.component.css']
 })
 export class CardCreateComponent implements OnInit {
+  
   card=card;
   form!:FormGroup;
   cardType=cardType;

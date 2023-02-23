@@ -6,7 +6,7 @@ import { SignalrService } from './signalr.service';
 @Injectable({
   providedIn: 'root'
 })
-export class OnlineusersService {
+export class OnlineUsersService {
   usersOnline: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([])
   
   constructor(private signalrService: SignalrService) { }
