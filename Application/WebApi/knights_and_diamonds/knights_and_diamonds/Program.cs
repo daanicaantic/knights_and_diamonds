@@ -11,6 +11,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using DAL.Models;
 using SignalR.GameHub;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.Extensions.FileProviders;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -68,6 +70,13 @@ builder.Services.AddSignalR(options=>
 
 builder.Services.AddControllers();
 
+builder.Services.Configure<FormOptions>(o =>
+{
+	o.ValueLengthLimit = int.MaxValue;
+	o.MultipartBodyLengthLimit = int.MaxValue;
+	o.MemoryBufferThreshold = int.MaxValue;
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -75,6 +84,7 @@ builder.Services.AddSwaggerGen();
 //connectig your database
 builder.Services.AddDbContext<KnightsAndDiamondsContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("Konekcija")));
 builder.Services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+
 
 
 builder.Services.AddScoped(typeof(ICardService),typeof(CardService));
@@ -100,6 +110,13 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions()
+{
+	FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources")),
+	RequestPath = new PathString("/Resources")
+});
 
 app.MapControllers();
 

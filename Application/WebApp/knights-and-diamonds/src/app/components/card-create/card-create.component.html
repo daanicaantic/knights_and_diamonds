@@ -1,4 +1,4 @@
-
+<!-- 
 <div class="card-creator" >
     <div class="card-container">
         <app-card></app-card>
@@ -60,4 +60,22 @@
             </span>
         </div>
     </div>
-</div>
+</div> -->
+
+<div class="row" style="margin-bottom:15px;">
+    <div class="col-md-3">
+      <input type="file" #file placeholder="Choose file" (change)="uploadFile(file.files)" style="display:none;">
+      <button type="button" class="btn btn-success" (click)="file.click()">Upload File</button>
+    </div>
+    <div class="col-md-4">
+      <span class="upload" *ngIf="progress > 0">
+        {{progress}}%
+      </span>
+      <span class="upload" *ngIf="message">
+        {{message}}
+      </span>
+    </div>
+    <div *ngIf="pickur!=undefined" class="pikcr">
+        <img src="https://localhost:7250/{{pickur}}" alt="Name name name" class="picture">
+    </div>
+  </div>

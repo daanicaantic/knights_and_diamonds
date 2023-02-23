@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { SignalrService } from './signalr.service';
 import { Router } from '@angular/router';
@@ -14,6 +14,9 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class GameService {
+  message:any;
+  progress:any;
+  pickur:any
   constructor(private httpClient: HttpClient,
     private signalrService: SignalrService,
     private router: Router
@@ -50,4 +53,7 @@ export class GameService {
   playMove(playerID: any, moveName: string) {
     return this.httpClient.put(`https://localhost:7250/RPSGame/PlayMove/` + `${playerID}` + `/` + `${moveName}`, { responseType: 'text' });
   }
+  
 }
+
+
