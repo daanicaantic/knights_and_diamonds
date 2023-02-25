@@ -27,6 +27,8 @@ import { HomeComponent } from './components/home/home.component';
 import { RegistrationFormComponent } from './components/registration-form/registration-form.component';
 import { GameComponent } from './components/game/game.component';
 import { RpsGameComponent } from './components/rps-game/rps-game.component';
+import { UploadFileComponent } from './components/upload-file/upload-file.component';
+
 
 @NgModule({
   declarations: [
@@ -40,6 +42,8 @@ import { RpsGameComponent } from './components/rps-game/rps-game.component';
     RegistrationFormComponent,
     GameComponent,
     RpsGameComponent,
+    UploadFileComponent,
+
   ],
   imports: [
     BrowserModule,

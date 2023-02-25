@@ -121,6 +121,23 @@ namespace knights_and_diamonds.Controllers
 				return BadRequest(e);
 			}
 		}
+		[Route("AddCardType")]
+		[HttpPost]
+		public async Task<IActionResult> AddCardType([FromBody] MonsterType type)
+		{
+			try
+			{
+				this.context.MonsterTypes.Add(type);
+				await this.context.SaveChangesAsync();
+
+				return Ok(type);
+			}
+			catch (Exception e)
+			{
+				return BadRequest(e);
+			}
+		}
+
 
 	}
 }

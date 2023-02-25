@@ -4,6 +4,7 @@ using DAL.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(KnightsAndDiamondsContext))]
-    partial class KnightsAndDiamondsContextModelSnapshot : ModelSnapshot
+    [Migration("20230223144531_pom")]
+    partial class pom
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,23 +38,23 @@ namespace DAL.Migrations
                     b.Property<string>("CardName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CardTypeID")
-                        .HasColumnType("int");
+                    b.Property<string>("CardType")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("DefencePoints")
                         .HasColumnType("int");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Effect")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ElementTypeID")
-                        .HasColumnType("int");
+                    b.Property<string>("ElementType")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImgPath")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("MonsterTypeID")
-                        .HasColumnType("int");
+                    b.Property<string>("MonsterType")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("NumberOfStars")
                         .HasColumnType("int");
@@ -61,12 +63,6 @@ namespace DAL.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("CardTypeID");
-
-                    b.HasIndex("ElementTypeID");
-
-                    b.HasIndex("MonsterTypeID");
 
                     b.HasIndex("UserHandID");
 
@@ -96,25 +92,6 @@ namespace DAL.Migrations
                     b.ToTable("CardInDecks");
                 });
 
-            modelBuilder.Entity("DAL.Models.CardType", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
-
-                    b.Property<string>("ImgPath")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("CardTypes");
-                });
-
             modelBuilder.Entity("DAL.Models.Deck", b =>
                 {
                     b.Property<int>("ID")
@@ -133,25 +110,6 @@ namespace DAL.Migrations
                     b.ToTable("Decks");
                 });
 
-            modelBuilder.Entity("DAL.Models.ElementType", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
-
-                    b.Property<string>("ImgPath")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("ElementTypes");
-                });
-
             modelBuilder.Entity("DAL.Models.Game", b =>
                 {
                     b.Property<int>("ID")
@@ -163,22 +121,6 @@ namespace DAL.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Games");
-                });
-
-            modelBuilder.Entity("DAL.Models.MonsterType", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
-
-                    b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("MonsterTypes");
                 });
 
             modelBuilder.Entity("DAL.Models.Player", b =>
@@ -281,27 +223,9 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Models.Card", b =>
                 {
-                    b.HasOne("DAL.Models.CardType", "CardType")
-                        .WithMany("Cards")
-                        .HasForeignKey("CardTypeID");
-
-                    b.HasOne("DAL.Models.ElementType", "ElementType")
-                        .WithMany("Cards")
-                        .HasForeignKey("ElementTypeID");
-
-                    b.HasOne("DAL.Models.MonsterType", "MonsterType")
-                        .WithMany("Cards")
-                        .HasForeignKey("MonsterTypeID");
-
                     b.HasOne("DAL.Models.UserHand", null)
                         .WithMany("Cards")
                         .HasForeignKey("UserHandID");
-
-                    b.Navigation("CardType");
-
-                    b.Navigation("ElementType");
-
-                    b.Navigation("MonsterType");
                 });
 
             modelBuilder.Entity("DAL.Models.CardInDeck", b =>
@@ -373,29 +297,14 @@ namespace DAL.Migrations
                     b.Navigation("CardInDecks");
                 });
 
-            modelBuilder.Entity("DAL.Models.CardType", b =>
-                {
-                    b.Navigation("Cards");
-                });
-
             modelBuilder.Entity("DAL.Models.Deck", b =>
                 {
                     b.Navigation("CardsInDeck");
                 });
 
-            modelBuilder.Entity("DAL.Models.ElementType", b =>
-                {
-                    b.Navigation("Cards");
-                });
-
             modelBuilder.Entity("DAL.Models.Game", b =>
                 {
                     b.Navigation("Players");
-                });
-
-            modelBuilder.Entity("DAL.Models.MonsterType", b =>
-                {
-                    b.Navigation("Cards");
                 });
 
             modelBuilder.Entity("DAL.Models.RockPaperScissorsGame", b =>

@@ -1,14 +1,14 @@
-/* .card-container
-{ */
+.card-container
+{ 
     /* width: 160px;
     height: 300px;
     transform: scale(0.7) translate(-9px,-48px); */
-    /* display: flex;
+    display: flex;
     justify-content: space-evenly;
     margin-bottom: 1rem;
-} */
+} 
 
-/* small
+small
 {
     color: rgb(173, 170, 170);
 }
@@ -83,29 +83,8 @@ p,h2
 {
     cursor: pointer;
 }
-.choose-file-button
-{
-    height: 47px;
-    width: 160px;
-    background-color: white;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    padding: 12px;
-    padding-left: 8px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    font-size: 1rem;
-    color: #495057;
-    border: 1px solid #ced4da;
-    justify-content: space-between;
-}
-.pom
-{
-    background-color: #ced4da;
-    border-radius: 5px;
-    padding: 5px;
-    border: 1px solid #495057;
-}
+
+
 .text-conteiner
 {
     text-overflow: ellipsis;
@@ -141,6 +120,9 @@ p,h2
     background-color: rgb(255, 255, 255);
     margin-bottom: 1rem;
 }
+.nemampojmavise{
+    background-color: red;
+}  
 
 @media (max-width: 625px) {
     .form-container{
@@ -149,22 +131,4 @@ p,h2
     .form-layout{
         margin-left: 0px;
     }
-} */
-
-.upload{
-    font-weight:bold;
-    color:#28a745;
-    margin-left: 15px;
-    line-height: 36px;
-  }
-  .pikcr
-  {
-    width:200px;
-    height: 200px;
-    background-color: red;
-  }
-  .picture
-  {
-    width: 100%;
-    height: 100%;
-  }
+}

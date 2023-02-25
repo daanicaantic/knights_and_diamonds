@@ -1,46 +1,44 @@
-<!-- 
+
 <div class="card-creator" >
     <div class="card-container">
-        <app-card></app-card>
+        <app-card [card]="card"></app-card>
     </div>
     <div class="form-layout">
         <div class="form-container">
             <div class="form card-view" [formGroup]="form">
                 <span class="form_field">
                     <small>Card Name</small>
-                    <input class="dataField" formControlName="cardName" placeholder='Card Name' type="text" pInputText (input)="onSearchChange()"  />
+                    <input class="dataField" formControlName="cardName" placeholder='Card Name' type="text" pInputText (input)="onCardNameChange()"  />
                 </span>
                 <span class="form_field">
                     <small>Card Type</small>
-                    <p-dropdown class="dataField" formControlName="cardType" [options]="cardType" optionValue="code" optionLabel="name" (onChange)="onChange()" [style]="{'minWidth':'100%'}"></p-dropdown>
+                    <p-dropdown class="dataField" formControlName="cardType" [options]="cardTypes" optionValue="id" optionLabel="type" (onChange)="onCardTypeChange()" [style]="{'minWidth':'100%'}"></p-dropdown>
                 </span>
                 <span class="form_field">
                     <small>Card Description</small>
-                    <input class="dataField" formControlName="effect" placeholder='Card Description' type="text" pInputText (input)="onSearchChange()"  />
+                    <input class="dataField" formControlName="description" placeholder='Card Description' type="text" pInputText (input)="onDescriptionChange()"  />
                 </span>
+
                 <span class="form_field form_field3">
                     <small>Card Photo</small>
-                    <label class="inputfile">
-                        <div class="choose-file-button">
-                            <p class="pom">Choose File</p>
-                            <i class="pi pi-paperclip" style="font-size: 2rem; color : #ced4da"></i>
-                        </div>
-                        <input type="file" class="file-upload" (change)="onFileSelected($event)">
+                    <label class="inputfile" >
+                        <app-upload-file (onUploadFinished)="uploadFinished($event)"></app-upload-file>
                     </label>
                 </span>
+
             </div>
-            <div class="form" [formGroup]="form" *ngIf="card.cardType=='MonsterCard'">
+            <div class="form" [formGroup]="form" >
                 <span class="form_field">
                     <small>Card Element</small>
-                    <p-dropdown class="dataField" formControlName="elementType" [options]="elementType" optionValue="code" optionLabel="name" (onChange)="onChangeElement()" [style]="{'minWidth':'100%'}"></p-dropdown>
+                    <p-dropdown class="dataField" formControlName="elementType" [options]="elementTypes" optionValue="id" optionLabel="type" (onChange)="onElementTypeChange()" [style]="{'minWidth':'100%'}"></p-dropdown>
                 </span>
                 <span class="form_field">
                     <small>Card Level</small>
-                    <input class="dataField" formControlName="numberOfStars" placeholder="Card Level" type="number" [min]="0" [max]="11" [maxlength]="2" pInputText (input)="onSearchChangeLevel()"  />
+                    <input class="dataField" formControlName="numberOfStars" placeholder="Card Level" type="number" [min]="0" [max]="11" [maxlength]="2" pInputText (input)="onLevelChange()"  />
                 </span>
                 <span class="form_field">
                     <small>Monster Type</small>
-                    <p-dropdown class="dataField" formControlName="monsterType" [options]="monsterType" optionValue="code" optionLabel="name" (onChange)="onChangeMonsterType()" [style]="{'minWidth':'100%'}"></p-dropdown>
+                    <p-dropdown class="dataField" formControlName="monsterType" [options]="monsterTypes" optionValue="id" optionLabel="type" (onChange)="onChangeMonsterType()" [style]="{'minWidth':'100%'}"></p-dropdown>
                 </span>
                 <span class="atkdefspan">
                     <div class="atkdefcontainer" >
@@ -60,22 +58,4 @@
             </span>
         </div>
     </div>
-</div> -->
-
-<div class="row" style="margin-bottom:15px;">
-    <div class="col-md-3">
-      <input type="file" #file placeholder="Choose file" (change)="uploadFile(file.files)" style="display:none;">
-      <button type="button" class="btn btn-success" (click)="file.click()">Upload File</button>
-    </div>
-    <div class="col-md-4">
-      <span class="upload" *ngIf="progress > 0">
-        {{progress}}%
-      </span>
-      <span class="upload" *ngIf="message">
-        {{message}}
-      </span>
-    </div>
-    <div *ngIf="pickur!=undefined" class="pikcr">
-        <img src="https://localhost:7250/{{pickur}}" alt="Name name name" class="picture">
-    </div>
-  </div>
+</div>

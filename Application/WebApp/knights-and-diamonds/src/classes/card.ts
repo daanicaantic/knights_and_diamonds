@@ -5,7 +5,7 @@ export interface Card {
     cardType: string;
     numberOfStars: any;
     imgPath: string;
-    effect: string;
+    description: string;
     monsterType: string;
     attackPoints :number;
     defencePoints :number;
