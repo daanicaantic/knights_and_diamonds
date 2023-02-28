@@ -12,7 +12,7 @@
                 pButton pRipple></button>
 
                 <button class="buttonProfile"
-                        [routerLink]="['/profil/player', authService.userValue.id]"
+                        [routerLink]="['/profil', authService.userValue?.id]"
                         type="button" icon="pi pi-user" class="p-button-rounded"
                         *ngIf="authService?.userValue?.role==='Player'"
                 pButton pRipple></button>

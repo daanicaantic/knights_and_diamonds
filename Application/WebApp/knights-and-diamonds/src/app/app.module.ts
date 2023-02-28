@@ -27,6 +27,9 @@ import { HomeComponent } from './components/home/home.component';
 import { RegistrationFormComponent } from './components/registration-form/registration-form.component';
 import { GameComponent } from './components/game/game.component';
 import { RpsGameComponent } from './components/rps-game/rps-game.component';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
+import { Error404Component } from './components/error404/error404.component';
+import { WelcomePageComponent } from './components/welcome-page/welcome-page.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +43,9 @@ import { RpsGameComponent } from './components/rps-game/rps-game.component';
     RegistrationFormComponent,
     GameComponent,
     RpsGameComponent,
+    UserProfileComponent,
+    Error404Component,
+    WelcomePageComponent,
   ],
   imports: [
     BrowserModule,

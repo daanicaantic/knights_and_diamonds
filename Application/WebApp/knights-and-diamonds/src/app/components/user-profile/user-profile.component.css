@@ -1,0 +1,265 @@
+p, label{
+    font-family: 'Roboto', sans-serif;
+}
+
+.pi {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.background {
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+    align-items: center;
+    width: auto;
+    flex: 1 1 auto;
+}
+
+.user-profile-full {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    height: 400px;
+    align-items: center;
+    flex-wrap: wrap;
+    -webkit-box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+    box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+}
+
+.user-profile-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: auto;
+    border-radius: 5px;
+    background: linear-gradient(to right, #5a69ce, #47e2bb);
+    height: 400px;
+    min-width: 280px;
+    flex-shrink: 2;
+    color: #ffffff;
+    padding-top: 5rem;
+    margin-bottom: 2rem;
+    font-size: x-large;
+}
+
+.avatar {
+    width: 80px;
+    height: 80px;
+}
+
+.user-data {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.username, .rank {
+    margin-top: 1rem;
+}
+
+.socials {
+    
+    display: flex;
+    flex-direction: row;
+    margin-top: 2rem;
+}
+
+.user-profile-info {
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    width: auto;
+    height: 400px;
+    width: 450px;
+    border-radius: 5px;
+    -webkit-box-shadow: 0 1px 20px 0 rgba(69, 88, 97, 0.08);
+    box-shadow: 0 1px 20px 0 rgba(69, 88, 97, 0.08);
+    border: none;
+    margin-bottom: 30px;
+    padding: 2rem;
+    flex: 1 1 auto;
+    flex-shrink: 3;
+}
+
+hr {
+    margin-top: -12px;
+}
+
+.analytics-div, .information-div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+
+.information-span {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.info-labels {
+    color: #979ea4;
+}
+
+.info-span {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: large;
+}
+
+.text-info {
+    font-size: large;
+}
+
+.info-rank-email {
+    margin-left: 2rem;
+}
+
+/* .background {
+    display: flex;
+    flex-direction: column;
+}
+
+body {
+    background-color: #f9f9fa
+}
+
+.padding {
+    padding: 3rem !important
+}
+
+.user-card-full {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.card {
+    border-radius: 5px;
+    -webkit-box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+    box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+    border: none;
+    margin-bottom: 30px;
+}
+
+.m-r-0 {
+    margin-right: 0px;
+}
+
+.m-l-0 {
+    margin-left: 0px;
+}
+
+.user-card-full .user-profile {
+    border-radius: 5px 0 0 5px;
+}
+
+.bg-c-lite-green {
+    background: linear-gradient(to right, #47e2bb, #4d5ed0);
+}
+
+.user-profile {
+    padding: 20px 0;
+    min-width: fit-content;
+}
+
+.card-block {
+    padding: 1.25rem;
+}
+
+.m-b-25 {
+    margin-bottom: 25px;
+}
+
+.img-radius {
+    border-radius: 5px;
+}
+
+
+
+h6 {
+    font-size: 14px;
+}
+
+.card .card-block p {
+    line-height: 25px;
+}
+
+@media (min-width: 700px) {
+    p {
+        font-size: 14px;
+    }
+}
+
+.card-block {
+    padding: 1.25rem;
+}
+
+.b-b-default {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.m-b-20 {
+    margin-bottom: 20px;
+}
+
+.p-b-5 {
+    padding-bottom: 5px !important;
+}
+
+.card .card-block p {
+    line-height: 25px;
+}
+
+.m-b-10 {
+    margin-bottom: 10px;
+}
+
+.text-muted {
+    color: #919aa3 !important;
+}
+
+.b-b-default {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.f-w-600 {
+    font-weight: 600;
+}
+
+.m-b-20 {
+    margin-bottom: 20px;
+}
+
+.m-t-40 {
+    margin-top: 20px;
+}
+
+.p-b-5 {
+    padding-bottom: 5px !important;
+}
+
+.m-b-10 {
+    margin-bottom: 10px;
+}
+
+.m-t-40 {
+    margin-top: 20px;
+}
+
+.user-card-full .social-link li {
+    display: inline-block;
+}
+
+.user-card-full .social-link li a {
+    font-size: 20px;
+    margin: 0 10px 0 0;
+    -webkit-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+} */

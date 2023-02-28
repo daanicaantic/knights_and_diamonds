@@ -24,14 +24,14 @@ export class AuthGuard implements CanActivate {
         route.data['roles'] &&
         route.data['roles'].indexOf(user?.role) === -1
       ) {
-        //this.router.navigate(['/home']);
+        this.router.navigate(['/home']);
         return false;
       }
       
       return true;
     }
     
-    //this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
+    this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
     return false;
   }
   
