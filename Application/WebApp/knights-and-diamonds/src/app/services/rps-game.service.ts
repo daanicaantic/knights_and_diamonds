@@ -20,15 +20,6 @@ export class RpsGameService {
     private router: Router
   ) { }
 
-  startGame(lobbyID: any) {
-    return this.httpClient.post(`https://localhost:7250/RPSGame/StartGame/` + `${lobbyID}`, { responseType: 'text' });
-  }
-
-  denyGame(lobbyID: any) {
-    console.log(lobbyID)
-    return this.httpClient.delete(`https://localhost:7250/RPSGame/DenyGame/` + `${lobbyID}`);
-  }
-
   startGameInv(rpsGameID: any) {
     this.signalrService.hubConnection.invoke("StartRPSGame", rpsGameID)
       .catch(err => console.error(err));
@@ -38,6 +29,15 @@ export class RpsGameService {
     this.signalrService.hubConnection.on("RPSGameStarted", (rpsGameID: any) => {
       this.router.navigate(['/rpsGame', rpsGameID]);
     });
+  }
+
+  startGame(lobbyID: any) {
+    return this.httpClient.post(`https://localhost:7250/RPSGame/StartGame/` + `${lobbyID}`, { responseType: 'text' });
+  }
+
+  denyGame(lobbyID: any) {
+    console.log(lobbyID)
+    return this.httpClient.delete(`https://localhost:7250/RPSGame/DenyGame/` + `${lobbyID}`);
   }
 
   getPlayer(rpsGameID: any, userID: any) {
