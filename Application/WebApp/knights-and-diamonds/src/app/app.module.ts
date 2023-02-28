@@ -27,14 +27,10 @@ import { HomeComponent } from './components/home/home.component';
 import { RegistrationFormComponent } from './components/registration-form/registration-form.component';
 import { GameComponent } from './components/game/game.component';
 import { RpsGameComponent } from './components/rps-game/rps-game.component';
-<<<<<<< HEAD
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { Error404Component } from './components/error404/error404.component';
 import { WelcomePageComponent } from './components/welcome-page/welcome-page.component';
-=======
 import { UploadFileComponent } from './components/upload-file/upload-file.component';
-
->>>>>>> 9cb1513b1b0f3bcce467bbdfd071cc04b4f68448
 
 @NgModule({
   declarations: [
@@ -48,14 +44,11 @@ import { UploadFileComponent } from './components/upload-file/upload-file.compon
     RegistrationFormComponent,
     GameComponent,
     RpsGameComponent,
-<<<<<<< HEAD
     UserProfileComponent,
     Error404Component,
     WelcomePageComponent,
-=======
     UploadFileComponent,
 
->>>>>>> 9cb1513b1b0f3bcce467bbdfd071cc04b4f68448
   ],
   imports: [
     BrowserModule,
