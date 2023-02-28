@@ -1,10 +1,10 @@
 
+using BLL.Services;
+using BLL.Services.Contracts;
 using DAL.DataContext;
+using DAL.DTOs;
 using DAL.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using BLL.Services.Contracts;
-using BLL.Services;
 
 namespace knights_and_diamonds.Controllers
 {
@@ -26,18 +26,41 @@ namespace knights_and_diamonds.Controllers
 
 		[Route("AddCard")]
 		[HttpPost]
-		public async Task<IActionResult> AddCard([FromBody] Card card)
+		public async Task<IActionResult> AddCard([FromBody] MCardDTO cardDTO)
 		{
 			try
 			{
+				var et = await this.context.ElementTypes.FindAsync(cardDTO.ElementType);
+				var mt = await this.context.MonsterTypes.FindAsync(cardDTO.MonsterType);
+				var ct = await this.context.CardTypes.FindAsync(cardDTO.CardType);
+				Card card = new Card(cardDTO.CardName, cardDTO.ImgPath, cardDTO.Description, cardDTO.NumberOfStars, cardDTO.AttackPoints, cardDTO.DefencePoints, mt, ct, et);
 				this._cardService.AddCard(card);
 				return Ok(card);
 			}
 			catch (Exception e)
 			{
-				return BadRequest(e);
+				return BadRequest(e.Message);
 			}
 		}
+
+
+		[Route("AddSTCard")]
+		[HttpPost]
+		public async Task<IActionResult> AddSTCard([FromBody] STCardDTO cardDTO)
+		{
+			try
+			{
+				var ct = await this.context.CardTypes.FindAsync(cardDTO.CardType);
+				Card card = new Card(cardDTO.CardName, cardDTO.ImgPath, cardDTO.Description,ct);
+				this._cardService.AddCard(card);
+				return Ok(card);
+			}
+			catch (Exception e)
+			{
+				return BadRequest(e.Message);
+			}
+		}
+
 		[Route("GetCard")]
 		[HttpGet]
 		public async Task<IActionResult> GetCard(int id)

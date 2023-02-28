@@ -1,6 +1,8 @@
 import { card } from 'src/classes/card-data';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Card } from 'src/classes/card';
+import { STCard } from 'src/classes/stcard';
+
 import { CardType } from 'src/classes/card-type';
 
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -18,6 +20,7 @@ import { BehaviorSubject, elementAt, Observable, Subject, Subscription } from 'r
 })
 export class CardCreateComponent implements OnInit {
   card=card;
+  stcard!:STCard;
   form!:FormGroup;
   cardTypes:any;
   elementTypes:any;
@@ -49,7 +52,7 @@ export class CardCreateComponent implements OnInit {
     console.log("ovdeeeee",this.card)
 
     this.form = this.fb.group({
-      cardName: '',
+      cardName: "",
       cardType: 3,
       description: "",
       elementType: 6,
@@ -64,7 +67,6 @@ export class CardCreateComponent implements OnInit {
   uploadFinished = (event:any) => { 
     this.card.imgPath=event.dbPath;
     this.form.value["imgPath"]=event.dbPath;
-    console.log("odje",this.form.value["imgPath"])
   }
 
   onCardNameChange(): void {  
@@ -150,26 +152,28 @@ export class CardCreateComponent implements OnInit {
 
   handleClick()
   {
+    let p=this.form.getRawValue()
 
-    
+    if(p.cardType!==3)
+    {
+      this.form.controls["elementType"].disable()
+      console.log(this.form.getRawValue());
+    //   this.form.getRawValue()
+      
+    //   console.log("ovdeeeeeeeeeeeeeeeeeeeeeee",p)
+    // }
+    //   p.imgPath=this.form.value["imgPath"]
+    //   console.log(p)
 
-    
-    // console.log("ovde")
-    // console.log(this.form.getRawValue())
-    // this.http.post("https://localhost:7250/Card/AddCard",this.form.getRawValue()).subscribe({
-    //   next: res=>{
-    //   this.messageService.add({key: 'br', severity:'success', summary: 'Uspešno', detail: 'Dodali ste kartu!'});
-    //   },
-    //   error: err=>{
-    //   this.messageService.add({key: 'br', severity:'error', summary: 'Neuspešno', detail: 'Pokušajte ponovo, došlo je do greške!'});
-    //   }
-    // });
-    
-    // this.confirmationService.confirm({
-    //   message: 'Da li ste sigurni da želite da izvršite ovu radnju?',
-    //   accept: () => {
-       
-    //   }
-    // });
+    //   this.cardService.addCard(p).subscribe({
+    //     next: (res: any)=> {
+    //       console.log(res);
+    //       this.monsterTypes=res;
+    //     },
+    //     error: (err:any)=> {
+    //       console.log("neuspesno")
+    //     } 
+    //   })
+    // }
+    }}  
   }
-}

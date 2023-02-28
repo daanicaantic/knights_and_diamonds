@@ -39,7 +39,7 @@ namespace BLL.Services
 			}
 			catch
 			{
-				throw;
+				throw new Exception();
 			}
 		}
 		public void RemoveCard(Card card)
