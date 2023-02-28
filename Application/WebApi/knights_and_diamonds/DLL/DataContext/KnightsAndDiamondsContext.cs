@@ -8,6 +8,9 @@ namespace DAL.DataContext
         public KnightsAndDiamondsContext(DbContextOptions options) : base(options) { }
 
         public DbSet<Card>? Cards { get; set; }
+		public DbSet<CardType>? CardTypes { get; set; }
+		public DbSet<ElementType>? ElementTypes { get; set; }
+		public DbSet<MonsterType>? MonsterTypes { get; set; }
 		public DbSet<Deck>? Decks { get; set; }
 		public DbSet<User>? Users { get; set; }
 		public DbSet<UserHand>? Hands { get; set; }

@@ -1,4 +1,5 @@
 export interface CardType {
-    name: string;
-    code: string;
+    id: number;
+    type: string;
+    imgPath:string;
 }

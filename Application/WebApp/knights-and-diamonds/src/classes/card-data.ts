@@ -1,12 +1,12 @@
 import { Card } from "./card";
 export const card: Card = {
     cardName: " ",
-    cardType: "MonsterCard",
-    elementType: "../../../assets/fire.png",
+    cardType: "Monster",
+    elementType: "Resources/Images/light.png",
     numberOfStars: 11,
-    imgPath: "../../../assets/white-squere.png",
-    monsterType: " ",
-    effect: " ",
+    imgPath: "Resources/Images/white-squere.png",
+    monsterType: "Dragon",
+    description: " ",
     attackPoints: 0,
     defencePoints: 0,
 };

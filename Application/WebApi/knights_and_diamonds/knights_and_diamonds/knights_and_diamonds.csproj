@@ -26,4 +26,8 @@
     <ProjectReference Include="..\SignalR\SignalR.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Resources\Images\" />
+  </ItemGroup>
+
 </Project>

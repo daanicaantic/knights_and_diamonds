@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { SignalrService } from './signalr.service';
 import { Router } from '@angular/router';
@@ -51,4 +51,7 @@ export class RpsGameService {
   playRPSMove(playerID: any, moveName: string) {
     return this.httpClient.put(`https://localhost:7250/RPSGame/PlayMove/` + `${playerID}` + `/` + `${moveName}`, { responseType: 'text' });
   }
+  
 }
+
+

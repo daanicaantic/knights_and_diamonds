@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(KnightsAndDiamondsContext))]
-    [Migration("20230222183703_v2")]
-    partial class v2
+    [Migration("20230223152537_CardType")]
+    partial class CardType
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -36,30 +36,24 @@ namespace DAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CardName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CardType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("CardTypeID")
+                        .HasColumnType("int");
 
                     b.Property<int>("DefencePoints")
                         .HasColumnType("int");
 
                     b.Property<string>("Effect")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ElementType")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImgPath")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MonsterType")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("NumberOfStars")
@@ -69,6 +63,8 @@ namespace DAL.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("CardTypeID");
 
                     b.HasIndex("UserHandID");
 
@@ -96,6 +92,25 @@ namespace DAL.Migrations
                     b.HasIndex("DeckID");
 
                     b.ToTable("CardInDecks");
+                });
+
+            modelBuilder.Entity("DAL.Models.CardType", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
+
+                    b.Property<string>("ImgPath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("CardTypes");
                 });
 
             modelBuilder.Entity("DAL.Models.Deck", b =>
@@ -229,9 +244,17 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Models.Card", b =>
                 {
+                    b.HasOne("DAL.Models.CardType", "CardType")
+                        .WithMany("Cards")
+                        .HasForeignKey("CardTypeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("DAL.Models.UserHand", null)
                         .WithMany("Cards")
                         .HasForeignKey("UserHandID");
+
+                    b.Navigation("CardType");
                 });
 
             modelBuilder.Entity("DAL.Models.CardInDeck", b =>
@@ -301,6 +324,11 @@ namespace DAL.Migrations
             modelBuilder.Entity("DAL.Models.Card", b =>
                 {
                     b.Navigation("CardInDecks");
+                });
+
+            modelBuilder.Entity("DAL.Models.CardType", b =>
+                {
+                    b.Navigation("Cards");
                 });
 
             modelBuilder.Entity("DAL.Models.Deck", b =>
