@@ -13,53 +13,51 @@ import { UserProfileComponent } from './components/user-profile/user-profile.com
 import { Error404Component } from './components/error404/error404.component';
 import { WelcomePageComponent } from './components/welcome-page/welcome-page.component';
 
-
 const routes: Routes = [
   {
     path: 'login',
-    component: LoginFormComponent
+    component: LoginFormComponent,
   },
   {
     path: 'register',
-    component: RegistrationFormComponent
+    component: RegistrationFormComponent,
   },
   {
     path: 'welcome',
-    component: WelcomePageComponent
+    component: WelcomePageComponent,
   },
   {
     path: 'home',
-    component: HomeComponent
+    component: HomeComponent,
   },
   {
     path: 'profil/:id',
     component: UserProfileComponent,
     canActivate: [AuthGuard],
-    data: {roles: ["Player"]}
+    data: { roles: ['Player'] },
   },
   {
     path: 'rpsGame/:rpsGameID',
-    component: RpsGameComponent
+    component: RpsGameComponent,
   },
   {
-    path:'', redirectTo:'error404',
-    pathMatch:'full'
+    path: '',
+    redirectTo: 'welcome',
+    pathMatch: 'full',
   },
   {
-    path:'**', redirectTo:'error404'
+    path: '**',
+    redirectTo: 'error404',
   },
   {
-    path:'error404',
-    component:Error404Component,
-  }
-]
+    path: 'error404',
+    component: Error404Component,
+  },
+];
 
 @NgModule({
   declarations: [],
-  imports: [
-    CommonModule,
-    RouterModule.forRoot(routes)
-  ],
-  exports: [RouterModule]
+  imports: [CommonModule, RouterModule.forRoot(routes)],
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

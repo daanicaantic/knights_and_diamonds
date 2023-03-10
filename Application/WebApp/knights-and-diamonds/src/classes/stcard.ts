@@ -1,6 +1,6 @@
-export interface STCard {
-    cardName: string;
-    cardType: string;
-    imgPath: any;
-    description: string;
+export class STCard {
+    cardName!: string;
+    cardTypeID: any;
+    imgPath!: string;
+    description!: string;
 }

@@ -9,8 +9,11 @@ namespace BLL.Services.Contracts
 {
     public interface IDeckService
     {
-        void AddDeck(Deck deck);
-        void AddCardToDeck(int cardID, int deckID);
-        public Task<IList<CardInDeck>> GetCards(int id);
+        Task<Deck> AddDeck(Deck deck);
+
+        Task AddCardToDeck(int cardID, int deckID);
+        Task<IList<Card>> ShuffleDeck(int DeckID);
+
+		public Task<IList<Card>> GetCards(int id);
 	}
 }

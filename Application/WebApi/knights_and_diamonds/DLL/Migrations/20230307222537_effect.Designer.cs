@@ -4,6 +4,7 @@ using DAL.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(KnightsAndDiamondsContext))]
-    partial class KnightsAndDiamondsContextModelSnapshot : ModelSnapshot
+    [Migration("20230307222537_effect")]
+    partial class effect
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,9 +42,6 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("EffectID")
-                        .HasColumnType("int");
-
                     b.Property<string>("ImgPath")
                         .HasColumnType("nvarchar(max)");
 
@@ -52,8 +51,6 @@ namespace DAL.Migrations
                     b.HasKey("ID");
 
                     b.HasIndex("CardTypeID");
-
-                    b.HasIndex("EffectID");
 
                     b.HasIndex("UserHandID");
 
@@ -120,50 +117,6 @@ namespace DAL.Migrations
                     b.HasIndex("UserID");
 
                     b.ToTable("Decks");
-                });
-
-            modelBuilder.Entity("DAL.Models.Effect", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("EffectTypeID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("NumOfCardsAffected")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("PointsAddedLost")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("EffectTypeID");
-
-                    b.ToTable("Effects");
-                });
-
-            modelBuilder.Entity("DAL.Models.EffectType", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("EffectTypes");
                 });
 
             modelBuilder.Entity("DAL.Models.ElementType", b =>
@@ -346,17 +299,11 @@ namespace DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAL.Models.Effect", "Effect")
-                        .WithMany("Cards")
-                        .HasForeignKey("EffectID");
-
                     b.HasOne("DAL.Models.UserHand", null)
                         .WithMany("Cards")
                         .HasForeignKey("UserHandID");
 
                     b.Navigation("CardType");
-
-                    b.Navigation("Effect");
                 });
 
             modelBuilder.Entity("DAL.Models.CardInDeck", b =>
@@ -385,15 +332,6 @@ namespace DAL.Migrations
                         .HasForeignKey("UserID");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("DAL.Models.Effect", b =>
-                {
-                    b.HasOne("DAL.Models.EffectType", "EffectType")
-                        .WithMany()
-                        .HasForeignKey("EffectTypeID");
-
-                    b.Navigation("EffectType");
                 });
 
             modelBuilder.Entity("DAL.Models.Player", b =>
@@ -468,11 +406,6 @@ namespace DAL.Migrations
             modelBuilder.Entity("DAL.Models.Deck", b =>
                 {
                     b.Navigation("CardsInDeck");
-                });
-
-            modelBuilder.Entity("DAL.Models.Effect", b =>
-                {
-                    b.Navigation("Cards");
                 });
 
             modelBuilder.Entity("DAL.Models.ElementType", b =>

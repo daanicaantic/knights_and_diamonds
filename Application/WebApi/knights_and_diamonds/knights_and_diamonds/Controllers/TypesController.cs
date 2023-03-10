@@ -12,10 +12,11 @@ namespace knights_and_diamonds.Controllers
 	public class TypesController : ControllerBase
 	{
 		private readonly KnightsAndDiamondsContext context;
-
+		public IEffectService _effectService { get; set; }
 		public TypesController(KnightsAndDiamondsContext context)
 		{
 			this.context = context;
+			this._effectService = new EffectService(context);
 		}
 
 		[Route("AddMonsterType")]
@@ -34,6 +35,23 @@ namespace knights_and_diamonds.Controllers
 				return BadRequest(e);
 			}
 		}
+		[Route("AddEffectType")]
+		[HttpPost]
+		public async Task<IActionResult> AddEffectType([FromBody] EffectType type)
+		{
+			try
+			{
+				this.context.EffectTypes.Add(type);
+				await this.context.SaveChangesAsync();
+
+				return Ok(type);
+			}
+			catch (Exception e)
+			{
+				return BadRequest(e);
+			}
+		}
+
 
 		[Route("RemoveMonsterType")]
 		[HttpPost]
@@ -61,6 +79,21 @@ namespace knights_and_diamonds.Controllers
 			{
 				var monsterTypes=await this.context.MonsterTypes.ToListAsync();
 				return Ok(monsterTypes);
+			}
+			catch (Exception e)
+			{
+				return BadRequest(e);
+			}
+		}
+
+		[Route("GetEffectTypes")]
+		[HttpGet]
+		public async Task<IActionResult> GetEffectTypes()
+		{
+			try
+			{
+				var et = await this._effectService.GetEffectTypes();
+				return Ok(et);
 			}
 			catch (Exception e)
 			{
@@ -97,6 +130,7 @@ namespace knights_and_diamonds.Controllers
 				return BadRequest(e);
 			}
 		}
+
 	}
 
 }

@@ -23,20 +23,29 @@ namespace DAL.Repositories
             get { return _context as KnightsAndDiamondsContext; }
         }
 
-
-        public async Task<IList<CardInDeck>> GetCardsFromDeck(int DeckId)
+        public async Task<Deck> AddDeck(Deck deck)
         {
-            try
-            {
-                return await Context.CardInDecks.Where(x => x.Deck.ID == DeckId)
-                    .Include(x => x.Card)
-                    .Include(x => x.Deck)
-                    .ToListAsync();
-            }
-            catch
-            {
-                throw;
-            }
+            var user = await this.Context.Users.FindAsync(deck.UserID);
+            this.Context.Decks.Include(x => x.User);
+            deck.User = user;
+            this.Context.Add(deck);
+            return deck;
+        }
+      /*  public async Task<CardInDeck> addCardInDeck(int cardID, int deckID) 
+        {
+            this.Context.CardInDecks.Include(x => x.Card).Include(x => x.Deck);
+            await this.Context.Cards.FindAsync(cardID);
+			await this.Context.Cards.FindAsync(deckID);
+
+		}*/
+		public async Task<IList<Card>> GetCardsFromDeck(int DeckId)
+        {
+
+            return await Context.CardInDecks.Where(x => x.Deck.ID == DeckId)
+                .Include(x => x.Card)
+                .Include(x => x.Deck)
+                .Select(x=>x.Card)
+                .ToListAsync();
         }
     }
 }

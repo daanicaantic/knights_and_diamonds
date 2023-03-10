@@ -9,6 +9,6 @@ namespace DAL.Repositories.Contracts
 {
 	public interface ICardInDeckRepository : IRepository<CardInDeck>
 	{
-
+		
 	}
 }

@@ -8,6 +8,7 @@ namespace DAL.DataContext
         public KnightsAndDiamondsContext(DbContextOptions options) : base(options) { }
 
         public DbSet<Card>? Cards { get; set; }
+		public DbSet<MonsterCard>? MonsterCards { get; set; }
 		public DbSet<CardType>? CardTypes { get; set; }
 		public DbSet<ElementType>? ElementTypes { get; set; }
 		public DbSet<MonsterType>? MonsterTypes { get; set; }
@@ -18,5 +19,7 @@ namespace DAL.DataContext
 		public DbSet<RockPaperScissorsGame>? RockPaperScissorsGames { get; set; }
 		public DbSet<Player>? Players { get; set; }
 		public DbSet<Game>? Games { get; set; }
+		public DbSet<Effect>? Effects { get; set; }
+		public DbSet<EffectType>? EffectTypes { get; set; }
 	}
 }

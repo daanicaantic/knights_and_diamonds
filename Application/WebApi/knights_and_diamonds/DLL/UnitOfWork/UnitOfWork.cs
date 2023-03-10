@@ -23,6 +23,7 @@ namespace DAL.UnitOfWork
 			RPSGame = new RPSGameRepository(_context);
 			Player = new PlayerRepository(_context);
 			Game = new GameRepository(_context);
+			Effect = new EffectRepository(_context);
 		}
 
 		public ICardRepository Card { get; private set; }
@@ -39,7 +40,9 @@ namespace DAL.UnitOfWork
 
         public IGameRepository Game { get; private set; }
 
-        public int Complete()
+		public IEffectRepository Effect { get; set; }
+
+		public int Complete()
 		{
 			return _context.SaveChanges();
 		}

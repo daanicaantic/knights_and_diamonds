@@ -20,7 +20,7 @@ import { BehaviorSubject, elementAt, Observable, Subject, Subscription } from 'r
 })
 export class CardCreateComponent implements OnInit {
   card=card;
-  stcard!:STCard;
+  stcard:STCard=new STCard;
   form!:FormGroup;
   cardTypes:any;
   elementTypes:any;
@@ -53,12 +53,12 @@ export class CardCreateComponent implements OnInit {
 
     this.form = this.fb.group({
       cardName: "",
-      cardType: 3,
+      cardTypeID: 3,
       description: "",
-      elementType: 6,
+      elementTypeID: 6,
       imgPath:"",
       numberOfStars: ['', [Validators.min(0), Validators.max(11), Validators.maxLength(2)]],
-      monsterType: 1,
+      monsterTypeID: 1,
       attackPoints: ['', [Validators.min(0), Validators.max(9999), Validators.maxLength(4)]],
       defencePoints: ['', [Validators.min(0), Validators.max(9999), Validators.maxLength(4)]]
     })
@@ -85,15 +85,15 @@ export class CardCreateComponent implements OnInit {
     this.card.description=this.form.value["description"]
   }
   onChangeMonsterType() {
-    let mt=this.monsterTypes.find((x: { id: any; })=>x.id==this.form.value["monsterType"])
+    let mt=this.monsterTypes.find((x: { id: any; })=>x.id==this.form.value["monsterTypeID"])
     this.card.monsterType=mt.type
   }
   onElementTypeChange() {
-    let et=this.elementTypes.find((x: { id: any; })=>x.id==this.form.value["elementType"])
+    let et=this.elementTypes.find((x: { id: any; })=>x.id==this.form.value["elementTypeID"])
     this.card.elementType=et.imgPath
   }
   onCardTypeChange() {
-    let ct=this.cardTypes.find((x: { id: any; })=>x.id==this.form.value["cardType"])
+    let ct=this.cardTypes.find((x: { id: any; })=>x.id==this.form.value["cardTypeID"])
     this.card.cardType=ct.type
     if(ct.type!=="Monster")
     {
@@ -101,7 +101,7 @@ export class CardCreateComponent implements OnInit {
     }
     else
     {
-      let et=this.elementTypes.find((x: { id: any; })=>x.id==this.form.value["elementType"])
+      let et=this.elementTypes.find((x: { id: any; })=>x.id==this.form.value["elementTypeID"])
       this.card.elementType=et.imgPath
       console.log(et)
     }
@@ -156,24 +156,35 @@ export class CardCreateComponent implements OnInit {
 
     if(p.cardType!==3)
     {
-      this.form.controls["elementType"].disable()
-      console.log(this.form.getRawValue());
-    //   this.form.getRawValue()
+      this.stcard.cardName=this.form.value["cardName"];
+      this.stcard.cardTypeID=this.form.value["cardTypeID"];
+      this.stcard.description=this.form.value["description"];
+      this.stcard.imgPath=this.form.value["imgPath"];
       
-    //   console.log("ovdeeeeeeeeeeeeeeeeeeeeeee",p)
-    // }
-    //   p.imgPath=this.form.value["imgPath"]
-    //   console.log(p)
+      this.cardService.addCard(this.stcard).subscribe({
+        next: (res: any)=> {
+          console.log(res);
+          this.monsterTypes=res;
+        },
+        error: (err:any)=> {
+          console.log(err)
+        } 
+      })
 
-    //   this.cardService.addCard(p).subscribe({
-    //     next: (res: any)=> {
-    //       console.log(res);
-    //       this.monsterTypes=res;
-    //     },
-    //     error: (err:any)=> {
-    //       console.log("neuspesno")
-    //     } 
-    //   })
-    // }
-    }}  
+      console.log("ovdeeeeeeeeeeeeeeeeeeeeeee",this.stcard)
+    }
+    else{
+      p.imgPath=this.form.value["imgPath"]
+      console.log(p)
+      this.cardService.addMonsterCard(p).subscribe({
+       next: (res: any)=> {
+         console.log(res);
+         this.monsterTypes=res;
+       },
+       error: (err:any)=> {
+         console.log(err)
+       } 
+     })
+    }
   }
+}
