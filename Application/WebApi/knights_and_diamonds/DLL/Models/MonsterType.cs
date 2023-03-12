@@ -15,6 +15,6 @@ namespace DAL.Models
 		public string? Type { get; set; }
 
 		[JsonIgnore]
-		public List<Card>? Cards { get; set; }
+		public List<MonsterCard>? MonsterCards { get; set; }
 	}
 }

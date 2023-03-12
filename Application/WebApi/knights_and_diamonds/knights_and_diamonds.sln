@@ -9,7 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BLL", "BLL\BLL.csproj", "{0
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAL", "DLL\DAL.csproj", "{B54CC0B5-EE47-4EC1-8B57-8AA689C53B68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalR", "SignalR\SignalR.csproj", "{292EA057-A143-47E8-A5F0-CC6990333FFE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SignalR", "SignalR\SignalR.csproj", "{292EA057-A143-47E8-A5F0-CC6990333FFE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B54F20FE-3486-48D8-B562-CABA2179AE4B}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -16,6 +16,7 @@ namespace DAL.UnitOfWork
 		ICardInDeckRepository CardInDeck { get; }
 		IPlayerRepository Player { get; }
 		IGameRepository Game { get; }
+		IEffectRepository Effect { get; }
 
 		int Complete();
 	}

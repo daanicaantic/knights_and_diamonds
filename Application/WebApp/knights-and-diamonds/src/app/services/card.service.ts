@@ -20,8 +20,8 @@ export class CardService {
   addCard(card: any): any {
     return this.httpClient.post(`https://localhost:7250/Card/AddCard`, card);
   }
-  addSTCard(card: any): any {
-    return this.httpClient.post(`https://localhost:7250/Card/AddSTCard`, card);
+  addMonsterCard(card: any): any {
+    return this.httpClient.post(`https://localhost:7250/Card/AddMonsterCard`, card);
   }
 
   getCardTypes() {

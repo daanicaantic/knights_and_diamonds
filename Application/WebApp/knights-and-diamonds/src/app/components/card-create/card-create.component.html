@@ -12,7 +12,7 @@
                 </span>
                 <span class="form_field">
                     <small>Card Type</small>
-                    <p-dropdown class="dataField" formControlName="cardType" [options]="cardTypes" optionValue="id" optionLabel="type" (onChange)="onCardTypeChange()" [style]="{'minWidth':'100%'}"></p-dropdown>
+                    <p-dropdown class="dataField" formControlName="cardTypeID" [options]="cardTypes" optionValue="id" optionLabel="type" (onChange)="onCardTypeChange()" [style]="{'minWidth':'100%'}"></p-dropdown>
                 </span>
                 <span class="form_field">
                     <small>Card Description</small>
@@ -30,7 +30,7 @@
             <div class="form" [formGroup]="form" >
                 <span class="form_field">
                     <small>Card Element</small>
-                    <p-dropdown class="dataField" formControlName="elementType" [options]="elementTypes" optionValue="id" optionLabel="type" (onChange)="onElementTypeChange()" [style]="{'minWidth':'100%'}"></p-dropdown>
+                    <p-dropdown class="dataField" formControlName="elementTypeID" [options]="elementTypes" optionValue="id" optionLabel="type" (onChange)="onElementTypeChange()" [style]="{'minWidth':'100%'}"></p-dropdown>
                 </span>
                 <span class="form_field">
                     <small>Card Level</small>
@@ -38,7 +38,7 @@
                 </span>
                 <span class="form_field">
                     <small>Monster Type</small>
-                    <p-dropdown class="dataField" formControlName="monsterType" [options]="monsterTypes" optionValue="id" optionLabel="type" (onChange)="onChangeMonsterType()" [style]="{'minWidth':'100%'}"></p-dropdown>
+                    <p-dropdown class="dataField" formControlName="monsterTypeID" [options]="monsterTypes" optionValue="id" optionLabel="type" (onChange)="onChangeMonsterType()" [style]="{'minWidth':'100%'}"></p-dropdown>
                 </span>
                 <span class="atkdefspan">
                     <div class="atkdefcontainer" >

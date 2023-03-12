@@ -29,12 +29,12 @@ namespace knights_and_diamonds.Controllers
         {
             try
             {
-                this._deckService.AddDeck(deck);
-                return Ok(deck);
+                var d=await this._deckService.AddDeck(deck);
+                return Ok(d);
             }
             catch (Exception e)
             {
-                return BadRequest(e);
+                return BadRequest(e.Message);
             }
         }
         [Route("AddCardToDeck")]
@@ -43,34 +43,51 @@ namespace knights_and_diamonds.Controllers
         {
             try
             {
-                this._deckService.AddCardToDeck(cardID, deckID);
+                await this._deckService.AddCardToDeck(cardID, deckID);
                 return Ok();
             }
             catch (Exception e)
             {
-                return BadRequest(e);
+                return BadRequest(e.Message);
             }
         }
-        [Route("GetDeck")]
+		[Route("ShuffleDeck")]
+		[HttpGet]
+		public async Task<IActionResult> ShuffleDeck(int deckID)
+		{
+			try
+			{
+				if (deckID <= 0)
+				{
+				    return BadRequest("ID must be bigger than 0");
+				}
+				var c = await this._deckService.ShuffleDeck(deckID);
+				return new JsonResult(c);
+
+			}
+			catch (Exception e)
+			{
+				return BadRequest(e);
+			}
+		}
+
+		[Route("GetDeck")]
         [HttpGet]
         public async Task<IActionResult> GetDeck(int id)
         {
             try
             {
-                if (id > 0)
-                {
-                    var c=await this._deckService.GetCards(id);
-                    return new JsonResult(c);
-                }
-                else
+                if (id <= 0)
                 {
                     return BadRequest("ID must be bigger than 0");
                 }
+                var c = await this._deckService.GetCards(id);
+                return new JsonResult(c);
             }
             catch (Exception e)
             {
                 return BadRequest(e);
             }
-        }
+		}
     }
 }

@@ -52,7 +52,7 @@ namespace BLL.Services
 			var cons = new List<string>();
 			if (_onlineUsers.ConnectedUsers.ContainsKey(UserID)) 
 			{ 
-				cons = _onlineUsers.ConnectedUsers[UserID].ToList();
+				cons =_onlineUsers.ConnectedUsers[UserID].ToList();
 			}
 			return cons;
 		}

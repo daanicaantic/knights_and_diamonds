@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace DAL.DTOs
@@ -11,20 +12,26 @@ namespace DAL.DTOs
 	{
 		public string? CardName { get; set; }
 		public string? ImgPath { get; set; }
+		public int CardTypeID { get; set; }
+
 		public string? Description { get; set; }
+		public int NumOfCardsAffected { get; set; }
+		public int PointsAddedLost { get; set; }
 		public int NumberOfStars { get; set; }
 		public int AttackPoints { get; set; }
 		public int DefencePoints { get; set; }
-		public int MonsterType { get; set; }
-		public int CardType { get; set; }
-		public int ElementType { get; set; }
+		public int MonsterTypeID { get; set; }
+		public int ElementTypeID { get; set; }
 	}
 
-	public class STCardDTO 
+	public class CardDTO 
 	{
 		public string? CardName { get; set; }
 		public string? ImgPath { get; set; }
-		public string? Description { get; set; }
-		public int CardType { get; set; }
+		public int CardTypeID { get; set; }
+		public int EffectTypeID { get; set; }
+		public int NumOfCardsAffected { get; set; }
+		public int PointsAddedLost { get; set; }
+
 	}
 }

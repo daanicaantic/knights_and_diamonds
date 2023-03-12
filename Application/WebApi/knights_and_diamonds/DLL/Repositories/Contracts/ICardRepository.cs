@@ -10,5 +10,8 @@ namespace DAL.Repositories.Contracts
 	public interface ICardRepository : IRepository<Card>
 	{
 		IQueryable<Card> GetCardsPerPage(int pageIndex, int pageSize);
+		public Task<Card> AddCard(Card card);
+		public Task<MonsterCard> AddMonsterCard(MonsterCard card);
+
 	}
 }

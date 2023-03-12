@@ -19,38 +19,58 @@ namespace BLL.Services
             this._context = context;
             unitOfWork = new UnitOfWork(_context);
         }
-        public void AddDeck(Deck deck)
+        public async Task<Deck> AddDeck(Deck deck)
         {
-            try
-            {
-                this.unitOfWork.Deck.Add(deck);
-                this.unitOfWork.Complete();
-            }
-            catch
-            {
-                throw;
-            }
+            var d=await this.unitOfWork.Deck.AddDeck(deck);
+            this.unitOfWork.Complete();
+            return d;
         }
-        public void AddCardToDeck(int cardID, int deckID)
+        public async Task AddCardToDeck(int cardID, int deckID)
         {
-        /*    CardInDeck cardInDeck = new CardInDeck();
-            var c = this.unitOfWork.Card.GetOne(cardID);
-            var d = this.unitOfWork.Deck.GetOne(deckID);
-            cardInDeck.Card = c;
+            CardInDeck cardInDeck = new CardInDeck();
+            var c = await this.unitOfWork.Card.GetOne(cardID);
+            if (c == null) 
+            {
+                throw new Exception("There is not card with this ID");
+            }
+            var d = await this.unitOfWork.Deck.GetOne(deckID);
+			if (c == null)
+			{
+				throw new Exception("There is not deck with this ID");
+			}
+			cardInDeck.Card = c;
             cardInDeck.Deck = d;
             this.unitOfWork.CardInDeck.Add(cardInDeck);
-            this.unitOfWork.Complete();*/
+            this.unitOfWork.Complete();
         }
-        public async Task<IList<CardInDeck>> GetCards(int id) 
+        public async Task<IList<Card>> ShuffleDeck(int DeckID)
         {
-            try
+            var deck = await this.unitOfWork.Deck.GetCardsFromDeck(DeckID);
+       
+            int lastIndex = deck.Count() - 1;
+            while (lastIndex > 0)
             {
-                return await this.unitOfWork.Deck.GetCardsFromDeck(id);
+                var tempValue = deck[lastIndex];
+                int randomIndex = new Random().Next(0, lastIndex);
+                deck[lastIndex] = deck[randomIndex];
+                deck[randomIndex] = tempValue;
+                lastIndex--;
             }
-            catch 
+            return deck;
+		}
+		public async Task<Card> DrawCard(IList<Card> cards)
+		{
+            if (cards.Count <= 0) 
             {
-                throw;
+                throw new Exception("There is not card in your deck anymore, you lost!!");
             }
+            var card = cards.FirstOrDefault();
+			return card;
+		}
+        
+		public async Task<IList<Card>> GetCards(int DeckID)
+        {
+            return await this.unitOfWork.Deck.GetCardsFromDeck(DeckID);
         }
 
   

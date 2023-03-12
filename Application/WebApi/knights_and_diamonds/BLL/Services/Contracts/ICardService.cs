@@ -1,4 +1,5 @@
-﻿using DAL.Models;
+﻿using DAL.DTOs;
+using DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,9 @@ namespace BLL.Services.Contracts
 	public interface ICardService
 	{
 		Task<Card> GetCard(int id);
-		void AddCard(Card card);
+		Task<Card> AddCard(CardDTO card);
+		Task<MonsterCard> AddMonsterCard(MonsterCard card);
+
 		void RemoveCard(Card card);
 		void UpdateCard(Card card);
 		IQueryable<Card> FindCardByName(string name);

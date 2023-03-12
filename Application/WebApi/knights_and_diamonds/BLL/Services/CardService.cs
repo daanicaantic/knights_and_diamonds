@@ -1,5 +1,8 @@
 ﻿using BLL.Services.Contracts;
 using DAL.DataContext;
+using DAL.DesignPatterns.Factory;
+using DAL.DesignPatterns.Factory.Contract;
+using DAL.DTOs;
 using DAL.Models;
 using DAL.UnitOfWork;
 using System;
@@ -14,10 +17,16 @@ namespace BLL.Services
 	{
 		private readonly KnightsAndDiamondsContext _context;
 		public UnitOfWork unitOfWork { get; set; }
+		public IDescriptionFactory _descriptionFactory { get; set; }
+		public IEffectService _effectService { get; set; }
+
+		public IFactory _factory { get; set; }
 		public CardService(KnightsAndDiamondsContext context)
 		{
 			this._context = context;
 			unitOfWork = new UnitOfWork(_context);
+			_descriptionFactory = new ConcreteDescriptionFactory();
+			_effectService = new EffectService(_context);
 		}
 		public async Task<Card> GetCard(int id)
 		{
@@ -30,16 +39,33 @@ namespace BLL.Services
 				throw;
 			}
 		}
-		public  void AddCard(Card card)
+		public async Task<Card> AddCard(CardDTO cardDTO)
 		{
 			try
 			{
-				this.unitOfWork.Card.Add(card);
+				var effect=await this._effectService.AddEffect(cardDTO.EffectTypeID, cardDTO.NumOfCardsAffected, cardDTO.PointsAddedLost);
+				var card = new Card(cardDTO.CardName, cardDTO.ImgPath, cardDTO.CardTypeID, cardDTO.EffectTypeID, effect);
+
+				var c=await this.unitOfWork.Card.AddCard(card);
 				this.unitOfWork.Complete();
+				return c;
 			}
-			catch
+			catch(Exception e)
 			{
-				throw new Exception();
+				throw e;
+			}
+		}
+		public async Task<MonsterCard> AddMonsterCard(MonsterCard card)
+		{
+			try
+			{
+				var c = await this.unitOfWork.Card.AddMonsterCard(card);
+				this.unitOfWork.Complete();
+				return c;
+			}
+			catch (Exception e)
+			{
+				throw e;
 			}
 		}
 		public void RemoveCard(Card card)

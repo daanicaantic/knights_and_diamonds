@@ -2,6 +2,8 @@
 using BLL.Services;
 using BLL.Services.Contracts;
 using DAL.DataContext;
+using DAL.DesignPatterns.Factory;
+using DAL.DesignPatterns.Factory.Contract;
 using DAL.DTOs;
 using DAL.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -18,24 +20,44 @@ namespace knights_and_diamonds.Controllers
 		*/
 		private readonly KnightsAndDiamondsContext context;
 		public ICardService _cardService { get; set; }
+		public IEffectService _effService { get; set; }
+
+		public IDescriptionFactory _descriptionFactory { get; set; }
+		public IFactory _factory { get; set; }
 		public CardController(KnightsAndDiamondsContext context)
 		{
 			this.context = context;
 			_cardService = new CardService(this.context);
+			_descriptionFactory = new ConcreteDescriptionFactory();
+			_effService = new EffectService(this.context);
 		}
 
 		[Route("AddCard")]
 		[HttpPost]
-		public async Task<IActionResult> AddCard([FromBody] MCardDTO cardDTO)
+		public async Task<IActionResult> AddCard([FromBody] CardDTO card)
 		{
 			try
 			{
-				var et = await this.context.ElementTypes.FindAsync(cardDTO.ElementType);
-				var mt = await this.context.MonsterTypes.FindAsync(cardDTO.MonsterType);
-				var ct = await this.context.CardTypes.FindAsync(cardDTO.CardType);
-				Card card = new Card(cardDTO.CardName, cardDTO.ImgPath, cardDTO.Description, cardDTO.NumberOfStars, cardDTO.AttackPoints, cardDTO.DefencePoints, mt, ct, et);
-				this._cardService.AddCard(card);
-				return Ok(card);
+				if (card.CardTypeID == 3)
+				{
+					return BadRequest("There is some error");
+				}
+				var c = await this._cardService.AddCard(card);
+				return Ok(c);
+			}
+			catch (Exception e)
+			{
+				return BadRequest(e.Message);
+			}
+		}
+		[Route("AddEffect")]
+		[HttpPost]
+		public async Task<IActionResult> AddEffect([FromBody] CardDTO card)
+		{
+			try
+			{
+				var e=await this._effService.AddEffect(card.EffectTypeID, card.NumOfCardsAffected, card.PointsAddedLost);
+				return Ok(e);
 			}
 			catch (Exception e)
 			{
@@ -43,17 +65,14 @@ namespace knights_and_diamonds.Controllers
 			}
 		}
 
-
-		[Route("AddSTCard")]
+		[Route("AddMonsterCard")]
 		[HttpPost]
-		public async Task<IActionResult> AddSTCard([FromBody] STCardDTO cardDTO)
+		public async Task<IActionResult> AddMonsterCard([FromBody] MonsterCard MonsterCard)
 		{
 			try
 			{
-				var ct = await this.context.CardTypes.FindAsync(cardDTO.CardType);
-				Card card = new Card(cardDTO.CardName, cardDTO.ImgPath, cardDTO.Description,ct);
-				this._cardService.AddCard(card);
-				return Ok(card);
+				var c=await this._cardService.AddMonsterCard(MonsterCard);
+				return Ok(c);
 			}
 			catch (Exception e)
 			{
@@ -160,7 +179,22 @@ namespace knights_and_diamonds.Controllers
 				return BadRequest(e);
 			}
 		}
-
+		[Route("GetD")]
+		[HttpGet]
+		public async Task<IActionResult> Getd(string type,string ct,int nuce,int points ) 
+		{
+			try
+			{
+				/*this._factory = this._descriptionFactory.FactoryMethod(type, ct, nuce, points);
+				var description = await this._factory.GetDescription();*/
+				return Ok();
+				
+			}
+			catch (Exception e)
+			{
+				return BadRequest(e);
+			}
+		}
 
 	}
 }

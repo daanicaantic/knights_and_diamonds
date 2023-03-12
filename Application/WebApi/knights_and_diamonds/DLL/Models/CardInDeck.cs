@@ -12,9 +12,11 @@ namespace DAL.Models
 	{
 		[Key]
 		public int ID { get; set; }
-		public int CardId { get; set; }
+		public int CardID { get; set; }
+		[JsonIgnore]
 		public Card? Card { get; set; }
-
+		public int DeckID { get; set; }
+		[JsonIgnore]
 		public Deck? Deck { get; set; }
 
 	}
