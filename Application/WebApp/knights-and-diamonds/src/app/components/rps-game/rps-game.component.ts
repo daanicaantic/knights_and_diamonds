@@ -25,7 +25,7 @@ export class RpsGameComponent implements OnInit, OnDestroy {
   player: any;
   playerFlag: any;
   winner: any;
-  moveChosed: Boolean = false;
+  moveChosed: any;
 
   constructor(private route: ActivatedRoute,
     private signalrService: SignalrService,
@@ -35,7 +35,6 @@ export class RpsGameComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.rpsGameID = this.route.snapshot.params['rpsGameID'];
-    console.log(this.rpsGameID)
     this.progressValue = 0;
     this.timer = 10;
     this.getPlayer();
@@ -68,9 +67,11 @@ export class RpsGameComponent implements OnInit, OnDestroy {
   }
 
   chooseRPSMove(move: string) {
+    console.log(this.moveChosed)
     this.rpsGameService.playRPSMove(this.player.id, move).subscribe({
       next: (res: any) => {
-        this.moveChosed == true;
+        this.moveChosed = move;
+        console.log(this.moveChosed)
         this.messageService.add({ key: 'br', severity: 'success', summary: 'Uspešno', detail: 'Uspesno odigran potez!' });
       },
       error: err => {

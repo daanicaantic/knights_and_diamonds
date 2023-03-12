@@ -42,7 +42,7 @@ const routes: Routes = [
     component: RpsGameComponent
   },
   {
-    path:'', redirectTo:'error404',
+    path:'', redirectTo:'welcome',
     pathMatch:'full'
   },
   {

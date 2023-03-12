@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Observable } from 'rxjs';
 import { AuthService } from './services/auth.service';
 import { ConnectionService } from './services/connection.service';
 import { SignalrService } from './services/signalr.service';
