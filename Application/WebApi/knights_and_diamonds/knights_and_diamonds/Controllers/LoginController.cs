@@ -8,7 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using DAL.DTOs;
-using DAL.Migrations;
+
 using DAL.Models;
 using Microsoft.AspNetCore.SignalR;
 using SignalR.HubConfig;

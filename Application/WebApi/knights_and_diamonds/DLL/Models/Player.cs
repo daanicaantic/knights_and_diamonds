@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -15,13 +16,14 @@ namespace DAL.Models
 	}
 	public class Player
 	{
+		[Key]
 		public int ID { get; set; }
 		public Play? Play { get; set; }
 		public int RPSGameID { get; set; }
 		public RockPaperScissorsGame? RPSGame { get; set; }
 		public int UserID { get; set; }
         public User? User { get; set; }
-		public Game? Game { get; set; }
+        public Game? Game { get; set; }
 
         public Player() 
 		{ 

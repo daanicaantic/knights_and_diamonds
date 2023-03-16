@@ -3,6 +3,7 @@ using BLL.Services.Contracts;
 using DAL.DataContext;
 using DAL.DesignPatterns;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace knights_and_diamonds.Controllers
 {
@@ -26,6 +27,20 @@ namespace knights_and_diamonds.Controllers
             {
                 var game = await this._gameservice.StartGame(player1ID, player2ID);
                 return Ok(game);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+        [Route("delete")]
+        [HttpDelete]
+        public async Task<IActionResult> delete()
+        {
+            try
+            {
+              
+                return Ok();
             }
             catch (Exception e)
             {
