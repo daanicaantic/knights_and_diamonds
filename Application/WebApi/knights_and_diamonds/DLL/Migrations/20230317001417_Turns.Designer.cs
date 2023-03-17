@@ -4,6 +4,7 @@ using DAL.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(KnightsAndDiamondsContext))]
-    partial class KnightsAndDiamondsContextModelSnapshot : ModelSnapshot
+    [Migration("20230317001417_Turns")]
+    partial class Turns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,7 +64,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("PlayerID");
 
-                    b.ToTable("Cards", (string)null);
+                    b.ToTable("Cards");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Card");
                 });
@@ -87,7 +89,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("DeckID");
 
-                    b.ToTable("CardInDecks", (string)null);
+                    b.ToTable("CardInDecks");
                 });
 
             modelBuilder.Entity("DAL.Models.CardType", b =>
@@ -106,7 +108,7 @@ namespace DAL.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("CardTypes", (string)null);
+                    b.ToTable("CardTypes");
                 });
 
             modelBuilder.Entity("DAL.Models.Deck", b =>
@@ -124,7 +126,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Decks", (string)null);
+                    b.ToTable("Decks");
                 });
 
             modelBuilder.Entity("DAL.Models.Effect", b =>
@@ -151,7 +153,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("EffectTypeID");
 
-                    b.ToTable("Effects", (string)null);
+                    b.ToTable("Effects");
                 });
 
             modelBuilder.Entity("DAL.Models.EffectType", b =>
@@ -168,7 +170,7 @@ namespace DAL.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("EffectTypes", (string)null);
+                    b.ToTable("EffectTypes");
                 });
 
             modelBuilder.Entity("DAL.Models.ElementType", b =>
@@ -187,7 +189,7 @@ namespace DAL.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("ElementTypes", (string)null);
+                    b.ToTable("ElementTypes");
                 });
 
             modelBuilder.Entity("DAL.Models.Game", b =>
@@ -200,7 +202,7 @@ namespace DAL.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Games", (string)null);
+                    b.ToTable("Games");
                 });
 
             modelBuilder.Entity("DAL.Models.MonsterType", b =>
@@ -216,7 +218,7 @@ namespace DAL.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("MonsterTypes", (string)null);
+                    b.ToTable("MonsterTypes");
                 });
 
             modelBuilder.Entity("DAL.Models.Player", b =>
@@ -255,7 +257,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Players", (string)null);
+                    b.ToTable("Players");
                 });
 
             modelBuilder.Entity("DAL.Models.PlayerHand", b =>
@@ -268,7 +270,7 @@ namespace DAL.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("PlayerHands", (string)null);
+                    b.ToTable("PlayerHands");
                 });
 
             modelBuilder.Entity("DAL.Models.RockPaperScissorsGame", b =>
@@ -281,7 +283,7 @@ namespace DAL.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("RockPaperScissorsGames", (string)null);
+                    b.ToTable("RockPaperScissorsGames");
                 });
 
             modelBuilder.Entity("DAL.Models.Turn", b =>
@@ -320,7 +322,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("GameID");
 
-                    b.ToTable("Turns", (string)null);
+                    b.ToTable("Turns");
                 });
 
             modelBuilder.Entity("DAL.Models.User", b =>
@@ -351,7 +353,7 @@ namespace DAL.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("DAL.Models.MonsterCard", b =>

@@ -96,11 +96,13 @@ namespace BLL.Services
                 throw new Exception(user2.UserName + "is already in game.");
             }
 
-            RockPaperScissorsGame game = new RockPaperScissorsGame();
-			this.unitOfWork.RPSGame.Add(game);
+            RockPaperScissorsGame rpsGame = new RockPaperScissorsGame();
+			Game cardGame = new Game();
+			
+			this.unitOfWork.RPSGame.Add(rpsGame);
 
-			Player player1 = new Player(game, user1);
-			Player player2 = new Player(game, user2);
+			Player player1 = new Player(rpsGame, cardGame, user1);
+			Player player2 = new Player(rpsGame, cardGame, user2);
 
 			this._usersingame.UsersInGame.Add(user1.ID);
 			this._usersingame.UsersInGame.Add(user2.ID);
@@ -111,7 +113,7 @@ namespace BLL.Services
 
 			this.unitOfWork.Complete();
 
-			return game.ID;
+			return rpsGame.ID;
 		}
         public async Task<int> DenyGame(int lobbyID)
         {

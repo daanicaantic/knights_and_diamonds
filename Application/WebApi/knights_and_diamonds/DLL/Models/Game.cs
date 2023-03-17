@@ -14,5 +14,7 @@ namespace DAL.Models
         public int ID { get; set; }
         [JsonIgnore]
         public List<Player>? Players { get; set; }
+		[JsonIgnore]
+		public List<Turn>? Turns { get; set; }
     }
 }

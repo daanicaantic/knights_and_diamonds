@@ -14,12 +14,14 @@ namespace DAL.DataContext
 		public DbSet<MonsterType>? MonsterTypes { get; set; }
 		public DbSet<Deck>? Decks { get; set; }
 		public DbSet<User>? Users { get; set; }
-		public DbSet<UserHand>? Hands { get; set; }
 		public DbSet<CardInDeck>? CardInDecks { get; set; }
 		public DbSet<RockPaperScissorsGame>? RockPaperScissorsGames { get; set; }
 		public DbSet<Player>? Players { get; set; }
 		public DbSet<Game>? Games { get; set; }
 		public DbSet<Effect>? Effects { get; set; }
 		public DbSet<EffectType>? EffectTypes { get; set; }
+		public DbSet<PlayerHand>? PlayerHands { get; set; }
+		public DbSet<Turn>? Turns { get; set; }
+
 	}
 }
