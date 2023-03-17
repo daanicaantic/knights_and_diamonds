@@ -18,7 +18,7 @@ namespace BLL.Services
         public GameService(KnightsAndDiamondsContext context)
         {
             this._context = context;
-            unitOfWork = new UnitOfWork(_context);
+            this.unitOfWork = new UnitOfWork(_context);
         }
 
         public async Task<int> StartGame(int player1ID, int player2ID)
