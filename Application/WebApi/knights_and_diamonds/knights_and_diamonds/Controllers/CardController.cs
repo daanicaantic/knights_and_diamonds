@@ -165,11 +165,11 @@ namespace knights_and_diamonds.Controllers
 		}
 		[Route("AddCardType")]
 		[HttpPost]
-		public async Task<IActionResult> AddCardType([FromBody] MonsterType type)
+		public async Task<IActionResult> AddCardType([FromBody] CardType type)
 		{
 			try
 			{
-				this.context.MonsterTypes.Add(type);
+				this.context.CardTypes.Add(type);
 				await this.context.SaveChangesAsync();
 
 				return Ok(type);

@@ -43,9 +43,9 @@ namespace BLL.Services
             this.unitOfWork.CardInDeck.Add(cardInDeck);
             this.unitOfWork.Complete();
         }
-        public async Task<IList<Card>> ShuffleDeck(int DeckID)
+        public async Task<List<CardInDeck>> ShuffleDeck(int deckID, int userID)
         {
-            var deck = await this.unitOfWork.Deck.GetCardsFromDeck(DeckID);
+            var deck = await this.unitOfWork.Deck.GetCardsFromDeck(deckID, userID);
        
             int lastIndex = deck.Count() - 1;
             while (lastIndex > 0)
@@ -68,9 +68,9 @@ namespace BLL.Services
 			return card;
 		}
         
-		public async Task<IList<Card>> GetCards(int DeckID)
+		public async Task<List<CardInDeck>> GetCards(int deckID, int userID)
         {
-            return await this.unitOfWork.Deck.GetCardsFromDeck(DeckID);
+            return await this.unitOfWork.Deck.GetCardsFromDeck(deckID, userID);
         }
 
   

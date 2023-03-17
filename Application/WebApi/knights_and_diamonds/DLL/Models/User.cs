@@ -23,6 +23,7 @@ namespace DAL.Models
 		public string? Role { get; set; }
 		[JsonIgnore]
 		public List<Deck>? Decks { get; set; }
+		public int MainDeckID { get; set; }
 
 		public User()
 		{

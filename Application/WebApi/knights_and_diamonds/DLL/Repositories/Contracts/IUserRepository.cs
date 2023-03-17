@@ -11,5 +11,6 @@ namespace DAL.Repositories.Contracts
     {
         Task<User> GetUserByEmail(string email);
         Task<User> GetUserByUsername(string username);
+        Task<User> SetMainDeck(int userID, int deckID);
     }
 }

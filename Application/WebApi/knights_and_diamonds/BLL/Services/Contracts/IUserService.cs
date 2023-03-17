@@ -13,5 +13,6 @@ namespace BLL.Services.Contracts
         Task AddUser(UserDTO user);
         Task<User> GetUserByID(int id);
         IQueryable<User> GetUser(string email, string password);
+        Task<User> SetMainDeckID(int userID, int deckID);
     }
 }

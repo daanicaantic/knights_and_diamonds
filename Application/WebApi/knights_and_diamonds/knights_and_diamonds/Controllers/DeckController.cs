@@ -53,7 +53,7 @@ namespace knights_and_diamonds.Controllers
         }
 		[Route("ShuffleDeck")]
 		[HttpGet]
-		public async Task<IActionResult> ShuffleDeck(int deckID)
+		public async Task<IActionResult> ShuffleDeck(int deckID, int userID)
 		{
 			try
 			{
@@ -61,7 +61,7 @@ namespace knights_and_diamonds.Controllers
 				{
 				    return BadRequest("ID must be bigger than 0");
 				}
-				var c = await this._deckService.ShuffleDeck(deckID);
+				var c = await this._deckService.ShuffleDeck(deckID, userID);
 				return new JsonResult(c);
 
 			}
@@ -73,15 +73,15 @@ namespace knights_and_diamonds.Controllers
 
 		[Route("GetDeck")]
         [HttpGet]
-        public async Task<IActionResult> GetDeck(int id)
+        public async Task<IActionResult> GetDeck(int deckID, int userID)
         {
             try
             {
-                if (id <= 0)
+                if (userID <= 0)
                 {
                     return BadRequest("ID must be bigger than 0");
                 }
-                var c = await this._deckService.GetCards(id);
+                var c = await this._deckService.GetCards(deckID, userID);
                 return new JsonResult(c);
             }
             catch (Exception e)

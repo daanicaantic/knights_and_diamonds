@@ -28,7 +28,7 @@ namespace DAL.Models
 		public int? GameID { get; set; }
 		public Game? Game { get; set; }
 		[JsonIgnore]
-		public List<Card>? Deck { get; set; }
+		public List<CardInDeck>? Deck { get; set; }
 		[JsonIgnore]
 		public PlayerHand? Hand { get; set; }
 
@@ -44,11 +44,11 @@ namespace DAL.Models
 			this.UserID = user.ID;
 			this.User = user;
 			this.Game = game;
-			this.Deck = new List<Card>();
+			this.Deck = new List<CardInDeck>();
 			this.Hand = new PlayerHand();
 			this.LifePoints = 8000;
 		}
-		public Card Draw() 
+	/*	public Card Draw() 
 		{
 			if (this.Deck.Count <= 0) {
 				throw new Exception("Thers is no more cards in your dack!!");
@@ -56,6 +56,6 @@ namespace DAL.Models
 			var card = this.Deck.FirstOrDefault();
 			this.Deck.Remove(card);
 			return card;
-		}
+		}*/
 	}
 }

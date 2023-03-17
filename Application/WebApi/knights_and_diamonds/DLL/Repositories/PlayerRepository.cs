@@ -21,10 +21,22 @@ namespace DAL.Repositories
 			get { return _context as KnightsAndDiamondsContext; }
 		}
 
-        public async Task<Player> GetPlayer(int gameID, int userID)
+        public async Task<Player> GetPlayer(int rpsGameID, int userID)
         {
-			var player = await this.Context.Players.Where(g => g.RPSGameID == gameID && g.UserID == userID).FirstOrDefaultAsync();
+			var player = await this.Context.Players.Where(g => g.RPSGameID == rpsGameID && g.UserID == userID).FirstOrDefaultAsync();
 			return player;
+        }
+
+        public async Task<Player> GetPlayerByID(int playerID)
+        {
+			var player = await this.Context.Players.Include(x => x.User).Where(p => p.ID == playerID).FirstOrDefaultAsync();
+            return player;
+        }
+
+		public async Task<List<CardInDeck>> GetShuffledDeck(int playerID)
+		{
+			var deck = await this.Context.Players.Include(x => x.Deck).Where(p => p.ID == playerID).Select(x => x.Deck).FirstOrDefaultAsync();
+			return deck;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DAL.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace BLL.Services.Contracts
 {
-    public interface IGameService
+    public interface IPlayerService
     {
-        public Task SetShuffledDeck(int playerID);
+        Task<List<CardInDeck>> GetShuffledDeck(int playerID);
     }
 }

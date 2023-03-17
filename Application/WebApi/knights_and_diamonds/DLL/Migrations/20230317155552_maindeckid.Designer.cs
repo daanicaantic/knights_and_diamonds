@@ -4,6 +4,7 @@ using DAL.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(KnightsAndDiamondsContext))]
-    partial class KnightsAndDiamondsContextModelSnapshot : ModelSnapshot
+    [Migration("20230317155552_maindeckid")]
+    partial class maindeckid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,6 +51,9 @@ namespace DAL.Migrations
                     b.Property<int?>("PlayerHandID")
                         .HasColumnType("int");
 
+                    b.Property<int?>("PlayerID")
+                        .HasColumnType("int");
+
                     b.HasKey("ID");
 
                     b.HasIndex("CardTypeID");
@@ -56,6 +61,8 @@ namespace DAL.Migrations
                     b.HasIndex("EffectID");
 
                     b.HasIndex("PlayerHandID");
+
+                    b.HasIndex("PlayerID");
 
                     b.ToTable("Cards");
 
@@ -76,16 +83,11 @@ namespace DAL.Migrations
                     b.Property<int>("DeckID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PlayerID")
-                        .HasColumnType("int");
-
                     b.HasKey("ID");
 
                     b.HasIndex("CardID");
 
                     b.HasIndex("DeckID");
-
-                    b.HasIndex("PlayerID");
 
                     b.ToTable("CardInDecks");
                 });
@@ -399,6 +401,10 @@ namespace DAL.Migrations
                         .WithMany("CardsInHand")
                         .HasForeignKey("PlayerHandID");
 
+                    b.HasOne("DAL.Models.Player", null)
+                        .WithMany("Deck")
+                        .HasForeignKey("PlayerID");
+
                     b.Navigation("CardType");
 
                     b.Navigation("Effect");
@@ -417,10 +423,6 @@ namespace DAL.Migrations
                         .HasForeignKey("DeckID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("DAL.Models.Player", null)
-                        .WithMany("Deck")
-                        .HasForeignKey("PlayerID");
 
                     b.Navigation("Card");
 

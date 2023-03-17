@@ -11,6 +11,6 @@ namespace DAL.Repositories.Contracts
     public interface IDeckRepository : IRepository<Deck>
     {
 		Task<Deck> AddDeck(Deck deck);
-		Task<IList<Card>> GetCardsFromDeck(int DeckId);
+		Task<List<CardInDeck>> GetCardsFromDeck(int deckID, int userID);
 	}
 }

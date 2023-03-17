@@ -10,5 +10,10 @@ namespace DAL.Repositories.Contracts
 	public interface IPlayerRepository : IRepository<Player>
 	{
 		Task<Player> GetPlayer(int gameID, int userID);
-	}
+
+		Task<Player> GetPlayerByID(int playerID);
+
+		Task<List<CardInDeck>> GetShuffledDeck(int playerID);
+
+    }
 }

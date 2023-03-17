@@ -52,15 +52,15 @@ namespace knights_and_diamonds.Controllers
                 if (id > 0)
                 {
                     var user = await this._userService.GetUserByID(id);
-                    if (user != null) 
-                    { 
-					    return new JsonResult(user);
-					}
-                    else 
+                    if (user != null)
+                    {
+                        return new JsonResult(user);
+                    }
+                    else
                     {
                         return NotFound("User dosent exist");
                     }
-				}
+                }
                 else
                 {
                     return BadRequest("ID must be bigger than 0");
@@ -70,6 +70,31 @@ namespace knights_and_diamonds.Controllers
             {
                 return BadRequest(e);
             }
+
         }
+
+        [Route("SetMainDeck")]
+        [HttpPut]
+        public async Task<IActionResult> SetMainDeck(int userID,int deckID)
+        {
+            try
+            {
+                if (userID <= 0)
+                {
+                    return BadRequest("UserID must be bigger then 0");
+                }
+                if (deckID <= 0)
+                {
+                    return BadRequest("DeckID must be bigger then 0");
+                }
+                var user=await this._userService.SetMainDeckID(userID, deckID);
+                return Ok(user);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
     }
 }
