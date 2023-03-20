@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { card } from 'src/classes/card-data';
 
 @Component({
   selector: 'app-game',
@@ -6,7 +7,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
   styleUrls: ['./game.component.css']
 })
 export class GameComponent implements OnInit, OnDestroy {
-
+  card=card;
   constructor() { }
 
   ngOnInit(): void {
