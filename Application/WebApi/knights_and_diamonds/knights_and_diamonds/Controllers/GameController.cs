@@ -36,35 +36,8 @@ namespace knights_and_diamonds.Controllers
             }
         }*/
 
-        [Route("SetShuffledDeck/{playerID}")]
-        [HttpPut]
-        public async Task<IActionResult> SetShuffledDeck(int playerID)
-        {
-            try
-            {
-                await this._gameservice.SetShuffledDeck(playerID);
-                return Ok("Deck is shuffled.");
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
 
-        [Route("GetShuffledDeck/{playerID}")]
-        [HttpGet]
-        public async Task<IActionResult> GetShuffledDeck(int playerID)
-        {
-            try
-            {
-                var shuffledDeck = await this._playerservice.GetShuffledDeck(playerID);
-                return Ok(shuffledDeck);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
+
 
     }
 }

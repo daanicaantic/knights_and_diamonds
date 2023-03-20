@@ -83,26 +83,36 @@ namespace BLL.Services
 			}
 
             var user1 = await this.unitOfWork.User.GetOne(lobby.User1.ID);
-            
-            if (this._usersingame.UsersInGame.Contains(user1.ID))
+			if (this._usersingame.UsersInGame.Contains(user1.ID))
 			{
 				throw new Exception(user1.UserName + "is already in game.");
 			}
 
+			var deck1 = await this.unitOfWork.Deck.GetCardsFromDeck(user1.MainDeckID, user1.ID);
+			if (deck1 == null) 
+			{
+				throw new Exception(user1.UserName + " didn't have deck to play with");
+			}
+            
             var user2 = await this.unitOfWork.User.GetOne(lobby.User2.ID);
+			if (this._usersingame.UsersInGame.Contains(user2.ID))
+			{
+				throw new Exception(user2.UserName + "is already in game.");
+			}
 
-            if (this._usersingame.UsersInGame.Contains(user2.ID))
-            {
-                throw new Exception(user2.UserName + "is already in game.");
-            }
+			var deck2 = await this.unitOfWork.Deck.GetCardsFromDeck(user2.MainDeckID, user2.ID);
+			if (deck2 == null)
+			{
+				throw new Exception(user2.UserName + " didn't have deck to play with");
+			}
 
-            RockPaperScissorsGame rpsGame = new RockPaperScissorsGame();
+			RockPaperScissorsGame rpsGame = new RockPaperScissorsGame();
 			Game cardGame = new Game();
 			
 			this.unitOfWork.RPSGame.Add(rpsGame);
 
-			Player player1 = new Player(rpsGame, cardGame, user1);
-			Player player2 = new Player(rpsGame, cardGame, user2);
+			Player player1 = new Player(rpsGame, cardGame, user1, deck1);
+			Player player2 = new Player(rpsGame, cardGame, user2, deck2);
 
 			this._usersingame.UsersInGame.Add(user1.ID);
 			this._usersingame.UsersInGame.Add(user2.ID);

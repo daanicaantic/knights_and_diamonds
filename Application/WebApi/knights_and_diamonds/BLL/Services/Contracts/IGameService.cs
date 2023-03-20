@@ -8,6 +8,6 @@ namespace BLL.Services.Contracts
 {
     public interface IGameService
     {
-        public Task SetShuffledDeck(int playerID);
+       
     }
 }

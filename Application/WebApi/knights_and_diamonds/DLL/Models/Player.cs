@@ -27,35 +27,35 @@ namespace DAL.Models
         public User? User { get; set; }
 		public int? GameID { get; set; }
 		public Game? Game { get; set; }
-		[JsonIgnore]
 		public List<CardInDeck>? Deck { get; set; }
-		[JsonIgnore]
-		public PlayerHand? Hand { get; set; }
-
+		public PlayersHand? Hand { get; set; }
 
 		public Player() 
 		{ 
 		
 		}
-		public Player(RockPaperScissorsGame? rPSGame,Game game, User? user)
+
+		public Player(RockPaperScissorsGame? rPSGame, Game game, User? user, List<CardInDeck> deck)
 		{
 			this.RPSGameID = rPSGame.ID;
 			this.RPSGame = rPSGame;
 			this.UserID = user.ID;
 			this.User = user;
 			this.Game = game;
-			this.Deck = new List<CardInDeck>();
-			this.Hand = new PlayerHand();
+			this.Deck = deck;
+			this.Hand = new PlayersHand();
 			this.LifePoints = 8000;
 		}
-	/*	public Card Draw() 
+		public CardInDeck Draw()
 		{
-			if (this.Deck.Count <= 0) {
-				throw new Exception("Thers is no more cards in your dack!!");
+			if (this.Deck.Count <= 0) 
+			{
+				throw new Exception("Error. There is no more cards in your deck!!");
 			}
-			var card = this.Deck.FirstOrDefault();
-			this.Deck.Remove(card);
+			int numberOfCards = this.Deck.Count - 1;
+			int randomIndex = new Random().Next(0, numberOfCards);
+			var card = this.Deck[randomIndex];
 			return card;
-		}*/
+		}
 	}
 }

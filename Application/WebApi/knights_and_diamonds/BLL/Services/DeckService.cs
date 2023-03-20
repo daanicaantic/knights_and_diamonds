@@ -21,7 +21,13 @@ namespace BLL.Services
         }
         public async Task<Deck> AddDeck(Deck deck)
         {
-            var d=await this.unitOfWork.Deck.AddDeck(deck);
+            var d = await this.unitOfWork.Deck.AddDeck(deck);
+            var user = await this.unitOfWork.User.GetOne(deck.UserID);
+            if (user.MainDeckID == 0)
+            {
+                user.MainDeckID = d.ID;
+                this.unitOfWork.User.Update(user);
+            }
             this.unitOfWork.Complete();
             return d;
         }
@@ -43,30 +49,6 @@ namespace BLL.Services
             this.unitOfWork.CardInDeck.Add(cardInDeck);
             this.unitOfWork.Complete();
         }
-        public async Task<List<CardInDeck>> ShuffleDeck(int deckID, int userID)
-        {
-            var deck = await this.unitOfWork.Deck.GetCardsFromDeck(deckID, userID);
-       
-            int lastIndex = deck.Count() - 1;
-            while (lastIndex > 0)
-            {
-                var tempValue = deck[lastIndex];
-                int randomIndex = new Random().Next(0, lastIndex);
-                deck[lastIndex] = deck[randomIndex];
-                deck[randomIndex] = tempValue;
-                lastIndex--;
-            }
-            return deck;
-		}
-		public async Task<Card> DrawCard(IList<Card> cards)
-		{
-            if (cards.Count <= 0) 
-            {
-                throw new Exception("There is not card in your deck anymore, you lost!!");
-            }
-            var card = cards.FirstOrDefault();
-			return card;
-		}
         
 		public async Task<List<CardInDeck>> GetCards(int deckID, int userID)
         {

@@ -24,19 +24,5 @@ namespace BLL.Services
             this._deckService = new DeckService(_context);
         }
 
-        public async Task SetShuffledDeck(int playerID)
-        {
-            var player = await _unitOfWork.Player.GetPlayerByID(playerID);
-            if (player == null)
-            {
-                throw new Exception("Player unknown.");
-            }
-
-            var shuffledDeck = await this._deckService.ShuffleDeck(player.User.MainDeckID, player.UserID);
-            player.Deck = shuffledDeck;
-
-            _unitOfWork.Player.Update(player);
-            _unitOfWork.Complete();
-        }
     }
 }

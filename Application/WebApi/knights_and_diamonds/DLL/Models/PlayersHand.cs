@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace DAL.Models
 {
-	public class PlayerHand
+	public class PlayersHand
 	{
 		[Key]
 		public int ID { get; set; }
 		[JsonIgnore]
-		public List<Card>? CardsInHand { get; set; }
+		public List<CardInDeck>? CardsInHand { get; set; }
 	}
 }

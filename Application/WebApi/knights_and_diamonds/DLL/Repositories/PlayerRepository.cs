@@ -21,6 +21,11 @@ namespace DAL.Repositories
 			get { return _context as KnightsAndDiamondsContext; }
 		}
 
+		public void AddPlayer(Player p)
+		{
+
+		}
+
         public async Task<Player> GetPlayer(int rpsGameID, int userID)
         {
 			var player = await this.Context.Players.Where(g => g.RPSGameID == rpsGameID && g.UserID == userID).FirstOrDefaultAsync();
@@ -29,14 +34,34 @@ namespace DAL.Repositories
 
         public async Task<Player> GetPlayerByID(int playerID)
         {
-			var player = await this.Context.Players.Include(x => x.User).Where(p => p.ID == playerID).FirstOrDefaultAsync();
+			var player = await this.Context.Players
+				.Include(x => x.User)
+				.Include(x => x.Deck)
+				.Where(p => p.ID == playerID)
+				.FirstOrDefaultAsync();
             return player;
         }
 
-		public async Task<List<CardInDeck>> GetShuffledDeck(int playerID)
+		public async Task<Player> GetPlayersHandByPlayerID(int playerID)
 		{
-			var deck = await this.Context.Players.Include(x => x.Deck).Where(p => p.ID == playerID).Select(x => x.Deck).FirstOrDefaultAsync();
-			return deck;
-        }
+			var player = await this.Context.Players
+				.Include(x=>x.Deck)
+				.Include(x => x.Hand)
+				.ThenInclude(x => x.CardsInHand)
+				.Where(p => p.ID == playerID)
+				.FirstOrDefaultAsync();
+			return player;
+		}
+
+		public async Task<PlayersHand> GetPlayersHand(int playerID)
+		{
+			var playerHand = await this.Context.Players
+				.Include(x => x.Hand)
+				.ThenInclude(x => x.CardsInHand)
+				.Where(p => p.ID == playerID)
+				.Select(x=>x.Hand)
+				.FirstOrDefaultAsync();
+			return playerHand;
+		}
     }
 }

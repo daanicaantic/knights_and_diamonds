@@ -4,6 +4,7 @@ using DAL.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(KnightsAndDiamondsContext))]
-    partial class KnightsAndDiamondsContextModelSnapshot : ModelSnapshot
+    [Migration("20230318152809_UserIDinDeck")]
+    partial class UserIDinDeck
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,11 +48,16 @@ namespace DAL.Migrations
                     b.Property<string>("ImgPath")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("PlayerHandID")
+                        .HasColumnType("int");
+
                     b.HasKey("ID");
 
                     b.HasIndex("CardTypeID");
 
                     b.HasIndex("EffectID");
+
+                    b.HasIndex("PlayerHandID");
 
                     b.ToTable("Cards");
 
@@ -74,9 +81,6 @@ namespace DAL.Migrations
                     b.Property<int?>("PlayerID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PlayersHandID")
-                        .HasColumnType("int");
-
                     b.HasKey("ID");
 
                     b.HasIndex("CardID");
@@ -84,8 +88,6 @@ namespace DAL.Migrations
                     b.HasIndex("DeckID");
 
                     b.HasIndex("PlayerID");
-
-                    b.HasIndex("PlayersHandID");
 
                     b.ToTable("CardInDecks");
                 });
@@ -258,7 +260,7 @@ namespace DAL.Migrations
                     b.ToTable("Players");
                 });
 
-            modelBuilder.Entity("DAL.Models.PlayersHand", b =>
+            modelBuilder.Entity("DAL.Models.PlayerHand", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -395,6 +397,10 @@ namespace DAL.Migrations
                         .WithMany("Cards")
                         .HasForeignKey("EffectID");
 
+                    b.HasOne("DAL.Models.PlayerHand", null)
+                        .WithMany("CardsInHand")
+                        .HasForeignKey("PlayerHandID");
+
                     b.Navigation("CardType");
 
                     b.Navigation("Effect");
@@ -417,10 +423,6 @@ namespace DAL.Migrations
                     b.HasOne("DAL.Models.Player", null)
                         .WithMany("Deck")
                         .HasForeignKey("PlayerID");
-
-                    b.HasOne("DAL.Models.PlayersHand", null)
-                        .WithMany("CardsInHand")
-                        .HasForeignKey("PlayersHandID");
 
                     b.Navigation("Card");
 
@@ -453,7 +455,7 @@ namespace DAL.Migrations
                         .WithMany("Players")
                         .HasForeignKey("GameID");
 
-                    b.HasOne("DAL.Models.PlayersHand", "Hand")
+                    b.HasOne("DAL.Models.PlayerHand", "Hand")
                         .WithMany()
                         .HasForeignKey("HandID");
 
@@ -548,7 +550,7 @@ namespace DAL.Migrations
                     b.Navigation("Deck");
                 });
 
-            modelBuilder.Entity("DAL.Models.PlayersHand", b =>
+            modelBuilder.Entity("DAL.Models.PlayerHand", b =>
                 {
                     b.Navigation("CardsInHand");
                 });

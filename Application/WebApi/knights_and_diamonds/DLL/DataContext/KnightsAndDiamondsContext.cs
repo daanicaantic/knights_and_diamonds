@@ -20,7 +20,7 @@ namespace DAL.DataContext
 		public DbSet<Game>? Games { get; set; }
 		public DbSet<Effect>? Effects { get; set; }
 		public DbSet<EffectType>? EffectTypes { get; set; }
-		public DbSet<PlayerHand>? PlayerHands { get; set; }
+		public DbSet<PlayersHand>? PlayerHands { get; set; }
 		public DbSet<Turn>? Turns { get; set; }
 
 	}

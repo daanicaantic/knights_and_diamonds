@@ -51,25 +51,6 @@ namespace knights_and_diamonds.Controllers
                 return BadRequest(e.Message);
             }
         }
-		[Route("ShuffleDeck")]
-		[HttpGet]
-		public async Task<IActionResult> ShuffleDeck(int deckID, int userID)
-		{
-			try
-			{
-				if (deckID <= 0)
-				{
-				    return BadRequest("ID must be bigger than 0");
-				}
-				var c = await this._deckService.ShuffleDeck(deckID, userID);
-				return new JsonResult(c);
-
-			}
-			catch (Exception e)
-			{
-				return BadRequest(e);
-			}
-		}
 
 		[Route("GetDeck")]
         [HttpGet]

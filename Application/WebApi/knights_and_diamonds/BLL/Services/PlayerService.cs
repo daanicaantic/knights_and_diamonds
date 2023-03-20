@@ -20,14 +20,33 @@ namespace BLL.Services
             _unitOfWork = new UnitOfWork(_context);
         }
 
-        public async Task<List<CardInDeck>> GetShuffledDeck(int playerID)
+        public async Task<List<CardInDeck>> SetPlayersDeck(int userID)
         {
-            var shuffledDeck = await _unitOfWork.Player.GetShuffledDeck(playerID);
-            if (shuffledDeck == null)
-            {
-                throw new Exception("Deck unknown.");
-            }
-            return shuffledDeck;
+            var user = await this._unitOfWork.User.GetOne(userID);
+            var deck = await this._unitOfWork.Deck.GetCardsFromDeck(user.MainDeckID, userID);
+            return deck;
         }
+        public async Task<Card> Draw(int playerID) 
+        {
+            var player = await this._unitOfWork.Player.GetPlayersHandByPlayerID(playerID);
+            var cardFromDeck = player.Draw();
+            var card = await this._unitOfWork.Card.GetOne(cardFromDeck.CardID);
+            player.Deck.Remove(cardFromDeck);
+            player.Hand.CardsInHand.Add(cardFromDeck);
+            this._unitOfWork.Complete();
+            return card;
+        }
+
+        public async Task<List<Card>> GetPlayersHand(int playerID) 
+        {
+            List<Card> hand = new List<Card>();
+            var playersHand = await this._unitOfWork.Player.GetPlayersHand(playerID);
+            foreach (var card in playersHand.CardsInHand)
+            {
+                var c = await this._unitOfWork.Card.GetOne(card.CardID);
+                hand.Add(c);
+            }
+            return hand;
+		}
     }
 }

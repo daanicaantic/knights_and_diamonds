@@ -31,18 +31,12 @@ namespace DAL.Repositories
             this.Context.Add(deck);
             return deck;
         }
-      /*  public async Task<CardInDeck> addCardInDeck(int cardID, int deckID) 
-        {
-            this.Context.CardInDecks.Include(x => x.Card).Include(x => x.Deck);
-            await this.Context.Cards.FindAsync(cardID);
-			await this.Context.Cards.FindAsync(deckID);
-
-		}*/
-		public async Task<List<CardInDeck>> GetCardsFromDeck(int deckID, int userID)
+        public async Task<List<CardInDeck>> GetCardsFromDeck(int deckID, int userID)
         {
             var deck = await Context.CardInDecks.Where(x => x.Deck.ID == deckID && x.Deck.UserID == userID)
                 .Include(x => x.Card)
                 .Include(x => x.Deck)
+
                 .ToListAsync();
             return deck;
         }
