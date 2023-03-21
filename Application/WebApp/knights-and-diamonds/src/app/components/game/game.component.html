@@ -1,7 +1,7 @@
 <div class="background">
     <div class="card-window">
         <div class="card">
-            <app-card class="bigcard" [card]="card"></app-card>
+            <app-card class="big-card" [card]="card"></app-card>
         </div>
         <h1>P E R A D E T L I C</h1>
     </div>
@@ -9,17 +9,39 @@
 
     </div>
     <div class="battle-window">
-        <div class="enemiesHand">
+        <div class="enemies-hand">
                 <div class="card-back"><img src="https://localhost:7250/Resources/Images/card-back.png" alt="Name name name" class="picture"></div>
                 <div class="card-back"><img src="https://localhost:7250/Resources/Images/card-back.png" alt="Name name name" class="picture"></div>
                 <div class="card-back"><img src="https://localhost:7250/Resources/Images/card-back.png" alt="Name name name" class="picture"></div>
                 <div class="card-back"><img src="https://localhost:7250/Resources/Images/card-back.png" alt="Name name name" class="picture"></div>
-                
                 <div class="card-back"><img src="https://localhost:7250/Resources/Images/card-back.png" alt="Name name name" class="picture"></div>
                 <div class="card-back"><img src="https://localhost:7250/Resources/Images/card-back.png" alt="Name name name" class="picture"></div>
         </div>
+        <div class="table-background">
+            <div class="deck-and-grave">
+                <div class="enemies-deck">
+
+                </div>
+                <div class="grave">
+                    <div class="scaled-grave">
+                        <app-card class="car" [card]="card"></app-card>
+                    </div>
+                </div>
+                <div class="player-deck">
+
+                </div>
+            </div>
+            <div class="table-all">
+                <div class="enemies-table">
+
+                </div>
+                <div class="player-table">
+
+                </div>
+            </div>
+        </div>
         <div class="hand">
-            <div class="scaledHand">
+            <div class="scaled-hand">
                 <app-card class="car" [card]="card"></app-card>
                 <app-card class="car" [card]="card"></app-card>
                 <app-card class="car" [card]="card"></app-card>
@@ -30,3 +52,4 @@
         </div>
     </div>
 </div>
+<body></body>
