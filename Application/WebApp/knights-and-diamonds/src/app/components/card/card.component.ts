@@ -9,7 +9,7 @@ import { card } from 'src/classes/card-data';
 })
 export class CardComponent implements OnInit {
   @Input() card!: Card;
-
+  
   constructor() { }
 
   ngOnInit(): void {

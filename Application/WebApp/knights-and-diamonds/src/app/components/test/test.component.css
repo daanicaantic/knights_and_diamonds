@@ -1,0 +1,30 @@
+*{
+    font-family: 'Roboto', sans-serif;
+    color: white;
+}
+.main
+{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.big-card
+{
+    width: 334px;
+    height: 452px;
+    font-size: 26px;
+}
+
+.medium-card
+{
+    width: 185px;
+    height: 251px;
+    font-size: 14px;
+}
+
+.small-card
+{
+    width: 85px;
+    height: 114px;
+    font-size: 8px;
+}

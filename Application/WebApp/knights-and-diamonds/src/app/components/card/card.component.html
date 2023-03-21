@@ -1,4 +1,4 @@
-
+<!-- 
     <div [class.monster_card]="card.cardType=='Monster'" [class.trap_card]="card.cardType=='Trap'" [class.spell_card]="card.cardType=='Spell'">
         <div [class.monster_header]="card.cardType=='Monster'" [class.trap_header]="card.cardType=='Trap'" [class.spell_header]="card.cardType=='Spell'">
             <div class="card-name-container">
@@ -29,4 +29,27 @@
                 </div>
             </div>
         </div>  
+    </div> -->
+
+<div class="container">
+    <div class="img">
+        <div class="number-of-stars">
+            <h1>{{card.numberOfStars}}</h1>
+        </div>
+        <div class="attact-points">
+            <h2>{{card.attackPoints}}</h2>
+        </div>
+        <div class="defence-points">
+            <h2>{{card.defencePoints}}</h2>
+        </div>
+        <div class="card-name">
+            <h3>{{card.cardName}}</h3>
+        </div>
+        <div class="card-description">
+            <h6>{{card.description}}</h6>
+        </div>
     </div>
+    <div class="picture">
+
+    </div>
+</div>

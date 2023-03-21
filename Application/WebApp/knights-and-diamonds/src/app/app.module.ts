@@ -31,6 +31,7 @@ import { UserProfileComponent } from './components/user-profile/user-profile.com
 import { Error404Component } from './components/error404/error404.component';
 import { WelcomePageComponent } from './components/welcome-page/welcome-page.component';
 import { UploadFileComponent } from './components/upload-file/upload-file.component';
+import { TestComponent } from './components/test/test.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { UploadFileComponent } from './components/upload-file/upload-file.compon
     Error404Component,
     WelcomePageComponent,
     UploadFileComponent,
+    TestComponent,
 
   ],
   imports: [

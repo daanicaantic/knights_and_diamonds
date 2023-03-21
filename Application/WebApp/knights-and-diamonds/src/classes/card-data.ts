@@ -3,7 +3,7 @@ export const card: Card = {
     cardName: " ",
     cardType: "Monster",
     elementType: "Resources/Images/light.png",
-    numberOfStars: 11,
+    numberOfStars: 0,
     imgPath: "Resources/Images/white-squere.png",
     monsterType: "Dragon",
     description: " ",
