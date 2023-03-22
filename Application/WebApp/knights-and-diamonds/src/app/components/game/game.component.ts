@@ -7,7 +7,9 @@ import { card } from 'src/classes/card-data';
   styleUrls: ['./game.component.css']
 })
 export class GameComponent implements OnInit, OnDestroy {
-  card=card;
+  card = card;
+  numberOfCardsInEnemiesHand:Number = 6;
+
   constructor() { }
 
   ngOnInit(): void {

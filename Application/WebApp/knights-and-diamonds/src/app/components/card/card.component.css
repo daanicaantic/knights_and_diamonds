@@ -1,8 +1,3 @@
- p,h3,h4,h6
-{
-    margin: 0px;
-    padding: 0px;
-}
 /*.card,.monster_card,.spell_card,.trap_card
 {
     width: 320px;
@@ -127,26 +122,35 @@
     flex-grow: 8;
 } */
 
-*{
+* {
     font-family: 'Roboto', sans-serif;
     color: white;
 }
 
-h1, h2, h3{
-    color: white;
-	-webkit-text-stroke: 0.5px black;
+p,
+h3,
+h4,
+h6 {
+    margin: 0px;
+    padding: 0px;
 }
 
-.container
-{
+h1,
+h2,
+h3 {
+    color: white;
+    -webkit-text-stroke: 0.5px black;
+}
+
+.container {
     width: 100%;
     height: 100%;
     position: relative;
     display: flex;
     justify-content: center;
 }
-.img
-{
+
+.img {
     width: 100%;
     height: 100%;
     background-image: url("https://localhost:7250/Resources/Images/card-front-cropped.png");
@@ -154,15 +158,18 @@ h1, h2, h3{
     position: absolute;
 
 }
-.picture
-{
+
+.picture {
     width: 70%;
     height: 50%;
     margin-top: 6%;
     background-image: url("https://localhost:7250/Resources/Images/wizard.png");
     background-size: 100% 100%;
 }
-.number-of-stars,.attact-points,.defence-points{
+
+.number-of-stars,
+.attact-points,
+.defence-points {
     width: 25%;
     height: 18%;
     display: flex;
@@ -170,16 +177,19 @@ h1, h2, h3{
     align-items: center;
     color: white;
 }
-.attact-points{
+
+.attact-points {
     position: absolute;
     top: 82%;
 }
-.defence-points{
+
+.defence-points {
     position: absolute;
     top: 82%;
     left: 75%;
 }
-.card-name{
+
+.card-name {
     width: 100%;
     height: 9%;
     position: absolute;
@@ -188,7 +198,8 @@ h1, h2, h3{
     justify-content: center;
     align-items: center;
 }
-.card-description{
+
+.card-description {
     width: 60%;
     height: 25%;
     position: absolute;
@@ -196,7 +207,8 @@ h1, h2, h3{
     left: 20%;
     text-align: center;
 }
-h6{
+
+h6 {
     color: white;
     -webkit-text-stroke: 0.05px rgb(42, 42, 42);
 }
