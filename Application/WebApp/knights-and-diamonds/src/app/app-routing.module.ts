@@ -29,6 +29,8 @@ const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
+    data: { roles: ['Player'] },
+
   },
   {
     path: 'profil/:id',

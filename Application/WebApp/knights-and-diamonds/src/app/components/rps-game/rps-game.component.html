@@ -1,12 +1,12 @@
 <body>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet" />
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet" />
     <div class="body-circular-progress" *ngIf="rpsGameStarted===false">
         <div class="container">
             <div class="circular-progress" [ngStyle]="{background: loadingBar}">
                 <div class="value-container"><b>{{progressValue}}%</b></div>
             </div>
         </div>
-    </div>
+    </div> -->
     <div *ngIf="rpsGameStarted===true" class="rps-game-container">
         <div>
             <div class="message-container">
@@ -24,15 +24,15 @@
         </div>
         <div *ngIf="winner==0 || winner==undefined" class="moves-container">
             <div class="move-container rock" (click)="chooseRPSMove('Rock')">
-                <img src="../../../assets/diamond.png" alt="Name name name" class="picture">
+                <img src="{{imgpath}}rock.png" alt="Name name name" class="picture">
                 <h1>ROCK</h1>
             </div>
             <div class="move-container papper" (click)="chooseRPSMove('Paper')">
-                <img src="../../../assets/checklist.png" alt="Name name name" class="picture">
+                <img src="{{imgpath}}papper.png" alt="Name name name" class="picture">
                 <h1>PAPPER</h1>
             </div>
             <div class="move-container scisorss" (click)="chooseRPSMove('Scissors')">
-                <img src="../../../assets/scissor.png" alt="Name name name" class="picture">
+                <img src="{{imgpath}}scissor.png" alt="Name name name" class="picture">
                 <h1>SCISSOR</h1>
             </div>
         </div>

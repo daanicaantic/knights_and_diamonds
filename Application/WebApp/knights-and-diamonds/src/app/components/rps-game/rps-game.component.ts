@@ -13,6 +13,7 @@ import { RpsGameService } from 'src/app/services/rps-game.service';
   styleUrls: ['./rps-game.component.css']
 })
 export class RpsGameComponent implements OnInit, OnDestroy {
+  imgpath="https://localhost:7250/Resources/Images/"
 
   rpsGameID: any;
   userID = this.authService?.userValue?.id;
@@ -109,7 +110,7 @@ export class RpsGameComponent implements OnInit, OnDestroy {
 
   timerFunction() {
     clearInterval(this.progress);
-    this.timer = 10;
+    this.timer = 30;
     console.log(this.timer)
     this.rpsGameStarted = true;
     this.progressValue = 0;
