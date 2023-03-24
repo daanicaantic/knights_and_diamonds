@@ -10,7 +10,5 @@ namespace BLL.Services.Contracts
 	public interface IEffectService
 	{
 		Task<IList<EffectType>> GetEffectTypes();
-		Task<Effect> AddEffect(int effectTypeID, int numOfCardsAffected, int pointsAddLost);
-		Task<string> SplitType(string type);
 	}
 }

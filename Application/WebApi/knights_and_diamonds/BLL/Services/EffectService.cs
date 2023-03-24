@@ -16,19 +16,19 @@ namespace BLL.Services
 	{
 		private readonly KnightsAndDiamondsContext _context;
 		public UnitOfWork unitOfWork { get; set; }
-		public IDescriptionFactory _descriptionFactory { get; set; }
+		public IEffectFactory _descriptionFactory { get; set; }
 		public IFactory _factory { get; set; }
 		public EffectService(KnightsAndDiamondsContext context)
 		{
 			this._context = context;
 			unitOfWork = new UnitOfWork(_context);
-			this._descriptionFactory=new ConcreteDescriptionFactory();
+			this._descriptionFactory=new ConcreteEffectFactory();
 		}
 		public async Task<IList<EffectType>> GetEffectTypes()
 		{
 			return await this.unitOfWork.Effect.GetEffectTypes();
 		}
-		public async Task<Effect> AddEffect(int effectTypeID,int numOfCardsAffected, int pointsAddLost)
+/*		public async Task<Effect> AddEffect(int effectTypeID,int numOfCardsAffected, int pointsAddLost)
 		{
 			Effect effect;
 			var effectType = await this.unitOfWork.Effect.GetEffectType(effectTypeID);
@@ -47,23 +47,12 @@ namespace BLL.Services
 			}
 
 			return effect;
-		}
-		public async Task<string> SplitType(string effectType)
-		{
-			string newstring = "";
-			int i = 0;
-			while (!effectType.Length.Equals(i) && !char.IsUpper(effectType[i]))
-			{
-				newstring += effectType[i].ToString();
-				i++;
-			}
+		}*/
 
-			return newstring;
-		}
 		public async Task<string> GetDescription(string type, string contreteType, int numOfCardAffected, int ponitsAddLost)
 		{
 			this._factory = this._descriptionFactory.FactoryMethod(type, contreteType, numOfCardAffected, ponitsAddLost);
-			var description = await this._factory.GetDescription();
+			var description = "dsadas";
 
 			return description;
 		}

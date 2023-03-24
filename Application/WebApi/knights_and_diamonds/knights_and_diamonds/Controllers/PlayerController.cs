@@ -33,6 +33,24 @@ namespace knights_and_diamonds.Controllers
 				return BadRequest(e.Message);
 			}
 		}
+		[Route("GetNumberOfCardsInDeck/{playerID}")]
+		[HttpGet]
+		public async Task<IActionResult> GetNumberOfCardsInDeck(int playerID)
+		{
+			try
+			{
+				if (playerID <= 0)
+				{
+					return BadRequest("Error,wrong playerID");
+				}
+				var nuc = await this._playerservice.GetNumberOfCardsInDeck(playerID);
+				return Ok(nuc);
+			}
+			catch (Exception e)
+			{
+				return BadRequest(e.Message);
+			}
+		}
 
 		[Route("GetPlayersHand/{playerID}")]
 		[HttpGet]

@@ -31,12 +31,11 @@ namespace DAL.Models
 
 		}
 
-		public Card(string? cardName, string? imgPath,int cardTypeID,int effectID,Effect effect) 
+		public Card(string? cardName, string? imgPath,int cardTypeID,Effect effect) 
 		{
 			CardName = cardName;
 			ImgPath = imgPath;
 			CardTypeID = cardTypeID;
-			EffectID = effectID;
 			Effect = effect;
 			
 		}

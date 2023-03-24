@@ -32,6 +32,10 @@ import { Error404Component } from './components/error404/error404.component';
 import { WelcomePageComponent } from './components/welcome-page/welcome-page.component';
 import { UploadFileComponent } from './components/upload-file/upload-file.component';
 import { TestComponent } from './components/test/test.component';
+import { LoadinscreenComponent } from './components/loadinscreen/loadinscreen.component';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { AnimateModule } from 'primeng/animate';
+
 
 @NgModule({
   declarations: [
@@ -50,10 +54,12 @@ import { TestComponent } from './components/test/test.component';
     WelcomePageComponent,
     UploadFileComponent,
     TestComponent,
+    LoadinscreenComponent,
 
   ],
   imports: [
     BrowserModule,
+    ProgressBarModule,
     AppRoutingModule,
     ButtonModule,
     InputTextModule,
@@ -69,7 +75,8 @@ import { TestComponent } from './components/test/test.component';
     ConfirmDialogModule,
     MessagesModule,
     MessageModule,
-    MenubarModule
+    MenubarModule,
+    AnimateModule
   ],
   providers: [AppComponent, MessageService, ConfirmationService, { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }],
   bootstrap: [AppComponent]

@@ -6,6 +6,7 @@ import { timer } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { SignalrService } from 'src/app/services/signalr.service';
 import { RpsGameService } from 'src/app/services/rps-game.service';
+import { IngameService } from 'src/app/services/ingame.service';
 
 @Component({
   selector: 'app-rps-game',
@@ -28,25 +29,39 @@ export class RpsGameComponent implements OnInit, OnDestroy {
   winner: any;
   moveChosed: any;
 
+  isLoadingOver=false;
+  loadingType="rpsGame";
+
   constructor(private route: ActivatedRoute,
     private signalrService: SignalrService,
+    public inGameService:IngameService,
     private authService: AuthService,
     private rpsGameService: RpsGameService,
     private messageService: MessageService,) { }
 
   ngOnInit(): void {
+    this.setGameStatus();
     this.rpsGameID = this.route.snapshot.params['rpsGameID'];
     this.progressValue = 0;
     this.timer = 10;
-    this.getPlayer();
-    this.getRPSWinner();
-    this.progressionFunction();
+    // this.getPlayer();
+    // this.getRPSWinner();
+    // this.timerFunction();
+
   }
 
   ngOnDestroy(): void {
     clearInterval(this.progress)
     this.rpsGameService.removeUserFromUsersInGame(this.userID).subscribe({});
   }
+
+  getTimer($event:any){
+    console.log("ovdeee",$event);
+    this.isLoadingOver=$event;
+    this.progressionFunction();
+
+  }
+
 
   getPlayer() {
     this.rpsGameService.getPlayer(this.rpsGameID, this.userID).subscribe({
@@ -95,7 +110,7 @@ export class RpsGameComponent implements OnInit, OnDestroy {
   progressionFunction() {
     this.progressValue = 0;
     let progressEndValue = 100;
-    let speed = 50;
+    let speed = 150;
 
     this.progress = setInterval(() => {
       this.progressValue++;
@@ -104,7 +119,7 @@ export class RpsGameComponent implements OnInit, OnDestroy {
         clearInterval(this.progress);
         this.timerFunction();
       }
-      speed = 50;
+      speed = 150;
     }, speed);
   }
 
@@ -122,5 +137,8 @@ export class RpsGameComponent implements OnInit, OnDestroy {
         this.checkRPSWinnerInv();
       }
     }, 1000)
+  }
+  setGameStatus(){
+    this.inGameService.setGameOn();
   }
 }

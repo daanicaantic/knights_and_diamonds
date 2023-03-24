@@ -12,6 +12,7 @@ import { RpsGameComponent } from './components/rps-game/rps-game.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { Error404Component } from './components/error404/error404.component';
 import { WelcomePageComponent } from './components/welcome-page/welcome-page.component';
+import { LoadinscreenComponent } from './components/loadinscreen/loadinscreen.component';
 
 const routes: Routes = [
   {
@@ -42,6 +43,15 @@ const routes: Routes = [
     path: 'rpsGame/:rpsGameID',
     component: RpsGameComponent,
   },
+  {
+    path: 'game',
+    component: GameComponent,
+  },
+  {
+    path:'loading',
+    component : LoadinscreenComponent,
+  },
+ 
   {
     path: '',
     redirectTo: 'welcome',

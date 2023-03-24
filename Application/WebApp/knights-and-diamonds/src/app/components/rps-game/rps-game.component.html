@@ -1,40 +1,28 @@
+
 <body>
-    <!-- <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet" />
-    <div class="body-circular-progress" *ngIf="rpsGameStarted===false">
-        <div class="container">
-            <div class="circular-progress" [ngStyle]="{background: loadingBar}">
-                <div class="value-container"><b>{{progressValue}}%</b></div>
+    <link rel="stylesheet" href="https://unpkg.com/primeflex@^3/primeflex.css">
+    <app-loadinscreen [loadingType]="loadingType"  *ngIf="isLoadingOver===false" (onTimerOverTask)="getTimer($event)"></app-loadinscreen>
+    <div class="main-container"  *ngIf="isLoadingOver===true">
+        <!-- <p>it works</p> -->
+        <div class="topBorder"></div>
+        <div class="game-container">
+            
+              
+            <div class="message-container font-bold bg-yellow-500 text-gray-900 border-round border-3 border-gray-900 m-2 px-5 py-3">
+                Choose your hand
+            </div>
+            <div class="enemies-options border-gray-900">{{progressValue}}</div>
+        
+            <div class="players-options border-gray-900">
+                <div class="rpsoption"></div>
+                <div class="rpsoption"></div>
+                <div class="rpsoption"></div>
             </div>
         </div>
-    </div> -->
-    <div *ngIf="rpsGameStarted===true" class="rps-game-container">
-        <div>
-            <div class="message-container">
-                <h1 *ngIf="winner==undefined">SELLECT YOUR HAND</h1>
-                <h1 *ngIf="winner==0">IT'S DRAW!</h1>
-                <div *ngIf="winner!=0 && winner!=undefined" class="winner-div">
-                    <h1 *ngIf="winner==player.id">YOU WIN!</h1>
-                    <h1 *ngIf="winner!==player.id">YOU LOSE!</h1>
-                </div>
-            </div>
-            <div *ngIf="winner==0 || winner==undefined" class="progression-bar">
-                <div class="moving-part" [ngStyle]="{width: timerCountDown}">
-                </div>
-            </div>
-        </div>
-        <div *ngIf="winner==0 || winner==undefined" class="moves-container">
-            <div class="move-container rock" (click)="chooseRPSMove('Rock')">
-                <img src="{{imgpath}}rock.png" alt="Name name name" class="picture">
-                <h1>ROCK</h1>
-            </div>
-            <div class="move-container papper" (click)="chooseRPSMove('Paper')">
-                <img src="{{imgpath}}papper.png" alt="Name name name" class="picture">
-                <h1>PAPPER</h1>
-            </div>
-            <div class="move-container scisorss" (click)="chooseRPSMove('Scissors')">
-                <img src="{{imgpath}}scissor.png" alt="Name name name" class="picture">
-                <h1>SCISSOR</h1>
-            </div>
+        <div class="botBorder">
+            <div class="round-time-bar" data-style="smooth" style="--duration: 15;">
+                <div></div>
+              </div>
         </div>
     </div>
 </body>

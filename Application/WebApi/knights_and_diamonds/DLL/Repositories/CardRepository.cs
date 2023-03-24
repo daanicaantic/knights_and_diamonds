@@ -1,6 +1,4 @@
 ﻿using DAL.DataContext;
-using DAL.DesignPatterns.Factory;
-using DAL.DesignPatterns.Factory.Contract;
 using DAL.Models;
 using DAL.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;
@@ -15,12 +13,10 @@ namespace DAL.Repositories
 {
 	public class CardRepository : Repository<Card>, ICardRepository
 	{
-		public IDescriptionFactory _descriptionFactory { get; set; }
-		public IFactory _factory { get; set; }
 
 		public CardRepository(KnightsAndDiamondsContext context) : base(context)
 		{
-			_descriptionFactory = new ConcreteDescriptionFactory();
+			
 		}
 		public IQueryable<Card> GetCardsPerPage(int pageIndex, int pageSize)
 		{
@@ -31,38 +27,20 @@ namespace DAL.Repositories
 		}
 		public async Task<Card> AddCard(Card card)
 		{
-			var ct = await this.Context.CardTypes.FindAsync(card.CardTypeID);
-			if (ct == null) {
-				throw new Exception("There is not cardType with this ID");
-			}
-			this.Context.Cards.Include(x => x.CardType).Include(x=>x.Effect);
-			card.CardType = ct;
+			this.Context.Cards.Include(x=>x.Effect);
 			this.Context.Cards.Add(card);
 			return card;
 		}
 
 		public async Task<MonsterCard> AddMonsterCard(MonsterCard card)
 		{
-			var ct = await this.Context.CardTypes.FindAsync(card.CardTypeID);
-			if (ct == null)
-			{
-				throw new Exception("There is not cardType with this ID");
-			}
-			var mt = await this.Context.MonsterTypes.FindAsync(card.MonsterTypeID);
-			if (mt == null)
-			{
-				throw new Exception("There is not monsterType with this ID");
-			}
-			var et = await this.Context.ElementTypes.FindAsync(card.ElementTypeID);
-			if (et == null)
-			{
-				throw new Exception("There is not elementType with this ID");
-			}
-			this.Context.MonsterCards.Include(x => x.CardType).Include(x => x.MonsterType).Include(x => x.ElementType);
-			card.CardType = ct;
-			card.MonsterType = mt;
-			card.ElementType = et;
+			this.Context.MonsterCards.Include(x=>x.Effect);
 			this.Context.MonsterCards.Add(card);
+			return card;
+		}
+		public async Task<Card> GetCardByName(string cardName)
+		{
+			var card=await this.Context.Cards.Where(x=>x.CardName == cardName).FirstOrDefaultAsync();
 			return card;
 		}
 		public async Task<Effect> AddEffect(Effect effect) 
@@ -79,6 +57,11 @@ namespace DAL.Repositories
 			}
 			effect.EffectType = effectType;
 			return effect;
+		}
+		public async Task<CardType> GetCardType(int cardTypeID)
+		{
+			var cardType = await this.Context.CardTypes.FindAsync(cardTypeID);
+			return cardType;
 		}
 		public KnightsAndDiamondsContext Context
 		{

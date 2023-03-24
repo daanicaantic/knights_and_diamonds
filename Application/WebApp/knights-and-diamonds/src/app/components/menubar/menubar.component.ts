@@ -33,7 +33,7 @@ export class MenubarComponent implements OnInit {
           label: 'Home', routerLink: ['/welcome']
         },
         {
-          label: 'Cards'
+          label: 'Cards',routerLink:['/loading']
         },
         {
           label: 'Rules'

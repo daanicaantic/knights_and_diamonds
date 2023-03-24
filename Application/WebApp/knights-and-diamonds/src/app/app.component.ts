@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { AuthService } from './services/auth.service';
 import { ConnectionService } from './services/connection.service';
 import { SignalrService } from './services/signalr.service';
+import { IngameService } from './services/ingame.service';
 
 @Component({
   selector: 'app-root',
@@ -12,8 +13,11 @@ import { SignalrService } from './services/signalr.service';
 export class AppComponent {
   title = 'knights-and-diamonds';
   userID=this.authService?.userValue?.id
+  gameStatus?=true;
 
-  constructor(public signalrService: SignalrService,
+  constructor(
+    public signalrService: SignalrService,
+    public inGameService: IngameService,
     public authService: AuthService,
     public connectionService: ConnectionService) { }
 
@@ -31,6 +35,7 @@ export class AppComponent {
         });
       }
     }
+    this.checkGameStatus();
   }
 
   ngOnDestroy() {
@@ -40,5 +45,15 @@ export class AppComponent {
   addConncectionInv(userID:any): void {
     this.signalrService.hubConnection.invoke("AddConnection",userID)
     .catch(err => console.error(err));
+  }
+  checkGameStatus(){
+    this.inGameService.gameStarted.subscribe((obj: any) => {
+      if (obj.type == "GameOn") {
+        this.gameStatus=false;
+      }
+      else{
+        this.gameStatus=true;
+      }
+    });
   }
 }

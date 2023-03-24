@@ -1,113 +1,84 @@
-*,
-*:before,
-*:after {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-}
-.body-circular-progress {
+body{
+  width: 100%;
   height: 100vh;
-  background: linear-gradient(#e8f0f7 50%, #4d5bf9 50%);
 }
-.container {
-  height: 400px;
-  width: 400px;
-  background-color: #ffffff;
-  position: absolute;
-  transform: translate(-50%, -50%);
-  top: 50%;
-  left: 50%;
-  border-radius: 8px;
-  box-shadow: 20px 20px 40px rgba(60, 60, 150, 0.25);
-  display: grid;
-  place-items: center;
+.main-container{
+  width: 100%;
+  height: 100%;
+  /* border: 2px solid red; */
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
 }
-.circular-progress {
-  position: relative;
-  height: 250px;
-  width: 250px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
+.topBorder,.botBorder{
+  width: 100%;
+  height: 10%;
+  /* border-bottom: 2px solid black; */
+  background-image: url("https://localhost:7250/Resources/Images/botTextur.jpg");
+
 }
-.circular-progress:before {
-  content: "";
-  position: absolute;
-  height: 84%;
-  width: 84%;
-  background-color: #ffffff;
-  border-radius: 50%;
+.topBorder{
+  transform: rotate(180deg);
 }
-.value-container {
-  position: relative;
-  font-family: "Poppins", sans-serif;
-  font-size: 50px;
-  color: #231c3d;
+.game-container{
+  width: 100%;
+  height: 80%;
+  /* background-color: red; */
 }
-.rps-game-container
-{
-    width: 100%;
-    height: 100vh;
-    background-color: rgb(243, 243, 243);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding-top: 100px;
+.enemies-options{
+  height: 50%;
+  /* background-color: rebeccapurple; */
+  border:3px solid;
 }
-.moves-container
-{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    width: 100%;
+.players-options{
+  height: 50%;
+  border:3px solid;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+
+  /* background-color: blue; */
 }
-.move-container
-{
-    width: 250px;
-    height: 250px;
-    /* background-color: red; */
-    background-color: white;
-    border: #231c3d 5px solid;
-    margin: 10px;
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    font-family: "Poppins", sans-serif;
-    font-size: 20px;
-    color: #231c3d;
-    cursor: pointer;
-}
-.picture
-{
-    width: 100%;
-    height: 100%;
+.card{
+  width: 100%;
+  height: 50%;
+  /* background-color: yellow; */
 }
 .message-container{
-    width: 100%;
-    /* background-color: red; */
-    font-family: "Poppins", sans-serif;
-    font-size: 40px;
-    color: #231c3d;
-    display: flex;
-    justify-content: center;
-    border: 5px solid #231c3d ;
-    border-bottom:none;
-    border-collapse: collapse;
-    text-align: center;
+  position:absolute;
+  top:45%;
+  left: 45%;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
 }
-.progression-bar
-{
-  width: 100%;
-  /* background-color: red; */
-  border: 5px solid #231c3d ;
-  border-collapse: collapse;
+.rpsoption{
+  width: 300px;
+  height: 80%;
+  background-color: yellow;
 }
-.moving-part{
-  background-color: rgb(167, 255, 36);
-  height: 10px;
-  /* padding: 10px; */
+.round-time-bar {
+  /* margin: 1rem; */
+  overflow: hidden;
 }
-.winner-div{
-  border-bottom: 5px solid #231c3d ;
+.round-time-bar div {
+  height: 5px;
+  /* animation: roundtime calc(var(--duration) * 1s) steps(var(--duration))forwards; */
+  
+  transform-origin: left center;
+  background: linear-gradient(to bottom, red, #900);
+}
+.round-time-bar[data-style="smooth"] div {
+  animation: roundtime calc(var(--duration) * 1s) linear forwards;
+}
+
+@keyframes roundtime {
+  to {
+    /* More performant than animating `width` */
+    transform: scaleX(0);
+  }
 }

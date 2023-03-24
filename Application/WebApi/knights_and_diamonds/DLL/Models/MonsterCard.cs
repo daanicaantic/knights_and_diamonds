@@ -13,23 +13,15 @@ namespace DAL.Models
 		public int NumberOfStars { get; set; }
 		public int AttackPoints { get; set; }
 		public int DefencePoints { get; set; }
-		public int MonsterTypeID { get; set; }
-		[JsonIgnore]
-		public MonsterType? MonsterType { get; set; }
-		public int ElementTypeID { get; set; }
-		[JsonIgnore]
-		public ElementType? ElementType { get; set; }
 		public MonsterCard() 
 		{
 		
 		}
-		public MonsterCard(string? cardName, string? imgPath, int numberOfStars, int attackPoints, int defencePoints,Effect effect, int monsterTypeID, int cardTypeID, int elementTypeID):base(cardName,imgPath, cardTypeID,cardTypeID,effect)
+		public MonsterCard(string? cardName, string? imgPath, int numberOfStars, int attackPoints, int defencePoints,Effect effect,int cardTypeID):base(cardName,imgPath,cardTypeID,effect)
 		{
 			NumberOfStars = numberOfStars;
 			AttackPoints = attackPoints;
 			DefencePoints = defencePoints;
-			MonsterTypeID = monsterTypeID;
-			ElementTypeID = elementTypeID;
 		}
 	}
 }

@@ -12,6 +12,8 @@ namespace DAL.Repositories.Contracts
 		IQueryable<Card> GetCardsPerPage(int pageIndex, int pageSize);
 		public Task<Card> AddCard(Card card);
 		public Task<MonsterCard> AddMonsterCard(MonsterCard card);
+		Task<CardType> GetCardType(int cardTypeID);
+		Task<Card> GetCardByName(string cardName);
 
 	}
 }

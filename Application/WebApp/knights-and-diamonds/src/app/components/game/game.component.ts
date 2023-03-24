@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { card } from 'src/classes/card-data';
+import { IngameService } from 'src/app/services/ingame.service';
 
 @Component({
   selector: 'app-game',
@@ -9,15 +10,21 @@ import { card } from 'src/classes/card-data';
 export class GameComponent implements OnInit, OnDestroy {
   card = card;
   numberOfCardsInEnemiesHand:Number = 6;
-
-  constructor() { }
+  
+  constructor(
+    public inGameService:IngameService
+  ) { }
 
   ngOnInit(): void {
-
+    this.setGameStatus();
   }
 
   ngOnDestroy(): void {
+    this.inGameService.setGameOff();
+  }
 
+  setGameStatus(){
+    this.inGameService.setGameOn();
   }
   
 }

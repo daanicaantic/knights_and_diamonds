@@ -10,8 +10,6 @@ namespace DAL.DataContext
         public DbSet<Card>? Cards { get; set; }
 		public DbSet<MonsterCard>? MonsterCards { get; set; }
 		public DbSet<CardType>? CardTypes { get; set; }
-		public DbSet<ElementType>? ElementTypes { get; set; }
-		public DbSet<MonsterType>? MonsterTypes { get; set; }
 		public DbSet<Deck>? Decks { get; set; }
 		public DbSet<User>? Users { get; set; }
 		public DbSet<CardInDeck>? CardInDecks { get; set; }

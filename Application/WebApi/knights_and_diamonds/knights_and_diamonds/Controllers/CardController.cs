@@ -22,57 +22,25 @@ namespace knights_and_diamonds.Controllers
 		public ICardService _cardService { get; set; }
 		public IEffectService _effService { get; set; }
 
-		public IDescriptionFactory _descriptionFactory { get; set; }
+		public IEffectFactory _descriptionFactory { get; set; }
 		public IFactory _factory { get; set; }
 		public CardController(KnightsAndDiamondsContext context)
 		{
 			this.context = context;
 			_cardService = new CardService(this.context);
-			_descriptionFactory = new ConcreteDescriptionFactory();
+			_descriptionFactory = new ConcreteEffectFactory();
 			_effService = new EffectService(this.context);
 		}
 
+
 		[Route("AddCard")]
 		[HttpPost]
-		public async Task<IActionResult> AddCard([FromBody] CardDTO card)
+		public async Task<IActionResult> AddCard(CardDTO card)
 		{
 			try
 			{
-				if (card.CardTypeID == 3)
-				{
-					return BadRequest("There is some error");
-				}
-				var c = await this._cardService.AddCard(card);
-				return Ok(c);
-			}
-			catch (Exception e)
-			{
-				return BadRequest(e.Message);
-			}
-		}
-		[Route("AddEffect")]
-		[HttpPost]
-		public async Task<IActionResult> AddEffect([FromBody] CardDTO card)
-		{
-			try
-			{
-				var e=await this._effService.AddEffect(card.EffectTypeID, card.NumOfCardsAffected, card.PointsAddedLost);
-				return Ok(e);
-			}
-			catch (Exception e)
-			{
-				return BadRequest(e.Message);
-			}
-		}
-
-		[Route("AddMonsterCard")]
-		[HttpPost]
-		public async Task<IActionResult> AddMonsterCard([FromBody] MonsterCard MonsterCard)
-		{
-			try
-			{
-				var c=await this._cardService.AddMonsterCard(MonsterCard);
-				return Ok(c);
+				await this._cardService.AddCard(card);
+				return Ok();
 			}
 			catch (Exception e)
 			{
@@ -179,22 +147,5 @@ namespace knights_and_diamonds.Controllers
 				return BadRequest(e);
 			}
 		}
-		[Route("GetD")]
-		[HttpGet]
-		public async Task<IActionResult> Getd(string type,string ct,int nuce,int points ) 
-		{
-			try
-			{
-				/*this._factory = this._descriptionFactory.FactoryMethod(type, ct, nuce, points);
-				var description = await this._factory.GetDescription();*/
-				return Ok();
-				
-			}
-			catch (Exception e)
-			{
-				return BadRequest(e);
-			}
-		}
-
 	}
 }

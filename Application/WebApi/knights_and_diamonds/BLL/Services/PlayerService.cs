@@ -26,6 +26,16 @@ namespace BLL.Services
             var deck = await this._unitOfWork.Deck.GetCardsFromDeck(user.MainDeckID, userID);
             return deck;
         }
+        public async Task<int> GetNumberOfCardsInDeck(int playerID)
+        {
+            var player = await this._unitOfWork.Player.GetPlayerByID(playerID);
+			if (player == null)
+			{
+				throw new Exception("Player dosent exsist!");
+			}
+			return player.Deck.Count();
+        }
+
         public async Task<Card> Draw(int playerID) 
         {
             var player = await this._unitOfWork.Player.GetPlayersHandByPlayerID(playerID);
