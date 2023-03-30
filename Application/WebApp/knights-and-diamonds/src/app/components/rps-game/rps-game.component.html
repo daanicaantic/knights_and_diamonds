@@ -4,25 +4,37 @@
     <app-loadinscreen [loadingType]="loadingType"  *ngIf="isLoadingOver===false" (onTimerOverTask)="getTimer($event)"></app-loadinscreen>
     <div class="main-container"  *ngIf="isLoadingOver===true">
         <!-- <p>it works</p> -->
-        <div class="topBorder"></div>
+        <header class="topBorder"></header>
         <div class="game-container">
-            
-              
-            <div class="message-container font-bold bg-yellow-500 text-gray-900 border-round border-3 border-gray-900 m-2 px-5 py-3">
-                Choose your hand
-            </div>
-            <div class="enemies-options border-gray-900">{{progressValue}}</div>
         
-            <div class="players-options border-gray-900">
-                <div class="rpsoption"></div>
-                <div class="rpsoption"></div>
-                <div class="rpsoption"></div>
+            <div class="enemies-options border-gray-900">
+                <div class="options">
+                    <div *ngFor="let option of enemiesOptions" class="rpsoption">
+                        <div class="rps{{option.name}} rps{{option.choosen}}" style="cursor:auto; transform: rotate(180deg) scaleX(-1);">
+    
+                        </div>
+                    </div>
+                </div>
+                <div class="message-container">
+                    <div class="message"><h1>{{message}}</h1></div>
+                </div>
+            </div>
+         
+            <div  class="players-options border-gray-900">
+                <div *ngFor="let option of options" class="rpsoption">
+                    <div class="rps{{option.name}} rps{{option.choosen}}"  (click)="chooseRPSMove(option.name)">
+
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="botBorder">
-            <div class="round-time-bar" data-style="smooth" style="--duration: 15;">
+        <div class="botBorder" >
+            <!-- <div  class="round-time-bar" data-style="smooth" style="--duration: {{cssTimer}}">
                 <div></div>
-              </div>
+            </div> -->
+            <div  class="timer" style="--width:{{loadingBar}}">
+                <div></div>
+            </div>
         </div>
     </div>
 </body>

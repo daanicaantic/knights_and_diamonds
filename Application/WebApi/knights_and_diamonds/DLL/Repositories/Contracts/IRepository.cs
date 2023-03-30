@@ -14,7 +14,7 @@ namespace DAL.Repositories.Contracts
 		Task<T> GetOne(int id);
 		Task<IQueryable<T>> GetAll();
 		IQueryable<T> Find(Expression<Func<T, bool>> predicate);
-		Task Add(T obj);
+		void Add(T obj);
 		void Delete(T obj);
 		void Update(T obj);
 	}

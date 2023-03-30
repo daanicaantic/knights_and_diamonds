@@ -154,7 +154,7 @@ namespace BLL.Services
 		public async Task<List<int>> RedirectToGame(int gameID) 
 		{
 			List<int> usersIDs=new List<int>(); 
-			var game = await this.unitOfWork.RPSGame.GetGamesWithPlayers(gameID);
+			var game = await this.unitOfWork.RPSGame.GetGameWithPlayers(gameID);
 
 			if (game == null)
 			{
@@ -172,9 +172,23 @@ namespace BLL.Services
 			var lobbies = this._usersingame.Lobbies.Where(x => x.User2.ID == userID).ToList();
 			return (lobbies);
 		}
-        public Task<List<Player>> GetPlayersPerGame(int gameID)
+        public async Task<GameDTO> GetGame(int gameID,int userID)
         {
-            throw new NotImplementedException();
+			GameDTO game = new GameDTO();
+			var rpsGame = await this.unitOfWork.RPSGame.GetGameWithPlayers(gameID);
+			foreach (var player in rpsGame.Players)
+			{
+				if (player.UserID == userID)
+				{
+					game.PlayerID = player.ID;
+				}
+				else
+				{
+					game.EnemiePlayerID = player.ID;
+				}
+			}
+			game.GameID=rpsGame.ID;
+			return game;
 		}
 		public async Task PlayMove(int playerID, string moveName)
 		{
@@ -207,7 +221,7 @@ namespace BLL.Services
         }
 		public async Task<int> CheckRPSWinner(int RPSgameID)
 		{
-            var game = await this.unitOfWork.RPSGame.GetGamesWithPlayers(RPSgameID);
+            var game = await this.unitOfWork.RPSGame.GetGameWithPlayers(RPSgameID);
 
 			List<Player> players = game.Players;
 
@@ -295,8 +309,22 @@ namespace BLL.Services
 			}
 			return player;
         }
-
-        public async Task RemoveUserFromUsersInGame(int userID)
+		public async Task<string> GetPlayersMove(int playerID)
+		{
+			var player = await this.unitOfWork.Player.GetPlayerByID(playerID);
+			if (player == null)
+			{
+				throw new Exception("Player is undefined.");
+			}
+			switch (player.Play)
+			{
+				case Play.Rock:return "Rock";
+				case Play.Scissors: return "Scissors";
+				case Play.Paper: return "Paper";
+				default:return "Undefined";
+			}
+		}
+		public async Task RemoveUserFromUsersInGame(int userID)
         {
 			if(this._usersingame.UsersInGame.Contains(userID))
 			{

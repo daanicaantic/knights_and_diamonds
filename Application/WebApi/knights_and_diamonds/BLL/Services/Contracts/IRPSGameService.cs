@@ -17,8 +17,9 @@ namespace BLL.Services.Contracts
         Task<Dictionary<int, List<int>>> GetGames();
 		Task<List<Lobby>> LobbiesPerUser(int userID);
         Task<List<int>> RedirectToGame(int gameID);
-        Task<List<Player>> GetPlayersPerGame(int gameID);
-        Task PlayMove(int playerID, string moveName);
+        Task<GameDTO> GetGame(int gameID, int userID);
+        Task<string> GetPlayersMove(int playerID);
+		Task PlayMove(int playerID, string moveName);
         Task<int> CheckRPSWinner(int RPSgameID);
         Task<Player> GetPlayer(int gameID, int userID);
         Task RemoveUserFromUsersInGame(int userID);

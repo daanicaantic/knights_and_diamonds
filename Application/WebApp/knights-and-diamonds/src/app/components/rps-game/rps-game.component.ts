@@ -15,22 +15,27 @@ import { IngameService } from 'src/app/services/ingame.service';
 })
 export class RpsGameComponent implements OnInit, OnDestroy {
   imgpath="https://localhost:7250/Resources/Images/"
+  
+  options:any[]=[{name:"Rock",choosen:false},{name:"Paper",choosen:false},{name:"Scissors",choosen:false}];
+  enemiesOptions:any[]=[{name:"Rock",choosen:true},{name:"Paper",choosen:true},{name:"Scissors",choosen:true}];
 
-  rpsGameID: any;
-  userID = this.authService?.userValue?.id;
+
   progressValue!: number;
-  loadingBar: any;
+  loadingBar=100;
   rpsGameStarted: Boolean = false;
-  timer: any;
   timerCountDown: any;
   progress: any;
-  player: any;
-  playerFlag: any;
-  winner: any;
-  moveChosed: any;
-
-  isLoadingOver=false;
+  message="Choose your option"
+  userID = this.authService?.userValue?.id;
   loadingType="rpsGame";
+  isDisebled=false;
+  rpsGameID!: number;
+  playerID:any;
+  enemiePlayerID:any;
+  isLoadingOver=false;
+  
+
+
 
   constructor(private route: ActivatedRoute,
     private signalrService: SignalrService,
@@ -40,41 +45,24 @@ export class RpsGameComponent implements OnInit, OnDestroy {
     private messageService: MessageService,) { }
 
   ngOnInit(): void {
-    this.setGameStatus();
     this.rpsGameID = this.route.snapshot.params['rpsGameID'];
+    console.log(Number(this.rpsGameID));
+    this.setGameStatus();
+    this.getRpsGame();
     this.progressValue = 0;
-    this.timer = 10;
     // this.getPlayer();
-    // this.getRPSWinner();
-    // this.timerFunction();
-
-  }
-
-  ngOnDestroy(): void {
-    clearInterval(this.progress)
-    this.rpsGameService.removeUserFromUsersInGame(this.userID).subscribe({});
-  }
-
-  getTimer($event:any){
-    console.log("ovdeee",$event);
-    this.isLoadingOver=$event;
+    this.getRPSWinner();
     this.progressionFunction();
 
+    // this.timerFunction();
+    // this.progressionFunction();
+
   }
-
-
-  getPlayer() {
-    this.rpsGameService.getPlayer(this.rpsGameID, this.userID).subscribe({
-      next: res => {
-        this.player = res;
-        console.log(this.player)
-        if (this.player.id % 2 == 0) {
-          this.playerFlag = "Player2"
-        }
-        else {
-          this.playerFlag = "Player1"
-        }
-        console.log(this.playerFlag)
+  getRpsGame(){
+    this.rpsGameService.getRPSGame(this.rpsGameID, this.userID).subscribe({
+      next: (res:any) => {
+        this.playerID=res.playerID;
+        this.enemiePlayerID=res.enemiePlayerID;
       },
       error: err => {
         console.log(err)
@@ -83,12 +71,10 @@ export class RpsGameComponent implements OnInit, OnDestroy {
   }
 
   chooseRPSMove(move: string) {
-    console.log(this.moveChosed)
-    this.rpsGameService.playRPSMove(this.player.id, move).subscribe({
+    this.rpsGameService.playRPSMove(this.playerID, move).subscribe({
       next: (res: any) => {
-        this.moveChosed = move;
-        console.log(this.moveChosed)
-        this.messageService.add({ key: 'br', severity: 'success', summary: 'Uspešno', detail: 'Uspesno odigran potez!' });
+        this.filterOptions(move,this.options);
+        this.messageService.add({ key: 'br', severity: 'success', summary: 'Success', detail: 'You choose '+move});
       },
       error: err => {
         this.messageService.add({ key: 'br', severity: 'error', summary: 'Neuspešno', detail: err.error });
@@ -96,48 +82,96 @@ export class RpsGameComponent implements OnInit, OnDestroy {
     });
   }
 
+  getTimer(event:any){
+    console.log("ovdeee",event);
+    this.isLoadingOver=event;
+    this.progressionFunction();
+
+  }
+
+  filterOptions(option:any,options:any[]){
+    options.forEach(element => {
+      if(element.name!==option){
+        element.choosen=true;
+      }
+      else{
+        element.choosen=false;
+        this.isDisebled=true;
+      }
+    });
+  }
+  
+  ngOnDestroy(): void {
+    clearInterval(this.progress)
+    this.rpsGameService.removeUserFromUsersInGame(this.userID).subscribe({});
+  }
+
   checkRPSWinnerInv(): void {
-    this.signalrService.hubConnection.invoke("CheckRPSWinner", this.player.rpsGameID)
+    this.signalrService.hubConnection.invoke("CheckRPSWinner",Number(this.rpsGameID))
       .catch(err => console.error(err));
   }
 
   getRPSWinner() {
+
     this.signalrService.hubConnection.on("GetRPSWinner", (winner: any) => {
-      this.winner = winner;
+      this.getEnemiesMove();
+      this.generateMessage(winner)
+
+      
     });
   }
+  generateMessage(winner:any){
+    if(winner===this.playerID){
+      this.message="You win"
+      clearInterval(this.progress);
+      this.loadingBar=0; 
+    }
+    else if(winner===this.enemiePlayerID){
+      this.message="You lose"
+      clearInterval(this.progress);
+      this.loadingBar=0; 
+    }
+    else{
+      this.message="It is draw"
+      this.enemiesOptions.forEach(element => {
+        element.choosen=true;
+      });
+      this.progressionFunction();
+    }
+  }
+
+   getEnemiesMove(){
+    this.rpsGameService.getPlayerMove(this.enemiePlayerID).subscribe({
+      next: (res: any) => {
+        console.log(res);
+      },
+      error: err => {
+        this.filterOptions(err.error.text, this.enemiesOptions);
+
+        console.log(err.error.text);
+      }
+    })
+  }
+  
 
   progressionFunction() {
     this.progressValue = 0;
     let progressEndValue = 100;
     let speed = 150;
-
+    this.loadingBar=100;
+    clearInterval(this.progress);
     this.progress = setInterval(() => {
       this.progressValue++;
-      this.loadingBar = 'conic-gradient(red ' + this.progressValue * 3.6 + 'deg, orange ' + this.progressValue * 3.6 + 'deg)';
+      console.log(this.progressValue)
+      this.loadingBar =this.loadingBar-1;
       if (this.progressValue == progressEndValue) {
         clearInterval(this.progress);
-        this.timerFunction();
+        this.checkRPSWinnerInv();
       }
       speed = 150;
     }, speed);
   }
 
-  timerFunction() {
-    clearInterval(this.progress);
-    this.timer = 30;
-    console.log(this.timer)
-    this.rpsGameStarted = true;
-    this.progressValue = 0;
-    this.progress = setInterval(() => {
-      this.timer--;
-      this.timerCountDown = this.timer * 3.3333333333333333333333 + "%"
-      if (this.timer == this.progressValue) {
-        clearInterval(this.progress);
-        this.checkRPSWinnerInv();
-      }
-    }, 1000)
-  }
   setGameStatus(){
     this.inGameService.setGameOn();
   }

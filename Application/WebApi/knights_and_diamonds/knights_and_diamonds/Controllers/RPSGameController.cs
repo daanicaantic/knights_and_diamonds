@@ -8,6 +8,7 @@ using static System.Text.Json.JsonSerializer;
 using System.Runtime.Intrinsics.X86;
 using DAL.DTOs;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace knights_and_diamonds.Controllers
 {
@@ -95,6 +96,37 @@ namespace knights_and_diamonds.Controllers
 			catch (Exception e)
 			{
 				return BadRequest(e);
+			}
+		}
+
+		[Route("GetRPSGame/{gameID}/{userID}")]
+		[HttpGet]
+		public async Task<IActionResult> GetGame(int gameID,int userID)
+		{
+			try
+			{
+				var game = await this._pregameservice.GetGame(gameID,userID);
+				return Ok(game);
+				
+			}
+			catch (Exception e)
+			{
+				return BadRequest(e.Message);
+			}
+		}
+		[Route("GetPlayerMove/{playerID}")]
+		[HttpGet]
+		public async Task<IActionResult> GetPlayerMove(int playerID)
+		{
+			try
+			{
+				var move=await this._pregameservice.GetPlayersMove(playerID);
+				return Ok(move);
+
+			}
+			catch (Exception e)
+			{
+				return BadRequest(e.Message);
 			}
 		}
 

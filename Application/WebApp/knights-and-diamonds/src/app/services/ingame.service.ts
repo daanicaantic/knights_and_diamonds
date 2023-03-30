@@ -5,6 +5,9 @@ import { Observable, Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class IngameService {
+  unsubscribe() {
+    throw new Error('Method not implemented.');
+  }
 
   gameStarted = new Subject<any>();
   gameObs(): Observable<any> {

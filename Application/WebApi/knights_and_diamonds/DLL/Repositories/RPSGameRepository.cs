@@ -22,17 +22,10 @@ namespace DAL.Repositories
 			get { return _context as KnightsAndDiamondsContext; }
 		}
 
-		public async Task<RockPaperScissorsGame> GetGamesWithPlayers(int gameID)
+		public async Task<RockPaperScissorsGame> GetGameWithPlayers(int gameID)
 		{
-			try
-			{
-				var game = await this.Context.RockPaperScissorsGames.Include(x => x.Players).Where(x => x.ID == gameID).FirstOrDefaultAsync();
-				return game;
-			}
-			catch
-			{
-				throw;
-			}
+			var game = await this.Context.RockPaperScissorsGames.Include(x => x.Players).Where(x => x.ID == gameID).FirstOrDefaultAsync();
+			return game;
 		}
 	}
 }

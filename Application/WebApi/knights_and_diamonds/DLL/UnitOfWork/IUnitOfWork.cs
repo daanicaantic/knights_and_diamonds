@@ -18,6 +18,6 @@ namespace DAL.UnitOfWork
 		IGameRepository Game { get; }
 		IEffectRepository Effect { get; }
 
-		int Complete();
+		void Complete();
 	}
 }

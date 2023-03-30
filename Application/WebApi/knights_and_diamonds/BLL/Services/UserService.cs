@@ -37,7 +37,7 @@ namespace BLL.Services
 
             var user = new User(u.Name, u.SurName, u.Email, u.Password, u.UserName, u.Role);
 
-            await this.unitOfWork.User.Add(user);
+            this.unitOfWork.User.Add(user);
             this.unitOfWork.Complete();
         }
         public async Task<User> GetUserByID(int id)

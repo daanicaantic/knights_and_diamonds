@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AuthService } from './services/auth.service';
 import { ConnectionService } from './services/connection.service';
@@ -19,9 +19,12 @@ export class AppComponent {
     public signalrService: SignalrService,
     public inGameService: IngameService,
     public authService: AuthService,
-    public connectionService: ConnectionService) { }
+    public connectionService: ConnectionService,
+    private cdr:ChangeDetectorRef) { }
 
   ngOnInit() {
+    this.checkGameStatus();
+
     this.signalrService.startConnection();
     if(this.userID!=undefined){
       if (this.signalrService.hubConnection.state=="Connected") {
@@ -35,11 +38,11 @@ export class AppComponent {
         });
       }
     }
-    this.checkGameStatus();
   }
 
   ngOnDestroy() {
     this.signalrService.hubConnection.off("askServerResponse");
+    // this.inGameService.unsubscribe();
   }
 
   addConncectionInv(userID:any): void {
@@ -54,6 +57,7 @@ export class AppComponent {
       else{
         this.gameStatus=true;
       }
+      this.cdr.detectChanges();
     });
   }
 }

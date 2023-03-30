@@ -43,7 +43,12 @@ export class RpsGameService {
   getPlayer(rpsGameID: any, userID: any) {
     return this.httpClient.get(`https://localhost:7250/RPSGame/GetPlayer/` + `${rpsGameID}` + `/` + `${userID}`);
   }
-
+  getPlayerMove(playerID:any) {
+    return this.httpClient.get(`https://localhost:7250/RPSGame/GetPlayerMove/` + `${playerID}`);
+  }
+  getRPSGame(rpsGameID: any, userID: any) {
+    return this.httpClient.get(`https://localhost:7250/RPSGame/GetRPSGame/` + `${rpsGameID}` + `/` + `${userID}`);
+  }
   removeUserFromUsersInGame(userID: any) {
     return this.httpClient.delete(`https://localhost:7250/RPSGame/RemoveUserFromUsersInGame/` + `${userID}`);
   }

@@ -42,9 +42,9 @@ namespace DAL.UnitOfWork
 
 		public IEffectRepository Effect { get; set; }
 
-		public int Complete()
+		public void Complete()
 		{
-			return _context.SaveChanges();
+			_context.SaveChanges();
 		}
 
 		public void Dispose()

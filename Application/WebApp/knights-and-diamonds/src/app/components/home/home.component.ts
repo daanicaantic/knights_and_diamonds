@@ -89,6 +89,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   acceptGameRequest(lobbyID:any) {
     this.rpsGameService.startGame(lobbyID).subscribe({
       next: res=> {
+        console.log(lobbyID)
+
         this.rpsGameService.startGameInv(res);
       },
       error: err=> {
