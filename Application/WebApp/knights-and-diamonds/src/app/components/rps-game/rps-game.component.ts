@@ -86,7 +86,6 @@ export class RpsGameComponent implements OnInit, OnDestroy {
     console.log("ovdeee",event);
     this.isLoadingOver=event;
     this.progressionFunction();
-
   }
 
   filterOptions(option:any,options:any[]){
@@ -112,12 +111,9 @@ export class RpsGameComponent implements OnInit, OnDestroy {
   }
 
   getRPSWinner() {
-
     this.signalrService.hubConnection.on("GetRPSWinner", (winner: any) => {
       this.getEnemiesMove();
       this.generateMessage(winner)
-
-      
     });
   }
   generateMessage(winner:any){
@@ -163,7 +159,7 @@ export class RpsGameComponent implements OnInit, OnDestroy {
     this.progress = setInterval(() => {
       this.progressValue++;
       console.log(this.progressValue)
-      this.loadingBar =this.loadingBar-1;
+      this.loadingBar = this.loadingBar-1;
       if (this.progressValue == progressEndValue) {
         clearInterval(this.progress);
         this.checkRPSWinnerInv();
