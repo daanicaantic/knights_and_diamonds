@@ -1,5 +1,6 @@
-
-<div class="background">
+<body>
+    <!-- <app-loadinscreen [loadingType]="loadingType"  *ngIf="isLoadingOver===false" (onTimerOverTask)="getTimer($event)"></app-loadinscreen> -->
+    <div class="background" *ngIf="isLoadingOver===false">
     <div class="card-window">
         <div class="enemies-health">
             <h1>8 0 0 0</h1>
@@ -19,24 +20,24 @@
     </div>
     <div class="battle-window">
         <div class="enemies-hand">
-                <div class="card-back">
+            <div class="card-back">
                     <img src="https://localhost:7250/Resources/Images/card-back.png" alt="Name name name" class="picture">
-                </div>
-                <div class="card-back">
+            </div>
+            <div class="card-back">
                     <img src="https://localhost:7250/Resources/Images/card-back.png" alt="Name name name" class="picture">
-                </div>
-                <div class="card-back">
+            </div>
+            <div class="card-back">
                     <img src="https://localhost:7250/Resources/Images/card-back.png" alt="Name name name" class="picture">
-                </div>
-                <div class="card-back">
+            </div>
+            <div class="card-back">
                     <img src="https://localhost:7250/Resources/Images/card-back.png" alt="Name name name" class="picture">
-                </div>
-                <div class="card-back">
+            </div>
+            <div class="card-back">
                     <img src="https://localhost:7250/Resources/Images/card-back.png" alt="Name name name" class="picture">
-                </div>
-                <div class="card-back">
+            </div>
+            <div class="card-back">
                     <img src="https://localhost:7250/Resources/Images/card-back.png" alt="Name name name" class="picture">
-                </div>
+            </div>
         </div>
         <div class="table-background">
             <div class="deck-and-grave">
@@ -53,18 +54,18 @@
             <div class="table-all">
                 <div class="enemies-table">
                     <div class="spell-table">
-                        <div class="card-place"></div>
-                        <div class="card-place">
+                        <div class="card-place-spell"></div>
+                        <div class="card-place-spell">
                             <div class="small-card rotating-card">
                                 <app-card [card]="card"></app-card>
                             </div>
                         </div>
-                        <div class="card-place"></div>
-                        <div class="card-place"></div>
-                        <div class="card-place"></div>
+                        <div class="card-place-spell"></div>
+                        <div class="card-place-spell"></div>
+                        <div class="card-place-spell"></div>
                     </div>
                     <div class="monster-table">
-                        <div class="card-place">
+                        <div class="card-place-monster">
                             <div class="small-card rotating-card">
                                 <app-card [card]="card"></app-card>
                             </div>
@@ -74,39 +75,38 @@
                                 <p>1200</p>
                             </div>
                         </div>
-                        <div class="card-place"></div>
-                        <div class="card-place"></div>
-                        <div class="card-place"></div>
-                        <div class="card-place"></div>
+                        <div class="card-place-monster"></div>
+                        <div class="card-place-monster"></div>
+                        <div class="card-place-monster"></div>
+                        <div class="card-place-monster"></div>
                     </div>
                 </div>
                 <div class="player-table">
                     <div class="monster-table">
-                        <div class="card-place"></div>
-                        <div class="card-place"></div>
-                        <div class="card-place">
+                        <div class="card-place-monster"></div>
+                        <div class="card-place-monster"></div>
+                        <div class="card-place-monster">
                             <div class="small-card rotating-card">
                                 <app-card [card]="card"></app-card>
                             </div>
-                            <div class="card-points">
-                                <p>1000</p>
-                                <p>/</p>
-                                <p>1200</p>
+                            <div class="card-points" >
+                                <p style="color: black;">1000 / 1200</p>
+
                             </div>
                         </div>
-                        <div class="card-place"></div>
-                        <div class="card-place"></div>
+                        <div class="card-place-monster"></div>
+                        <div class="card-place-monster"></div>
                     </div>
                     <div class="spell-table">
-                        <div class="card-place"></div>
-                        <div class="card-place"></div>
-                        <div class="card-place"></div>
-                        <div class="card-place">
+                        <div class="card-place-spell"></div>
+                        <div class="card-place-spell"></div>
+                        <div class="card-place-spell"></div>
+                        <div class="card-place-spell">
                             <div class="small-card rotating-card">
                                 <app-card [card]="card"></app-card>
                             </div>
                         </div>
-                        <div class="card-place"></div>
+                        <div class="card-place-spell"></div>
                     </div>
                 </div>
             </div>
@@ -130,9 +130,7 @@
             <div class="medium-card">
                 <app-card [card]="card"></app-card>
             </div>
-            <div class="medium-card">
-                <app-card [card]="card"></app-card>
-            </div>
         </div>
     </div>
-</div>
+    </div>
+</body>

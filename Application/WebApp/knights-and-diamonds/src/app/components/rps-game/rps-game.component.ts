@@ -27,12 +27,13 @@ export class RpsGameComponent implements OnInit, OnDestroy {
   progress: any;
   message="Choose your option"
   userID = this.authService?.userValue?.id;
-  loadingType="rpsGame";
+ 
   isDisebled=false;
   rpsGameID!: number;
   playerID:any;
   enemiePlayerID:any;
   isLoadingOver=false;
+  loadingType="rpsGame";
   
 
 
@@ -42,7 +43,8 @@ export class RpsGameComponent implements OnInit, OnDestroy {
     public inGameService:IngameService,
     private authService: AuthService,
     private rpsGameService: RpsGameService,
-    private messageService: MessageService,) { }
+    private messageService: MessageService,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.rpsGameID = this.route.snapshot.params['rpsGameID'];
@@ -120,12 +122,21 @@ export class RpsGameComponent implements OnInit, OnDestroy {
     if(winner===this.playerID){
       this.message="You win"
       clearInterval(this.progress);
-      this.loadingBar=0; 
+      this.loadingBar=0;
+      setTimeout(() => {
+        this.router.navigate(['/game']);
+      }, 3000);
+
     }
     else if(winner===this.enemiePlayerID){
       this.message="You lose"
       clearInterval(this.progress);
       this.loadingBar=0; 
+      setTimeout(() => {
+        this.router.navigate(['/game']);
+      }, 3000);
+      
+
     }
     else{
       this.message="It is draw"
@@ -134,6 +145,7 @@ export class RpsGameComponent implements OnInit, OnDestroy {
       });
       this.progressionFunction();
     }
+
   }
 
    getEnemiesMove(){
