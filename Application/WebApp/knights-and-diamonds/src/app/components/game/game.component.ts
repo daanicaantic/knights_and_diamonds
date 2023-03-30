@@ -10,6 +10,9 @@ import { IngameService } from 'src/app/services/ingame.service';
 export class GameComponent implements OnInit, OnDestroy {
   card = card;
   numberOfCardsInEnemiesHand:Number = 6;
+  isLoadingOver=false;
+  loadingType="game";
+  
   
   constructor(
     public inGameService:IngameService
@@ -25,6 +28,10 @@ export class GameComponent implements OnInit, OnDestroy {
 
   setGameStatus(){
     this.inGameService.setGameOn();
+  }
+  getTimer(event:any){
+    console.log("ovdeee",event);
+    this.isLoadingOver=event;
   }
   
 }

@@ -2,21 +2,27 @@
     font-family: 'Roboto', sans-serif;
     color: white;
 }
-
+body{
+    height: 100vh;
+    width: 100vw;
+}
 p {
     margin: 0px;
     padding: 0px;
 }
 
 .big-card {
-    width: 334px;
+    /* width: 334px;
     height: 452px;
+    font-size: 26px; */
+    width: 100%;
+    height: 65%;
     font-size: 26px;
 }
 
 .medium-card,
 .card-back {
-    width: 185px;
+    width: 16%;
     height: 251px;
     font-size: 14px;
 }
@@ -30,12 +36,17 @@ p {
 .background {
     display: flex;
     flex-direction: row;
+    width: 100vw;
+    height: 100vh;
+
 }
 
 .card-window {
-    background-color: yellow;
-    width: 25%;
-    height: 700px;
+    /* background-color: yellow; */
+    background-color: #BAD7E9;
+    width: 24%;
+    height: 100%;
+    min-width: 200px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -46,24 +57,25 @@ p {
 .enemies-health,
 .players-health {
     width: 100%;
-    height: 50px;
+    height: 8%;
     background-color: #0f3943;
-    display: flex;
-    justify-content: center;
+    display: flex;    justify-content: center;
     align-items: center;
     border: 1px solid rgb(79, 79, 79);
     border-radius: 10px;
 }
 
 .phases-window {
-    width: 3%;
-    height: 700px;
+    width: 4%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
-    margin-left: 0.5%;
-    margin-right: 0.5%;
+    padding-left: 0.5%;
+    padding-right: 0.5%;
+    border-left: 2px solid #0f4a55;
+    border-right: 2px solid #0f4a55;
 }
 
 .draw-phase,
@@ -81,9 +93,9 @@ p {
 }
 
 .battle-window {
-    background-color: coral;
+    /* background-color: coral; */
     min-width: 72%;
-    height: 700px;
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -93,7 +105,7 @@ p {
 .enemies-hand {
     width: 100%;
     height: 40px;
-    background-color: aqua;
+    /* background-color: aqua; */
     display: flex;
     justify-content: center;
     align-items: flex-end;
@@ -107,7 +119,7 @@ p {
 .players-hand {
     width: 100%;
     height: 100px;
-    background-color: aqua;
+    /* background-color: aqua; */
     display: flex;
     justify-content: center;
 }
@@ -123,7 +135,7 @@ p {
 .table-background {
     width: 100%;
     height: 100%;
-    background-color: yellowgreen;
+    /* background-color: yellowgreen; */
     display: flex;
     flex-direction: row;
 }
@@ -131,7 +143,7 @@ p {
 .deck-and-grave {
     width: 100px;
     height: 100%;
-    background-color: antiquewhite;
+    /* background-color: antiquewhite; */
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -141,11 +153,12 @@ p {
 .enemies-deck,
 .grave,
 .player-deck {
-    background-color: burlywood;
+    /* background-color: burlywood; */
 }
 
 .table-all {
-    background-color: crimson;
+    /* background-color: crimson; */
+
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -158,7 +171,7 @@ p {
 .player-table {
     width: 100%;
     height: 100%;
-    background-color: aquamarine;
+    /* background-color: aquamarine; */
     border: 1px solid gray;
     border-collapse: collapse;
     display: flex;
@@ -169,7 +182,7 @@ p {
 .monster-table {
     width: 100%;
     height: 100%;
-    background-color: aquamarine;
+    /* background-color: aquamarine; */
     border: 1px solid gray;
     border-collapse: collapse;
     display: flex;
@@ -178,15 +191,15 @@ p {
 }
 
 .spell-table {
-    background-color: darkmagenta;
+    background-color: #3b4f4e ;
 }
 
 .monster-table {
-    background-color: darkolivegreen;
+    background-color: #3b4f4e;
 }
 
-.card-place {
-    background-color: antiquewhite;
+.card-place-spell, .card-place-monster {
+    /* background-color: antiquewhite; */
     border: 1px solid black;
     height: 100%;
     width: 100%;
@@ -196,6 +209,16 @@ p {
     align-items: center;
     margin-left: 0.3%;
     margin-right: 0.3%;
+    background-image: repeating-linear-gradient(36deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 1px, transparent 0px, transparent 2px);
+}
+
+.card-place-spell {
+    background-color: #7ea7c1;
+}
+
+.card-place-monster {
+    /* background-color: #f0ab7e; */
+    background-color: #e0c269;
 }
 
 .card-points {

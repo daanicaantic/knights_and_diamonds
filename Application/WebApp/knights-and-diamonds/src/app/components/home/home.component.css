@@ -1,4 +1,4 @@
-p,
+/* p,
 h1,
 h3 {
     margin: 0px;
@@ -23,7 +23,6 @@ h3 {
 }
 
 .user {
-    /* padding: 10px; */
     margin: 10px;
     width: 180px;
     background-color: white;
@@ -41,7 +40,6 @@ h3 {
     flex-direction: row;
     width: 100px;
     height: 100px;
-    /* background-color: aquamarine; */
     border-radius: 100%;
     border: 2px solid black;
     background-image: linear-gradient(to right, #24C6DC 0%, #514A9D 100%, #24C6DC 100%);
@@ -94,4 +92,79 @@ h3 {
 .pi-check,
 .pi-times {
     cursor: pointer;
+} */
+body{
+    width: 100%;
+    height: 90.9vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url("https://localhost:7250/Resources/Images/female-knight-2.jpg");
 }
+.main-container{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+
+
+}
+.list-of-onlineusers{
+    width: 20%;
+    height: 100%;
+    background-color: #031315;
+    margin:4px, 4px;
+    padding:4px;
+    /* padding-right: 10px; */
+
+    overflow-x: hidden;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+
+}
+.user-container{
+    width: 100%;
+    height: 10%;
+    border-bottom:2px solid #0f4a55;
+    /* background-color: blue; */
+    margin: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.avatar,.username{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.avatar{
+    width: 33%;
+    height: 100%;
+    /* background-color: yellow; */
+    border-radius: 100%;
+    border: 3px solid orange;
+}
+.username{
+    height: 100%;
+    width: 100%;
+    /* background-color: aqua;  */
+    justify-content: start;
+    padding: 1%;
+
+}
+
+
+.list-of-onlineusers::-webkit-scrollbar {
+    width: 0.3em;
+  }
+   
+.list-of-onlineusers:-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  }
+   
+.list-of-onlineusers::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    outline: 1px solid slategrey;
+  }
