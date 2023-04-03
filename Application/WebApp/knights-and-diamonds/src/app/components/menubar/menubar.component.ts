@@ -10,12 +10,13 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./menubar.component.css']
 })
 export class MenubarComponent implements OnInit {
-
   subscriptions: Subscription[] = [];
   items!: MenuItem[];
   admin: any = " ";
   player: any = " ";
   id!: number;
+  menubarOptions:any[]=["Home","Deck","Rules"];
+
 
   constructor(
     public authService: AuthService,

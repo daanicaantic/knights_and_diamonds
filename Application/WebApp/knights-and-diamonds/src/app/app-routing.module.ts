@@ -28,6 +28,10 @@ const routes: Routes = [
     component: WelcomePageComponent,
   },
   {
+    path: 'card-create',
+    component: CardCreateComponent,
+  },
+  {
     path: 'home',
     component: HomeComponent,
     data: { roles: ['Player'] },

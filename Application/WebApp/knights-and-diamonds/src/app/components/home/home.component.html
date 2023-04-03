@@ -1,3 +1,5 @@
+
+
 <!-- <div class="onlineusersContainer">
     <div class="pom">
         <div class="gamerequests" *ngFor="let c of gameRequests">
@@ -27,16 +29,37 @@
 </div> -->
 
 <body>
-    <div class="main-container">
-        <!-- <div class="list-of-onlineusers" *ngFor="let onlineuser of usersOnline">
-            <div class="user-container">
-                <div class="avatar"> <h1>{{onlineuser.name[0]}}{{onlineuser.surName[0]}}</h1></div>
-                <div class="username"><h3>{{onlineuser.userName}}</h3></div>
+    <div class="news-container">
+        <div class="photo-container"></div>
+        <div class="news">
+            <div class="div"></div>
+            <div class="div"></div>
+            <div class="div"></div>
+            <div class="div"></div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="gamerequests" *ngFor="let c of gameRequests">
+            <div class="gamerequest">
+                <div class="gamerequest-user">
+                    <h3>{{c.user1.userName}}</h3>
+                </div>
+                <div class="gamerequest-actions">
+                    <i class="pi pi-check" style="margin-right: 4px" (click)="acceptGameRequest(c.id)"></i>
+                    <i class="pi pi-times" style="margin-left: 4px" (click)="denyGameRequest(c.id)"></i>
+                </div>
             </div>
-            <div class="user-container"></div>
-            <div class="user-container"></div>
-            <div class="user-container"></div>
-           
-        </div> -->
+        </div>
+        <div class="online-users" *ngFor="let onlineuser of usersOnline">
+            <div class="user">
+                <div class="avatar">
+                    <h1>{{onlineuser.name[0]}}{{onlineuser.surName[0]}}</h1>
+                </div>
+                <div class="username">
+                    <h2>{{onlineuser.userName}}</h2>
+                    <div class="chalange-player" (click)="challangePlayer(userID, onlineuser.id)"></div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>

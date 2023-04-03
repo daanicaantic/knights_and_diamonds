@@ -9,6 +9,7 @@ h3 {
 .onlineusersContainer {
     display: flex;
     justify-content: end;
+    height: calc(100vh - 65px);
 }
 
 .pom {
@@ -19,7 +20,7 @@ h3 {
     overflow: hidden;
     border: 2px solid grey;
     padding: 10px;
-    margin-top: 30px;
+
 }
 
 .user {
@@ -92,79 +93,102 @@ h3 {
 .pi-check,
 .pi-times {
     cursor: pointer;
-} */
+}
+ */
+.chalange-player,body{
+    background-size:cover;
+    background-repeat:no-repeat;
+    background-position: top;
+
+
+}
 body{
+    font-family: Arial, Helvetica, sans-serif;
+    height: calc(100vh - 66px);
+    background-color: rgb(25,27,31);
     width: 100%;
-    height: 90.9vh;
+    display: flex; 
+    background-position:top;
+    justify-content:flex-end;   
+
+}
+
+
+.container {
+    height: 100%;
+    min-width: 300px;
+    border:3px solid #1d3036;
+    background: linear-gradient(360deg,#1d3036 0%, rgba(255, 255, 255, 0) 50%,#1d3036 100% );
+
+  }
+  .online-users{
+    display: flex;
+    flex-direction: column;
+    padding: 5px; 
+
+  }
+
+  .user{
+    height: 90px;
+    width: 100%;
+    background-color: #1e3036;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    border:2px solid #0a1113;
+    padding: 2px;
+    display: flex;
+  }
+  .avatar{
+    height: 100%;
+    aspect-ratio: 1/1;
+    border:2px solid #0a1113;
+    background-color: #c2c9a0;
+    border-radius: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color:#0a1113;
+  }
+  .username{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    text-align: center;
+    justify-content: space-around;
+    align-items: center;
+  }
+  .chalange-player{
+    height: 50%;
+    aspect-ratio: 1/1;
+    background-image: url("https://localhost:7250/Resources/Images/cursor.png");
+    cursor:pointer;
+  }
+  .news-container{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
+  }
+  .news{
+    height: 30%;
+    width: 100%;
+    margin-bottom: 1%;
+    /* background-color:red; */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+  .div{
+    height: 100%;
+    width:200px;
+    margin: 0px;
+    clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);
+    /* background-color: yellow; */
+    background-image: url("https://localhost:7250/Resources/Images/wizard.png");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    background-image: url("https://localhost:7250/Resources/Images/female-knight-2.jpg");
-}
-.main-container{
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: end;
+    /* border: #0a1113 solid 5px; */
 
-
-}
-.list-of-onlineusers{
-    width: 20%;
-    height: 100%;
-    background-color: #031315;
-    margin:4px, 4px;
-    padding:4px;
-    /* padding-right: 10px; */
-
-    overflow-x: hidden;
-    overflow-y: auto;
-    scroll-behavior: smooth;
-
-}
-.user-container{
-    width: 100%;
-    height: 10%;
-    border-bottom:2px solid #0f4a55;
-    /* background-color: blue; */
-    margin: 5px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-}
-.avatar,.username{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.avatar{
-    width: 33%;
-    height: 100%;
-    /* background-color: yellow; */
-    border-radius: 100%;
-    border: 3px solid orange;
-}
-.username{
-    height: 100%;
-    width: 100%;
-    /* background-color: aqua;  */
-    justify-content: start;
-    padding: 1%;
-
-}
-
-
-.list-of-onlineusers::-webkit-scrollbar {
-    width: 0.3em;
-  }
-   
-.list-of-onlineusers:-webkit-scrollbar-track {
-    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  }
-   
-.list-of-onlineusers::-webkit-scrollbar-thumb {
-    background-color: darkgrey;
-    outline: 1px solid slategrey;
   }

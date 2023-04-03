@@ -59,3 +59,31 @@
         </div>
     </div>
 </div>
+
+<!-- <body>
+    <div class="main-container">
+        <div class="card-creator">
+            <div class="card-container">
+                <app-card [card]="card"></app-card>
+            </div>
+            <div class="form-container" [formGroup]="form">
+                <span class="form_field">
+                    <small>Card Name</small>
+                    <input class="dataField" formControlName="cardName" placeholder='Card Name' type="text" pInputText (input)="onCardNameChange()"  />
+                </span>
+                <span class="form_field">
+                    <small>Card Level</small>
+                    <input class="dataField" formControlName="numberOfStars" placeholder="Card Level" type="number" [min]="0" [max]="11" [maxlength]="2" pInputText (input)="onLevelChange()"  />
+                </span>
+                <div class="form_field" >
+                    <small>ATK</small>
+                    <input class="smallDataField" formControlName="attackPoints" placeholder='Attack' type="number" [min]="0" [max]="9999" [maxlength]="4" pInputText (input)="onAttackChange()"  />
+                </div>
+                <div class="form_field">
+                    <small>DEF</small>
+                    <input class="smallDataField" formControlName="defencePoints" placeholder='Defence' type="number" [min]="0" [max]="9999" [maxlength]="4" pInputText (input)="onDefenceChange()"  />
+                </div>
+            </div>
+        </div>
+    </div>
+</body> -->
