@@ -1,45 +1,12 @@
-<!-- 
-    <div [class.monster_card]="card.cardType=='Monster'" [class.trap_card]="card.cardType=='Trap'" [class.spell_card]="card.cardType=='Spell'">
-        <div [class.monster_header]="card.cardType=='Monster'" [class.trap_header]="card.cardType=='Trap'" [class.spell_header]="card.cardType=='Spell'">
-            <div class="card-name-container">
-                <h3>{{card.cardName}}</h3>
-            </div>
-            <div class="card-type">
-                <img src="https://localhost:7250/{{card.elementType}}" alt="" class="picture">
-            </div>
-        </div>
-        <div class="card-rating">
-            <h4 *ngIf="card.cardType=='Trap'">[Trap Card]</h4>
-            <h4 *ngIf="card.cardType=='Spell'">[Spell Card]</h4>
-            <p-rating *ngIf="card.cardType=='Monster'" [(ngModel)]=card.numberOfStars [stars]=card.numberOfStars [readonly]="true" [iconOffStyle]="{'display':'none'}" [iconOnStyle]="{'color':'#DEE239','cursor':'auto'}" [cancel]="false"></p-rating>
-        </div>
-        <div class="main-container">
-            <div [class.monster_photo]="card.cardType=='Monster'" [class.trap_photo]="card.cardType=='Trap'" [class.spell_photo]="card.cardType=='Spell'">
-                <img src="https://localhost:7250/{{card.imgPath}}" alt="Name name name" class="picture">
-            </div>
-             
-            <div  [class.monster_description]="card.cardType=='Monster'" [class.trap_description]="card.cardType=='Trap'" [class.spell_description]="card.cardType=='Spell'">
-                <div class="description">
-                    <p *ngIf="card.cardType=='Monster'">[{{card.monsterType}} / Effect]</p>
-                    <p class="p">{{card.description}}</p>
-                </div>
-                <div *ngIf="card.cardType=='Monster'" class="points-container">
-                    <p>ATK/{{card.attackPoints}} &nbsp;</p>
-                    <p>DEF/{{card.defencePoints}}</p>
-                </div>
-            </div>
-        </div>  
-    </div> -->
-
 <div class="container">
-    <div class="img">
-        <div class="number-of-stars">
-            <h1>{{card.numberOfStars}}</h1>
+    <div class="img img{{card.cardType}}">
+        <div class="card-level" *ngIf="card.cardType=='MonsterCard'">
+            <h1>{{card.cardLevel}}</h1>
         </div>
-        <div class="attact-points">
+        <div class="attact-points" *ngIf="card.cardType=='MonsterCard'">
             <h2>{{card.attackPoints}}</h2>
         </div>
-        <div class="defence-points">
+        <div class="defence-points" *ngIf="card.cardType=='MonsterCard'">
             <h2>{{card.defencePoints}}</h2>
         </div>
         <div class="card-name">
@@ -50,6 +17,6 @@
         </div>
     </div>
     <div class="picture">
-
+        <img src="https://localhost:7250/{{card.imgPath}}" alt="Name name name" style="width: 100%; height: 100%;">
     </div>
 </div>

@@ -58,7 +58,7 @@ namespace BLL.Services
 			}
 			if (cardType.Type == "MonsterCard")
 			{
-				MonsterCard monsterCard = new MonsterCard(card.CardName, card.ImgPath, card.NumberOfStars, card.AttackPoints, card.DefencePoints, effect, card.CardTypeID);
+				MonsterCard monsterCard = new MonsterCard(card.CardName, card.ImgPath, card.CardLevel, card.AttackPoints, card.DefencePoints, effect, card.CardTypeID);
 				await this.unitOfWork.Card.AddMonsterCard(monsterCard);
 			}
 			else
@@ -147,6 +147,11 @@ namespace BLL.Services
 			this._factory = this._effectFactory.FactoryMethod(type, concreteType, numOfCardAffected, pointsAddedLost);
 			var effect = this._factory.GetEffect();
 			return effect;
-		}	
-	}
+		}
+
+        public async Task<List<Card>> GetAllCards()
+        {
+           return await this.unitOfWork.Card.GetAllCards();
+        }
+    }
 }

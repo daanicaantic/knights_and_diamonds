@@ -20,21 +20,12 @@ export class CardService {
   addCard(card: any): any {
     return this.httpClient.post(`https://localhost:7250/Card/AddCard`, card);
   }
-  addMonsterCard(card: any): any {
-    return this.httpClient.post(`https://localhost:7250/Card/AddMonsterCard`, card);
-  }
 
   getCardTypes() {
     return this.httpClient.get(`https://localhost:7250/Types/GetCardTypes`);
   }
 
-  getMonsterTypes() {
-    return this.httpClient.get(`https://localhost:7250/Types/GetMonsterTypes`);
+  getEffectTypes() {
+    return this.httpClient.get(`https://localhost:7250/Types/GetEffectTypes`);
   }
-
-  getElementTypes() {
-    return this.httpClient.get(`https://localhost:7250/Types/GetElementTypes`);
-  }
-
-  
 }

@@ -15,9 +15,9 @@ namespace DAL.DesignPatterns.Factory
 			switch (type)
 			{
 				case "draw": return new DrawCard(cardsAffected);
-				case "lpchange": return new LPChange(effectType,pointsAddedLost);
-				case "return": return new ReturnCard(effectType,cardsAffected);
-				case "take":return new TakeCard(effectType,cardsAffected);
+				case "lpchange": return new LPChange(effectType, pointsAddedLost);
+				case "return": return new ReturnCard(effectType, cardsAffected);
+				case "take": return new TakeCard(effectType, cardsAffected);
 				default: return new NoEffect();
 			}
 		}

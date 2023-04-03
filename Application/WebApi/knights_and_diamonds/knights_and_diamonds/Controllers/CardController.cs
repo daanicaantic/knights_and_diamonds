@@ -75,6 +75,7 @@ namespace knights_and_diamonds.Controllers
 				return BadRequest(e);
 			}
 		}
+
 		[Route("GetCardByName")]
 		[HttpGet]
 		public async Task<IActionResult> GetCardByName(string name)
@@ -88,6 +89,7 @@ namespace knights_and_diamonds.Controllers
 				return BadRequest(e);
 			}
 		}
+
 		[Route("DeleteCard")]
 		[HttpDelete]
 		public async Task<IActionResult> DeleteCard(int id)
@@ -110,6 +112,7 @@ namespace knights_and_diamonds.Controllers
 				return BadRequest(e);
 			}
 		}
+
 		[Route("UpdateCard")]
 		[HttpPut]
 		public async Task<IActionResult> UpdateCard([FromBody] Card card)
@@ -131,6 +134,7 @@ namespace knights_and_diamonds.Controllers
 				return BadRequest(e);
 			}
 		}
+
 		[Route("AddCardType")]
 		[HttpPost]
 		public async Task<IActionResult> AddCardType([FromBody] CardType type)
@@ -147,5 +151,21 @@ namespace knights_and_diamonds.Controllers
 				return BadRequest(e);
 			}
 		}
-	}
+
+        [Route("GetAllCards")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllCards()
+        {
+            try
+            {
+                var cards=await this._cardService.GetAllCards();
+
+                return Ok(cards);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+    }
 }

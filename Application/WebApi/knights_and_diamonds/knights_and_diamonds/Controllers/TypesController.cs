@@ -19,7 +19,6 @@ namespace knights_and_diamonds.Controllers
 			this._effectService = new EffectService(context);
 		}
 
-		
 		[Route("AddEffectType")]
 		[HttpPost]
 		public async Task<IActionResult> AddEffectType([FromBody] EffectType type)
@@ -37,10 +36,6 @@ namespace knights_and_diamonds.Controllers
 			}
 		}
 
-
-
-
-
 		[Route("GetEffectTypes")]
 		[HttpGet]
 		public async Task<IActionResult> GetEffectTypes()
@@ -56,7 +51,22 @@ namespace knights_and_diamonds.Controllers
 			}
 		}
 
-		[Route("GetCardTypes")]
+        [Route("GetEffectTypeByID/{effectTypeID}")]
+        [HttpGet]
+        public async Task<IActionResult> GetEffectTypeByID(int effectTypeID)
+        {
+            try
+            {
+				var et = await this._effectService.GetEffectTypeByID(effectTypeID);
+                return Ok(et);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+        [Route("GetCardTypes")]
 		[HttpGet]
 		public async Task<IActionResult> GetCardTypes()
 		{
@@ -71,6 +81,21 @@ namespace knights_and_diamonds.Controllers
 			}
 		}
 
-	}
+        [Route("GetCardTypeByID/{cardTypeID}")]
+        [HttpGet]
+        public async Task<IActionResult> GetCardTypeByID(int cardTypeID)
+        {
+            try
+            {
+				var cardTypes = await this.context.CardTypes.FindAsync(cardTypeID);
+                return Ok(cardTypes);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+    }
 
 }

@@ -22,12 +22,19 @@ namespace BLL.Services
 		{
 			this._context = context;
 			unitOfWork = new UnitOfWork(_context);
-			this._descriptionFactory=new ConcreteEffectFactory();
+			this._descriptionFactory = new ConcreteEffectFactory();
 		}
+
 		public async Task<IList<EffectType>> GetEffectTypes()
 		{
 			return await this.unitOfWork.Effect.GetEffectTypes();
 		}
+
+		public async Task<EffectType> GetEffectTypeByID(int effectTypeID)
+		{
+			return await this.unitOfWork.Effect.GetEffectType(effectTypeID);
+		}
+
 /*		public async Task<Effect> AddEffect(int effectTypeID,int numOfCardsAffected, int pointsAddLost)
 		{
 			Effect effect;
@@ -49,12 +56,6 @@ namespace BLL.Services
 			return effect;
 		}*/
 
-		public async Task<string> GetDescription(string type, string contreteType, int numOfCardAffected, int ponitsAddLost)
-		{
-			this._factory = this._descriptionFactory.FactoryMethod(type, contreteType, numOfCardAffected, ponitsAddLost);
-			var description = "dsadas";
-
-			return description;
-		}
+		
 	}
 }

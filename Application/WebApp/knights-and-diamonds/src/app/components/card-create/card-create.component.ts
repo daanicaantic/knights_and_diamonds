@@ -2,9 +2,7 @@ import { card } from 'src/classes/card-data';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Card } from 'src/classes/card';
 import { STCard } from 'src/classes/stcard';
-
 import { CardType } from 'src/classes/card-type';
-
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Message } from 'primeng//api';
 import { HttpClient, HttpEventType, HttpErrorResponse } from '@angular/common/http';
@@ -19,172 +17,165 @@ import { BehaviorSubject, elementAt, Observable, Subject, Subscription } from 'r
   styleUrls: ['./card-create.component.css']
 })
 export class CardCreateComponent implements OnInit {
-  card=card;
-  stcard:STCard=new STCard;
-  form!:FormGroup;
-  cardTypes:any;
-  elementTypes:any;
-  monsterTypes:any;
-  isDisabled=false;
-
-  // progress!: number;
-  // message!: string;
-  pickur:any;
+  card = card;
+  form!: FormGroup;
+  cardTypes: any;
+  cardEffects: any;
+  pickur: any;
   // @Output() public onUploadFinished = new EventEmitter();
-  subscripions: Subscription[] = []
+  subscripions: Subscription[] = [];
+  isEffectNone = false;
+  isSpellOrTrapCard = false;
 
-  constructor(private fb: FormBuilder, 
-    private http:HttpClient,
+  constructor(private fb: FormBuilder,
+    private http: HttpClient,
     private messageService: MessageService,
-    private cardService:CardService,
-    private confirmationService: ConfirmationService) 
-    { 
-
-    }
-
+    private cardService: CardService,
+    private confirmationService: ConfirmationService) {
+  }
 
   ngOnInit(): void {
+    this.isEffectNone = true;
+    this.isSpellOrTrapCard = false;
+
     this.getCardTypes();
-    this.getElementTypes();
-    this.getMonsterTypes();
+    this.getEffectTypes();
 
     // this.card.cardType=this.cardTypes.type;
-    console.log("ovdeeeee",this.card)
+    console.log("ovdeeeee", this.card)
 
     this.form = this.fb.group({
       cardName: "",
       cardTypeID: 3,
-      description: "",
-      elementTypeID: 6,
-      imgPath:"",
-      numberOfStars: ['', [Validators.min(0), Validators.max(11), Validators.maxLength(2)]],
-      monsterTypeID: 1,
-      attackPoints: ['', [Validators.min(0), Validators.max(9999), Validators.maxLength(4)]],
-      defencePoints: ['', [Validators.min(0), Validators.max(9999), Validators.maxLength(4)]]
+      numOfCardsAffected: 0,
+      pointsAddedLost: 0,
+      effectTypeID: 10,
+      cardLevel: [0, [Validators.min(0), Validators.max(11), Validators.maxLength(2)]],
+      attackPoints: [0, [Validators.min(0), Validators.max(999), Validators.maxLength(3)]],
+      defencePoints: [0, [Validators.min(0), Validators.max(999), Validators.maxLength(3)]],
+      imgPath: "",
     })
   }
 
-  uploadFinished = (event:any) => { 
-    this.card.imgPath=event.dbPath;
-    this.form.value["imgPath"]=event.dbPath;
+  onCardNameChange(): void {
+    this.card.cardName = this.form.value["cardName"];
   }
 
-  onCardNameChange(): void {  
-    this.card.cardName=this.form.value["cardName"]
-  }
-  onLevelChange() {
-    this.card.numberOfStars=this.form.value["numberOfStars"]
-  }
-  onAttackChange() {
-    this.card.attackPoints=this.form.value["attackPoints"]
-  }
-  onDefenceChange() {
-    this.card.defencePoints=this.form.value["defencePoints"]
-  }
-  onDescriptionChange() {
-    this.card.description=this.form.value["description"]
-  }
-  onChangeMonsterType() {
-    let mt=this.monsterTypes.find((x: { id: any; })=>x.id==this.form.value["monsterTypeID"])
-    this.card.monsterType=mt.type
-  }
-  onElementTypeChange() {
-    let et=this.elementTypes.find((x: { id: any; })=>x.id==this.form.value["elementTypeID"])
-    this.card.elementType=et.imgPath
-  }
   onCardTypeChange() {
-    let ct=this.cardTypes.find((x: { id: any; })=>x.id==this.form.value["cardTypeID"])
-    this.card.cardType=ct.type
-    if(ct.type!=="Monster")
-    {
-      this.card.elementType=ct.imgPath
+    let ct = this.cardTypes.find((x: { id: any; }) => x.id == this.form.value["cardTypeID"]);
+    this.card.cardType = ct.type;
+    if(ct.type == "MonsterCard"){
+      console.log(ct.type)
+      this.isSpellOrTrapCard = false;
     }
-    else
-    {
-      let et=this.elementTypes.find((x: { id: any; })=>x.id==this.form.value["elementTypeID"])
-      this.card.elementType=et.imgPath
-      console.log(et)
-    }
-
+    else this.isSpellOrTrapCard = true;
   }
-
-  getCardTypes()
-  {
-    this.cardService.getCardTypes().subscribe({
-      next: res=> {
-        console.log(res);
-        this.cardTypes=res;
-        // console.log(this.cardTypes.type)
-        console.log(this.cardTypes)
   
-      },
-      error: err=> {
-        console.log("neuspesno")
-      }
-    })
+  onCardsAffectedChange() {
+    this.card.numberOfCardsAffected = this.form.value["numberOfCardsAffected"];
   }
 
-  getElementTypes()
-  {
-    this.cardService.getElementTypes().subscribe({
-      next: res=> {
-        console.log(res);
-        this.elementTypes=res;
-      },
-      error: err=> {
-        console.log("neuspesno")
-      }
-    })
+  onPointsAddedLostChange() {
+    this.card.pointsAddedLost = this.form.value["pointsAddedLost"];
   }
 
-  getMonsterTypes()
-  {
-    this.cardService.getMonsterTypes().subscribe({
-      next: res=> {
-        console.log(res);
-        this.monsterTypes=res;
-      },
-      error: err=> {
-        console.log("neuspesno")
-      }
-    })
-  }
-
-  handleClick()
-  {
-    let p=this.form.getRawValue()
-
-    if(p.cardType!==3)
-    {
-      this.stcard.cardName=this.form.value["cardName"];
-      this.stcard.cardTypeID=this.form.value["cardTypeID"];
-      this.stcard.description=this.form.value["description"];
-      this.stcard.imgPath=this.form.value["imgPath"];
-      
-      this.cardService.addCard(this.stcard).subscribe({
-        next: (res: any)=> {
-          console.log(res);
-          this.monsterTypes=res;
-        },
-        error: (err:any)=> {
-          console.log(err)
-        } 
-      })
-
-      console.log("ovdeeeeeeeeeeeeeeeeeeeeeee",this.stcard)
+  onCardEffectChange() {
+    let ce = this.cardEffects.find((x: { id: any; }) => x.id == this.form.value["effectTypeID"]);
+    this.card.cardEffect = ce.type;
+    console.log(ce)
+    if(ce.type == "none") {
+      this.isEffectNone = true;
     }
-    else{
-      p.imgPath=this.form.value["imgPath"]
-      console.log(p)
-      this.cardService.addMonsterCard(p).subscribe({
-       next: (res: any)=> {
-         console.log(res);
-         this.monsterTypes=res;
-       },
-       error: (err:any)=> {
-         console.log(err)
-       } 
-     })
-    }
+    else this.isEffectNone = false;
+  }
+
+  onCardLevelChange() {
+    this.card.cardLevel = this.form.value["cardLevel"];
+  }
+
+  onAttackChange() {
+    this.card.attackPoints = this.form.value["attackPoints"]
+  }
+
+  onDefenceChange() {
+    this.card.defencePoints = this.form.value["defencePoints"]
+  }
+
+  uploadFinished = (event: any) => {
+    this.card.imgPath = event.dbPath;
+    console.log(event.dbPath)
+    this.form.value["imgPath"] = event.dbPath;
+  }
+
+  getCardTypes() {
+    this.cardService.getCardTypes().subscribe({
+      next: res => {
+        console.log(res);
+        this.cardTypes = res;
+        console.log(this.cardTypes)
+      },
+      error: err => {
+        console.log("neuspesno ct")
+      }
+    })
+  }
+
+  getEffectTypes() {
+    this.cardService.getEffectTypes().subscribe({
+      next: res => {
+        console.log(res);
+        this.cardEffects = res;
+        console.log(this.cardEffects)
+      },
+      error: err => {
+        console.log("neuspesno ce")
+      }
+    })
+  }
+
+  handleClick() {
+    let p = this.form.getRawValue()
+    p.imgPath = this.form.value["imgPath"]
+
+    this.cardService.addCard(p).subscribe({
+      next: (res: any) => {
+        this.messageService.add({key: 'br', severity:'success', summary: 'Success', detail: p.cardName + ' card added!'});
+      },
+      error: (err: any) => {
+        this.messageService.add({key: 'br', severity:'error', summary: 'Error', detail: err.error});
+        console.log(err)
+      }
+    })
+
+    // if (p.cardType !== 3) {
+    //   this.card.cardName = this.form.value["cardName"];
+    //   this.card.cardType = this.form.value["cardTypeID"];
+    //   this.card.imgPath = this.form.value["imgPath"];
+
+    //   this.cardService.addCard(this.stcard).subscribe({
+    //     next: (res: any) => {
+    //       console.log(res);
+    //       this.monsterTypes = res;
+    //     },
+    //     error: (err: any) => {
+    //       console.log(err)
+    //     }
+    //   })
+
+    //   console.log("ovdeeeeeeeeeeeeeeeeeeeeeee", this.stcard)
+    // }
+    // else {
+    //   p.imgPath = this.form.value["imgPath"]
+    //   console.log(p)
+    //   this.cardService.addCard(p).subscribe({
+    //     next: (res: any) => {
+    //       console.log(res);
+    //       this.monsterTypes = res;
+    //     },
+    //     error: (err: any) => {
+    //       console.log(err)
+    //     }
+    //   })
+    // }
   }
 }

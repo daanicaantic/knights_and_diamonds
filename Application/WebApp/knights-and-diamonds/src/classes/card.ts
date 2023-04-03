@@ -1,12 +1,13 @@
 export interface Card {
     id?: number;
     cardName: string;
-    elementType: string;
     cardType: string;
-    numberOfStars: any;
+    numberOfCardsAffected: number;
+    pointsAddedLost: number;
+    cardEffect: string;
+    cardLevel: number;
+    attackPoints: number;
+    defencePoints: number;
     imgPath: any;
-    description: string;
-    monsterType: string;
-    attackPoints :number;
-    defencePoints :number;
+    description: any;
 }

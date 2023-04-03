@@ -24,8 +24,8 @@ namespace DAL.DesignPatterns.Factory
         {
 			switch (effectType)
 			{
-				case "lpchangeAdd":return this.Description = "This card restores " + pointsAddedLost + " life points to player who played this card";
-                case "lpchangeReduce": return Description = "This card reduces " + pointsAddedLost + " life points to your oponent";
+				case "lpchangeAdd": return this.Description = "This card restores " + pointsAddedLost + " life points to player who played this card.";
+                case "lpchangeReduce": return Description = "This card reduces " + pointsAddedLost + " life points from your opponent.";
 				default: throw new ArgumentException("Invalid type", "effectType");
 			}
 		}

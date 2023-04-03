@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Models
 {
-	public class MonsterCard:Card
+	public class MonsterCard : Card
 	{
 		public int NumberOfStars { get; set; }
 		public int AttackPoints { get; set; }
@@ -17,7 +17,8 @@ namespace DAL.Models
 		{
 		
 		}
-		public MonsterCard(string? cardName, string? imgPath, int numberOfStars, int attackPoints, int defencePoints,Effect effect,int cardTypeID):base(cardName,imgPath,cardTypeID,effect)
+		public MonsterCard(string? cardName, string? imgPath, int numberOfStars, int attackPoints, int defencePoints, Effect effect, int cardTypeID)
+		: base(cardName, imgPath, cardTypeID, effect)
 		{
 			NumberOfStars = numberOfStars;
 			AttackPoints = attackPoints;

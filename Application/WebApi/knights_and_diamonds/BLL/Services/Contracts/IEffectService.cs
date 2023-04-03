@@ -10,5 +10,6 @@ namespace BLL.Services.Contracts
 	public interface IEffectService
 	{
 		Task<IList<EffectType>> GetEffectTypes();
-	}
+		Task<EffectType> GetEffectTypeByID(int effectTypeID);
+    }
 }

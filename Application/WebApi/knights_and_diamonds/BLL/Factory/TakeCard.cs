@@ -29,8 +29,8 @@ namespace DAL.DesignPatterns.Factory
 
 			switch (effectType)
 			{
-				case "takeCardFromEnemiesHand": return this.Description = "This card takes " + numOFCardAffected.ToString() + " " + Plural + " from enemies hand";
-				case "takeCardFromEnemiesField": return this.Description = "This card takes " + numOFCardAffected.ToString() + " " + Plural + " from enemies field";
+				case "takeCardFromEnemiesHand": return this.Description = "This card takes " + numOFCardAffected.ToString() + " " + Plural + " from enemies hand.";
+				case "takeCardFromEnemiesField": return this.Description = "This card takes " + numOFCardAffected.ToString() + " " + Plural + " from enemies field.";
 
 				default: throw new ArgumentException("Invalid type", effectType);
 			}

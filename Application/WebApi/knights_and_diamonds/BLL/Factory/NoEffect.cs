@@ -20,7 +20,7 @@ namespace BLL.Factory
 		}
 		public string SetDescription()
 		{
-			return this.Description = "This card has no Effect";
+			return this.Description = "This card has no effect.";
 		}
 		public string GetDescription()
 		{

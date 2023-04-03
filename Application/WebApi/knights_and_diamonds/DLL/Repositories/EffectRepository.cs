@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
-	public class EffectRepository:Repository<Effect>,IEffectRepository
+	public class EffectRepository : Repository<Effect>, IEffectRepository
 	{
 		public EffectRepository(KnightsAndDiamondsContext context) : base(context)
 		{
@@ -27,18 +27,22 @@ namespace DAL.Repositories
 			this.Context.Effects.Add(effect);
 			return effect;
 		}
+
 		public async Task<Effect> GetEffectByDescription(string description)
 		{
-			return await this.Context.Effects.Where(x=>x.Description==description).FirstOrDefaultAsync();
+			return await this.Context.Effects.Where(x => x.Description == description).FirstOrDefaultAsync();
 		}
-		public async Task<EffectType> GetEffectType(int EffectTypeID)
+
+		public async Task<EffectType> GetEffectType(int effectTypeID)
 		{
-			return await this.Context.EffectTypes.FindAsync(EffectTypeID);
+			return await this.Context.EffectTypes.FindAsync(effectTypeID);
 		}
 
 		public async Task<IList<EffectType>> GetEffectTypes()
 		{
 			return await this.Context.EffectTypes.ToListAsync();
 		}
+
+
 	}
 }

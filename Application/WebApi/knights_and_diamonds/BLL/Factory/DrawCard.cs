@@ -23,7 +23,7 @@ namespace DAL.DesignPatterns.Factory
         }
         public void SetDescription(int numberOfCardsToDraw)
         {
-            this.Description = "Draw " + numberOfCardsToDraw.ToString() + " card from your deck.";
+            this.Description = "Draw " + numberOfCardsToDraw.ToString() + " card(s) from your deck.";
         }
 
         public string GetDescription()

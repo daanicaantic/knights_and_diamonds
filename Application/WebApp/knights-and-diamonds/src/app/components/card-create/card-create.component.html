@@ -1,4 +1,71 @@
-
+<div class="card-create-container">
+    <div class="card-container">
+        <app-card [card]="card"></app-card>
+    </div>
+    <div class="form-container">
+        <div class="form-layout">
+            <div class="form card-view" [formGroup]="form">
+                <div class="header">
+                    <h2>Card Generator</h2>
+                </div>
+                <div>
+                    <div class="small-container">
+                        <span class="form-field">
+                            <small>Card Name</small>
+                            <input class="data-field" formControlName="cardName" placeholder="Card name" type="text" pInputText (input)="onCardNameChange()" />
+                        </span>
+                        <span class="form-field">
+                            <small>Card Type</small>
+                            <p-dropdown class="data-field" formControlName="cardTypeID" [options]="cardTypes" optionValue="id" optionLabel="type" (onChange)="onCardTypeChange()"></p-dropdown>
+                        </span>
+                    </div>
+                    <div class="small-container">
+                        <span class="form-field">
+                            <small>Card Effect</small>
+                            <p-dropdown class="data-field" formControlName="effectTypeID" [options]="cardEffects" optionValue="id" optionLabel="type" (onChange)="onCardEffectChange()"></p-dropdown>
+                        </span>
+                        <span class="form-field">
+                            <small>Card Level</small>
+                            <input class="data-field" [readonly]="isSpellOrTrapCard" formControlName="cardLevel" placeholder="Card level" type="number" [min]="0" [max]="7" [maxlength]="1" pInputText (input)="onCardLevelChange()" />
+                        </span>
+                    </div>
+                    <div class="small-container">
+                        <span class="form-field">
+                            <small>Number of cards affected</small>
+                            <input class="data-field" [readonly]="isEffectNone" formControlName="numOfCardsAffected" placeholder="Cards affected" type="number" [min]="0" [max]="5" [maxlength]="2" pInputText (input)="onCardsAffectedChange()" />
+                        </span>
+                        <span class="form-field">
+                            <small>Points added/lost</small>
+                            <input class="data-field" [readonly]="isEffectNone" formControlName="pointsAddedLost" placeholder="Points added/lost" type="number" [min]="0" [max]="999" [maxlength]="3" pInputText (input)="onPointsAddedLostChange()" />
+                        </span>
+                    </div>
+                    <div class="small-container">
+                        <span class="form-field">
+                            <small>ATK</small>
+                            <input class="data-field" [readonly]="isSpellOrTrapCard" formControlName="attackPoints" placeholder='Attack' type="number" [min]="0" [max]="999" [maxlength]="3" pInputText (input)="onAttackChange()" />
+                        </span>
+                        <span class="form-field">
+                            <small>DEF</small>
+                            <input class="data-field" [readonly]="isSpellOrTrapCard" formControlName="defencePoints" placeholder='Defence' type="number" [min]="0" [max]="999" [maxlength]="3" pInputText (input)="onDefenceChange()" />
+                        </span>
+                    </div>
+                    <div class="small-container">
+                        <span class="form-field">
+                            <small>Image</small>
+                            <label class="input-file">
+                                <app-upload-file (onUploadFinished)="uploadFinished($event)"></app-upload-file>
+                            </label>
+                        </span>
+                        <span class="form-field button-span">
+                            <button pButton label="Click" class="p-button-secondary" [disabled]="!form.valid" (click)="handleClick()"></button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 
 <div class="card-creator" >
     <div class="card-container">
         <app-card [card]="card"></app-card>
@@ -8,15 +75,15 @@
             <div class="form card-view" [formGroup]="form">
                 <span class="form_field">
                     <small>Card Name</small>
-                    <input class="dataField" formControlName="cardName" placeholder='Card Name' type="text" pInputText (input)="onCardNameChange()"  />
+                    <input class="data-field" formControlName="cardName" placeholder='Card Name' type="text" pInputText (input)="onCardNameChange()"  />
                 </span>
                 <span class="form_field">
                     <small>Card Type</small>
-                    <p-dropdown class="dataField" formControlName="cardTypeID" [options]="cardTypes" optionValue="id" optionLabel="type" (onChange)="onCardTypeChange()" [style]="{'minWidth':'100%'}"></p-dropdown>
+                    <p-dropdown class="data-field" formControlName="cardTypeID" [options]="cardTypes" optionValue="id" optionLabel="type" (onChange)="onCardTypeChange()" [style]="{'minWidth':'100%'}"></p-dropdown>
                 </span>
                 <span class="form_field">
                     <small>Card Description</small>
-                    <input class="dataField" formControlName="description" placeholder='Card Description' type="text" pInputText (input)="onDescriptionChange()"  />
+                    <input class="data-field" formControlName="description" placeholder='Card Description' type="text" pInputText (input)="onDescriptionChange()"  />
                 </span>
 
                 <span class="form_field form_field3">
@@ -30,24 +97,24 @@
             <div class="form" [formGroup]="form" >
                 <span class="form_field">
                     <small>Card Element</small>
-                    <p-dropdown class="dataField" formControlName="elementTypeID" [options]="elementTypes" optionValue="id" optionLabel="type" (onChange)="onElementTypeChange()" [style]="{'minWidth':'100%'}"></p-dropdown>
+                    <p-dropdown class="data-field" formControlName="elementTypeID" [options]="elementTypes" optionValue="id" optionLabel="type" (onChange)="onElementTypeChange()" [style]="{'minWidth':'100%'}"></p-dropdown>
                 </span>
                 <span class="form_field">
                     <small>Card Level</small>
-                    <input class="dataField" formControlName="numberOfStars" placeholder="Card Level" type="number" [min]="0" [max]="11" [maxlength]="2" pInputText (input)="onLevelChange()"  />
+                    <input class="data-field" formControlName="numberOfStars" placeholder="Card Level" type="number" [min]="0" [max]="11" [maxlength]="2" pInputText (input)="onLevelChange()"  />
                 </span>
                 <span class="form_field">
                     <small>Monster Type</small>
-                    <p-dropdown class="dataField" formControlName="monsterTypeID" [options]="monsterTypes" optionValue="id" optionLabel="type" (onChange)="onChangeMonsterType()" [style]="{'minWidth':'100%'}"></p-dropdown>
+                    <p-dropdown class="data-field" formControlName="monsterTypeID" [options]="monsterTypes" optionValue="id" optionLabel="type" (onChange)="onChangeMonsterType()" [style]="{'minWidth':'100%'}"></p-dropdown>
                 </span>
                 <span class="atkdefspan">
                     <div class="atkdefcontainer" >
                         <small>ATK</small>
-                        <input class="smallDataField" formControlName="attackPoints" placeholder='Attack' type="number" [min]="0" [max]="9999" [maxlength]="4" pInputText (input)="onAttackChange()"  />
+                        <input class="smalldata-field" formControlName="attackPoints" placeholder='Attack' type="number" [min]="0" [max]="9999" [maxlength]="4" pInputText (input)="onAttackChange()"  />
                     </div>
                     <div class="atkdefcontainer">
                         <small>DEF</small>
-                        <input class="smallDataField" formControlName="defencePoints" placeholder='Defence' type="number" [min]="0" [max]="9999" [maxlength]="4" pInputText (input)="onDefenceChange()"  />
+                        <input class="smalldata-field" formControlName="defencePoints" placeholder='Defence' type="number" [min]="0" [max]="9999" [maxlength]="4" pInputText (input)="onDefenceChange()"  />
                     </div>
                 </span>
             </div>
@@ -58,7 +125,7 @@
             </span>
         </div>
     </div>
-</div>
+</div> -->
 
 <!-- <body>
     <div class="main-container">
@@ -69,19 +136,19 @@
             <div class="form-container" [formGroup]="form">
                 <span class="form_field">
                     <small>Card Name</small>
-                    <input class="dataField" formControlName="cardName" placeholder='Card Name' type="text" pInputText (input)="onCardNameChange()"  />
+                    <input class="data-field" formControlName="cardName" placeholder='Card Name' type="text" pInputText (input)="onCardNameChange()"  />
                 </span>
                 <span class="form_field">
                     <small>Card Level</small>
-                    <input class="dataField" formControlName="numberOfStars" placeholder="Card Level" type="number" [min]="0" [max]="11" [maxlength]="2" pInputText (input)="onLevelChange()"  />
+                    <input class="data-field" formControlName="numberOfStars" placeholder="Card Level" type="number" [min]="0" [max]="11" [maxlength]="2" pInputText (input)="onLevelChange()"  />
                 </span>
                 <div class="form_field" >
                     <small>ATK</small>
-                    <input class="smallDataField" formControlName="attackPoints" placeholder='Attack' type="number" [min]="0" [max]="9999" [maxlength]="4" pInputText (input)="onAttackChange()"  />
+                    <input class="smalldata-field" formControlName="attackPoints" placeholder='Attack' type="number" [min]="0" [max]="9999" [maxlength]="4" pInputText (input)="onAttackChange()"  />
                 </div>
                 <div class="form_field">
                     <small>DEF</small>
-                    <input class="smallDataField" formControlName="defencePoints" placeholder='Defence' type="number" [min]="0" [max]="9999" [maxlength]="4" pInputText (input)="onDefenceChange()"  />
+                    <input class="smalldata-field" formControlName="defencePoints" placeholder='Defence' type="number" [min]="0" [max]="9999" [maxlength]="4" pInputText (input)="onDefenceChange()"  />
                 </div>
             </div>
         </div>

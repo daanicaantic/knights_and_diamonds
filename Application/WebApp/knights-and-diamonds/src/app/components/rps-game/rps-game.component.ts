@@ -76,10 +76,10 @@ export class RpsGameComponent implements OnInit, OnDestroy {
     this.rpsGameService.playRPSMove(this.playerID, move).subscribe({
       next: (res: any) => {
         this.filterOptions(move,this.options);
-        this.messageService.add({ key: 'br', severity: 'success', summary: 'Success', detail: 'You choose '+move});
+        this.messageService.add({ key: 'br', severity: 'success', summary: 'Success', detail: 'You choose '+ move});
       },
       error: err => {
-        this.messageService.add({ key: 'br', severity: 'error', summary: 'Neuspešno', detail: err.error });
+        this.messageService.add({ key: 'br', severity: 'error', summary: 'Error', detail: err.error });
       }
     });
   }

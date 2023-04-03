@@ -1,127 +1,3 @@
-/*.card,.monster_card,.spell_card,.trap_card
-{
-    width: 320px;
-    height: 520px;
-    padding: 10px;
-    border: 3px solid black;
-}
-.monster_card
-{
-    background-color: #e28743;
-    box-shadow: 20px 20px 50px 10px #8b5023 inset;
-}
-.trap_card
-{
-    background-color: #9e0b79;
-    box-shadow: 20px 20px 50px 10px #fc00bd inset;
-}
-.spell_card
-{
-    background-color: #60d48d;
-    box-shadow: 20px 20px 50px 10px #379b5d inset;
-}
-.card-header,.trap_header,.spell_header,.monster_header
-{
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    height: 50px;
-    padding: 3px;
-}
-.trap_header
-{
-    box-shadow:3px 3px 2px 2px #4d093c;
-    border: 2px rgb(100, 9, 81) solid;
-}
-.monster_header
-{
-    box-shadow:3px 3px 2px 2px rgb(77, 42, 17);
-}
-.spell_header
-{
-    box-shadow:3px 3px 2px 2px  #2c9152;
-}
-.card-name-container
-{
-    width: 250px;
-    height: 50px;
-    margin-right: 10px;
-    margin-left: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-overflow: ellipsis;
-    overflow: hidden;
-}
-.card-type
-{
-    height: 42px;
-    width: 42px;
-}
-.card-rating
-{
-    display: flex;
-    justify-content: flex-end;
-    margin: 5px;
-    margin-top: 10px;
-    height: 18px;
-}
-.photo-container,.monster_photo,.spell_photo,.trap_photo
-{
-    width: 260px;
-    height: 260px;
-}
-.monster_photo,.monster_description,.monster_header
-{
-    border: 2px solid #873e23;
-}
-.spell_photo,.spell_description,.spell_header
-{
-    border: 2px solid #25663e;
-}
-
-.picture{
-    width: 100%;
-    height: 100%;
-} 
-.main-container
-{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.description{
-    text-overflow: ellipsis;
-    overflow: hidden;
-    word-wrap:break-word;
-}
-.card-description-cotainer,.monster_description,.spell_description,.trap_description
-{
-    width: 100%;
-    height: 150px;
-    margin-top: 5px;
-    padding: 3px;
-    display: flex;
-    flex-direction: column;
-
-}
-.trap_photo,.trap_description,.trap_header
-{
-    border: 2px rgb(100, 9, 81) solid;
-}
-.points-container
-{
-    width: 100%;
-    border-top: 2px solid #873e23;
-    display: flex;
-    justify-content: flex-end;
-}
-.description
-{
-    flex-grow: 8;
-} */
-
 * {
     font-family: 'Roboto', sans-serif;
     color: white;
@@ -153,21 +29,30 @@ h3 {
 .img {
     width: 100%;
     height: 100%;
-    background-image: url("https://localhost:7250/Resources/Images/card-front-cropped.png");
     background-size: 100% 100%;
     position: absolute;
+}
 
+.imgMonsterCard {
+    background-image: url("https://localhost:7250/Resources/Images/card-front-cropped.png");
+}
+
+.imgTrapCard {
+    background-image: url("https://localhost:7250/Resources/Images/trap-front.png");
+}
+
+.imgSpellCard {
+    background-image: url("https://localhost:7250/Resources/Images/spell-front.png");
 }
 
 .picture {
     width: 70%;
     height: 50%;
     margin-top: 6%;
-    background-image: url("https://localhost:7250/Resources/Images/wizard.png");
     background-size: 100% 100%;
 }
 
-.number-of-stars,
+.card-level,
 .attact-points,
 .defence-points {
     width: 25%;
@@ -176,6 +61,7 @@ h3 {
     justify-content: center;
     align-items: center;
     color: white;
+    overflow: hidden;
 }
 
 .attact-points {

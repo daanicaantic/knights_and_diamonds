@@ -19,6 +19,7 @@ namespace DAL.Models
 		public int? EffectID { get; set; }
 		[JsonIgnore]
 		public Effect? Effect { get; set; }
+		public string Discriminator { get; set; }
 		public int CardTypeID { get; set; }
 		[JsonIgnore]
 		public CardType? CardType { get; set; }
