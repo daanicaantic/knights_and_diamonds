@@ -10,5 +10,7 @@ namespace DAL.Repositories.Contracts
 	public interface IRPSGameRepository : IRepository<RockPaperScissorsGame>
 	{
         Task<RockPaperScissorsGame> GetGameWithPlayers(int gameID);
-    }
+		Task<int> GetRpsGameWinner(int rpsGameID);
+
+	}
 }

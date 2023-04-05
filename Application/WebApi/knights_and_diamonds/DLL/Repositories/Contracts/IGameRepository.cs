@@ -9,5 +9,8 @@ namespace DAL.Repositories.Contracts
 {
     public interface IGameRepository : IRepository<Game>
     {
-    }
+		Task<Game> GetGameWithPlayers(int gameID);
+		Task<Game> GetGameWithTurns(int gameID);
+
+	}
 }

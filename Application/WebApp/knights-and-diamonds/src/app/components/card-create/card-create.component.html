@@ -16,7 +16,7 @@
                         </span>
                         <span class="form-field">
                             <small>Card Type</small>
-                            <p-dropdown class="data-field" formControlName="cardTypeID" [options]="cardTypes" optionValue="id" optionLabel="type" (onChange)="onCardTypeChange()"></p-dropdown>
+                            <p-dropdown class="data-field" formControlName="cardTypeID" [options]="cardTypes"  optionValue="id" optionLabel="type" (onChange)="onCardTypeChange()"></p-dropdown>
                         </span>
                     </div>
                     <div class="small-container">
@@ -65,92 +65,3 @@
         </div>
     </div>
 </div>
-<!-- 
-<div class="card-creator" >
-    <div class="card-container">
-        <app-card [card]="card"></app-card>
-    </div>
-    <div class="form-layout">
-        <div class="form-container">
-            <div class="form card-view" [formGroup]="form">
-                <span class="form_field">
-                    <small>Card Name</small>
-                    <input class="data-field" formControlName="cardName" placeholder='Card Name' type="text" pInputText (input)="onCardNameChange()"  />
-                </span>
-                <span class="form_field">
-                    <small>Card Type</small>
-                    <p-dropdown class="data-field" formControlName="cardTypeID" [options]="cardTypes" optionValue="id" optionLabel="type" (onChange)="onCardTypeChange()" [style]="{'minWidth':'100%'}"></p-dropdown>
-                </span>
-                <span class="form_field">
-                    <small>Card Description</small>
-                    <input class="data-field" formControlName="description" placeholder='Card Description' type="text" pInputText (input)="onDescriptionChange()"  />
-                </span>
-
-                <span class="form_field form_field3">
-                    <small>Card Photo</small>
-                    <label class="inputfile" >
-                        <app-upload-file (onUploadFinished)="uploadFinished($event)"></app-upload-file>
-                    </label>
-                </span>
-
-            </div>
-            <div class="form" [formGroup]="form" >
-                <span class="form_field">
-                    <small>Card Element</small>
-                    <p-dropdown class="data-field" formControlName="elementTypeID" [options]="elementTypes" optionValue="id" optionLabel="type" (onChange)="onElementTypeChange()" [style]="{'minWidth':'100%'}"></p-dropdown>
-                </span>
-                <span class="form_field">
-                    <small>Card Level</small>
-                    <input class="data-field" formControlName="numberOfStars" placeholder="Card Level" type="number" [min]="0" [max]="11" [maxlength]="2" pInputText (input)="onLevelChange()"  />
-                </span>
-                <span class="form_field">
-                    <small>Monster Type</small>
-                    <p-dropdown class="data-field" formControlName="monsterTypeID" [options]="monsterTypes" optionValue="id" optionLabel="type" (onChange)="onChangeMonsterType()" [style]="{'minWidth':'100%'}"></p-dropdown>
-                </span>
-                <span class="atkdefspan">
-                    <div class="atkdefcontainer" >
-                        <small>ATK</small>
-                        <input class="smalldata-field" formControlName="attackPoints" placeholder='Attack' type="number" [min]="0" [max]="9999" [maxlength]="4" pInputText (input)="onAttackChange()"  />
-                    </div>
-                    <div class="atkdefcontainer">
-                        <small>DEF</small>
-                        <input class="smalldata-field" formControlName="defencePoints" placeholder='Defence' type="number" [min]="0" [max]="9999" [maxlength]="4" pInputText (input)="onDefenceChange()"  />
-                    </div>
-                </span>
-            </div>
-        </div>
-        <div>
-            <span class="buttonspan">
-                <button pButton label="Click" class="p-button-secondary" [disabled]="!form.valid" (click)="handleClick()"></button>
-            </span>
-        </div>
-    </div>
-</div> -->
-
-<!-- <body>
-    <div class="main-container">
-        <div class="card-creator">
-            <div class="card-container">
-                <app-card [card]="card"></app-card>
-            </div>
-            <div class="form-container" [formGroup]="form">
-                <span class="form_field">
-                    <small>Card Name</small>
-                    <input class="data-field" formControlName="cardName" placeholder='Card Name' type="text" pInputText (input)="onCardNameChange()"  />
-                </span>
-                <span class="form_field">
-                    <small>Card Level</small>
-                    <input class="data-field" formControlName="numberOfStars" placeholder="Card Level" type="number" [min]="0" [max]="11" [maxlength]="2" pInputText (input)="onLevelChange()"  />
-                </span>
-                <div class="form_field" >
-                    <small>ATK</small>
-                    <input class="smalldata-field" formControlName="attackPoints" placeholder='Attack' type="number" [min]="0" [max]="9999" [maxlength]="4" pInputText (input)="onAttackChange()"  />
-                </div>
-                <div class="form_field">
-                    <small>DEF</small>
-                    <input class="smalldata-field" formControlName="defencePoints" placeholder='Defence' type="number" [min]="0" [max]="9999" [maxlength]="4" pInputText (input)="onDefenceChange()"  />
-                </div>
-            </div>
-        </div>
-    </div>
-</body> -->

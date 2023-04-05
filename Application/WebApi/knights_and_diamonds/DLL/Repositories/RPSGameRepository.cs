@@ -27,5 +27,10 @@ namespace DAL.Repositories
 			var game = await this.Context.RockPaperScissorsGames.Include(x => x.Players).Where(x => x.ID == gameID).FirstOrDefaultAsync();
 			return game;
 		}
+		public async Task<int> GetRpsGameWinner(int rpsGameID)
+		{
+			var game = await this.Context.RockPaperScissorsGames.FindAsync(rpsGameID);
+			return game.Winner;
+		}
 	}
 }

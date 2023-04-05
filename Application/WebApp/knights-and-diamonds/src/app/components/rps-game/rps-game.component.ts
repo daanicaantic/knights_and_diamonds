@@ -34,6 +34,8 @@ export class RpsGameComponent implements OnInit, OnDestroy {
   enemiePlayerID:any;
   isLoadingOver=false;
   loadingType="rpsGame";
+  gameID:any;
+  winner:any;
   
 
 
@@ -52,12 +54,7 @@ export class RpsGameComponent implements OnInit, OnDestroy {
     this.setGameStatus();
     this.getRpsGame();
     this.progressValue = 0;
-    // this.getPlayer();
     this.getRPSWinner();
-    this.progressionFunction();
-
-    // this.timerFunction();
-    // this.progressionFunction();
 
   }
   getRpsGame(){
@@ -65,6 +62,8 @@ export class RpsGameComponent implements OnInit, OnDestroy {
       next: (res:any) => {
         this.playerID=res.playerID;
         this.enemiePlayerID=res.enemiePlayerID;
+        this.gameID=res.gameID;
+        console.log("resko reskovic",res)
       },
       error: err => {
         console.log(err)
@@ -114,38 +113,40 @@ export class RpsGameComponent implements OnInit, OnDestroy {
 
   getRPSWinner() {
     this.signalrService.hubConnection.on("GetRPSWinner", (winner: any) => {
+      this.winner=winner;
       this.getEnemiesMove();
-      this.generateMessage(winner)
+      this.generateMessage()
+      console.log(winner)
     });
   }
-  generateMessage(winner:any){
-    if(winner===this.playerID){
+  generateMessage(){
+
+    // console.log(winner)
+    this.loadingBar=0;
+
+    if(this.winner===this.playerID){
       this.message="You win"
       clearInterval(this.progress);
-      this.loadingBar=0;
       setTimeout(() => {
-        this.router.navigate(['/game']);
+        this.router.navigate(['/game',this.gameID]);
       }, 3000);
-
     }
-    else if(winner===this.enemiePlayerID){
+    else if(this.winner===this.enemiePlayerID){
       this.message="You lose"
       clearInterval(this.progress);
-      this.loadingBar=0; 
       setTimeout(() => {
-        this.router.navigate(['/game']);
+        this.router.navigate(['/game',this.gameID]);
       }, 3000);
-      
-
     }
-    else{
+    else if(this.winner==0){
+      console.log("W I N N E R ",this.winner)
       this.message="It is draw"
       this.enemiesOptions.forEach(element => {
         element.choosen=true;
       });
+      clearInterval(this.progress);
       this.progressionFunction();
     }
-
   }
 
    getEnemiesMove(){
@@ -178,6 +179,7 @@ export class RpsGameComponent implements OnInit, OnDestroy {
       }
       speed = 150;
     }, speed);
+    // clearInterval(this.progress);
   }
 
   setGameStatus(){

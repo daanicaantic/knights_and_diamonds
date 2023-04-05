@@ -12,9 +12,18 @@ namespace DAL.Models
     {
         [Key]
         public int ID { get; set; }
-        [JsonIgnore]
+		public int PlayerOnTurn { get; set; }
+		public int TurnNumber { get; set; }
+		[JsonIgnore]
         public List<Player>? Players { get; set; }
 		[JsonIgnore]
 		public List<Turn>? Turns { get; set; }
+
+        public void NewTurn(Turn turn)
+        {
+            this.Turns.Add(turn);
+            this.TurnNumber = turn.ID;
+        }
+
     }
 }

@@ -21,6 +21,10 @@ export class CardService {
     return this.httpClient.post(`https://localhost:7250/Card/AddCard`, card);
   }
 
+  getCards() {
+    return this.httpClient.get(`https://localhost:7250/Card/GetAllCards`);
+  }
+
   getCardTypes() {
     return this.httpClient.get(`https://localhost:7250/Types/GetCardTypes`);
   }

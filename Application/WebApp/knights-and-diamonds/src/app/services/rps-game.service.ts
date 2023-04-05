@@ -15,7 +15,8 @@ const httpOptions = {
 })
 export class RpsGameService {
 
-  constructor(private httpClient: HttpClient,
+  constructor(
+    private httpClient: HttpClient,
     private signalrService: SignalrService,
     private router: Router
   ) { }

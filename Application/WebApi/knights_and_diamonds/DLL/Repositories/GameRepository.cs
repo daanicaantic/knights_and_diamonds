@@ -20,5 +20,22 @@ namespace DAL.Repositories
         {
             get { return _context as KnightsAndDiamondsContext; }
         }
+		public async Task<Game> GetGameWithPlayers(int gameID)
+		{
+			var game = await this.Context.Games
+				.Include(x => x.Players)
+				.Where(x => x.ID == gameID)
+				.FirstOrDefaultAsync();
+			return game;
+		}
+
+		public async Task<Game> GetGameWithTurns(int gameID)
+        {
+            var game = await this.Context.Games
+                .Include(x => x.Turns)
+                .Where(x=>x.ID==gameID)
+                .FirstOrDefaultAsync();
+            return game;
+        }
     }
 }

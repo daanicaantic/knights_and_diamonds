@@ -21,7 +21,7 @@ namespace knights_and_diamonds.Controllers
             this._playerservice = new PlayerService(this.context);
         }
 
-        /*[Route("StartGame/{player1ID}/{player2ID}")]
+		/*[Route("StartGame/{player1ID}/{player2ID}")]
         [HttpPost]
         public async Task<IActionResult> StartGame(int player1ID, int player2ID)
         {
@@ -36,8 +36,23 @@ namespace knights_and_diamonds.Controllers
             }
         }*/
 
+		[Route("GetGame/{gameID}/{userID}")]
+		[HttpGet]
+		public async Task<IActionResult> GetGame(int gameID, int userID)
+		{
+			try
+			{
+				var game = await this._gameservice.GetGame(gameID, userID);
+				return Ok(game);
+
+			}
+			catch (Exception e)
+			{
+				return BadRequest(e.Message);
+			}
+		}
 
 
 
-    }
+	}
 }

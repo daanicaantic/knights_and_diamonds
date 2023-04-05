@@ -24,20 +24,25 @@ namespace SignalR.HubConfig
 
 		private readonly KnightsAndDiamondsContext context;
 		public IUserService _userService { get; set; }
+		public IPlayerService _playerService { get; set; }
 		public IConnectionService _connectionService { get; set; }
 		public IRPSGameService _rpsGameService { get; set; }
 		public ILoginService _loginService { get; set; }
+		public IGameService _gameService { get; set; }
+
 		public ConnectionsHub _connectedUsers { get; set; }
 
 		public MyHub(KnightsAndDiamondsContext context, IConfiguration config)
 		{
 			this.context = context;
 			this._config = config;
-			_userService = new UserService(this.context);
-			_connectionService = new ConnectionService(this.context);
-			_rpsGameService = new RPSGameService(this.context);
-			_loginService = new LoginService(this.context, this._config);
-			_connectedUsers = ConnectionsHub.GetInstance();
+			this._userService = new UserService(this.context);
+			this._connectionService = new ConnectionService(this.context);
+			this._rpsGameService = new RPSGameService(this.context);
+			this._loginService = new LoginService(this.context, this._config);
+			this._connectedUsers = ConnectionsHub.GetInstance();
+			this._gameService = new GameService(this.context);
+			this._playerService = new PlayerService(this.context);
 		}
 		public async Task askServer(string someTextForClient) 
 		{
@@ -127,6 +132,30 @@ namespace SignalR.HubConfig
                 }
             }
         }
+		/*---------------------------K-N-I-G-H-T-S-A-N-D-D-I-A-M-O-N-D-S----------------------------------------------*/
+
+		public async Task StartingDrawing(int gameID,int playerID)
+		{
+			var connections=await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
+			for(int i = 0; i < 5; i++)
+			{
+				var playerHand = await this._playerService.GetPlayersHand(playerID);
+				if (playerHand.Count < 6)
+				{
+					var card = await this._playerService.Draw(playerID);
+					foreach (var con in connections.MyConnections)
+					{
+						await Clients.Client(con).SendAsync("GetFirstCards", playerHand);
+					}
+					foreach (var con in connections.EnemiesConnections)
+					{
+						await Clients.Client(con).SendAsync("GetNumberOfCardsInHand", playerHand.Count);
+					}
+				}
+			
+			}
+		}
+
 
     }
 }

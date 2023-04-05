@@ -42,10 +42,11 @@ namespace DAL.Repositories
             return player;
         }
 
-		public async Task<Player> GetPlayersHandByPlayerID(int playerID)
+		public async Task<Player> GetPlayerWithHandAndDeckByID(int playerID)
 		{
 			var player = await this.Context.Players
 				.Include(x=>x.Deck)
+				.ThenInclude(x=>x.Card)
 				.Include(x => x.Hand)
 				.ThenInclude(x => x.CardsInHand)
 				.Where(p => p.ID == playerID)
@@ -58,6 +59,7 @@ namespace DAL.Repositories
 			var playerHand = await this.Context.Players
 				.Include(x => x.Hand)
 				.ThenInclude(x => x.CardsInHand)
+				.ThenInclude(x => x.Card)
 				.Where(p => p.ID == playerID)
 				.Select(x=>x.Hand)
 				.FirstOrDefaultAsync();

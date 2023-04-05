@@ -1,10 +1,10 @@
 import { Card } from "./card";
 export const card: Card = {
     cardName: " ",
-    cardType: "MonsterCard",
+    cardType: " ",
     numberOfCardsAffected: 0,
     pointsAddedLost: 0,
-    cardEffect: "draw",
+    cardEffectID: 1,
     cardLevel: 0,
     attackPoints: 0,
     defencePoints: 0,

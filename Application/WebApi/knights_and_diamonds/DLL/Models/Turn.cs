@@ -17,9 +17,7 @@ namespace DAL.Models
 		public bool BattlePhase { get; set; }
 		public bool EndPhase { get; set; }
 		public bool MonsterSummoned { get; set; }
-		public int TurnNumber { get; set; }
 		[JsonIgnore]
-		public int PlayerOnTurn { get; set; }
 		public Game? Game { get; set; }
 
 		public Turn()

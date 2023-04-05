@@ -48,7 +48,7 @@ const routes: Routes = [
     component: RpsGameComponent,
   },
   {
-    path: 'game',
+    path: 'game/:gameID',
     component: GameComponent,
   },
   {

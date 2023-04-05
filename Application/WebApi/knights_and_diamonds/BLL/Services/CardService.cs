@@ -149,9 +149,23 @@ namespace BLL.Services
 			return effect;
 		}
 
-        public async Task<List<Card>> GetAllCards()
+        public async Task<List<CardDisplayDTO>> GetAllCards()
         {
-           return await this.unitOfWork.Card.GetAllCards();
-        }
-    }
+			var cards = new List<CardDisplayDTO>();
+			var spellTrapCards=await this.unitOfWork.Card.GetSpellTrapCards();
+			var monsterCards = await this.unitOfWork.Card.GetMonsterCards();
+
+			foreach (var card in spellTrapCards)
+			{
+				var c = new CardDisplayDTO(card.ID,card.CardName,card.CardType.Type,card.Effect.NumOfCardsAffected,card.Effect.PointsAddedLost,card.EffectID,card.ImgPath,card.Effect.Description);
+				cards.Add(c);
+			}
+			foreach (var card in monsterCards)
+			{
+				var c = new CardDisplayDTO(card.ID,card.CardName, card.CardType.Type, card.Effect.NumOfCardsAffected, card.Effect.PointsAddedLost, card.EffectID,card.NumberOfStars,card.AttackPoints,card.DefencePoints, card.ImgPath, card.Effect.Description);
+				cards.Add(c);
+			}
+			return cards;
+		}
+	}
 }

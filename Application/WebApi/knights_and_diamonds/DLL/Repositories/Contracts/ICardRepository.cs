@@ -14,7 +14,11 @@ namespace DAL.Repositories.Contracts
 		public Task<MonsterCard> AddMonsterCard(MonsterCard card);
 		Task<CardType> GetCardType(int cardTypeID);
 		Task<Card> GetCardByName(string cardName);
-		Task<List<Card>> GetAllCards();
+		Task<List<Card>> GetSpellTrapCards();
+		Task<List<MonsterCard>> GetMonsterCards();
+		Task<Card> GetCard(int cardID);
+		Task<MonsterCard> GetMonsterCard(int cardID);
 
-    }
+
+	}
 }

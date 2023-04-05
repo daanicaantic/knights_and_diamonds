@@ -12,5 +12,11 @@ namespace DAL.Models
 		public int ID { get; set; }
 		[JsonIgnore]
 		public List<Player>? Players { get; set; }
+		public int Winner { get; set; }
+
+		public void SetRpsWinner(int winnerID)
+		{
+			this.Winner=winnerID;
+		}
 	}
 }

@@ -1,6 +1,6 @@
 <body>
-    <!-- <app-loadinscreen [loadingType]="loadingType"  *ngIf="isLoadingOver===false" (onTimerOverTask)="getTimer($event)"></app-loadinscreen> -->
-    <div class="background" *ngIf="isLoadingOver===false">
+    <app-loadinscreen [loadingType]="loadingType"  *ngIf="isLoadingOver===false" (onTimerOverTask)="getTimer($event)"></app-loadinscreen>
+    <div class="background" *ngIf="isLoadingOver===true">
     <div class="card-window">
         <div class="enemies-health">
             <h1>8 0 0 0</h1>
@@ -20,22 +20,7 @@
     </div>
     <div class="battle-window">
         <div class="enemies-hand">
-            <div class="card-back">
-                    <img src="https://localhost:7250/Resources/Images/card-back.png" alt="Name name name" class="picture">
-            </div>
-            <div class="card-back">
-                    <img src="https://localhost:7250/Resources/Images/card-back.png" alt="Name name name" class="picture">
-            </div>
-            <div class="card-back">
-                    <img src="https://localhost:7250/Resources/Images/card-back.png" alt="Name name name" class="picture">
-            </div>
-            <div class="card-back">
-                    <img src="https://localhost:7250/Resources/Images/card-back.png" alt="Name name name" class="picture">
-            </div>
-            <div class="card-back">
-                    <img src="https://localhost:7250/Resources/Images/card-back.png" alt="Name name name" class="picture">
-            </div>
-            <div class="card-back">
+            <div class="card-back" *ngFor="let num of numbers">
                     <img src="https://localhost:7250/Resources/Images/card-back.png" alt="Name name name" class="picture">
             </div>
         </div>
@@ -112,22 +97,7 @@
             </div>
         </div>
         <div class="players-hand">
-            <div class="medium-card">
-                <app-card [card]="card"></app-card>
-            </div>
-            <div class="medium-card">
-                <app-card [card]="card"></app-card>
-            </div>
-            <div class="medium-card">
-                <app-card [card]="card"></app-card>
-            </div>
-            <div class="medium-card">
-                <app-card [card]="card"></app-card>
-            </div>
-            <div class="medium-card">
-                <app-card [card]="card"></app-card>
-            </div>
-            <div class="medium-card">
+            <div class="medium-card" *ngFor="let card of playerHand">
                 <app-card [card]="card"></app-card>
             </div>
         </div>

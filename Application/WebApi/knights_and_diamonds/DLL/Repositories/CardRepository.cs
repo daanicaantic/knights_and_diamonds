@@ -5,9 +5,11 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Resources;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace DAL.Repositories
 {
@@ -58,10 +60,51 @@ namespace DAL.Repositories
 			return cardType;
 		}
 
-		public async Task<List<Card>> GetAllCards()
+		public async Task<List<Card>> GetSpellTrapCards()
 		{
-			var cards = await this.Context.Cards.Include(x => x.Effect).ToListAsync();
+			var cards = await this.Context.Cards
+				.Include(x => x.Effect)
+				.Include(x => x.CardType)
+				.Where(x=>x.Discriminator=="Card" && x.ImgPath.StartsWith("Resources/Images/"))
+				.ToListAsync();
 			return cards;
+		}
+		public async Task<List<MonsterCard>> GetMonsterCards()
+		{
+			var cards = await this.Context.MonsterCards
+				.Include(x => x.Effect)
+				.Include(x=>x.CardType)
+				.Where(x=>x.ImgPath.StartsWith("Resources/Images/"))
+				.ToListAsync();
+			return cards;
+		}
+
+		public async Task<MonsterCard> GetMonsterCard(int cardID)
+		{
+			var card = await this.Context.MonsterCards
+				.Include(x => x.Effect)
+				.Include(x => x.CardType)
+				.Where(x => x.ID==cardID)
+				.FirstOrDefaultAsync();
+			if (card == null)
+			{
+				throw new Exception("There is no card with this ID");
+			}
+			return card;
+		}
+
+		public async Task<Card> GetCard(int cardID)
+		{
+			var card = await this.Context.Cards
+				.Include(x => x.Effect)
+				.Include(x => x.CardType)
+				.Where(x => x.ID == cardID)
+				.FirstOrDefaultAsync();
+			if (card == null)
+			{
+				throw new Exception("There is no card with this ID");
+			}
+			return card;
 		}
 	}
 }

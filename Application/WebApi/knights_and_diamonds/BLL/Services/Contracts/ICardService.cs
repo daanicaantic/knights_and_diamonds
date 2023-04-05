@@ -17,6 +17,6 @@ namespace BLL.Services.Contracts
 		void UpdateCard(Card card);
 		IQueryable<Card> FindCardByName(string name);
 		string SplitType(string effectType);
-		Task<List<Card>> GetAllCards();
+		Task<List<CardDisplayDTO>> GetAllCards();
 	}
 }

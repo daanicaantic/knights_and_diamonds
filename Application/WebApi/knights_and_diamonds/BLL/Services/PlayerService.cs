@@ -1,5 +1,6 @@
 ﻿using BLL.Services.Contracts;
 using DAL.DataContext;
+using DAL.DTOs;
 using DAL.Models;
 using DAL.UnitOfWork;
 using System;
@@ -36,25 +37,45 @@ namespace BLL.Services
 			return player.Deck.Count();
         }
 
-        public async Task<Card> Draw(int playerID) 
+        public async Task<CardDisplayDTO> MapCard(CardInDeck cardInDeck)
         {
-            var player = await this._unitOfWork.Player.GetPlayersHandByPlayerID(playerID);
+            var mappedCard = new CardDisplayDTO();
+			if (cardInDeck.Card.Discriminator == "Card")
+			{
+				var card = await this._unitOfWork.Card.GetCard(cardInDeck.CardID);
+				mappedCard = new CardDisplayDTO(card.ID, card.CardName, card.CardType.Type, card.Effect.NumOfCardsAffected, card.Effect.PointsAddedLost, card.EffectID, card.ImgPath, card.Effect.Description);
+			}
+			else
+			{
+				var card = await this._unitOfWork.Card.GetMonsterCard(cardInDeck.CardID);
+				mappedCard = new CardDisplayDTO(card.ID, card.CardName, card.CardType.Type, card.Effect.NumOfCardsAffected, card.Effect.PointsAddedLost, card.EffectID, card.NumberOfStars, card.AttackPoints, card.DefencePoints, card.ImgPath, card.Effect.Description);
+			}
+            return mappedCard;
+		}
+        public async Task<CardDisplayDTO> Draw(int playerID) 
+        {
+            var mappedCard=new CardDisplayDTO();
+            var player = await this._unitOfWork.Player.GetPlayerWithHandAndDeckByID(playerID);
+            if (player == null)
+            {
+                throw new Exception("There is no Player with this ID"); 
+            }
             var cardFromDeck = player.Draw();
-            var card = await this._unitOfWork.Card.GetOne(cardFromDeck.CardID);
+			mappedCard = await this.MapCard(cardFromDeck);
             player.Deck.Remove(cardFromDeck);
             player.Hand.CardsInHand.Add(cardFromDeck);
             this._unitOfWork.Complete();
-            return card;
+            return mappedCard;
         }
 
-        public async Task<List<Card>> GetPlayersHand(int playerID) 
+        public async Task<List<CardDisplayDTO>> GetPlayersHand(int playerID) 
         {
-            List<Card> hand = new List<Card>();
+            List<CardDisplayDTO> hand = new List<CardDisplayDTO>();
             var playersHand = await this._unitOfWork.Player.GetPlayersHand(playerID);
             foreach (var card in playersHand.CardsInHand)
             {
-                var c = await this._unitOfWork.Card.GetOne(card.CardID);
-                hand.Add(c);
+                var mappedCard = await this.MapCard(card);
+                hand.Add(mappedCard);
             }
             return hand;
 		}

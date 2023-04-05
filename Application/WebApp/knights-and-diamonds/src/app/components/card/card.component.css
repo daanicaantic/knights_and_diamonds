@@ -15,7 +15,7 @@ h1,
 h2,
 h3 {
     color: white;
-    -webkit-text-stroke: 0.5px black;
+    /* -webkit-text-stroke: 0.5px black; */
 }
 
 .container {
@@ -96,5 +96,5 @@ h3 {
 
 h6 {
     color: white;
-    -webkit-text-stroke: 0.05px rgb(42, 42, 42);
+    /* -webkit-text-stroke: 0.05px rgb(42, 42, 42); */
 }

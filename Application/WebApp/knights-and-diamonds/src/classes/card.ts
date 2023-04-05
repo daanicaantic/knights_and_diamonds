@@ -4,7 +4,7 @@ export interface Card {
     cardType: string;
     numberOfCardsAffected: number;
     pointsAddedLost: number;
-    cardEffect: string;
+    cardEffectID: number;
     cardLevel: number;
     attackPoints: number;
     defencePoints: number;

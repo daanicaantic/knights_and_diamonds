@@ -176,18 +176,22 @@ namespace BLL.Services
         {
 			GameDTO game = new GameDTO();
 			var rpsGame = await this.unitOfWork.RPSGame.GetGameWithPlayers(gameID);
+			if (rpsGame == null)
+			{
+				throw new Exception("Wrong gameID");
+			}
 			foreach (var player in rpsGame.Players)
 			{
 				if (player.UserID == userID)
 				{
 					game.PlayerID = player.ID;
+					game.GameID = player.GameID;
 				}
 				else
 				{
 					game.EnemiePlayerID = player.ID;
 				}
 			}
-			game.GameID=rpsGame.ID;
 			return game;
 		}
 		public async Task PlayMove(int playerID, string moveName)
@@ -222,8 +226,9 @@ namespace BLL.Services
 		public async Task<int> CheckRPSWinner(int RPSgameID)
 		{
             var game = await this.unitOfWork.RPSGame.GetGameWithPlayers(RPSgameID);
-
 			List<Player> players = game.Players;
+			int winner=new();
+
 
 			if (game == null)
 			{
@@ -231,30 +236,30 @@ namespace BLL.Services
 			}
 
 			if (players[0].Play == players[1].Play)
-			{
+			{	
 				return 0;
 				//nereseno
 			}
 			else if (players[0].Play == null)
 			{
-				return players[1].ID;
+				winner = players[1].ID;
 				//izazvani je pobednik (player2)
 			}
 			else if (players[1].Play == null)
-			{ 
-				return players[0].ID;
+			{
+				winner = players[0].ID;
 				//izazivac je pobednik (player1)
             }
             else if (players[0].Play == Play.Rock)
 			{
 				if (players[1].Play == Play.Paper)
 				{
-                    return players[1].ID;
+                    winner= players[1].ID;
                     //izazvani je pobednik (player2)
                 }
                 else if (players[1].Play == Play.Scissors)
 				{
-                    return players[0].ID;
+                    winner= players[0].ID;
                     //izazivac je pobednik (player1)
                 }
                 else
@@ -266,12 +271,12 @@ namespace BLL.Services
 			{
 				if (players[1].Play == Play.Rock)
 				{
-                    return players[1].ID;
+                    winner= players[1].ID;
                     //izazvani je pobednik (player2)
                 }
                 else if (players[1].Play == Play.Paper)
 				{
-                    return players[0].ID;
+                    winner= players[0].ID;
                     //izazivac je pobednik (player1)
                 }
                 else
@@ -283,12 +288,12 @@ namespace BLL.Services
 			{
 				if (players[1].Play == Play.Scissors)
 				{
-                    return players[1].ID;
+                    winner= players[1].ID;
                     //izazvani je pobednik (player2)
                 }
                 else if (players[1].Play == Play.Rock)
 				{
-                    return players[0].ID;
+                    winner= players[0].ID;
                     //izazivac je pobednik (player1)
                 }
                 else
@@ -297,8 +302,12 @@ namespace BLL.Services
 				}
 			}
 
-			throw new Exception("Players moves are undefined");
+			game.Winner = winner;
+			this.unitOfWork.RPSGame.Update(game);
+			this.unitOfWork.Complete();
+			return winner;
         }
+
 
         public async Task<Player> GetPlayer(int gameID, int userID)
         {
