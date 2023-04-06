@@ -1,8 +1,11 @@
 <div class="container">
     <div class="card-layout">
-        <div class="big-card">
+        <div class="big-card" style="position: relative;">
             <!-- *ngFor="let card of cards" -->
-            <app-card [card]="card"></app-card>
+            <div class="big-card-text" style="position: absolute;">
+                <h2>Card display</h2>
+            </div>
+            <app-card [card]="bigCard"></app-card>
         </div>
         <div class="deck-stats">
             <div class="deck-data-row">
@@ -21,7 +24,9 @@
     </div>
     <div class="deck-container">
         <div class="cards-in-deck">
-
+            <div class="medium-card" *ngFor="let card of cardsInDeck">
+                <app-card [card]="card" (mouseover)="bigCard=card" (mouseout)="bigCard=undefined"></app-card>
+            </div>
         </div>
     </div>
     <div class="cards-and-search">
@@ -29,17 +34,17 @@
             <div class="form" [formGroup]="form">
                 <div class="small-container">
                     <span class="form-field">
-                        <p-dropdown class="data-field" formControlName="cardTypeID" [options]="cardTypes"  optionValue="id" optionLabel="type" (onChange)="onCardTypeChange()"></p-dropdown>
+                        <p-dropdown class="data-field" formControlName="cardTypeID" [options]="cardTypes" [(ngModel)]="startingvalue" optionValue="id" optionLabel="type" (onChange)="onCardTypeChange()"></p-dropdown>
                     </span>
                     <span class="form-field">
-                        <input class="data-field" formControlName="cardName" placeholder="Card name" type="text" pInputText (input)="onCardNameChange()" />
+                        <input class="data-field" formControlName="cardName" placeholder="Card name" type="text" pInputText  />
                     </span>
                 </div>
             </div>
         </div>
         <div class="cards-container">
             <div class="mini-card" *ngFor="let card of cards">
-                <app-card [card]="card"></app-card>
+                <app-card [card]="card" (mouseover)="bigCard=card" (mouseout)="bigCard=undefined"></app-card>
             </div>
         </div>
     </div>

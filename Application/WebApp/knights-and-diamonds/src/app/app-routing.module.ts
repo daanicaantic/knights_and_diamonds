@@ -13,6 +13,7 @@ import { UserProfileComponent } from './components/user-profile/user-profile.com
 import { Error404Component } from './components/error404/error404.component';
 import { WelcomePageComponent } from './components/welcome-page/welcome-page.component';
 import { LoadinscreenComponent } from './components/loadinscreen/loadinscreen.component';
+import { DeckCreateComponent } from './components/deck-create/deck-create.component';
 
 const routes: Routes = [
   {
@@ -54,6 +55,10 @@ const routes: Routes = [
   {
     path:'loading',
     component : LoadinscreenComponent,
+  },
+  {
+    path:'deck-create/:userID',
+    component : DeckCreateComponent,
   },
   {
     path: '',

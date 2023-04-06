@@ -37,6 +37,7 @@ namespace knights_and_diamonds.Controllers
                 return BadRequest(e.Message);
             }
         }
+
         [Route("AddCardToDeck")]
         [HttpPost]
         public async Task<IActionResult> AddCardToDeck(int cardID,int deckID)
@@ -52,9 +53,9 @@ namespace knights_and_diamonds.Controllers
             }
         }
 
-		[Route("GetDeck")]
+		[Route("GetDeck/{userID}")]
         [HttpGet]
-        public async Task<IActionResult> GetDeck(int deckID, int userID)
+        public async Task<IActionResult> GetDeck(int userID)
         {
             try
             {
@@ -62,12 +63,12 @@ namespace knights_and_diamonds.Controllers
                 {
                     return BadRequest("ID must be bigger than 0");
                 }
-                var c = await this._deckService.GetCards(deckID, userID);
+                var c = await this._deckService.GetCardsFromDeck(userID);
                 return new JsonResult(c);
             }
             catch (Exception e)
             {
-                return BadRequest(e);
+                return BadRequest(e.Message);
             }
 		}
     }

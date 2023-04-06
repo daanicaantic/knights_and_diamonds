@@ -15,6 +15,5 @@ namespace BLL.Services.Contracts
 		Task<List<CardDisplayDTO>> GetPlayersHand(int playerID);
 		Task<int> GetNumberOfCardsInDeck(int playerID);
 		Task<CardDisplayDTO> Draw(int playerID);
-
 	}
 }

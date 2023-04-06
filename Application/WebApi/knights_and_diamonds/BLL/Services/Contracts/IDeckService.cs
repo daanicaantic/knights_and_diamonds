@@ -1,4 +1,5 @@
-﻿using DAL.Models;
+﻿using DAL.DTOs;
+using DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,6 @@ namespace BLL.Services.Contracts
     {
         Task<Deck> AddDeck(Deck deck);
         Task AddCardToDeck(int cardID, int deckID);
-		public Task<List<CardInDeck>> GetCards(int deckID, int userID);
+		public Task<List<CardDisplayDTO>> GetCardsFromDeck(int userID);
 	}
 }

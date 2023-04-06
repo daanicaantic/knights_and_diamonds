@@ -155,5 +155,21 @@ namespace BLL.Services
 			}
 			return cards;
 		}
-	}
+
+        public async Task<CardDisplayDTO> MapCard(CardInDeck cardInDeck)
+        {
+            var mappedCard = new CardDisplayDTO();
+            if (cardInDeck.Card.Discriminator == "Card")
+            {
+                var card = await this.unitOfWork.Card.GetCard(cardInDeck.CardID);
+                mappedCard = new CardDisplayDTO(card.ID, card.CardName, card.CardType.Type, card.Effect.NumOfCardsAffected, card.Effect.PointsAddedLost, card.EffectID, card.ImgPath, card.Effect.Description);
+            }
+            else
+            {
+                var card = await this.unitOfWork.Card.GetMonsterCard(cardInDeck.CardID);
+                mappedCard = new CardDisplayDTO(card.ID, card.CardName, card.CardType.Type, card.Effect.NumOfCardsAffected, card.Effect.PointsAddedLost, card.EffectID, card.NumberOfStars, card.AttackPoints, card.DefencePoints, card.ImgPath, card.Effect.Description);
+            }
+            return mappedCard;
+        }
+    }
 }

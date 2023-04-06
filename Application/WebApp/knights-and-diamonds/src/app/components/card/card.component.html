@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" *ngIf="card != undefined">
     <div class="img img{{card.cardType}}">
         <div class="card-level" *ngIf="card.cardType=='MonsterCard'">
             <h1>{{card.cardLevel}}</h1>

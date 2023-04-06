@@ -17,5 +17,7 @@ namespace BLL.Services.Contracts
 		IQueryable<Card> FindCardByName(string name);
 		string SplitType(string effectType);
 		Task<List<CardDisplayDTO>> GetAllCards();
-	}
+		Task<CardDisplayDTO> MapCard(CardInDeck cardInDeck);
+
+    }
 }

@@ -31,6 +31,7 @@ namespace DAL.Repositories
             await this.Context.AddAsync(deck);
             return deck;
         }
+
         public async Task<List<CardInDeck>> GetCardsFromDeck(int deckID, int userID)
         {
             var deck = await Context.CardInDecks.Where(x => x.Deck.ID == deckID && x.Deck.UserID == userID)
