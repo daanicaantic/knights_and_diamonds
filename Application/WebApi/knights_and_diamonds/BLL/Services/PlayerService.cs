@@ -54,7 +54,7 @@ namespace BLL.Services
 		}
         public async Task<CardDisplayDTO> Draw(int playerID) 
         {
-            var mappedCard=new CardDisplayDTO();
+            var mappedCard = new CardDisplayDTO();
             var player = await this._unitOfWork.Player.GetPlayerWithHandAndDeckByID(playerID);
             if (player == null)
             {
@@ -64,7 +64,7 @@ namespace BLL.Services
 			mappedCard = await this.MapCard(cardFromDeck);
             player.Deck.Remove(cardFromDeck);
             player.Hand.CardsInHand.Add(cardFromDeck);
-            this._unitOfWork.Complete();
+            await this._unitOfWork.Complete();
             return mappedCard;
         }
 

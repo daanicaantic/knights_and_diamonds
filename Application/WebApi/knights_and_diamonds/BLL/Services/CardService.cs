@@ -33,7 +33,7 @@ namespace BLL.Services
 
 		public async Task AddCard(CardDTO card)
 		{
-		/*	var doesCardExists = await this.unitOfWork.Card.GetCardByName(card.CardName);
+			/*	var doesCardExists = await this.unitOfWork.Card.GetCardByName(card.CardName);
 			if (doesCardExists != null)
 			{
 				throw new Exception("Card with this name already exists");
@@ -66,8 +66,9 @@ namespace BLL.Services
 				Card c = new Card(card.CardName, card.ImgPath, card.CardTypeID, effect);
 				await this.unitOfWork.Card.AddCard(c);
 			}
-			this.unitOfWork.Complete();
+			await this.unitOfWork.Complete();
 		}
+
 		public async Task<Card> GetCard(int id)
 		{
 			try
@@ -80,37 +81,24 @@ namespace BLL.Services
 			}
 		}
 
-		public async Task<MonsterCard> AddMonsterCard(MonsterCard card)
-		{
-			try
-			{
-				var c = await this.unitOfWork.Card.AddMonsterCard(card);
-				this.unitOfWork.Complete();
-				return c;
-			}
-			catch (Exception e)
-			{
-				throw e;
-			}
-		}
-		public void RemoveCard(Card card)
+		public async Task RemoveCard(Card card)
 		{
 			try
 			{
 				this.unitOfWork.Card.Delete(card);
-				this.unitOfWork.Complete();
+				await this.unitOfWork.Complete();
 			}
 			catch
 			{
 				throw;
 			}
 		}
-		public void UpdateCard(Card card)
+		public async Task UpdateCard(Card card)
 		{
 			try
 			{
 				this.unitOfWork.Card.Update(card);
-				this.unitOfWork.Complete();
+				await this.unitOfWork.Complete();
 			}
 			catch
 			{
@@ -152,12 +140,12 @@ namespace BLL.Services
         public async Task<List<CardDisplayDTO>> GetAllCards()
         {
 			var cards = new List<CardDisplayDTO>();
-			var spellTrapCards=await this.unitOfWork.Card.GetSpellTrapCards();
+			var spellTrapCards = await this.unitOfWork.Card.GetSpellTrapCards();
 			var monsterCards = await this.unitOfWork.Card.GetMonsterCards();
 
 			foreach (var card in spellTrapCards)
 			{
-				var c = new CardDisplayDTO(card.ID,card.CardName,card.CardType.Type,card.Effect.NumOfCardsAffected,card.Effect.PointsAddedLost,card.EffectID,card.ImgPath,card.Effect.Description);
+				var c = new CardDisplayDTO(card.ID, card.CardName, card.CardType.Type, card.Effect.NumOfCardsAffected, card.Effect.PointsAddedLost, card.EffectID, card.ImgPath, card.Effect.Description);
 				cards.Add(c);
 			}
 			foreach (var card in monsterCards)

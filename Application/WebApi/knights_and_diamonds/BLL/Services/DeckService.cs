@@ -28,7 +28,7 @@ namespace BLL.Services
                 user.MainDeckID = d.ID;
                 this.unitOfWork.User.Update(user);
             }
-            this.unitOfWork.Complete();
+            await this.unitOfWork.Complete();
             return d;
         }
         public async Task AddCardToDeck(int cardID, int deckID)
@@ -46,8 +46,8 @@ namespace BLL.Services
 			}
 			cardInDeck.Card = c;
             cardInDeck.Deck = d;
-            this.unitOfWork.CardInDeck.Add(cardInDeck);
-            this.unitOfWork.Complete();
+            await this.unitOfWork.CardInDeck.Add(cardInDeck);
+            await this.unitOfWork.Complete();
         }
         
 		public async Task<List<CardInDeck>> GetCards(int deckID, int userID)

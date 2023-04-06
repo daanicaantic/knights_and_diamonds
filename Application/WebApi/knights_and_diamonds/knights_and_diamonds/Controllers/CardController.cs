@@ -99,7 +99,7 @@ namespace knights_and_diamonds.Controllers
 				var c = await this._cardService.GetCard(id);
 				if (c != null)
 				{
-					this._cardService.RemoveCard(c);
+					await this._cardService.RemoveCard(c);
 					return Ok(c);
 				}
 				else
@@ -121,7 +121,7 @@ namespace knights_and_diamonds.Controllers
 			{
 				if (card != null)
 				{
-					this._cardService.UpdateCard(card);
+					await this._cardService.UpdateCard(card);
 				}
 				else 
 				{

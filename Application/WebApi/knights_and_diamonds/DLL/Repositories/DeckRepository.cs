@@ -28,7 +28,7 @@ namespace DAL.Repositories
             var user = await this.Context.Users.FindAsync(deck.UserID);
             this.Context.Decks.Include(x => x.User);
             deck.User = user;
-            this.Context.Add(deck);
+            await this.Context.AddAsync(deck);
             return deck;
         }
         public async Task<List<CardInDeck>> GetCardsFromDeck(int deckID, int userID)
@@ -36,7 +36,6 @@ namespace DAL.Repositories
             var deck = await Context.CardInDecks.Where(x => x.Deck.ID == deckID && x.Deck.UserID == userID)
                 .Include(x => x.Card)
                 .Include(x => x.Deck)
-
                 .ToListAsync();
             return deck;
         }

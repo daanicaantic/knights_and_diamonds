@@ -35,6 +35,7 @@ import { TestComponent } from './components/test/test.component';
 import { LoadinscreenComponent } from './components/loadinscreen/loadinscreen.component';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { AnimateModule } from 'primeng/animate';
+import { DeckCreateComponent } from './components/deck-create/deck-create.component';
 
 
 @NgModule({
@@ -55,6 +56,7 @@ import { AnimateModule } from 'primeng/animate';
     UploadFileComponent,
     TestComponent,
     LoadinscreenComponent,
+    DeckCreateComponent,
 
   ],
   imports: [

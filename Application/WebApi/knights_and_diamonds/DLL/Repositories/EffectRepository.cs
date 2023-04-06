@@ -21,13 +21,6 @@ namespace DAL.Repositories
 			get { return _context as KnightsAndDiamondsContext; }
 		}
 
-		public async Task<Effect> AddEffect(Effect effect) 
-		{
-			this.Context.Effects.Include(x => x.EffectType);
-			this.Context.Effects.Add(effect);
-			return effect;
-		}
-
 		public async Task<Effect> GetEffectByDescription(string description)
 		{
 			return await this.Context.Effects.Where(x => x.Description == description).FirstOrDefaultAsync();
@@ -42,7 +35,5 @@ namespace DAL.Repositories
 		{
 			return await this.Context.EffectTypes.ToListAsync();
 		}
-
-
 	}
 }

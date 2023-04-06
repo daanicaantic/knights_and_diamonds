@@ -12,7 +12,7 @@ namespace BLL.Services.Contracts
 	{
 		Task<List<string>> GetConnectionByUser(int Userid);
 		Task<List<OnlineUserDto>> GetOnlineUsers();
-		void AddOnlineUser(int userID,string connectionID);
+		void AddOnlineUser(int userID, string connectionID);
 		void RemoveUserFromOnlineUsers(int userID);
 	}
 }

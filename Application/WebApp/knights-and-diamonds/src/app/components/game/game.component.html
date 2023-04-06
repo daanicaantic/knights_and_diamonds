@@ -1,5 +1,6 @@
 <body>
-    <app-loadinscreen [loadingType]="loadingType"  *ngIf="isLoadingOver===false" (onTimerOverTask)="getTimer($event)"></app-loadinscreen>
+    <app-loadinscreen [loadingType]="loadingType"  *ngIf="isLoadingOver===false" (onTimerOverTask)="getTimer($event)">
+    </app-loadinscreen>
     <div class="background" *ngIf="isLoadingOver===true">
     <div class="card-window">
         <div class="enemies-health">

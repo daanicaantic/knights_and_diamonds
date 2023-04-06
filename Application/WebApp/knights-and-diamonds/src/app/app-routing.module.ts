@@ -55,7 +55,6 @@ const routes: Routes = [
     path:'loading',
     component : LoadinscreenComponent,
   },
- 
   {
     path: '',
     redirectTo: 'welcome',

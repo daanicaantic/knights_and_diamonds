@@ -33,7 +33,7 @@ namespace DAL.Repositories
         {
             var game = await this.Context.Games
                 .Include(x => x.Turns)
-                .Where(x=>x.ID==gameID)
+                .Where(x => x.ID == gameID)
                 .FirstOrDefaultAsync();
             return game;
         }

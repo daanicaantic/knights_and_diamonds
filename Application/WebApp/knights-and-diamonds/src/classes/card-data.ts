@@ -1,7 +1,7 @@
 import { Card } from "./card";
 export const card: Card = {
     cardName: " ",
-    cardType: " ",
+    cardType: "MonsterCard",
     numberOfCardsAffected: 0,
     pointsAddedLost: 0,
     cardEffectID: 1,

@@ -1,0 +1,46 @@
+<div class="container">
+    <div class="card-layout">
+        <div class="big-card">
+            <!-- *ngFor="let card of cards" -->
+            <app-card [card]="card"></app-card>
+        </div>
+        <div class="deck-stats">
+            <div class="deck-data-row">
+                <div class="deck-data number-of-spell-cards"><h2>4</h2></div>
+                <div class="deck-data number-of-trap-cards"><h2>8</h2></div>
+                <div class="deck-data number-of-monster-cards"><h2>12</h2></div>
+            </div>
+            <div class="deck-data-row">
+                <div class="deck-data total-number-of-cards"><h2>24</h2></div>
+                <div class="deck-data save-deck"><i class="pi pi-check-circle" style="font-size: 1.5rem;"></i></div>
+            </div>
+            <div class="deck-data-row">
+                <div class="deck-data exit-deck"><i class="pi pi-arrow-circle-left" style="font-size: 1.5rem;"></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="deck-container">
+        <div class="cards-in-deck">
+
+        </div>
+    </div>
+    <div class="cards-and-search">
+        <div class="search-container">
+            <div class="form" [formGroup]="form">
+                <div class="small-container">
+                    <span class="form-field">
+                        <p-dropdown class="data-field" formControlName="cardTypeID" [options]="cardTypes"  optionValue="id" optionLabel="type" (onChange)="onCardTypeChange()"></p-dropdown>
+                    </span>
+                    <span class="form-field">
+                        <input class="data-field" formControlName="cardName" placeholder="Card name" type="text" pInputText (input)="onCardNameChange()" />
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="cards-container">
+            <div class="mini-card" *ngFor="let card of cards">
+                <app-card [card]="card"></app-card>
+            </div>
+        </div>
+    </div>
+</div>
