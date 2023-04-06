@@ -10,6 +10,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
+//#nullable disable
 
 namespace DAL.Repositories
 {
@@ -37,14 +38,14 @@ namespace DAL.Repositories
 		public async Task<Card> AddCard(Card card)
 		{
 			this.Context.Cards.Include(x => x.Effect);
-			this.Context.Cards.Add(card);
+			await this.Context.Cards.AddAsync(card);
 			return card;
 		}
 
 		public async Task<MonsterCard> AddMonsterCard(MonsterCard card)
 		{
 			this.Context.MonsterCards.Include(x => x.Effect);
-			this.Context.MonsterCards.Add(card);
+			await this.Context.MonsterCards.AddAsync(card);
 			return card;
 		}
 
@@ -65,7 +66,7 @@ namespace DAL.Repositories
 			var cards = await this.Context.Cards
 				.Include(x => x.Effect)
 				.Include(x => x.CardType)
-				.Where(x=>x.Discriminator=="Card" && x.ImgPath.StartsWith("Resources/Images/"))
+				.Where(x => x.Discriminator == "Card" && x.ImgPath.StartsWith("Resources/Images/"))
 				.ToListAsync();
 			return cards;
 		}

@@ -6,7 +6,6 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { CardService } from 'src/app/services/card.service';
 import { BehaviorSubject, elementAt, Observable, Subject, Subscription } from 'rxjs';
 
-
 @Component({
   selector: 'app-card-create',
   templateUrl: './card-create.component.html',

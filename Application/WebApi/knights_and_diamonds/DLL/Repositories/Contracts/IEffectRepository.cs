@@ -9,7 +9,6 @@ namespace DAL.Repositories.Contracts
 {
 	public interface IEffectRepository : IRepository<Effect>
 	{
-		Task<Effect> AddEffect(Effect effect);
 		Task<IList<EffectType>> GetEffectTypes();
 		Task<EffectType> GetEffectType(int EffectTypeID);
 		Task<Effect> GetEffectByDescription(string description);

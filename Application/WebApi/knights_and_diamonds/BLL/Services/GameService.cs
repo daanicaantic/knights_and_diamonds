@@ -127,7 +127,7 @@ namespace BLL.Services
 			}
             game.PlayerOnTurn = rpsGame.Winner;
             this._unitOfWork.Game.Update(game);
-            this._unitOfWork.Complete();
+            await this._unitOfWork.Complete();
 
 			return game.PlayerOnTurn;
         }
@@ -141,7 +141,7 @@ namespace BLL.Services
             var turn = new Turn();
             game.NewTurn(turn);
             this._unitOfWork.Game.Update(game);
-            this._unitOfWork.Complete();
+            await this._unitOfWork.Complete();
             return game;
 		}
 

@@ -109,7 +109,7 @@ namespace BLL.Services
 			RockPaperScissorsGame rpsGame = new RockPaperScissorsGame();
 			Game cardGame = new Game();
 			
-			this.unitOfWork.RPSGame.Add(rpsGame);
+			await this.unitOfWork.RPSGame.Add(rpsGame);
 
 			Player player1 = new Player(rpsGame, cardGame, user1, deck1);
 			Player player2 = new Player(rpsGame, cardGame, user2, deck2);
@@ -117,11 +117,11 @@ namespace BLL.Services
 			this._usersingame.UsersInGame.Add(user1.ID);
 			this._usersingame.UsersInGame.Add(user2.ID);
 
-			this.unitOfWork.Player.Add(player1);
-			this.unitOfWork.Player.Add(player2);
+			await this.unitOfWork.Player.Add(player1);
+			await this.unitOfWork.Player.Add(player2);
 			this._usersingame.Lobbies.Remove(lobby);
 
-			this.unitOfWork.Complete();
+			await this.unitOfWork.Complete();
 
 			return rpsGame.ID;
 		}
@@ -221,7 +221,7 @@ namespace BLL.Services
 			}
 
 			this.unitOfWork.Player.Update(player);
-			this.unitOfWork.Complete();
+			await this.unitOfWork.Complete();
         }
 		public async Task<int> CheckRPSWinner(int RPSgameID)
 		{
@@ -304,7 +304,7 @@ namespace BLL.Services
 
 			game.Winner = winner;
 			this.unitOfWork.RPSGame.Update(game);
-			this.unitOfWork.Complete();
+			await this.unitOfWork.Complete();
 			return winner;
         }
 

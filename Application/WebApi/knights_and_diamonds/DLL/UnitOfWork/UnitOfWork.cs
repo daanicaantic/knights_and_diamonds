@@ -45,9 +45,9 @@ namespace DAL.UnitOfWork
 		public ITurnRepository Turn { get; set; }
 
 
-		public void Complete()
+		public async Task Complete()
 		{
-			_context.SaveChanges();
+			await _context.SaveChangesAsync();
 		}
 
 		public void Dispose()

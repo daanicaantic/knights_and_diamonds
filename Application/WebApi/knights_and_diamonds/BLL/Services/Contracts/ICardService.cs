@@ -12,9 +12,8 @@ namespace BLL.Services.Contracts
 	{
 		Task<Card> GetCard(int id);
 		Task AddCard(CardDTO card);
-		Task<MonsterCard> AddMonsterCard(MonsterCard card);
-		void RemoveCard(Card card);
-		void UpdateCard(Card card);
+		Task RemoveCard(Card card);
+		Task UpdateCard(Card card);
 		IQueryable<Card> FindCardByName(string name);
 		string SplitType(string effectType);
 		Task<List<CardDisplayDTO>> GetAllCards();

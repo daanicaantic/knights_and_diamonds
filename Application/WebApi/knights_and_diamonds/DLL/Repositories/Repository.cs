@@ -30,9 +30,9 @@ namespace DAL.Repositories
 		{
 			return _context.Set<T>().Where(predicate);
 		}
-		public void Add(T obj)
+		public async Task Add(T obj)
 		{
-			this._context.Set<T>().Add(obj);
+			await this._context.Set<T>().AddAsync(obj);
 		}
 		public void Delete(T obj)
 		{

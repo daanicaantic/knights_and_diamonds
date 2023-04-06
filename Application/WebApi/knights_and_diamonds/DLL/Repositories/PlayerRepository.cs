@@ -21,11 +21,6 @@ namespace DAL.Repositories
 			get { return _context as KnightsAndDiamondsContext; }
 		}
 
-		public void AddPlayer(Player p)
-		{
-
-		}
-
         public async Task<Player> GetPlayer(int rpsGameID, int userID)
         {
 			var player = await this.Context.Players.Where(g => g.RPSGameID == rpsGameID && g.UserID == userID).FirstOrDefaultAsync();
