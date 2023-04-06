@@ -42,6 +42,7 @@ namespace DAL.UnitOfWork
         public IGameRepository Game { get; private set; }
 
 		public IEffectRepository Effect { get; set; }
+
 		public ITurnRepository Turn { get; set; }
 
 

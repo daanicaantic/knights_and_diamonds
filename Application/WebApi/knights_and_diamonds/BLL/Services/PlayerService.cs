@@ -15,10 +15,12 @@ namespace BLL.Services
     {
         private readonly KnightsAndDiamondsContext _context;
         public UnitOfWork _unitOfWork { get; set; }
+        public ICardService _cardservice { get; set; }
         public PlayerService(KnightsAndDiamondsContext context)
         {
             this._context = context;
             _unitOfWork = new UnitOfWork(_context);
+            _cardservice = new CardService(_context);
         }
 
         public async Task<List<CardInDeck>> SetPlayersDeck(int userID)
@@ -37,21 +39,7 @@ namespace BLL.Services
 			return player.Deck.Count();
         }
 
-        public async Task<CardDisplayDTO> MapCard(CardInDeck cardInDeck)
-        {
-            var mappedCard = new CardDisplayDTO();
-			if (cardInDeck.Card.Discriminator == "Card")
-			{
-				var card = await this._unitOfWork.Card.GetCard(cardInDeck.CardID);
-				mappedCard = new CardDisplayDTO(card.ID, card.CardName, card.CardType.Type, card.Effect.NumOfCardsAffected, card.Effect.PointsAddedLost, card.EffectID, card.ImgPath, card.Effect.Description);
-			}
-			else
-			{
-				var card = await this._unitOfWork.Card.GetMonsterCard(cardInDeck.CardID);
-				mappedCard = new CardDisplayDTO(card.ID, card.CardName, card.CardType.Type, card.Effect.NumOfCardsAffected, card.Effect.PointsAddedLost, card.EffectID, card.NumberOfStars, card.AttackPoints, card.DefencePoints, card.ImgPath, card.Effect.Description);
-			}
-            return mappedCard;
-		}
+        
         public async Task<CardDisplayDTO> Draw(int playerID) 
         {
             var mappedCard = new CardDisplayDTO();
@@ -61,7 +49,7 @@ namespace BLL.Services
                 throw new Exception("There is no Player with this ID"); 
             }
             var cardFromDeck = player.Draw();
-			mappedCard = await this.MapCard(cardFromDeck);
+			mappedCard = await _cardservice.MapCard(cardFromDeck);
             player.Deck.Remove(cardFromDeck);
             player.Hand.CardsInHand.Add(cardFromDeck);
             await this._unitOfWork.Complete();
@@ -74,7 +62,7 @@ namespace BLL.Services
             var playersHand = await this._unitOfWork.Player.GetPlayersHand(playerID);
             foreach (var card in playersHand.CardsInHand)
             {
-                var mappedCard = await this.MapCard(card);
+                var mappedCard = await _cardservice.MapCard(card);
                 hand.Add(mappedCard);
             }
             return hand;

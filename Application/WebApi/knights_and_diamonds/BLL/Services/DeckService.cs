@@ -1,5 +1,6 @@
 ﻿using BLL.Services.Contracts;
 using DAL.DataContext;
+using DAL.DTOs;
 using DAL.Models;
 using DAL.UnitOfWork;
 using System;
@@ -14,11 +15,14 @@ namespace BLL.Services
     {
         private readonly KnightsAndDiamondsContext _context;
         public UnitOfWork unitOfWork { get; set; }
+        public ICardService _cardservice { get; set; }
         public DeckService(KnightsAndDiamondsContext context)
         {
             this._context = context;
             unitOfWork = new UnitOfWork(_context);
+            _cardservice = new CardService(_context);
         }
+
         public async Task<Deck> AddDeck(Deck deck)
         {
             var d = await this.unitOfWork.Deck.AddDeck(deck);
@@ -31,6 +35,7 @@ namespace BLL.Services
             await this.unitOfWork.Complete();
             return d;
         }
+
         public async Task AddCardToDeck(int cardID, int deckID)
         {
             CardInDeck cardInDeck = new CardInDeck();
@@ -50,11 +55,30 @@ namespace BLL.Services
             await this.unitOfWork.Complete();
         }
         
-		public async Task<List<CardInDeck>> GetCards(int deckID, int userID)
+		public async Task<List<CardDisplayDTO>> GetCardsFromDeck(int userID)
         {
-            return await this.unitOfWork.Deck.GetCardsFromDeck(deckID, userID);
-        }
+            var user = await this.unitOfWork.User.GetOne(userID);
+            if(user == null)
+            {
+                throw new Exception("User not found.");
+            }
 
-  
+            var mainDeckID = user.MainDeckID;
+
+            List<CardDisplayDTO> deck = new List<CardDisplayDTO>();
+
+            var cards = await this.unitOfWork.Deck.GetCardsFromDeck(mainDeckID, userID);
+            if (cards == null)
+            {
+                throw new Exception("This user doesn't have main deck.");
+            }
+
+            foreach (var card in cards)
+            {
+                var mappedCard = await _cardservice.MapCard(card);
+                deck.Add(mappedCard);
+            }
+            return deck;
+        }
     }
 }
