@@ -1,12 +1,12 @@
 <body>
-    <app-loadinscreen [loadingType]="loadingType"  *ngIf="isLoadingOver===false" (onTimerOverTask)="getTimer($event)"></app-loadinscreen>
-    <div class="background" *ngIf="isLoadingOver===true">
+    <!-- <app-loadinscreen [loadingType]="loadingType"  *ngIf="isLoadingOver===false" (onTimerOverTask)="getTimer($event)"></app-loadinscreen> -->
+    <div class="background" *ngIf="isLoadingOver===false">
     <div class="card-window">
         <div class="enemies-health">
             <h1>8 0 0 0</h1>
         </div>
-        <div class="big-card">
-            <app-card [card]="card"></app-card>
+        <div class="big-card" *ngIf="mediumCard!=undefined">
+            <app-card [card]="mediumCard"></app-card>
         </div>
         <div class="players-health">
             <h1>8 0 0 0</h1>
@@ -20,20 +20,20 @@
     </div>
     <div class="battle-window">
         <div class="enemies-hand">
-            <div class="card-back" *ngFor="let num of numbers">
+            <div class="card-back" *ngFor="let num of numOfEnemiesCards">
                     <img src="https://localhost:7250/Resources/Images/card-back.png" alt="Name name name" class="picture">
             </div>
         </div>
         <div class="table-background">
             <div class="deck-and-grave">
-                <div class="enemies-deck small-card">
-                    <app-card [card]="card"></app-card>
+                <div class="enemies-deck">
+                    <img src="https://localhost:7250/Resources/Images/card-back.png" alt="Name name name" class="picture">
                 </div>
                 <div class="grave small-card">
                     <app-card [card]="card"></app-card>
                 </div>
                 <div class="player-deck small-card">
-                    <app-card [card]="card"></app-card>
+                    <img src="https://localhost:7250/Resources/Images/card-back.png" alt="Name name name" class="picture">
                 </div>
             </div>
             <div class="table-all">
@@ -97,8 +97,9 @@
             </div>
         </div>
         <div class="players-hand">
-            <div class="medium-card" *ngFor="let card of playerHand">
-                <app-card [card]="card"></app-card>
+            <div class="medium-card" *ngFor="let card of playerHand;let i = index">
+                <p>{{i}}</p>
+                <app-card [card]="card" (mouseover)="mediumCard=card"></app-card>
             </div>
         </div>
     </div>

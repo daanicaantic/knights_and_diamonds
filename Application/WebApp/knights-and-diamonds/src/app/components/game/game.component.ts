@@ -20,8 +20,10 @@ export class GameComponent implements OnInit, OnDestroy {
   gameID:any;
   playerID:any;
   enemiesID:any;
-  playerHand:any;
-  numbers:any;
+  playerHand:any[]=[];
+  numOfEnemiesCards:any[]=[];
+  drawingTimer:any;
+  mediumCard:any;
 
   constructor(
     public inGameService:IngameService,
@@ -90,14 +92,39 @@ export class GameComponent implements OnInit, OnDestroy {
   startingDrawing() {
     this.signalrService.hubConnection.on("GetFirstCards", (playerHand: any) => {
       console.log(playerHand);
-      this.playerHand=playerHand;
+      this.getStartingDrawingEffect(0,this.playerHand,playerHand);
+      // this.playerHand=playerHand;
     });
   }
   getNumOfCardsInHand(){
     this.signalrService.hubConnection.on("GetNumberOfCardsInHand", (count: any) => {
       console.log(count);
-      this.numbers = new Array<number>(count)
+      this.getEnemiesDrawingEffect(0,this.numOfEnemiesCards,count);
+      // this.getArrayValues(0,this.numbers,)
     })
   }
-  
+  //koristimo fju za prikaz pocetnog izvlacenja karata;
+  getStartingDrawingEffect(index:any,selectedArray:any,Array2:any) {
+    var timer=setInterval(() => {
+      if(index == Array2.length){
+        clearInterval(timer)
+        return;
+      }
+      selectedArray.unshift(Array2[index]);
+      index++;
+    }, 300);
+  }
+  //koristimo fju za prikaz pocetnog broja protivnickih karata;
+  getEnemiesDrawingEffect(index:any,selectedArray:any,count:any) {
+    var timer=setInterval(() => {
+      console.log(index)
+      if(index == count){
+        clearInterval(timer)
+        return;
+      }
+      selectedArray.unshift(new Array<number>(index));
+      index++;
+    }, 300);
+  }
+
 }
