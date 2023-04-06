@@ -10,7 +10,8 @@ namespace BLL.Services.Contracts
 {
     public interface IPlayerService
     {
-        Task<List<CardInDeck>> SetPlayersDeck(int userID);
+		Task<Player> GetPlayer(int playerID);
+		Task<List<CardInDeck>> SetPlayersDeck(int userID);
 		Task<List<CardDisplayDTO>> GetPlayersHand(int playerID);
 		Task<int> GetNumberOfCardsInDeck(int playerID);
 		Task<CardDisplayDTO> Draw(int playerID);

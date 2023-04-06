@@ -19,6 +19,21 @@ namespace knights_and_diamonds.Controllers
 			this._playerservice = new PlayerService(this.context);
 		}
 
+		[Route("GetPlayer/{playerID}")]
+		[HttpGet]
+		public async Task<IActionResult> GetPlayer(int playerID)
+		{
+			try
+			{
+				var player = await this._playerservice.GetPlayer(playerID);
+				return Ok(player);
+			}
+			catch (Exception e)
+			{
+				return BadRequest(e.Message);
+			}
+		}
+
 		[Route("Draw/{playerID}")]
 		[HttpGet]
 		public async Task<IActionResult> Draw(int playerID)
