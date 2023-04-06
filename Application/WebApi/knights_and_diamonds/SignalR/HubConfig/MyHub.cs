@@ -15,6 +15,7 @@ using System.Linq;
 using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace SignalR.HubConfig
 {
@@ -134,28 +135,36 @@ namespace SignalR.HubConfig
         }
 		/*---------------------------K-N-I-G-H-T-S-A-N-D-D-I-A-M-O-N-D-S----------------------------------------------*/
 
-		public async Task StartingDrawing(int gameID,int playerID)
+		public async Task GetHands(ConnectionsPerUser connections,List<CardDisplayDTO> playerHand)
 		{
-			var connections=await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
-			for(int i = 0; i < 5; i++)
+			var count = playerHand.Count;
+			foreach (var con in connections.MyConnections)
 			{
-				var playerHand = await this._playerService.GetPlayersHand(playerID);
-				if (playerHand.Count < 6)
-				{
-					var card = await this._playerService.Draw(playerID);
-					foreach (var con in connections.MyConnections)
-					{
-						await Clients.Client(con).SendAsync("GetFirstCards", playerHand);
-					}
-					foreach (var con in connections.EnemiesConnections)
-					{
-						await Clients.Client(con).SendAsync("GetNumberOfCardsInHand", playerHand.Count);
-					}
-				}
-			
+				await Clients.Client(con).SendAsync("GetFirstCards", playerHand);
+			}
+			foreach (var con in connections.EnemiesConnections)
+			{
+				await Clients.Client(con).SendAsync("GetNumberOfCardsInHand", count);
 			}
 		}
 
+		public async Task StartingDrawing(int gameID, int playerID)
+		{
+			var game = await this._gameService.GetGameByID(gameID);
+			var connections = await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
+			var countOfCards = 0;
 
+			if (game.GameStarted < 2)//ako je 2 oba igracu su pozvala ovu fju,pa kad se refresuje klijent nece se izvlaciti nove kartte
+			{
+				await this._gameService.SetGameStarted(game);
+				while (countOfCards < 5)
+				{
+					var card = await this._playerService.Draw(playerID);
+					countOfCards = countOfCards + 1;
+				}
+			}
+			var playerHand = await this._playerService.GetPlayersHand(playerID);
+			await this.GetHands(connections, playerHand);
+		}
     }
 }

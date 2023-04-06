@@ -24,6 +24,7 @@ namespace DAL.UnitOfWork
 			Player = new PlayerRepository(_context);
 			Game = new GameRepository(_context);
 			Effect = new EffectRepository(_context);
+			Turn = new TurnRepository(_context);
 		}
 
 		public ICardRepository Card { get; private set; }
@@ -41,6 +42,8 @@ namespace DAL.UnitOfWork
         public IGameRepository Game { get; private set; }
 
 		public IEffectRepository Effect { get; set; }
+		public ITurnRepository Turn { get; set; }
+
 
 		public void Complete()
 		{

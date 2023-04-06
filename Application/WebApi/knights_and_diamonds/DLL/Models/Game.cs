@@ -14,11 +14,16 @@ namespace DAL.Models
         public int ID { get; set; }
 		public int PlayerOnTurn { get; set; }
 		public int TurnNumber { get; set; }
-		[JsonIgnore]
+        public int GameStarted { get; set; } //0,1-nije pocela,2 pocela
+        [JsonIgnore]
         public List<Player>? Players { get; set; }
 		[JsonIgnore]
 		public List<Turn>? Turns { get; set; }
 
+        public Game()
+        {
+
+        }
         public void NewTurn(Turn turn)
         {
             this.Turns.Add(turn);

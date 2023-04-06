@@ -4,6 +4,7 @@ using DAL.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(KnightsAndDiamondsContext))]
-    partial class KnightsAndDiamondsContextModelSnapshot : ModelSnapshot
+    [Migration("20230405213957_GameStarted")]
+    partial class GameStarted
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -179,8 +181,8 @@ namespace DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
 
-                    b.Property<int>("GameStarted")
-                        .HasColumnType("int");
+                    b.Property<bool>("GameStarted")
+                        .HasColumnType("bit");
 
                     b.Property<int>("PlayerOnTurn")
                         .HasColumnType("int");
