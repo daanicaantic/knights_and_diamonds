@@ -73,7 +73,22 @@ namespace BLL.Services
 			}
 			return connectionsPerUser;
 		}
-
+        
+        public async Task<Game> GetGameByID(int gameID)
+        {
+            var game = await this._unitOfWork.Game.GetOne(gameID);
+            if (game == null)
+            {
+                throw new Exception("There is no game with this ID");
+            }
+            return game;
+        }
+        public async Task SetGameStarted(Game game)
+        {
+            game.GameStarted = game.GameStarted+1;
+            this._unitOfWork.Game.Update(game);
+            this._unitOfWork.Complete();
+        }
 		public async Task<GameDTO> GetGame(int gameID, int userID)
 		{
 			GameDTO game = new GameDTO();

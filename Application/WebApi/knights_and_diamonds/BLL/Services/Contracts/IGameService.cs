@@ -1,4 +1,5 @@
 ﻿using DAL.DTOs;
+using DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,8 @@ namespace BLL.Services.Contracts
 {
     public interface IGameService
     {
+		Task<Game> GetGameByID(int gameID);
+		Task SetGameStarted(Game game);
 		Task<GameDTO> GetGame(int gameID, int userID);
 		Task<int> SetFirstGamesTurn(int rpsGameID, int gameID);
 		Task<List<string>> GameGroup(int gameID);
