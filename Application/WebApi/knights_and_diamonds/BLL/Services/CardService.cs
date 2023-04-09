@@ -8,6 +8,7 @@ using DAL.UnitOfWork;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -150,7 +151,7 @@ namespace BLL.Services
 			}
 			foreach (var card in monsterCards)
 			{
-				var c = new CardDisplayDTO(card.ID,card.CardName, card.CardType.Type, card.Effect.NumOfCardsAffected, card.Effect.PointsAddedLost, card.EffectID,card.NumberOfStars,card.AttackPoints,card.DefencePoints, card.ImgPath, card.Effect.Description);
+				var c = new CardDisplayDTO(card.ID, card.CardName, card.CardType.Type, card.Effect.NumOfCardsAffected, card.Effect.PointsAddedLost, card.EffectID,card.NumberOfStars,card.AttackPoints,card.DefencePoints, card.ImgPath, card.Effect.Description);
 				cards.Add(c);
 			}
 			return cards;
@@ -171,5 +172,30 @@ namespace BLL.Services
             }
             return mappedCard;
         }
+
+/*		public async Task<CardDisplayDTO> MapMonsterCard(int cardID)
+		{
+            var mappedCard = new CardDisplayDTO();
+            var card = await this.unitOfWork.Card.GetMonsterCard(cardID);
+        }*/
+
+/*		public async Task<List<CardDisplayDTO>> GetFilteredCards(int cardTypeID, string name)
+		{
+            *//*Expression<Func<T, bool>> predicate;*//*
+            var cardType = await unitOfWork.Card.GetCardType(cardTypeID);
+
+			
+			//var cards = new List<CardDisplayDTO>();
+			if(cardType == null && name == " ")
+			{
+				return await this.GetAllCards();
+			}
+			else if(cardType == null) 
+			{
+                Expression predicate = x => x.CardName == name;
+				var cards = await unitOfWork.Card.Find(predicate);
+			}
+			
+        }*/
     }
 }

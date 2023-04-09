@@ -57,7 +57,7 @@ const routes: Routes = [
     component : LoadinscreenComponent,
   },
   {
-    path:'deck-create/:userID',
+    path:'deck-create/:deckID',
     component : DeckCreateComponent,
   },
   {

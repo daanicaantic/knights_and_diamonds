@@ -9,6 +9,7 @@ namespace DAL.Repositories.Contracts
 {
 	public interface ICardInDeckRepository : IRepository<CardInDeck>
 	{
-		
-	}
+        Task<CardInDeck> RemoveCardFromDeck(int cardID, int deckID);
+
+    }
 }

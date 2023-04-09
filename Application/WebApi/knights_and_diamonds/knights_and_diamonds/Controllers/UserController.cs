@@ -73,28 +73,5 @@ namespace knights_and_diamonds.Controllers
 
         }
 
-        [Route("SetMainDeck")]
-        [HttpPut]
-        public async Task<IActionResult> SetMainDeck(int userID,int deckID)
-        {
-            try
-            {
-                if (userID <= 0)
-                {
-                    return BadRequest("UserID must be bigger then 0");
-                }
-                if (deckID <= 0)
-                {
-                    return BadRequest("DeckID must be bigger then 0");
-                }
-                var user=await this._userService.SetMainDeckID(userID, deckID);
-                return Ok(user);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e);
-            }
-        }
-
     }
 }

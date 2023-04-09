@@ -7,15 +7,15 @@
             </div>
             <app-card [card]="bigCard"></app-card>
         </div>
-        <div class="deck-stats">
+        <div class="deck-stats" *ngIf="stats!=undefined">
             <div class="deck-data-row">
-                <div class="deck-data number-of-spell-cards"><h2>4</h2></div>
-                <div class="deck-data number-of-trap-cards"><h2>8</h2></div>
-                <div class="deck-data number-of-monster-cards"><h2>12</h2></div>
+                <div class="deck-data number-of-spell-cards"><h2>S - {{stats.spellCardsCount}}</h2></div>
+                <div class="deck-data number-of-trap-cards"><h2>T - {{stats.trapCardsCount}}</h2></div>
+                <div class="deck-data number-of-monster-cards"><h2>M - {{stats.monsterCardsCount}}</h2></div>
             </div>
             <div class="deck-data-row">
-                <div class="deck-data total-number-of-cards"><h2>24</h2></div>
-                <div class="deck-data save-deck"><i class="pi pi-check-circle" style="font-size: 1.5rem;"></i></div>
+                <div class="deck-data total-number-of-cards"><h2>{{stats.allCardsCount}}</h2></div>
+                <!-- <div class="deck-data save-deck"><i class="pi pi-check-circle" style="font-size: 1.5rem;"></i></div> -->
             </div>
             <div class="deck-data-row">
                 <div class="deck-data exit-deck"><i class="pi pi-arrow-circle-left" style="font-size: 1.5rem;"></i></div>
@@ -24,8 +24,10 @@
     </div>
     <div class="deck-container">
         <div class="cards-in-deck">
-            <div class="medium-card" *ngFor="let card of cardsInDeck">
-                <app-card [card]="card" (mouseover)="bigCard=card" (mouseout)="bigCard=undefined"></app-card>
+            <div class="mini-card" *ngFor="let card of cardsInDeck">
+                <app-card [card]="card" (mouseover)="bigCard=card"
+                    (click)="removeCardFromDeck(card.id)">
+                </app-card>
             </div>
         </div>
     </div>
@@ -33,18 +35,23 @@
         <div class="search-container">
             <div class="form" [formGroup]="form">
                 <div class="small-container">
-                    <span class="form-field">
+                    <div class="form-field">
                         <p-dropdown class="data-field" formControlName="cardTypeID" [options]="cardTypes" [(ngModel)]="startingvalue" optionValue="id" optionLabel="type" (onChange)="onCardTypeChange()"></p-dropdown>
-                    </span>
-                    <span class="form-field">
+                    </div>
+                    <div class="form-field">
+                        <p-dropdown class="data-field" formControlName="cardSorting" [options]="sortType" [(ngModel)]="startingvalue" optionValue="id" optionLabel="type" (onChange)="onCardSortChange()"></p-dropdown>
+                    </div>
+                    <div class="form-field">
                         <input class="data-field" formControlName="cardName" placeholder="Card name" type="text" pInputText  />
-                    </span>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="cards-container">
             <div class="mini-card" *ngFor="let card of cards">
-                <app-card [card]="card" (mouseover)="bigCard=card" (mouseout)="bigCard=undefined"></app-card>
+                <app-card [card]="card" (mouseover)="bigCard=card" 
+                    (click)="addCardToDeck(card.id)">
+                </app-card>
             </div>
         </div>
     </div>

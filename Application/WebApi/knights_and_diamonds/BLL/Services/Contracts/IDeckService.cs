@@ -11,7 +11,10 @@ namespace BLL.Services.Contracts
     public interface IDeckService
     {
         Task<Deck> AddDeck(Deck deck);
+        Task<User> SetMainDeckID(int userID, int deckID);
+        public Task<List<CardDisplayDTO>> GetCardsFromDeck(int userID);
         Task AddCardToDeck(int cardID, int deckID);
-		public Task<List<CardDisplayDTO>> GetCardsFromDeck(int userID);
-	}
+        Task RemoveCardFromDeck(int cardID, int deckID);
+        Task<CardCounter> CardCounter(int deckID, int userID);
+    }
 }
