@@ -112,7 +112,9 @@ namespace BLL.Services
 			await this.unitOfWork.RPSGame.Add(rpsGame);
 
 			Player player1 = new Player(rpsGame, cardGame, user1, deck1);
+			player1.CreateFields();
 			Player player2 = new Player(rpsGame, cardGame, user2, deck2);
+			player2.CreateFields();
 
 			this._usersingame.UsersInGame.Add(user1.ID);
 			this._usersingame.UsersInGame.Add(user2.ID);

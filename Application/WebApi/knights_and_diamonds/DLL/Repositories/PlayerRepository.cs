@@ -60,5 +60,21 @@ namespace DAL.Repositories
 				.FirstOrDefaultAsync();
 			return playerHand;
 		}
-    }
+
+		public async Task<Player> GetPlayersField(int playerID)
+		{
+			var field = await this.Context.Players
+				.Include(x => x.Hand)
+				.ThenInclude(x => x.CardsInHand)
+				.ThenInclude(x => x.Card)
+				.Include(x => x.Deck)
+				.ThenInclude(x => x.Card)
+				.Include(x => x.Fields)
+				.ThenInclude(x => x.CardOnField)
+				.ThenInclude(x => x.Card)
+				.Where(p => p.ID == playerID)
+				.FirstOrDefaultAsync();
+			return field;
+		}
+	}
 }

@@ -26,6 +26,9 @@ namespace BLL.Services
         public UnitOfWork _unitOfWork { get; set; }
         public IDeckService _deckService { get; set; }
         public IConnectionService _connectionService { get; set; }
+		public ICardService _cardService { get; set; }
+
+
 
 		public GameService(KnightsAndDiamondsContext context)
         {
@@ -33,6 +36,7 @@ namespace BLL.Services
             this._unitOfWork = new UnitOfWork(_context);
             this._deckService = new DeckService(_context);
 			this._connectionService = new ConnectionService(_context);
+            this._cardService = new CardService(_context);
 
 		}
 
@@ -108,6 +112,29 @@ namespace BLL.Services
 			game.GameID = gaame.ID;
 			return game;
 		}
+
+/*        public async Task<FieldDTO> GetPlayersField(int playerID)
+        {
+            var mappedCards = new List<CardDisplayDTO>();
+
+			var player = await this.GetPlayersField(playerID);
+            if (player == null)
+            {
+                throw new Exception("There is no player with this id");
+            }
+            if (player.Hand == null)
+            {
+                throw new Exception("This player has no hand");
+            }
+            if(player.CardFields == null)
+            {
+				throw new Exception("This player has no fields");
+			}
+            foreach (var card in player.Hand)
+            {
+                var mappedCard=await this._cardService.m
+            }
+		}*/
 
 		public async Task<int> SetFirstGamesTurn(int rpsGameID,int gameID)
         {

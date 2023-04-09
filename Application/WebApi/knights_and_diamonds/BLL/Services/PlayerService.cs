@@ -23,6 +23,11 @@ namespace BLL.Services
             _cardservice = new CardService(_context);
         }
 
+        public async Task<Player> GetPlayer(int playerID)
+        {
+            return await this._unitOfWork.Player.GetOne(playerID);
+        }
+
         public async Task<List<CardInDeck>> SetPlayersDeck(int userID)
         {
             var user = await this._unitOfWork.User.GetOne(userID);

@@ -29,6 +29,7 @@ namespace DAL.Models
 		public Game? Game { get; set; }
 		public List<CardInDeck>? Deck { get; set; }
 		public PlayersHand? Hand { get; set; }
+		public List<CardField> Fields { get; set; }
 
 		public Player() 
 		{ 
@@ -45,6 +46,7 @@ namespace DAL.Models
 			this.Deck = deck;
 			this.Hand = new PlayersHand();
 			this.LifePoints = 8000;
+			this.Fields = new List<CardField>();
 		}
 		public CardInDeck Draw()
 		{
@@ -56,6 +58,24 @@ namespace DAL.Models
 			int randomIndex = new Random().Next(0, numberOfCards);
 			var card = this.Deck[randomIndex];
 			return card;
+		}
+
+		public void CreateFields()
+		{
+			for (int i = 0; i < 10; i++)
+			{
+				string fieldType;
+				if (i < 5)
+				{
+					fieldType = "MonsterField";
+				}
+				else
+				{
+					fieldType = "SpellTrapField";
+				}
+				var cardField = new CardField(i,this.ID, fieldType);
+				this.Fields.Add(cardField);
+			}
 		}
 	}
 }
