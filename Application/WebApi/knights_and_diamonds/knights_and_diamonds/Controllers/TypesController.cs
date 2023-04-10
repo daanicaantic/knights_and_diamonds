@@ -11,11 +11,11 @@ namespace knights_and_diamonds.Controllers
 	[Route("[controller]")]
 	public class TypesController : ControllerBase
 	{
-		private readonly KnightsAndDiamondsContext context;
+		private readonly KnightsAndDiamondsContext _context;
 		public IEffectService _effectService { get; set; }
 		public TypesController(KnightsAndDiamondsContext context)
 		{
-			this.context = context;
+			this._context = context;
 			this._effectService = new EffectService(context);
 		}
 
@@ -25,8 +25,8 @@ namespace knights_and_diamonds.Controllers
 		{
 			try
 			{
-				this.context.EffectTypes.Add(type);
-				await this.context.SaveChangesAsync();
+				this._context.EffectTypes.Add(type);
+				await this._context.SaveChangesAsync();
 
 				return Ok(type);
 			}
@@ -72,7 +72,7 @@ namespace knights_and_diamonds.Controllers
 		{
 			try
 			{
-				var cardTypes = await this.context.CardTypes.ToListAsync();
+				var cardTypes = await this._context.CardTypes.ToListAsync();
 				return Ok(cardTypes);
 			}
 			catch (Exception e)
@@ -87,7 +87,7 @@ namespace knights_and_diamonds.Controllers
         {
             try
             {
-				var cardTypes = await this.context.CardTypes.FindAsync(cardTypeID);
+				var cardTypes = await this._context.CardTypes.FindAsync(cardTypeID);
                 return Ok(cardTypes);
             }
             catch (Exception e)

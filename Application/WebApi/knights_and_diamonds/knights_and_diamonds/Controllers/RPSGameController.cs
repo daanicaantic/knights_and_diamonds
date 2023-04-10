@@ -20,15 +20,15 @@ namespace knights_and_diamonds.Controllers
 				private readonly KnightsAndDiamondsContext context;
 				public UnitOfWork unitOfWork { get; set; }
         */
-		private readonly KnightsAndDiamondsContext context;
+		private readonly KnightsAndDiamondsContext _context;
 		public IRPSGameService _pregameservice { get; set; }
 		public IUserService _userService { get; set; }
 
 		public RPSGameController(KnightsAndDiamondsContext context)
 		{
-			this.context = context;
-			_pregameservice = new RPSGameService(this.context);
-			_userService = new UserService(this.context);
+			this._context = context;
+			_pregameservice = new RPSGameService(this._context);
+			_userService = new UserService(this._context);
 		}
 
 		[Route("NewLobby")]
@@ -139,7 +139,7 @@ namespace knights_and_diamonds.Controllers
 				var user = await this._userService.GetUserByID(userID);
 				if (user != null)
 				{
-					var games = await this._pregameservice.LobbiesPerUser(userID);
+					var games = this._pregameservice.LobbiesPerUser(userID);
 					return new JsonResult(games);
 				}
 				else 

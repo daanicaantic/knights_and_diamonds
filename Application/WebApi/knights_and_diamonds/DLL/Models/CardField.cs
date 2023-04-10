@@ -26,7 +26,7 @@ namespace DAL.Models
 		{
 
 		}
-		public CardField(int fieldIndex,int playerID,string fieldType )
+		public CardField(int fieldIndex, int playerID, string fieldType )
 		{
 			FieldIndex = fieldIndex;
 			PlayerID = playerID;

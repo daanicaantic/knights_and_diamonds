@@ -7,7 +7,6 @@ import { SignalrService } from './signalr.service';
   providedIn: 'root'
 })
 export class OnlineUsersService {
-  usersOnline: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([])
   
   constructor(private signalrService: SignalrService) { }
 
@@ -16,9 +15,9 @@ export class OnlineUsersService {
       .catch(err => console.error(err));
   }
 
-  getOnlineUsersList(): void {
-    this.signalrService.hubConnection.on("GetUsersFromHub", (users: Array<OnlineUsers>) => {
-      this.usersOnline.next(users)
-    });
-  }
+  // getOnlineUsersList(): void {
+  //   this.signalrService.hubConnection.on("GetUsersFromHub", (users: Array<OnlineUsers>) => {
+  //     this.usersOnline.next(users);
+  //   });
+  // }
 }

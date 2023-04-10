@@ -28,8 +28,6 @@ namespace BLL.Services
         public IConnectionService _connectionService { get; set; }
 		public ICardService _cardService { get; set; }
 
-
-
 		public GameService(KnightsAndDiamondsContext context)
         {
             this._context = context;

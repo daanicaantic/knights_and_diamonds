@@ -6,6 +6,7 @@ using DAL.DTOs;
 
 using DAL.Models;
 using Microsoft.AspNetCore.Connections;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
@@ -23,27 +24,26 @@ namespace SignalR.HubConfig
 	{
 		private readonly IConfiguration _config;
 
-		private readonly KnightsAndDiamondsContext context;
+		private readonly KnightsAndDiamondsContext _context;
 		public IUserService _userService { get; set; }
 		public IPlayerService _playerService { get; set; }
 		public IConnectionService _connectionService { get; set; }
 		public IRPSGameService _rpsGameService { get; set; }
 		public ILoginService _loginService { get; set; }
 		public IGameService _gameService { get; set; }
-
 		public ConnectionsHub _connectedUsers { get; set; }
 
 		public MyHub(KnightsAndDiamondsContext context, IConfiguration config)
 		{
-			this.context = context;
+			this._context = context;
 			this._config = config;
-			this._userService = new UserService(this.context);
-			this._connectionService = new ConnectionService(this.context);
-			this._rpsGameService = new RPSGameService(this.context);
-			this._loginService = new LoginService(this.context, this._config);
+			this._userService = new UserService(this._context);
+			this._connectionService = new ConnectionService(this._context);
+			this._rpsGameService = new RPSGameService(this._context);
+			this._loginService = new LoginService(this._context, this._config);
 			this._connectedUsers = ConnectionsHub.GetInstance();
-			this._gameService = new GameService(this.context);
-			this._playerService = new PlayerService(this.context);
+			this._gameService = new GameService(this._context);
+			this._playerService = new PlayerService(this._context);
 		}
 		public async Task askServer(string someTextForClient)
 		{
@@ -63,10 +63,9 @@ namespace SignalR.HubConfig
 		{
 			await Clients.Caller.SendAsync("GetConnectionID", this.Context.ConnectionId);
 		}
-		public async Task AddConnection(int userID)
+		public void AddConnection(int userID)
 		{
 			this._connectionService.AddOnlineUser(userID, this.Context.ConnectionId);
-			Console.WriteLine("Konaa" + this.context.ContextId);
 		}
 		public async Task LogIn(UserInfoDTO userInfo)
 		{
@@ -80,8 +79,15 @@ namespace SignalR.HubConfig
 
 		public async Task GetOnlineUsers()
 		{
-			var onlineUsers = await this._connectionService.GetOnlineUsers();
-			await Clients.All.SendAsync("GetUsersFromHub", onlineUsers);
+			try
+			{
+                var onlineUsers = await this._connectionService.GetOnlineUsers();
+                await Clients.All.SendAsync("GetUsersFromHub", onlineUsers);
+            }
+			catch(Exception ex)
+			{
+                Console.WriteLine("Error invoking GetOnlineUsers: {0}", ex.Message);
+            }
 		}
 
 		public async Task CreateLobby(int player1ID, int player2ID)
@@ -99,11 +105,12 @@ namespace SignalR.HubConfig
 
 		public async Task GamesRequests(int userID)
 		{
-			var games = await this._rpsGameService.LobbiesPerUser(userID);
+			var lobbiesYouDelivered = this._rpsGameService.LobbiesPerUser(userID);
+			var lobbiesYouCreated = this._rpsGameService.LobbiesYouCreated(userID);
 			var connections = await this._connectionService.GetConnectionByUser(userID);
 			foreach (var con in connections)
 			{
-				await Clients.Client(con).SendAsync("GetGamesRequests", games);
+				await Clients.Client(con).SendAsync("GetGamesRequests", lobbiesYouDelivered, lobbiesYouCreated);
 			}
 		}
 

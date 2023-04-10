@@ -17,6 +17,7 @@ namespace DAL.Models
 		{
 		
 		}
+
 		public MonsterCard(string? cardName, string? imgPath, int numberOfStars, int attackPoints, int defencePoints, Effect effect, int cardTypeID)
 		: base(cardName, imgPath, cardTypeID, effect)
 		{

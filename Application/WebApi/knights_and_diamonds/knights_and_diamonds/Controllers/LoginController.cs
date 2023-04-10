@@ -18,19 +18,18 @@ namespace knights_and_diamonds.Controllers
     public class LoginController : ControllerBase
     {
         private readonly IConfiguration _config;
-        private readonly KnightsAndDiamondsContext context;
+        private readonly KnightsAndDiamondsContext _context;
         public IUserService _userService { get; set; }
 		public ILoginService _loginService { get; set; }
 		public IConnectionService _connetionService { get; set; }
 
-		public LoginController(KnightsAndDiamondsContext context, IConfiguration config,IHubContext<MyHub> HubContext)
+		public LoginController(KnightsAndDiamondsContext context, IConfiguration config, IHubContext<MyHub> HubContext)
         {
-            this.context = context;
-            _userService = new UserService(this.context);
-			_connetionService=new ConnectionService(this.context);
+            this._context = context;
+            _userService = new UserService(this._context);
+			_connetionService = new ConnectionService(this._context);
 			_config = config;
-			_loginService = new LoginService(this.context, this._config);
-
+			_loginService = new LoginService(this._context, this._config);
 		}
 
 		public static long CheckLoginToken(string token) 

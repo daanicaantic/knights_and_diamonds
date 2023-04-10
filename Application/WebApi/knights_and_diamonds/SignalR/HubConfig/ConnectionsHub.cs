@@ -31,7 +31,5 @@ namespace SignalR.HubConfig
 			return _instance;
 		}
 		public List<int> ConnectedUsers { get; set; }
-
-
 	}
 }

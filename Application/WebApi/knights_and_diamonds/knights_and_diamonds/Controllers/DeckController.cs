@@ -15,12 +15,12 @@ namespace knights_and_diamonds.Controllers
 				private readonly KnightsAndDiamondsContext context;
 				public UnitOfWork unitOfWork { get; set; }
         */
-        private readonly KnightsAndDiamondsContext context;
+        private readonly KnightsAndDiamondsContext _context;
         public IDeckService _deckService { get; set; }
         public DeckController(KnightsAndDiamondsContext context)
         {
-            this.context = context;
-            _deckService = new DeckService(this.context);
+            this._context = context;
+            _deckService = new DeckService(this._context);
         }
 
         [Route("AddDeck")]

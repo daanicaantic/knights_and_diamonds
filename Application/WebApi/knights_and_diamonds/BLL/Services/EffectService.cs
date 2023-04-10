@@ -15,24 +15,24 @@ namespace BLL.Services
 	public class EffectService : IEffectService
 	{
 		private readonly KnightsAndDiamondsContext _context;
-		public UnitOfWork unitOfWork { get; set; }
+		public UnitOfWork _unitOfWork { get; set; }
 		public IEffectFactory _descriptionFactory { get; set; }
 		public IFactory _factory { get; set; }
 		public EffectService(KnightsAndDiamondsContext context)
 		{
 			this._context = context;
-			unitOfWork = new UnitOfWork(_context);
+			_unitOfWork = new UnitOfWork(_context);
 			this._descriptionFactory = new ConcreteEffectFactory();
 		}
 
 		public async Task<IList<EffectType>> GetEffectTypes()
 		{
-			return await this.unitOfWork.Effect.GetEffectTypes();
+			return await this._unitOfWork.Effect.GetEffectTypes();
 		}
 
 		public async Task<EffectType> GetEffectTypeByID(int effectTypeID)
 		{
-			return await this.unitOfWork.Effect.GetEffectType(effectTypeID);
+			return await this._unitOfWork.Effect.GetEffectType(effectTypeID);
 		}
 
 /*		public async Task<Effect> AddEffect(int effectTypeID,int numOfCardsAffected, int pointsAddLost)

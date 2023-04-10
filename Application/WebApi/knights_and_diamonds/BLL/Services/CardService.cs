@@ -17,7 +17,7 @@ namespace BLL.Services
 	public class CardService : ICardService
 	{
 		private readonly KnightsAndDiamondsContext _context;
-		public UnitOfWork unitOfWork { get; set; }
+		public UnitOfWork _unitOfWork { get; set; }
 		public IEffectFactory _effectFactory { get; set; }
 		public IFactory _factory { get; set; }
 		public IEffectService _effectService { get; set; }
@@ -26,7 +26,7 @@ namespace BLL.Services
 		public CardService(KnightsAndDiamondsContext context)
 		{
 			this._context = context;
-			this.unitOfWork = new UnitOfWork(_context);
+			this._unitOfWork = new UnitOfWork(_context);
 			this._effectService = new EffectService(_context);
 			this._effectFactory = new ConcreteEffectFactory();
 			
@@ -39,7 +39,7 @@ namespace BLL.Services
 			{
 				throw new Exception("Card with this name already exists");
 			}*/
-			var effectType = await this.unitOfWork.Effect.GetEffectType(card.EffectTypeID);
+			var effectType = await this._unitOfWork.Effect.GetEffectType(card.EffectTypeID);
 			if (effectType == null)
 			{
 				throw new Exception("There is no EffectType with this ID");
@@ -47,12 +47,12 @@ namespace BLL.Services
 			var type = this.SplitType(effectType.Type);
 			var effect = this.GenerateEffect(type, effectType.Type, card.NumOfCardsAffected, card.PointsAddedLost);
 			effect.EffectTypeID = card.EffectTypeID;
-			var checkIfEffectExist = await this.unitOfWork.Effect.GetEffectByDescription(effect.Description);
+			var checkIfEffectExist = await this._unitOfWork.Effect.GetEffectByDescription(effect.Description);
 			if (checkIfEffectExist != null)
 			{
 				effect = checkIfEffectExist;
 			}
-			var cardType = await this.unitOfWork.Card.GetCardType(card.CardTypeID);
+			var cardType = await this._unitOfWork.Card.GetCardType(card.CardTypeID);
 			if (cardType == null)
 			{
 				throw new Exception("There is no CardType with this ID");
@@ -60,21 +60,21 @@ namespace BLL.Services
 			if (cardType.Type == "MonsterCard")
 			{
 				MonsterCard monsterCard = new MonsterCard(card.CardName, card.ImgPath, card.CardLevel, card.AttackPoints, card.DefencePoints, effect, card.CardTypeID);
-				await this.unitOfWork.Card.AddMonsterCard(monsterCard);
+				await this._unitOfWork.Card.AddMonsterCard(monsterCard);
 			}
 			else
 			{
 				Card c = new Card(card.CardName, card.ImgPath, card.CardTypeID, effect);
-				await this.unitOfWork.Card.AddCard(c);
+				await this._unitOfWork.Card.AddCard(c);
 			}
-			await this.unitOfWork.Complete();
+			await this._unitOfWork.Complete();
 		}
 
 		public async Task<Card> GetCard(int id)
 		{
 			try
 			{
-				return await this.unitOfWork.Card.GetOne(id);
+				return await this._unitOfWork.Card.GetOne(id);
 			}
 			catch
 			{
@@ -86,8 +86,8 @@ namespace BLL.Services
 		{
 			try
 			{
-				this.unitOfWork.Card.Delete(card);
-				await this.unitOfWork.Complete();
+				this._unitOfWork.Card.Delete(card);
+				await this._unitOfWork.Complete();
 			}
 			catch
 			{
@@ -98,8 +98,8 @@ namespace BLL.Services
 		{
 			try
 			{
-				this.unitOfWork.Card.Update(card);
-				await this.unitOfWork.Complete();
+				this._unitOfWork.Card.Update(card);
+				await this._unitOfWork.Complete();
 			}
 			catch
 			{
@@ -111,7 +111,7 @@ namespace BLL.Services
 		{
 			try
 			{
-				return this.unitOfWork.Card.Find(x => x.CardName == name);
+				return this._unitOfWork.Card.Find(x => x.CardName == name);
 			}
 			catch
 			{
@@ -141,8 +141,8 @@ namespace BLL.Services
         public async Task<List<MappedCard>> GetAllCards()
         {
 			var cards = new List<MappedCard>();
-			var spellTrapCards = await this.unitOfWork.Card.GetSpellTrapCards();
-			var monsterCards = await this.unitOfWork.Card.GetMonsterCards();
+			var spellTrapCards = await this._unitOfWork.Card.GetSpellTrapCards();
+			var monsterCards = await this._unitOfWork.Card.GetMonsterCards();
 
 			foreach (var card in spellTrapCards)
 			{
@@ -162,12 +162,12 @@ namespace BLL.Services
 			var mappedCard = new MappedCard();
 			if (cardInDeck.Card.Discriminator == "Card")
 			{
-				var card = await this.unitOfWork.Card.GetCard(cardInDeck.CardID);
+				var card = await this._unitOfWork.Card.GetCard(cardInDeck.CardID);
 				mappedCard = new MappedCard(card.ID, card.CardName, card.CardType.Type, card.Effect.NumOfCardsAffected, card.Effect.PointsAddedLost, card.EffectID, card.ImgPath, card.Effect.Description);
 			}
 			else
 			{
-				var card = await this.unitOfWork.Card.GetMonsterCard(cardInDeck.CardID);
+				var card = await this._unitOfWork.Card.GetMonsterCard(cardInDeck.CardID);
 				mappedCard = new MappedCard(card.ID, card.CardName, card.CardType.Type, card.Effect.NumOfCardsAffected, card.Effect.PointsAddedLost, card.EffectID, card.NumberOfStars, card.AttackPoints, card.DefencePoints, card.ImgPath, card.Effect.Description);
 			}
 			return mappedCard;

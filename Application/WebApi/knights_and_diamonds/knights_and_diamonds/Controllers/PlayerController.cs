@@ -9,14 +9,14 @@ namespace knights_and_diamonds.Controllers
 	[Route("[controller]")]
 	public class PlayerController : ControllerBase
 	{
-		private readonly KnightsAndDiamondsContext context;
+		private readonly KnightsAndDiamondsContext _context;
 		public IGameService _gameservice { get; set; }
 		public IPlayerService _playerservice { get; set; }
 		public PlayerController(KnightsAndDiamondsContext context)
 		{
-			this.context = context;
-			this._gameservice = new GameService(this.context);
-			this._playerservice = new PlayerService(this.context);
+			this._context = context;
+			this._gameservice = new GameService(this._context);
+			this._playerservice = new PlayerService(this._context);
 		}
 
 		[Route("GetPlayer/{playerID}")]

@@ -32,7 +32,7 @@ namespace DAL.Models
 
 		}
 
-		public Card(string? cardName, string? imgPath,int cardTypeID,Effect effect) 
+		public Card(string? cardName, string? imgPath, int cardTypeID, Effect effect) 
 		{
 			CardName = cardName;
 			ImgPath = imgPath;

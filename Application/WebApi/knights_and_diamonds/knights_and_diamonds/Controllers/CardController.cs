@@ -18,7 +18,7 @@ namespace knights_and_diamonds.Controllers
 				private readonly KnightsAndDiamondsContext context;
 				public UnitOfWork unitOfWork { get; set; }
 		*/
-		private readonly KnightsAndDiamondsContext context;
+		private readonly KnightsAndDiamondsContext _context;
 		public ICardService _cardService { get; set; }
 		public IEffectService _effService { get; set; }
 
@@ -26,10 +26,10 @@ namespace knights_and_diamonds.Controllers
 		public IFactory _factory { get; set; }
 		public CardController(KnightsAndDiamondsContext context)
 		{
-			this.context = context;
-			_cardService = new CardService(this.context);
+			this._context = context;
+			_cardService = new CardService(this._context);
 			_descriptionFactory = new ConcreteEffectFactory();
-			_effService = new EffectService(this.context);
+			_effService = new EffectService(this._context);
 		}
 
 
@@ -141,8 +141,8 @@ namespace knights_and_diamonds.Controllers
 		{
 			try
 			{
-				this.context.CardTypes.Add(type);
-				await this.context.SaveChangesAsync();
+				this._context.CardTypes.Add(type);
+				await this._context.SaveChangesAsync();
 
 				return Ok(type);
 			}

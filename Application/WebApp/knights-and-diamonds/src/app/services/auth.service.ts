@@ -48,7 +48,7 @@ export class AuthService {
         localStorage.removeItem('user');
         this.userSubject.next(null);
         this.onlineUsersService.getOnlineUsersInv();
-        this.onlineUsersService.getOnlineUsersList();
+        // this.onlineUsersService.getOnlineUsersList();
       },
       error: err=>{
       }

@@ -14,14 +14,14 @@ namespace knights_and_diamonds.Controllers
 	{
 		/*
 				private readonly KnightsAndDiamondsContext context;
-				public UnitOfWork unitOfWork { get; set; }
+				public UnitOfWork _unitOfWork { get; set; }
 		*/
-		private readonly KnightsAndDiamondsContext context;
+		private readonly KnightsAndDiamondsContext _context;
 		public IConnectionService _connectionService { get; set; }
 		public ConnectionController(KnightsAndDiamondsContext context)
 		{
-			this.context = context;
-			_connectionService = new ConnectionService(this.context);
+			this._context = context;
+			_connectionService = new ConnectionService(this._context);
 		}
 
 		[HttpPost]
@@ -49,7 +49,7 @@ namespace knights_and_diamonds.Controllers
 		}
 		[HttpGet]
 		[Route("GetOnlineUsers")]
-		public async Task<IActionResult> GetOnlineUsers()
+		public async Task<IActionResult> GetOnlineUsers(int userID)
 		{
 			try
 			{

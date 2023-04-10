@@ -15,21 +15,21 @@ namespace BLL.Services
     public class UserService : IUserService
     {
         private readonly KnightsAndDiamondsContext _context;
-        public UnitOfWork unitOfWork { get; set; }
+        public UnitOfWork _unitOfWork { get; set; }
         public UserService(KnightsAndDiamondsContext context)
         {
             this._context = context;
-            unitOfWork = new UnitOfWork(_context);
+            _unitOfWork = new UnitOfWork(_context);
         }
         public async Task AddUser(UserDTO u)
         {
-            var userFound = await this.unitOfWork.User.GetUserByEmail(u.Email);
+            var userFound = await this._unitOfWork.User.GetUserByEmail(u.Email);
             if(userFound != null)
             {
                 throw new Exception("User with this email already exists.");
             }
 
-            userFound = await this.unitOfWork.User.GetUserByUsername(u.UserName);
+            userFound = await this._unitOfWork.User.GetUserByUsername(u.UserName);
             if(userFound != null )
             {
                 throw new Exception("User with this username already exists.");
@@ -37,19 +37,19 @@ namespace BLL.Services
 
             var user = new User(u.Name, u.SurName, u.Email, u.Password, u.UserName, u.Role);
 
-            await this.unitOfWork.User.Add(user);
-            await this.unitOfWork.Complete();
+            await this._unitOfWork.User.Add(user);
+            await this._unitOfWork.Complete();
         }
         public async Task<User> GetUserByID(int id)
         {
-            return await this.unitOfWork.User.GetOne(id);
+            return await this._unitOfWork.User.GetOne(id);
         }
 
         public IQueryable<User> GetUser(string email, string password)
         {
             try
             {
-                return this.unitOfWork.User.Find(x => x.Email == email && x.Password == password);
+                return this._unitOfWork.User.Find(x => x.Email == email && x.Password == password);
             }
             catch
             {

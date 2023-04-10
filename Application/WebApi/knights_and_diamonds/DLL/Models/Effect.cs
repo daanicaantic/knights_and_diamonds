@@ -18,10 +18,12 @@ namespace DAL.Models
 		public int? PointsAddedLost { get; set; }
 		[JsonIgnore]
 		public List<Card> Cards { get; set; }
+
 		public Effect()
 		{
 
 		}
+
 		public Effect(int effectTypeID, EffectType? effectType, string? description, int? numOfCardsAffected, int? pointsAddedLost)
 		{
 			EffectTypeID = effectTypeID;

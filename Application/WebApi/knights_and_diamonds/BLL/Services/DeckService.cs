@@ -24,44 +24,44 @@ namespace BLL.Services
     public class DeckService : IDeckService
     {
         private readonly KnightsAndDiamondsContext _context;
-        public UnitOfWork unitOfWork { get; set; }
+        public UnitOfWork _unitOfWork { get; set; }
         public ICardService _cardservice { get; set; }
         public DeckService(KnightsAndDiamondsContext context)
         {
             this._context = context;
-            unitOfWork = new UnitOfWork(_context);
+            _unitOfWork = new UnitOfWork(_context);
             _cardservice = new CardService(_context);
         }
 
         public async Task<Deck> AddDeck(Deck deck)
         {
-            var d = await this.unitOfWork.Deck.AddDeck(deck);
-            var user = await this.unitOfWork.User.GetOne(deck.UserID);
+            var d = await this._unitOfWork.Deck.AddDeck(deck);
+            var user = await this._unitOfWork.User.GetOne(deck.UserID);
             if (user.MainDeckID == 0)
             {
                 user.MainDeckID = d.ID;
-                this.unitOfWork.User.Update(user);
+                this._unitOfWork.User.Update(user);
             }
-            await this.unitOfWork.Complete();
+            await this._unitOfWork.Complete();
             return d;
         }
 
         public async Task<User> SetMainDeckID(int userID, int deckID)
         {
 
-            var deck = await this.unitOfWork.Deck.GetCardsFromDeck(userID, deckID);
+            var deck = await this._unitOfWork.Deck.GetCardsFromDeck(userID, deckID);
             if (deck == null)
             {
                 throw new Exception("This user doesn't contains deck with this ID");
             }
-            var user = await this.unitOfWork.Deck.SetMainDeck(userID, deckID);
-            await this.unitOfWork.Complete();
+            var user = await this._unitOfWork.Deck.SetMainDeck(userID, deckID);
+            await this._unitOfWork.Complete();
             return user;
         }
         
 		public async Task<List<MappedCard>> GetCardsFromDeck(int userID)
         {
-            var user = await this.unitOfWork.User.GetOne(userID);
+            var user = await this._unitOfWork.User.GetOne(userID);
             if (user == null)
             {
                 throw new Exception("User not found.");
@@ -69,7 +69,7 @@ namespace BLL.Services
 
             var mainDeckID = user.MainDeckID;
 
-            var cards = await this.unitOfWork.Deck.GetCardsFromDeck(mainDeckID, userID);
+            var cards = await this._unitOfWork.Deck.GetCardsFromDeck(mainDeckID, userID);
             if (cards == null)
             {
                 throw new Exception("This user doesn't have main deck.");
@@ -91,44 +91,44 @@ namespace BLL.Services
         public async Task AddCardToDeck(int cardID, int deckID)
         {
             CardInDeck cardInDeck = new CardInDeck();
-            var c = await this.unitOfWork.Card.GetOne(cardID);
+            var c = await this._unitOfWork.Card.GetOne(cardID);
             if (c == null) 
             {
                 throw new Exception("There is no card with this ID");
             }
-            var d = await this.unitOfWork.Deck.GetOne(deckID);
+            var d = await this._unitOfWork.Deck.GetOne(deckID);
 			if (d == null)
 			{
 				throw new Exception("There is no deck with this ID");
 			}
             var userID = d.UserID;
-            var cInD = await this.unitOfWork.Deck.GetCardsFromDeck(deckID, userID);
+            var cInD = await this._unitOfWork.Deck.GetCardsFromDeck(deckID, userID);
             if (cInD.Count == 40)
             {
                 throw new Exception("You have reached card limit.");
             }
 			cardInDeck.Card = c;
             cardInDeck.Deck = d;
-            await this.unitOfWork.CardInDeck.Add(cardInDeck);
-            await this.unitOfWork.Complete();
+            await this._unitOfWork.CardInDeck.Add(cardInDeck);
+            await this._unitOfWork.Complete();
         }
 
         public async Task RemoveCardFromDeck(int cardID, int deckID)
         {
-            var cardInDeck = await this.unitOfWork.CardInDeck.RemoveCardFromDeck(cardID, deckID);
+            var cardInDeck = await this._unitOfWork.CardInDeck.RemoveCardFromDeck(cardID, deckID);
             if (cardInDeck == null)
             {
                 throw new Exception("There is no card in deck with this ID");
             }
-            this.unitOfWork.CardInDeck.Delete(cardInDeck);
-            await this.unitOfWork.Complete();
+            this._unitOfWork.CardInDeck.Delete(cardInDeck);
+            await this._unitOfWork.Complete();
         }
 
         public async Task<CardCounter> CardCounter(int deckID, int userID)
         {
             var cardCounter = new CardCounter();
 
-            var deck = await this.unitOfWork.Deck.GetCardsFromDeck(deckID, userID);
+            var deck = await this._unitOfWork.Deck.GetCardsFromDeck(deckID, userID);
             if (deck == null)
             {
                 throw new Exception("There is no deck with this ID");
@@ -138,7 +138,7 @@ namespace BLL.Services
 
             foreach (var card in deck)
             {
-                var cardTypeID = await this.unitOfWork.Card.GetCardType(card.Card.CardTypeID);
+                var cardTypeID = await this._unitOfWork.Card.GetCardType(card.Card.CardTypeID);
                 if (cardTypeID.Type == "MonsterCard")
                 {
                     cardCounter.MonsterCardsCount += 1;

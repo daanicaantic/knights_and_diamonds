@@ -18,7 +18,7 @@ namespace DAL.DesignPatterns
 		}
 
 		private static readonly object _lock = new object();
-		private static InGameUsers? _instance=null;
+		private static InGameUsers? _instance = null;
 
 		public static InGameUsers GetInstance()
 		{
@@ -34,6 +34,7 @@ namespace DAL.DesignPatterns
 			}
 			return _instance;
 		}
+
 		public int lobbyID { get; set; }
 		public List<Lobby> Lobbies { get; set; }
 		public Dictionary<int, List<int>> GamesIDs { get; set; }

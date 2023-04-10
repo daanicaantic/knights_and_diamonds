@@ -11,19 +11,20 @@ using DAL.DTOs;
 
 namespace SignalR.GameHub
 {
-	public class GameHub:Hub
+	public class GameHub : Hub
 	{
-		private readonly KnightsAndDiamondsContext context;
+		private readonly KnightsAndDiamondsContext _context;
 		public IRPSGameService _gameService { get; set; }
 
 		public GameHub(KnightsAndDiamondsContext context)
 		{
-			this.context = context;
-			_gameService = new RPSGameService(this.context);
+			this._context = context;
+			_gameService = new RPSGameService(this._context);
 		}
+
 		public async Task GetPossibleLobbiesForUser(int userID)
 		{
-			/*var games =await this._gameService.LobbiesPerUser(userID);*/
+			/*var games = await this._gameService.LobbiesPerUser(userID);*/
 			/*await Clients.All.SendAsync("GetUsersFromHub", games);*/
 		}
 	}

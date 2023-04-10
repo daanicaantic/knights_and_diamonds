@@ -8,7 +8,6 @@ namespace DAL.DesignPatterns.Factory.Contract
 {
 	public interface IEffectFactory
 	{
-		IFactory FactoryMethod(string type,string effectType,int cardsAffected,int pointsAddedLost);
-
+		IFactory FactoryMethod(string type, string effectType, int cardsAffected, int pointsAddedLost);
 	}
 }

@@ -18,13 +18,13 @@ namespace knights_and_diamonds.Controllers
 				private readonly KnightsAndDiamondsContext context;
 				public UnitOfWork unitOfWork { get; set; }
         */
-        private readonly KnightsAndDiamondsContext context;
+        private readonly KnightsAndDiamondsContext _context;
         public IUserService _userService { get; set; }
 
         public UserController(KnightsAndDiamondsContext context)
         {
-            this.context = context;
-            _userService = new UserService(this.context);
+            this._context = context;
+            _userService = new UserService(this._context);
         }
 
         [Route("AddUser")]

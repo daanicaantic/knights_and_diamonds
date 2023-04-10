@@ -16,7 +16,7 @@ namespace DAL.Models
 
 		public void SetRpsWinner(int winnerID)
 		{
-			this.Winner=winnerID;
+			this.Winner = winnerID;
 		}
 	}
 }

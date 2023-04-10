@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Models
 {
-	internal class Grave
+	public class Grave
 	{
 	}
 }

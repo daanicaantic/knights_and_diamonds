@@ -8,10 +8,10 @@ namespace knights_and_diamonds.Controllers
 	[Route("[controller]")]
 	public class FileController : ControllerBase
 	{
-		private readonly KnightsAndDiamondsContext context;
+		private readonly KnightsAndDiamondsContext _context;
 		public FileController(KnightsAndDiamondsContext context)
 		{
-			this.context = context;
+			this._context = context;
 		}
 
 		[Route("UploadPhoto")]

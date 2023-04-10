@@ -13,7 +13,8 @@ namespace DAL.DesignPatterns.Factory
     {
         public string Description { get; set; }
 		public Effect Effect { get; set; }
-		public LPChange(string effectType,int pointsAddedLost)
+
+		public LPChange(string effectType, int pointsAddedLost)
         {
 			this.Effect = new Effect();
             this.SetDescription(effectType, pointsAddedLost);
@@ -29,15 +30,18 @@ namespace DAL.DesignPatterns.Factory
 				default: throw new ArgumentException("Invalid type", "effectType");
 			}
 		}
+
 		public string GetDescription()
 		{
 			return this.Description;
 		}
+
 		public void SetEffect(int pointsAddedLost)
 		{
 			this.Effect.Description = Description;
 			this.Effect.PointsAddedLost = pointsAddedLost;
 		}
+
 		public Effect GetEffect()
 		{
 			return this.Effect;

@@ -22,14 +22,13 @@ namespace BLL.Services
 		private readonly KnightsAndDiamondsContext _context;
 
         private readonly IConfiguration _config;
-
-        public UnitOfWork unitOfWork { get; set; }
+        public UnitOfWork _unitOfWork { get; set; }
 		public OnlineUsers _onlineUsers { get; set; }
 
 		public LoginService(KnightsAndDiamondsContext context, IConfiguration config)
 		{
 			this._context = context;
-			unitOfWork = new UnitOfWork(_context);
+			_unitOfWork = new UnitOfWork(_context);
 			_onlineUsers = OnlineUsers.GetInstance();
 			_config = config;
 		}
@@ -38,7 +37,7 @@ namespace BLL.Services
 		{
 			TokenDTO t = new TokenDTO();
 
-			var user = this.unitOfWork.User.Find(x => x.Email == userInfo.Email && x.Password == userInfo.Password).FirstOrDefault();
+			var user = this._unitOfWork.User.Find(x => x.Email == userInfo.Email && x.Password == userInfo.Password).FirstOrDefault();
 
 			var claims = new List<Claim>();
 

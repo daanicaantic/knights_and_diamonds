@@ -30,9 +30,9 @@ namespace DAL.DesignPatterns.Factory
 			switch (effectType)
 			{
 				case "returnCardFromFieldToHand": return this.Description = "This card returns " + numOFCardAffected.ToString() + " " + Plural + " from field to players hand."; ;
-				case "returnSTFromGraveToHand": return this.Description = "This card returns " + numOFCardAffected.ToString() + "spell or trap " + Plural + " from grave to your hand.";
-				case "returnMonsterFromGraveToHand": return this.Description = "This card returns " + numOFCardAffected.ToString() + "monster " + Plural + " from grave to your hand.";
-				case "returnMonsterFromGraveToField": return this.Description = "This card returns " + numOFCardAffected.ToString() + "monster " + Plural + " from grave to field.";
+				case "returnSTFromGraveToHand": return this.Description = "This card returns " + numOFCardAffected.ToString() + " spell or trap " + Plural + " from grave to your hand.";
+				case "returnMonsterFromGraveToHand": return this.Description = "This card returns " + numOFCardAffected.ToString() + " monster " + Plural + " from grave to your hand.";
+				case "returnMonsterFromGraveToField": return this.Description = "This card returns " + numOFCardAffected.ToString() + " monster " + Plural + " from grave to field.";
 
 				default: throw new ArgumentException("Invalid type", effectType);
 			}

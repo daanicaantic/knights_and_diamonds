@@ -19,12 +19,12 @@ namespace BLL.Services
 	public class RPSGameService : IRPSGameService
 	{
 		private readonly KnightsAndDiamondsContext _context;
-		public UnitOfWork unitOfWork { get; set; }
+		public UnitOfWork _unitOfWork { get; set; }
 		private InGameUsers _usersingame { get; set; }
 		public RPSGameService(KnightsAndDiamondsContext context)
 		{
 			this._context = context;
-			unitOfWork = new UnitOfWork(_context);
+			_unitOfWork = new UnitOfWork(_context);
 			_usersingame = InGameUsers.GetInstance();
 		}
 
@@ -86,25 +86,25 @@ namespace BLL.Services
 				throw new Exception("There is no users in this lobby");
 			}
 
-            var user1 = await this.unitOfWork.User.GetOne(lobby.User1.ID);
+            var user1 = await this._unitOfWork.User.GetOne(lobby.User1.ID);
 			if (this._usersingame.UsersInGame.Contains(user1.ID))
 			{
 				throw new Exception(user1.UserName + "is already in game.");
 			}
 
-			var deck1 = await this.unitOfWork.Deck.GetCardsFromDeck(user1.MainDeckID, user1.ID);
+			var deck1 = await this._unitOfWork.Deck.GetCardsFromDeck(user1.MainDeckID, user1.ID);
 			if (deck1 == null) 
 			{
 				throw new Exception(user1.UserName + " didn't have deck to play with");
 			}
             
-            var user2 = await this.unitOfWork.User.GetOne(lobby.User2.ID);
+            var user2 = await this._unitOfWork.User.GetOne(lobby.User2.ID);
 			if (this._usersingame.UsersInGame.Contains(user2.ID))
 			{
 				throw new Exception(user2.UserName + "is already in game.");
 			}
 
-			var deck2 = await this.unitOfWork.Deck.GetCardsFromDeck(user2.MainDeckID, user2.ID);
+			var deck2 = await this._unitOfWork.Deck.GetCardsFromDeck(user2.MainDeckID, user2.ID);
 			if (deck2 == null)
 			{
 				throw new Exception(user2.UserName + " didn't have deck to play with");
@@ -113,7 +113,7 @@ namespace BLL.Services
 			RockPaperScissorsGame rpsGame = new RockPaperScissorsGame();
 			Game cardGame = new Game();
 			
-			await this.unitOfWork.RPSGame.Add(rpsGame);
+			await this._unitOfWork.RPSGame.Add(rpsGame);
 
 			Player player1 = new Player(rpsGame, cardGame, user1, deck1);
 			player1.CreateFields();
@@ -123,11 +123,11 @@ namespace BLL.Services
 			this._usersingame.UsersInGame.Add(user1.ID);
 			this._usersingame.UsersInGame.Add(user2.ID);
 
-			await this.unitOfWork.Player.Add(player1);
-			await this.unitOfWork.Player.Add(player2);
+			await this._unitOfWork.Player.Add(player1);
+			await this._unitOfWork.Player.Add(player2);
 			this._usersingame.Lobbies.Remove(lobby);
 
-			await this.unitOfWork.Complete();
+			await this._unitOfWork.Complete();
 
 			return rpsGame.ID;
 		}
@@ -160,7 +160,7 @@ namespace BLL.Services
 		public async Task<List<int>> RedirectToGame(int gameID) 
 		{
 			List<int> usersIDs=new List<int>(); 
-			var game = await this.unitOfWork.RPSGame.GetGameWithPlayers(gameID);
+			var game = await this._unitOfWork.RPSGame.GetGameWithPlayers(gameID);
 
 			if (game == null)
 			{
@@ -173,15 +173,23 @@ namespace BLL.Services
 			}
 			return usersIDs;
 		}
-		public async Task<List<Lobby>> LobbiesPerUser(int userID)
+
+		public List<Lobby> LobbiesPerUser(int userID)
 		{
 			var lobbies = this._usersingame.Lobbies.Where(x => x.User2.ID == userID).ToList();
 			return (lobbies);
 		}
+
+        public List<Lobby> LobbiesYouCreated(int userID)
+        {
+            var lobbies = this._usersingame.Lobbies.Where(x => x.User1.ID == userID).ToList();
+            return (lobbies);
+        }
+
         public async Task<GameDTO> GetGame(int gameID,int userID)
         {
 			GameDTO game = new GameDTO();
-			var rpsGame = await this.unitOfWork.RPSGame.GetGameWithPlayers(gameID);
+			var rpsGame = await this._unitOfWork.RPSGame.GetGameWithPlayers(gameID);
 			if (rpsGame == null)
 			{
 				throw new Exception("Wrong gameID");
@@ -202,7 +210,7 @@ namespace BLL.Services
 		}
 		public async Task PlayMove(int playerID, string moveName)
 		{
-			var player = await this.unitOfWork.Player.GetOne(playerID);
+			var player = await this._unitOfWork.Player.GetOne(playerID);
 
 			if (player == null)
 			{
@@ -226,12 +234,12 @@ namespace BLL.Services
 				throw new Exception("Move is undefined.");
 			}
 
-			this.unitOfWork.Player.Update(player);
-			await this.unitOfWork.Complete();
+			this._unitOfWork.Player.Update(player);
+			await this._unitOfWork.Complete();
         }
 		public async Task<int> CheckRPSWinner(int RPSgameID)
 		{
-            var game = await this.unitOfWork.RPSGame.GetGameWithPlayers(RPSgameID);
+            var game = await this._unitOfWork.RPSGame.GetGameWithPlayers(RPSgameID);
 			List<Player> players = game.Players;
 			int winner=new();
 
@@ -309,15 +317,15 @@ namespace BLL.Services
 			}
 
 			game.Winner = winner;
-			this.unitOfWork.RPSGame.Update(game);
-			await this.unitOfWork.Complete();
+			this._unitOfWork.RPSGame.Update(game);
+			await this._unitOfWork.Complete();
 			return winner;
         }
 
 
         public async Task<Player> GetPlayer(int gameID, int userID)
         {
-			var player = await this.unitOfWork.Player.GetPlayer(gameID, userID);
+			var player = await this._unitOfWork.Player.GetPlayer(gameID, userID);
 			if (player == null)
 			{
 				throw new Exception("Player is undefined.");
@@ -326,7 +334,7 @@ namespace BLL.Services
         }
 		public async Task<string> GetPlayersMove(int playerID)
 		{
-			var player = await this.unitOfWork.Player.GetPlayerByID(playerID);
+			var player = await this._unitOfWork.Player.GetPlayerByID(playerID);
 			if (player == null)
 			{
 				throw new Exception("Player is undefined.");

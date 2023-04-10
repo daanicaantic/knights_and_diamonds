@@ -14,7 +14,7 @@ namespace knights_and_diamonds.Controllers
     [Route("[controller]")]
     public class GameController : ControllerBase
     {
-        private readonly KnightsAndDiamondsContext context;
+        private readonly KnightsAndDiamondsContext _context;
         public IGameService _gameservice { get; set; }
         public IPlayerService _playerservice { get; set; }
 		public MyHub _hubContext { get; set; }
@@ -22,10 +22,10 @@ namespace knights_and_diamonds.Controllers
 
 		public GameController(KnightsAndDiamondsContext context, IConfiguration config)
 		{
-			this.context = context;
+			this._context = context;
 			this._config = config;
-			this._gameservice = new GameService(this.context);
-			this._playerservice = new PlayerService(this.context);
+			this._gameservice = new GameService(this._context);
+			this._playerservice = new PlayerService(this._context);
 			this._hubContext = new MyHub(context,_config);
 		}
 		/*[Route("StartGame/{player1ID}/{player2ID}")]

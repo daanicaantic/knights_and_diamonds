@@ -33,7 +33,6 @@ builder.Services.AddCors(options =>
                               "https://localhost:1200",
                               "http://127.0.0.1:1200",
                               "https://127.0.0.1:1200"
-
                            )
                           .AllowAnyHeader()
                           .AllowAnyMethod()

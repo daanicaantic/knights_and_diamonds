@@ -17,14 +17,14 @@ namespace BLL.Services
 	public class ConnectionService : IConnectionService
 	{
 		private readonly KnightsAndDiamondsContext _context;
-		public UnitOfWork unitOfWork { get; set; }
+		public UnitOfWork _unitOfWork { get; set; }
 		public OnlineUsers _onlineUsers { get; set; }
 		public InGameUsers _inGameUsers { get; set; }
 
         public ConnectionService(KnightsAndDiamondsContext context)
 		{
 			this._context = context;
-			unitOfWork = new UnitOfWork(_context);
+			_unitOfWork = new UnitOfWork(_context);
 			_onlineUsers = OnlineUsers.GetInstance();
 			_inGameUsers = InGameUsers.GetInstance();
 		}
@@ -66,18 +66,20 @@ namespace BLL.Services
 			List<OnlineUserDto> ListOfOnlineUsers = new List<OnlineUserDto>();
 			foreach (var userID in this._onlineUsers.ConnectedUsers.Keys)
 			{
-				var user = await this.unitOfWork.User.GetOne(userID);
-				if (user != null)
-				{
-					onlineUserDto = new OnlineUserDto(user.ID, user.Name, user.SurName, user.UserName);
-					ListOfOnlineUsers.Add(onlineUserDto);
-				}
-				else 
-				{
-					throw new Exception("This" + user.ID.ToString() + "does not exsists.");
-				}
-			}
-			return ListOfOnlineUsers;
+
+                var user = await this._unitOfWork.User.GetOne(userID);
+                if (user != null)
+                {
+                    onlineUserDto = new OnlineUserDto(user.ID, user.Name, user.SurName, user.UserName);
+                    ListOfOnlineUsers.Add(onlineUserDto);
+                }
+                else
+                {
+                    throw new Exception("This" + user.ID.ToString() + "does not exsists.");
+                }
+
+            }
+            return ListOfOnlineUsers;
 		}
 		public void RemoveUserFromOnlineUsers(int userID)
 		{

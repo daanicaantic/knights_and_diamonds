@@ -15,7 +15,8 @@ namespace BLL.Services.Contracts
         Task<int> StartGame(int lobbyID);
         Task<int> DenyGame(int lobbyID);
         Task<Dictionary<int, List<int>>> GetGames();
-		Task<List<Lobby>> LobbiesPerUser(int userID);
+		List<Lobby> LobbiesPerUser(int userID);
+        List<Lobby> LobbiesYouCreated(int userID);
         Task<List<int>> RedirectToGame(int gameID);
         Task<GameDTO> GetGame(int gameID, int userID);
         Task<string> GetPlayersMove(int playerID);
