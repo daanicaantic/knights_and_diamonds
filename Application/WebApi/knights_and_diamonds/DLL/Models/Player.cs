@@ -27,6 +27,7 @@ namespace DAL.Models
         public User? User { get; set; }
 		public int GameID { get; set; }
 		public Game? Game { get; set; }
+		public bool GaemeStarted { get; set; }
 		public List<CardInDeck>? Deck { get; set; }
 		public PlayersHand? Hand { get; set; }
 		public List<CardField> Fields { get; set; }
@@ -45,7 +46,7 @@ namespace DAL.Models
 			this.Game = game;
 			this.Deck = deck;
 			this.Hand = new PlayersHand();
-			this.LifePoints = 8000;
+			this.LifePoints = 4000;
 			this.Fields = new List<CardField>();
 		}
 		public CardInDeck Draw()

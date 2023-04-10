@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace DAL.DTOs
 {
     //ovo koristimo kada prikazujemo kartu
-    public class CardDisplayDTO
+    public class MappedCard
     {
 		public int ID { get; set; }
 		public string? CardName { get; set; }
@@ -21,9 +21,9 @@ namespace DAL.DTOs
         public int? PointsAddedLost { get; set; }
         public int? CardEffectID { get; set; }
 
-        public CardDisplayDTO() { }
+        public MappedCard() { }
 
-        public CardDisplayDTO(int id,string? cardName, string cardType, int? numberOfCardsAffected, int? pointsAddedLost, int? cardEffectID, int cardLevel, int attackPoints, int defencePoints, string? imgPath, string? description)
+        public MappedCard(int id,string? cardName, string cardType, int? numberOfCardsAffected, int? pointsAddedLost, int? cardEffectID, int cardLevel, int attackPoints, int defencePoints, string? imgPath, string? description)
         {
 			ID = id;
             CardName = cardName;
@@ -38,7 +38,7 @@ namespace DAL.DTOs
             Description = description;
         }
 
-		public CardDisplayDTO(int id,string? cardName, string cardType, int? numberOfCardsAffected, int? pointsAddedLost, int? cardEffectID, string? imgPath, string? description)
+		public MappedCard(int id,string? cardName, string cardType, int? numberOfCardsAffected, int? pointsAddedLost, int? cardEffectID, string? imgPath, string? description)
 		{
 			ID = id;
 			CardName = cardName;

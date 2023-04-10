@@ -12,6 +12,6 @@ namespace BLL.Services.Contracts
     {
         Task<Deck> AddDeck(Deck deck);
         Task AddCardToDeck(int cardID, int deckID);
-		public Task<List<CardDisplayDTO>> GetCardsFromDeck(int userID);
+		public Task<List<MappedCard>> GetCardsFromDeck(int userID);
 	}
 }

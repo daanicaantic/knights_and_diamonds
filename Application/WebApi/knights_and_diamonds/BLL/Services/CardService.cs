@@ -137,39 +137,49 @@ namespace BLL.Services
 			return effect;
 		}
 
-        public async Task<List<CardDisplayDTO>> GetAllCards()
+        public async Task<List<MappedCard>> GetAllCards()
         {
-			var cards = new List<CardDisplayDTO>();
+			var cards = new List<MappedCard>();
 			var spellTrapCards = await this.unitOfWork.Card.GetSpellTrapCards();
 			var monsterCards = await this.unitOfWork.Card.GetMonsterCards();
 
 			foreach (var card in spellTrapCards)
 			{
-				var c = new CardDisplayDTO(card.ID, card.CardName, card.CardType.Type, card.Effect.NumOfCardsAffected, card.Effect.PointsAddedLost, card.EffectID, card.ImgPath, card.Effect.Description);
+				var c = new MappedCard(card.ID, card.CardName, card.CardType.Type, card.Effect.NumOfCardsAffected, card.Effect.PointsAddedLost, card.EffectID, card.ImgPath, card.Effect.Description);
 				cards.Add(c);
 			}
 			foreach (var card in monsterCards)
 			{
-				var c = new CardDisplayDTO(card.ID,card.CardName, card.CardType.Type, card.Effect.NumOfCardsAffected, card.Effect.PointsAddedLost, card.EffectID,card.NumberOfStars,card.AttackPoints,card.DefencePoints, card.ImgPath, card.Effect.Description);
+				var c = new MappedCard(card.ID,card.CardName, card.CardType.Type, card.Effect.NumOfCardsAffected, card.Effect.PointsAddedLost, card.EffectID,card.NumberOfStars,card.AttackPoints,card.DefencePoints, card.ImgPath, card.Effect.Description);
 				cards.Add(c);
 			}
 			return cards;
 		}
 
-        public async Task<CardDisplayDTO> MapCard(CardInDeck cardInDeck)
+		public async Task<MappedCard> MapCard(CardInDeck cardInDeck)
+		{
+			var mappedCard = new MappedCard();
+			if (cardInDeck.Card.Discriminator == "Card")
+			{
+				var card = await this.unitOfWork.Card.GetCard(cardInDeck.CardID);
+				mappedCard = new MappedCard(card.ID, card.CardName, card.CardType.Type, card.Effect.NumOfCardsAffected, card.Effect.PointsAddedLost, card.EffectID, card.ImgPath, card.Effect.Description);
+			}
+			else
+			{
+				var card = await this.unitOfWork.Card.GetMonsterCard(cardInDeck.CardID);
+				mappedCard = new MappedCard(card.ID, card.CardName, card.CardType.Type, card.Effect.NumOfCardsAffected, card.Effect.PointsAddedLost, card.EffectID, card.NumberOfStars, card.AttackPoints, card.DefencePoints, card.ImgPath, card.Effect.Description);
+			}
+			return mappedCard;
+		}
+
+        public async Task<List<MappedCard>> MapCards(List<CardInDeck> cardsInDeck)
         {
-            var mappedCard = new CardDisplayDTO();
-            if (cardInDeck.Card.Discriminator == "Card")
-            {
-                var card = await this.unitOfWork.Card.GetCard(cardInDeck.CardID);
-                mappedCard = new CardDisplayDTO(card.ID, card.CardName, card.CardType.Type, card.Effect.NumOfCardsAffected, card.Effect.PointsAddedLost, card.EffectID, card.ImgPath, card.Effect.Description);
-            }
-            else
-            {
-                var card = await this.unitOfWork.Card.GetMonsterCard(cardInDeck.CardID);
-                mappedCard = new CardDisplayDTO(card.ID, card.CardName, card.CardType.Type, card.Effect.NumOfCardsAffected, card.Effect.PointsAddedLost, card.EffectID, card.NumberOfStars, card.AttackPoints, card.DefencePoints, card.ImgPath, card.Effect.Description);
-            }
-            return mappedCard;
+			var mappedCards = new List<MappedCard>();
+			foreach (var cardInDeck in cardsInDeck)
+			{
+				mappedCards.Add(await this.MapCard(cardInDeck));
+			}
+			return mappedCards;
         }
     }
 }

@@ -49,13 +49,14 @@ namespace BLL.Services
 			{
 				throw new Exception("There is not deck with this ID");
 			}
+
 			cardInDeck.Card = c;
             cardInDeck.Deck = d;
             await this.unitOfWork.CardInDeck.Add(cardInDeck);
             await this.unitOfWork.Complete();
         }
         
-		public async Task<List<CardDisplayDTO>> GetCardsFromDeck(int userID)
+		public async Task<List<MappedCard>> GetCardsFromDeck(int userID)
         {
             var user = await this.unitOfWork.User.GetOne(userID);
             if(user == null)
@@ -65,19 +66,13 @@ namespace BLL.Services
 
             var mainDeckID = user.MainDeckID;
 
-            List<CardDisplayDTO> deck = new List<CardDisplayDTO>();
-
             var cards = await this.unitOfWork.Deck.GetCardsFromDeck(mainDeckID, userID);
             if (cards == null)
             {
                 throw new Exception("This user doesn't have main deck.");
             }
 
-            foreach (var card in cards)
-            {
-                var mappedCard = await _cardservice.MapCard(card);
-                deck.Add(mappedCard);
-            }
+            var deck = await this._cardservice.MapCards(cards);
             return deck;
         }
     }

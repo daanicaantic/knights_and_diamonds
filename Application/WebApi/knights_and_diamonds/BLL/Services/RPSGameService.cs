@@ -69,6 +69,10 @@ namespace BLL.Services
 		public async Task<int> StartGame(int lobbyID)
 		{
 			var lobbies = this._usersingame.Lobbies;
+			if (lobbies == null)
+			{
+				throw new Exception("There are no any loby");
+			}
 
 			if (!lobbies.Any(x => x.ID == lobbyID))
 			{

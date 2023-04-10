@@ -29,6 +29,7 @@ export class RpsGameService {
   startGameResponse() {
     this.signalrService.hubConnection.on("RPSGameStarted", (rpsGameID: any) => {
       this.router.navigate(['/rpsGame', rpsGameID]);
+      
     });
   }
 

@@ -3,6 +3,7 @@ using DAL.DataContext;
 using DAL.DTOs;
 using DAL.Models;
 using DAL.UnitOfWork;
+using Microsoft.Win32.SafeHandles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,20 @@ namespace BLL.Services
 
         public async Task<Player> GetPlayer(int playerID)
         {
-            return await this._unitOfWork.Player.GetOne(playerID);
+            var player = await this._unitOfWork.Player.GetOne(playerID);
+            if (player == null)
+            {
+                throw new Exception("There is no player with this ID");
+            }
+            return player;
+            
+        }
+
+        public async Task SetGameStarted(Player player)
+        {
+            player.GaemeStarted = true;
+            this._unitOfWork.Player.Update(player);
+            await this._unitOfWork.Complete();
         }
 
         public async Task<List<CardInDeck>> SetPlayersDeck(int userID)
@@ -45,32 +59,30 @@ namespace BLL.Services
         }
 
         
-        public async Task<CardDisplayDTO> Draw(int playerID) 
+        public async Task<MappedCard> Draw(int playerID) 
         {
-            var mappedCard = new CardDisplayDTO();
             var player = await this._unitOfWork.Player.GetPlayerWithHandAndDeckByID(playerID);
             if (player == null)
             {
                 throw new Exception("There is no Player with this ID"); 
             }
             var cardFromDeck = player.Draw();
-			mappedCard = await _cardservice.MapCard(cardFromDeck);
             player.Deck.Remove(cardFromDeck);
             player.Hand.CardsInHand.Add(cardFromDeck);
             await this._unitOfWork.Complete();
-            return mappedCard;
+            return await this._cardservice.MapCard(cardFromDeck);
+
         }
 
-        public async Task<List<CardDisplayDTO>> GetPlayersHand(int playerID) 
+        public async Task<List<MappedCard>> GetPlayersHand(int playerID) 
         {
-            List<CardDisplayDTO> hand = new List<CardDisplayDTO>();
-            var playersHand = await this._unitOfWork.Player.GetPlayersHand(playerID);
-            foreach (var card in playersHand.CardsInHand)
+			var playersHand = await this._unitOfWork.Player.GetPlayersHand(playerID);
+            if (playersHand == null)
             {
-                var mappedCard = await _cardservice.MapCard(card);
-                hand.Add(mappedCard);
+                throw new Exception("This player dont have hands :(");
             }
-            return hand;
+			var mappedHand = await this._cardservice.MapCards(playersHand.CardsInHand);
+			return mappedHand;
 		}
-    }
+	}
 }

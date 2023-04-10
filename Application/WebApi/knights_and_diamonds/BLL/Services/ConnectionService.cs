@@ -53,6 +53,10 @@ namespace BLL.Services
 			if (_onlineUsers.ConnectedUsers.ContainsKey(UserID)) 
 			{ 
 				cons =_onlineUsers.ConnectedUsers[UserID].ToList();
+				if (cons == null)
+				{
+					throw new Exception("This user has no connections");
+				}
 			}
 			return cons;
 		}

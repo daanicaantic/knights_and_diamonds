@@ -9,10 +9,13 @@ import { card } from 'src/classes/card-data';
 })
 export class CardComponent implements OnInit {
   @Input() card!: Card;
+  @Input() isCardShowen: Boolean=true;
+
   
   constructor() { }
 
   ngOnInit(): void {
-    console.log("odje",this.card)
+    // this.isCardShowen=true;
+    // console.log("odje",this.card)
   }
 }

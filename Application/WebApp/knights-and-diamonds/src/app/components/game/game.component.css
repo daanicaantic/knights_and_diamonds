@@ -2,9 +2,18 @@
     font-family: 'Roboto', sans-serif;
     color: white;
 }
+app-card{
+    cursor: pointer;
+}
 body{
     height: 100vh;
     width: 100vw;
+    background-image: url("https://localhost:7250/Resources/Images/wood.jpg");
+    background-size: contain;
+    background-position: center;
+    background-repeat: repeat;
+    background-size: 200px 200px;
+    /* filter: blur(1.5rem); */
 }
 p {
     margin: 0px;
@@ -12,27 +21,36 @@ p {
 }
 
 .big-card {
-    /* width: 334px;
-    height: 452px;
-    font-size: 26px; */
     width: 100%;
     height: 65%;
     font-size: 26px;
     /* -webkit-text-stroke: 0.5px black; */
-
 }
 
 .medium-card,
-.card-back {
+.card-back ,
+.card-in-hand{
     width: 16%;
     height: 251px;
     font-size: 14px;
+   
+}
+.card-in-hand,
+.card-back{
+    background-image: url("https://localhost:7250/Resources/Images/card-back.png");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+.card-in-hand:hover{
+    translate: 0px 50px;
+    z-index: 1;
+
 }
 
 .small-card {
-    width: 85px;
-    height: 114px;
-    font-size: 8px;
+    width: 70px;
+    height: 100px;
+    font-size: 6px;
 }
 
 .background {
@@ -44,8 +62,6 @@ p {
 }
 
 .card-window {
-    /* background-color: yellow; */
-    background-color: #BAD7E9;
     width: 24%;
     height: 100%;
     min-width: 200px;
@@ -54,17 +70,18 @@ p {
     justify-content: space-between;
     align-items: center;
     padding: 10px;
+    background-color: #956E4A;
 }
 
 .enemies-health,
 .players-health {
     width: 100%;
     height: 8%;
-    background-color: #0f3943;
     display: flex;    justify-content: center;
     align-items: center;
-    border: 1px solid rgb(79, 79, 79);
+    border: 1px solid rgb(41, 20, 0);
     border-radius: 10px;
+    background: linear-gradient(#4C3825 0%, #463321 50%, #4C3825 100%);
 }
 
 .phases-window {
@@ -74,61 +91,67 @@ p {
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
+    background-color: #4C3825;
     padding-left: 0.5%;
     padding-right: 0.5%;
-    border-left: 2px solid #0f4a55;
-    border-right: 2px solid #0f4a55;
+    border-left: 2px solid #131313;
+    border-right: 2px solid #141414;
+    /* background-image: url("https://localhost:7250/Resources/Images/health-bar.jpg"); */
+    background-size: 100% 50px;
+
 }
 
 .draw-phase,
 .main-phase,
 .battle-phase,
 .end-phase {
-    background-color: #0f4a55;
+    background-color: #956e4a;
     width: 100%;
     height: 100px;
-    border: 1px solid rgb(79, 79, 79);
+    border: 1px solid #36281a;
     border-radius: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
+
+    /* background: linear-gradient(#956e4a 0%, #533d28 50%, #956e4a 100%); */
 }
 
 .battle-window {
-    /* background-color: coral; */
     min-width: 72%;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     overflow: hidden;
+    flex-direction: column;
 }
 
-.enemies-hand {
-    width: 100%;
-    height: 40px;
-    /* background-color: aqua; */
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-}
+
 
 .picture {
     width: 100%;
     height: 100%;
 }
-
+.enemies-hand {
+    height: 40px;
+    align-items: flex-end;
+}
 .players-hand {
-    width: 100%;
     height: 100px;
-    /* background-color: aqua; */
+}
+.enemies-hand,
+.players-hand{
+    width: 100%;
     display: flex;
     justify-content: center;
+    /* background-image: url("https://localhost:7250/Resources/Images/wood.jpg"); */
+    background-position: center;
+    background-size: contain;
 }
 
-.card-back:hover {
-    translate: 0px 30px;
-}
+
+
 
 .medium-card:hover {
     translate: 0px -30px;
@@ -149,9 +172,15 @@ p {
     /* background-color: antiquewhite; */
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
     align-items: center;
-    background-color: rebeccapurple;
+
+}
+.graveBG{
+    background-image: url("https://localhost:7250/Resources/Images/treestump.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+
 }
 
 /* .enemies-deck
@@ -187,32 +216,50 @@ p {
 } */
 
 .table-all {
-    /* background-color: crimson; */
-
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 1%;
-}
-
-.enemies-table,
-.player-table {
     width: 100%;
     height: 100%;
-    /* background-color: aquamarine; */
-    border: 1px solid gray;
-    border-collapse: collapse;
     display: flex;
     flex-direction: column;
+
+
+}
+
+.player-table,.enemies-table{
+    height: 50%;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    background-color: rgba(108, 104, 102, 0.651);
+    justify-content: stretch;
+    align-items: stretch;
+    margin: 4px;
+    border:2px solid black
+}
+.enemies-table{
+    transform:scale(1,-1);
+}
+
+.card-place{
+    /* margin: 1%; */
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    min-height: 121px;
+
+    /* background-image: url("https://localhost:7250/Resources/Images/texture.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center; */
+    
+
+    
 }
 
 .spell-table,
 .monster-table {
     width: 100%;
     height: 100%;
-    /* background-color: aquamarine; */
     border: 1px solid gray;
     border-collapse: collapse;
     display: flex;
@@ -221,11 +268,11 @@ p {
 }
 
 .spell-table {
-    background-color: #3b4f4e ;
+    /* background-color: #3b4f4e ; */
 }
 
 .monster-table {
-    background-color: #3b4f4e;
+    /* background-color: #3b4f4e; */
 }
 
 .card-place-spell, .card-place-monster {
@@ -243,12 +290,12 @@ p {
 }
 
 .card-place-spell {
-    background-color: #7ea7c1;
+    /* background-color: #7ea7c1; */
 }
 
 .card-place-monster {
     /* background-color: #f0ab7e; */
-    background-color: #e0c269;
+    /* background-color: #e0c269; */
 }
 
 .card-points {
@@ -256,29 +303,21 @@ p {
     flex-direction: row;
 }
 
-.rotating-card:hover {
+.small-card:hover {
     transform: rotate(-90deg);
 }
 
-/* .enemies-deck:after
-{
-    content:"";
-    display:block;
-    position:absolute;
-    left:0px;
-    top:100%;
-    border:10px solid transparent;
-    border-left:10px solid red;
-    border-bottom:10px solid red;
+.deck{
+    width: 70px;
+    height: 110px; 
 }
-.enemies-deck:before
-{
-    content:"";
-    display:block;
-    position:absolute;
-    top:0px;
-    left:100%;
-    border:10px solid transparent;
-    border-top:10px solid red;
-    border-right:10px solid red;
-} */
+.card-summoning{
+    position: absolute;
+    right: calc(50% - 200px);
+    left: calc(50% - 200px);
+    top: calc(50% - 200px);
+    bottom: calc(50% - 200px);
+    width: 400px; 
+    height:400px; 
+    /* background-color: brown; */
+}

@@ -1,22 +1,24 @@
-<div class="container" *ngIf="card != undefined">
-    <div class="img img{{card.cardType}}">
-        <div class="card-level" *ngIf="card.cardType=='MonsterCard'">
-            <h1>{{card.cardLevel}}</h1>
+<div class="background-container-{{isCardShowen}}" *ngIf="card != undefined ">
+    <div class="container" *ngIf="this.isCardShowen==true">
+        <div class="img img{{card.cardType}}" >
+            <div class="card-level" *ngIf="card.cardType=='MonsterCard'">
+                <h1>{{card.cardLevel}}</h1>
+            </div>
+            <div class="attact-points" *ngIf="card.cardType=='MonsterCard'">
+                <h2>{{card.attackPoints}}</h2>
+            </div>
+            <div class="defence-points" *ngIf="card.cardType=='MonsterCard'">
+                <h2>{{card.defencePoints}}</h2>
+            </div>
+            <div class="card-name">
+                <h3>{{card.cardName}}</h3>
+            </div>
+            <div class="card-description">
+                <h6>{{card.description}}</h6>
+            </div>
         </div>
-        <div class="attact-points" *ngIf="card.cardType=='MonsterCard'">
-            <h2>{{card.attackPoints}}</h2>
+        <div class="picture" >
+            <img  src="https://localhost:7250/{{card.imgPath}}" alt="Name name name" style="width: 100%; height: 100%;">
         </div>
-        <div class="defence-points" *ngIf="card.cardType=='MonsterCard'">
-            <h2>{{card.defencePoints}}</h2>
-        </div>
-        <div class="card-name">
-            <h3>{{card.cardName}}</h3>
-        </div>
-        <div class="card-description">
-            <h6>{{card.description}}</h6>
-        </div>
-    </div>
-    <div class="picture" >
-        <img  src="https://localhost:7250/{{card.imgPath}}" alt="Name name name" style="width: 100%; height: 100%;">
     </div>
 </div>

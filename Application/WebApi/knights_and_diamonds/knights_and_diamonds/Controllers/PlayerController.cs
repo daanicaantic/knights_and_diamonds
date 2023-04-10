@@ -34,14 +34,30 @@ namespace knights_and_diamonds.Controllers
 			}
 		}
 
+
+		[Route("SetStatus/{playerID}")]
+		[HttpGet]
+		public async Task<IActionResult> SetStatus(int playerID)
+		{
+			try
+			{
+				var player = await this._playerservice.GetPlayer(playerID);
+				await this._playerservice.SetGameStarted(player);
+				return Ok();
+			}
+			catch (Exception e)
+			{
+				return BadRequest(e.Message);
+			}
+		}
+
 		[Route("Draw/{playerID}")]
 		[HttpGet]
 		public async Task<IActionResult> Draw(int playerID)
 		{
 			try
 			{
-				var card = await this._playerservice.Draw(playerID);
-				return Ok(card);
+				return new JsonResult(await this._playerservice.Draw(playerID));
 			}
 			catch (Exception e)
 			{

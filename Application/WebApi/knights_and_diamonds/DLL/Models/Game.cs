@@ -14,7 +14,6 @@ namespace DAL.Models
         public int ID { get; set; }
 		public int PlayerOnTurn { get; set; }
 		public int TurnNumber { get; set; }
-        public int GameStarted { get; set; } //0,1-nije pocela,2 pocela
         [JsonIgnore]
         public List<Player>? Players { get; set; }
 		[JsonIgnore]

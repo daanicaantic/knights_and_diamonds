@@ -36,7 +36,7 @@ export class RpsGameComponent implements OnInit, OnDestroy {
   loadingType="rpsGame";
   gameID:any;
   winner:any;
-  
+  user:any;
 
 
 
@@ -46,7 +46,9 @@ export class RpsGameComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private rpsGameService: RpsGameService,
     private messageService: MessageService,
-    private router: Router) { }
+    private router: Router) { 
+   
+    }
 
   ngOnInit(): void {
     this.rpsGameID = this.route.snapshot.params['rpsGameID'];
@@ -63,14 +65,24 @@ export class RpsGameComponent implements OnInit, OnDestroy {
         this.playerID=res.playerID;
         this.enemiePlayerID=res.enemiePlayerID;
         this.gameID=res.gameID;
-        console.log("resko reskovic",res)
+        this.setNewUserValue();
+   
       },
       error: err => {
         console.log(err)
       }
     })
   }
-
+  setNewUserValue(){
+    this.user={
+      ...this.authService.userValue,
+      enemie:this.enemiePlayerID,
+      player:this.playerID
+    }
+    localStorage.setItem('user',JSON.stringify(this.user))
+    this.authService.userSubject.next(this.user)
+    console.log(this.authService.userValue);
+  }
   chooseRPSMove(move: string) {
     this.rpsGameService.playRPSMove(this.playerID, move).subscribe({
       next: (res: any) => {

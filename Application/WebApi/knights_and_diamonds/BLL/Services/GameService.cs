@@ -87,12 +87,12 @@ namespace BLL.Services
             }
             return game;
         }
-        public async Task SetGameStarted(Game game)
+    /*    public async Task SetGameStarted(Game game)
         {
             game.GameStarted = game.GameStarted+1;
             this._unitOfWork.Game.Update(game);
             this._unitOfWork.Complete();
-        }
+        }*/
 		public async Task<GameDTO> GetGame(int gameID, int userID)
 		{
 			GameDTO game = new GameDTO();
@@ -113,28 +113,47 @@ namespace BLL.Services
 			return game;
 		}
 
-/*        public async Task<FieldDTO> GetPlayersField(int playerID)
+        public async Task<FieldDTO> GetPlayersField(int playerID)
         {
-            var mappedCards = new List<CardDisplayDTO>();
-
-			var player = await this.GetPlayersField(playerID);
+			var field = new FieldDTO();
+            var player = await this._unitOfWork.Player.GetPlayersField(playerID);
             if (player == null)
             {
                 throw new Exception("There is no player with this id");
             }
-            if (player.Hand == null)
+			//true-vec je pocela partija(tj vec je vukao pocetne karte)//false=!true
+			field.GameStarted = player.GaemeStarted;
+            field.LifePoints=player.LifePoints;
+            field.DeckCount = player.Deck.Count;
+			field.Hand = await this._cardService.MapCards(player.Hand.CardsInHand);
+ 
+			var cardsOnField = new List<CardOnFieldDisplay>();
+            foreach (var f in player.Fields)
             {
-                throw new Exception("This player has no hand");
+                var cardOnField = new CardOnFieldDisplay();
+                if (f.CardOnField != null)
+                {
+                    var mappedCard = await this._cardService.MapCard(f.CardOnField);
+                    cardOnField.CardOnField = mappedCard;
+                }
+                cardOnField.FieldID = f.ID;
+                cardOnField.CardPosition = f.CardPosition;
+                cardOnField.CardShowen = f.CardShowen;
+                cardOnField.FieldIndex = f.FieldIndex;
+                cardsOnField.Add(cardOnField);
             }
-            if(player.CardFields == null)
-            {
-				throw new Exception("This player has no fields");
-			}
-            foreach (var card in player.Hand)
-            {
-                var mappedCard=await this._cardService.m
-            }
-		}*/
+            field.CardFields = cardsOnField;
+            return field;
+        }
+		public EnemiesFieldDTO GetEneiesField(FieldDTO enemiesField)
+		{
+			var field = new EnemiesFieldDTO();
+            field.LifePoints = enemiesField.LifePoints;
+		    field.DeckCount= enemiesField.DeckCount;
+            field.CardFields= enemiesField.CardFields;
+            field.HandCount = enemiesField.Hand.Count;
+			return field;
+		}
 
 		public async Task<int> SetFirstGamesTurn(int rpsGameID,int gameID)
         {

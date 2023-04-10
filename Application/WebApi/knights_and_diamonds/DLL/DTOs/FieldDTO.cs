@@ -9,7 +9,7 @@ namespace DAL.DTOs
 {
 	public struct CardOnFieldDisplay
 	{
-		public CardDisplayDTO CardOnField { get; set; }
+		public MappedCard CardOnField { get; set; }
 		public int FieldID { get; set; }
 		public int FieldIndex { get; set; }
 		public bool CardPosition { get; set; } //0-napad,1-odbrana
@@ -19,8 +19,9 @@ namespace DAL.DTOs
 	public class FieldDTO
     {
         public int LifePoints { get; set; }
-        public List<CardDisplayDTO> Deck { get; set; }
-		public List<CardDisplayDTO> Hand { get; set; }
+		public bool GameStarted { get; set; }
+        public int DeckCount { get; set; }
+		public List<MappedCard> Hand { get; set; }
 		public List<CardOnFieldDisplay> CardFields { get; set; }
 
 	}

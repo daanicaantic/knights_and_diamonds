@@ -19,7 +19,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace SignalR.HubConfig
 {
-	public class MyHub:Hub
+	public class MyHub : Hub
 	{
 		private readonly IConfiguration _config;
 
@@ -45,28 +45,28 @@ namespace SignalR.HubConfig
 			this._gameService = new GameService(this.context);
 			this._playerService = new PlayerService(this.context);
 		}
-		public async Task askServer(string someTextForClient) 
+		public async Task askServer(string someTextForClient)
 		{
 			string tempstring;
-			if(someTextForClient == "hey") 
+			if (someTextForClient == "hey")
 			{
 				tempstring = "HI";
 			}
-			else 
+			else
 			{
 				tempstring = "NEHI";
 			}
-			await Clients.Clients(this.Context.ConnectionId).SendAsync("askServerResponse",tempstring);
+			await Clients.Clients(this.Context.ConnectionId).SendAsync("askServerResponse", tempstring);
 			Console.WriteLine(this.Context.ConnectionId);
 		}
-		public async Task GetConnection() 
+		public async Task GetConnection()
 		{
 			await Clients.Caller.SendAsync("GetConnectionID", this.Context.ConnectionId);
 		}
-		public async Task AddConnection(int userID) 
+		public async Task AddConnection(int userID)
 		{
 			this._connectionService.AddOnlineUser(userID, this.Context.ConnectionId);
-			Console.WriteLine("Konaa" + this.context.ContextId);	
+			Console.WriteLine("Konaa" + this.context.ContextId);
 		}
 		public async Task LogIn(UserInfoDTO userInfo)
 		{
@@ -84,7 +84,7 @@ namespace SignalR.HubConfig
 			await Clients.All.SendAsync("GetUsersFromHub", onlineUsers);
 		}
 
-		public async Task CreateLobby(int player1ID, int player2ID) 
+		public async Task CreateLobby(int player1ID, int player2ID)
 		{
 			var user1 = await this._userService.GetUserByID(player1ID);
 			var user2 = await this._userService.GetUserByID(player2ID);
@@ -92,7 +92,7 @@ namespace SignalR.HubConfig
 			var player1 = new OnlineUserDto(user1.ID, user1.Name, user1.SurName, user1.UserName);
 			var player2 = new OnlineUserDto(user2.ID, user2.Name, user2.SurName, user2.UserName);
 
-			this._rpsGameService.NewLobby(player1, player2);
+			await this._rpsGameService.NewLobby(player1, player2);
 
 			await Clients.All.SendAsync("AddUsersToLobby");
 		}
@@ -104,7 +104,7 @@ namespace SignalR.HubConfig
 			foreach (var con in connections)
 			{
 				await Clients.Client(con).SendAsync("GetGamesRequests", games);
-            }
+			}
 		}
 
 		public async Task StartRPSGame(int rpsGameID)
@@ -120,22 +120,22 @@ namespace SignalR.HubConfig
 			}
 		}
 
-        public async Task CheckRPSWinner(int rpsGameID)
-        {
+		public async Task CheckRPSWinner(int rpsGameID)
+		{
 			var RPSwinner = await this._rpsGameService.CheckRPSWinner(rpsGameID);
-            var userIDs = await this._rpsGameService.RedirectToGame(rpsGameID);
-            foreach (var userID in userIDs)
-            {
-                var connections = await this._connectionService.GetConnectionByUser(userID);
-                foreach (var con in connections)
-                {
-                    await Clients.Client(con).SendAsync("GetRPSWinner", RPSwinner);
-                }
-            }
-        }
+			var userIDs = await this._rpsGameService.RedirectToGame(rpsGameID);
+			foreach (var userID in userIDs)
+			{
+				var connections = await this._connectionService.GetConnectionByUser(userID);
+				foreach (var con in connections)
+				{
+					await Clients.Client(con).SendAsync("GetRPSWinner", RPSwinner);
+				}
+			}
+		}
 		/*---------------------------K-N-I-G-H-T-S-A-N-D-D-I-A-M-O-N-D-S----------------------------------------------*/
 
-		public async Task GetHands(ConnectionsPerUser connections,List<CardDisplayDTO> playerHand)
+		public async Task GetHands(ConnectionsPerUser connections, List<MappedCard> playerHand)
 		{
 			var count = playerHand.Count;
 			foreach (var con in connections.MyConnections)
@@ -147,24 +147,51 @@ namespace SignalR.HubConfig
 				await Clients.Client(con).SendAsync("GetNumberOfCardsInHand", count);
 			}
 		}
+		public async Task GetField(ConnectionsPerUser connections, FieldDTO field)
+		{
+			var enemiesField = this._gameService.GetEneiesField(field);
+			foreach (var con in connections.MyConnections)
+			{
+				await Clients.Client(con).SendAsync("GetYourField", field);
+			}
+			foreach (var con in connections.EnemiesConnections)
+			{
+				await Clients.Client(con).SendAsync("GetEnemiesField", enemiesField);
+			}
+		}
 
 		public async Task StartingDrawing(int gameID, int playerID)
 		{
-			var game = await this._gameService.GetGameByID(gameID);
+			var player=await this._playerService.GetPlayer(playerID);
 			var connections = await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
+
 			var countOfCards = 0;
 
-			if (game.GameStarted < 2)//ako je 2 oba igracu su pozvala ovu fju,pa kad se refresuje klijent nece se izvlaciti nove kartte
+			if (player.GaemeStarted == false)
 			{
-				await this._gameService.SetGameStarted(game);
+				await this._playerService.SetGameStarted(player);
 				while (countOfCards < 5)
 				{
-					var card = await this._playerService.Draw(playerID);
+					var card=await this._playerService.Draw(playerID);
 					countOfCards = countOfCards + 1;
 				}
 			}
 			var playerHand = await this._playerService.GetPlayersHand(playerID);
 			await this.GetHands(connections, playerHand);
 		}
-    }
+
+		public async Task GetPlayersField(int gameID, int playerID)
+		{
+			
+			var connections = await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
+			var field = await this._gameService.GetPlayersField(playerID);
+			if (field == null)
+			{
+				throw new Exception("This player has no field");
+			}
+			await this.GetField(connections,field);
+		}
+
+
+	}
 }

@@ -12,19 +12,24 @@ import { SignalrService } from 'src/app/services/signalr.service';
   styleUrls: ['./game.component.css']
 })
 export class GameComponent implements OnInit, OnDestroy {
+  userID = this.authService?.userValue?.id;
+  playerID=this.authService?.userValue?.player;  
+  enemiesID=this.authService?.userValue?.enemie; 
+  curentPhase="DP";
+
+  playerField:any;
+  enemiesField:any;
   card = card;
-  numberOfCardsInEnemiesHand:Number = 6;
+  // numberOfCardsInEnemiesHand:Number = 6;
   isLoadingOver=false;
   loadingType="game";
-  userID = this.authService?.userValue?.id;
-  gameID:any;
-  playerID:any;
-  enemiesID:any;
+  gameID:any
   playerHand:any[]=[];
-  numOfEnemiesCards:any[]=[];
+  enemiesHand:any[]=[];
   drawingTimer:any;
-  mediumCard:any;
-
+  mediumCard=card; 
+  graveCard:any;
+  iscardshowen=false;
   constructor(
     public inGameService:IngameService,
     public gameService:GameService,
@@ -35,13 +40,15 @@ export class GameComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.gameID = this.route.snapshot.params['gameID'];
-    this.setGameStatus();
-    this.getGame();
-    this.startingDrawing();
-    this.getNumOfCardsInHand();
-
     
+    console.log(this.authService.userValue);
+    this.gameID = this.route.snapshot.params['gameID'];
+    // this.getPlayersField();
+    // this.getEnemiesField();
+    this.getStartingField();
+
+    this.getStartingDrawing();
+
   }
 
   ngOnDestroy(): void {
@@ -51,58 +58,75 @@ export class GameComponent implements OnInit, OnDestroy {
   setGameStatus(){
     this.inGameService.setGameOn();
   }
-  getTimer(event:any){
-    console.log("ovdeee",event);
+  onLoadingOver(event:any){
     this.isLoadingOver=event;
-
-    if(this.userID!=undefined){
-      if (this.signalrService.hubConnection.state=="Connected") {
-        this.startingDrawingInv(); 
-      }
-      else{
-        this.signalrService.ssSubj.subscribe((obj: any) => {
-          if (obj.type == "HubConnStarted") {
-            this.startingDrawingInv(); 
-          }
-        });
-      }
+    if(this.playerField.gameStarted==false){
+      this.gameService.startingDrawingInv(Number(this.gameID),this.playerID); 
     }
   }
-  
-  getGame(){
-    this.gameService.getGame(this.gameID, this.userID).subscribe({
-      next: (res:any) => {
-        this.playerID=res.playerID;
-        this.enemiesID=res.enemiePlayerID;
-        console.log("resko reskovic",res)
-        // this.startingDrawingInv();
+
+  //koristimo fju prilikom ngOnInita vraca ceo prikaz table
+  //preko kontrolera,preko signalr-a,ukoliko dodje do refresha
+  //dolazi do gresaka
+  getStartingField(){
+    this.gameService.getPlayersField(this.playerID).subscribe({
+      next: res => {
+        this.playerField=res;
+        console.log(this.playerField)
+   
+        this.playerField.cardFields[3].cardOnField=this.playerField.hand[0]
+        this.playerField.cardFields[9].cardOnField=this.playerField.hand[2]
+        this.playerField.cardFields[9].cardShowen=false;
 
       },
       error: err => {
-        console.log(err)
+        console.log(err.error);
+      }
+    })
+    this.gameService.getEnemiesField(this.enemiesID).subscribe({
+      next: res => {
+        this.enemiesField=res;
+        this.enemiesHand=Array.from(Array(this.enemiesField.handCount).keys())
+        this.enemiesField.cardFields[4].cardOnField=this.mediumCard
+        this.enemiesField.cardFields[0].cardOnField=this.mediumCard
+        this.enemiesField.cardFields[9].cardOnField=this.mediumCard
+
+        this.enemiesField.cardFields[9].cardShowen=false;
+        console.log( this.enemiesField.cardFields[9])
+
+      },
+      error: err => {
+        console.log(err.error);
       }
     })
   }
+  
 
-  startingDrawingInv(): void {
-    this.signalrService.hubConnection.invoke("StartingDrawing",Number(this.gameID),this.playerID)
-      .catch(err => console.error(err));
-  }
 
-  startingDrawing() {
+  getStartingDrawing() {
     this.signalrService.hubConnection.on("GetFirstCards", (playerHand: any) => {
-      console.log(playerHand);
-      this.getStartingDrawingEffect(0,this.playerHand,playerHand);
-      // this.playerHand=playerHand;
+      this.getStartingDrawingEffect(0,this.playerField.hand,playerHand);
     });
-  }
-  getNumOfCardsInHand(){
     this.signalrService.hubConnection.on("GetNumberOfCardsInHand", (count: any) => {
-      console.log(count);
-      this.getEnemiesDrawingEffect(0,this.numOfEnemiesCards,count);
-      // this.getArrayValues(0,this.numbers,)
+      this.getEnemiesDrawingEffect(0,this.enemiesHand,count);
     })
   }
+
+  getPlayersField() {
+    this.signalrService.hubConnection.on("GetYourField", (field: any) => {
+      this.playerField=field;
+      console.log(this.playerField);
+    });
+  }
+  getEnemiesField() {
+    this.signalrService.hubConnection.on("GetEnemiesField", (enemiesField: any) => {
+      this.enemiesField=enemiesField;
+      console.log(this.enemiesField);
+    });
+  }
+
+
+
   //koristimo fju za prikaz pocetnog izvlacenja karata;
   getStartingDrawingEffect(index:any,selectedArray:any,Array2:any) {
     var timer=setInterval(() => {
@@ -111,6 +135,7 @@ export class GameComponent implements OnInit, OnDestroy {
         return;
       }
       selectedArray.unshift(Array2[index]);
+      this.playerField.deckCount=this.playerField.deckCount-1;
       index++;
     }, 300);
   }
@@ -122,9 +147,25 @@ export class GameComponent implements OnInit, OnDestroy {
         clearInterval(timer)
         return;
       }
-      selectedArray.unshift(new Array<number>(index));
+      this.getEnemiesNumberOfCards(selectedArray);
       index++;
     }, 300);
   }
 
+  getEnemiesNumberOfCards(selectedArray:any){
+    selectedArray.unshift(new Array<number>(0));
+    this.enemiesField.deckCount=this.enemiesField.deckCount-1;
+  }
+  onEnemiesCardMouseOver(field:any){
+    this.mediumCard=field.cardOnField;
+    if(field.cardShowen==true) 
+    {
+      this.iscardshowen=true;
+    }
+    else{
+      this.iscardshowen=false;
+    }
+    
+  }
 }
+

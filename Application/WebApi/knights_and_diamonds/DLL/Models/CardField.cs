@@ -31,8 +31,8 @@ namespace DAL.Models
 			FieldIndex = fieldIndex;
 			PlayerID = playerID;
 			FieldType = fieldType;
-			CardPosition = false;
-			CardShowen = false;
+			CardPosition = true;
+			CardShowen = true;
 		}
 	}
 }

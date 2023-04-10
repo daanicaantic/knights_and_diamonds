@@ -29,7 +29,7 @@ export class LoadinscreenComponent implements OnInit {
           clearInterval(interval);
           // this.router.navigate(['/game']);
       }
-  }, 500);
+  }, 700);
   }
   onTimerOver() {
     this.onTimerOverTask.emit(this.isTimerOver);
