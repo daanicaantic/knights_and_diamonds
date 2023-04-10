@@ -70,7 +70,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   getGameRequestsList() {
     this.signalrService.hubConnection.on("GetGamesRequests", (gameRequests:any[]) => {
       this.gameRequests=gameRequests;
-      console.log(gameRequests);
+      console.log("game request list",gameRequests);
     });
   }
 

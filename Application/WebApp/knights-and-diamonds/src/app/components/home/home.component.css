@@ -95,100 +95,165 @@ h3 {
     cursor: pointer;
 }
  */
-.chalange-player,body{
-    background-size:cover;
-    background-repeat:no-repeat;
-    background-position: top;
 
-
+h1, h2, h3 {
+  font-family: 'Roboto', sans-serif;
 }
-body{
-    font-family: Arial, Helvetica, sans-serif;
-    height: calc(100vh - 66px);
-    background-color: rgb(25,27,31);
-    width: 100%;
-    display: flex; 
-    background-position:top;
-    justify-content:flex-end;   
 
+.chalange-player,
+body {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top;
+}
+
+body {
+  /* font-family: Arial, Helvetica, sans-serif; */
+  height: calc(100vh - 66px);
+  /* background-color: rgb(25,27,31); */
+  background-image: url("https://localhost:7250/Resources/Images/home-background.jpg");
+  background-size: 100% 100%;
+  width: 100%;
+  display: flex;
+  background-position: top;
+  justify-content: flex-end;
 }
 
 
 .container {
-    height: 100%;
-    min-width: 300px;
-    border:3px solid #1d3036;
-    background: linear-gradient(360deg,#1d3036 0%, rgba(255, 255, 255, 0) 50%,#1d3036 100% );
+  height: 100%;
+  min-width: 300px;
+  border-left: 2px solid rgba(137, 137, 137);
+  /* background: linear-gradient(360deg,#192b30 0%, rgba(255, 255, 255, 0) 50%, #162428 100% ); */
+  /* background-color: #101618; */
+  background-color: rgba(137, 137, 137, 0.5);
+  position: relative;
+}
 
-  }
-  .online-users{
-    display: flex;
-    flex-direction: column;
-    padding: 5px; 
+.header {
+  color: white;
+  margin: 5%;
+  display: flex;
+  justify-content: flex-end;
+}
 
-  }
+.online-users {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+}
 
-  .user{
-    height: 90px;
-    width: 100%;
-    background-color: #1e3036;
-    margin-bottom: 5px;
-    border-radius: 5px;
-    border:2px solid #0a1113;
-    padding: 2px;
-    display: flex;
-  }
-  .avatar{
-    height: 100%;
-    aspect-ratio: 1/1;
-    border:2px solid #0a1113;
-    background-color: #c2c9a0;
-    border-radius: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color:#0a1113;
-  }
-  .username{
-    width: 100%;
-    height: 100%;
-    display: flex;
-    text-align: center;
-    justify-content: space-around;
-    align-items: center;
-  }
-  .chalange-player{
-    height: 50%;
-    aspect-ratio: 1/1;
-    background-image: url("https://localhost:7250/Resources/Images/cursor.png");
-    cursor:pointer;
-  }
-  .news-container{
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    flex-direction: column;
-  }
-  .news{
-    height: 30%;
-    width: 100%;
-    margin-bottom: 1%;
-    /* background-color:red; */
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-  }
-  .div{
-    height: 100%;
-    width:200px;
-    margin: 0px;
-    clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);
-    /* background-color: yellow; */
-    background-image: url("https://localhost:7250/Resources/Images/wizard.png");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    /* border: #0a1113 solid 5px; */
+.user {
+  color: white;
+  height: 70px;
+  width: 100%;
+  /* background-color: #bad4dc; */
+  margin-bottom: 2%;
+  margin-top: 2%;
+  border-radius: 5px;
+  /* border: 2px solid #0a1113; */
+  padding: 2px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
 
-  }
+.avatar-border {
+  height: 100%;
+  aspect-ratio: 1/1;
+  border: 2px solid #ecf0f1;
+  border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0a1113;
+  padding: 1%;
+}
+
+.avatar {
+  color: white;
+  height: 100%;
+  aspect-ratio: 1/1;
+  /* border: 2px solid #0a1113; */
+  background-color: #f5dfd0;
+  border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0a1113;
+}
+
+.username {
+  color: white;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  text-align: center;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.chalange-player {
+  height: 60%;
+  aspect-ratio: 1/1;
+  background-image: url("https://localhost:7250/Resources/Images/swords.png");
+  cursor: pointer;
+}
+
+.news-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
+}
+
+.news {
+  height: 30%;
+  width: 100%;
+  margin-bottom: 1%;
+  /* background-color:red; */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.div {
+  height: 100%;
+  width: 200px;
+  margin: 0px;
+  clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);
+  /* background-color: yellow; */
+  background-image: url("https://localhost:7250/Resources/Images/wizard.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  /* border: #0a1113 solid 5px; */
+
+}
+
+.gamerequests {
+  /* height: 70px; */
+  display: flex;
+  justify-content: flex-end;
+}
+
+.gamerequest-actions {
+  display: flex;
+  flex-direction: row;
+}
+
+.gamerequest-accept {
+  height: 60%;
+  aspect-ratio: 1/1;
+  background-image: url("https://localhost:7250/Resources/Images/cancel.png");
+  cursor: pointer;
+}
+
+.gamerequest-deny {
+  height: 60%;
+  aspect-ratio: 1/1;
+  background-image: url("https://localhost:7250/Resources/Images/checkmark.png");
+  cursor: pointer;
+}
