@@ -10,7 +10,8 @@ namespace DAL.Repositories.Contracts
 {
     public interface IDeckRepository : IRepository<Deck>
     {
-		Task<Deck> AddDeck(Deck deck);
-		Task<List<CardInDeck>> GetCardsFromDeck(int deckID, int userID);
+        Task<Deck> AddDeck(Deck deck);
+        Task<User> SetMainDeck(int userID, int deckID);
+        Task<List<CardInDeck>> GetCardsFromDeck(int deckID, int userID);
 	}
 }

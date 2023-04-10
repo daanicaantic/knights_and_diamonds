@@ -8,6 +8,7 @@ using DAL.UnitOfWork;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -181,5 +182,30 @@ namespace BLL.Services
 			}
 			return mappedCards;
         }
+
+/*		public async Task<CardDisplayDTO> MapMonsterCard(int cardID)
+		{
+            var mappedCard = new CardDisplayDTO();
+            var card = await this.unitOfWork.Card.GetMonsterCard(cardID);
+        }*/
+
+/*		public async Task<List<CardDisplayDTO>> GetFilteredCards(int cardTypeID, string name)
+		{
+            *//*Expression<Func<T, bool>> predicate;*//*
+            var cardType = await unitOfWork.Card.GetCardType(cardTypeID);
+
+			
+			//var cards = new List<CardDisplayDTO>();
+			if(cardType == null && name == " ")
+			{
+				return await this.GetAllCards();
+			}
+			else if(cardType == null) 
+			{
+                Expression predicate = x => x.CardName == name;
+				var cards = await unitOfWork.Card.Find(predicate);
+			}
+			
+        }*/
     }
 }

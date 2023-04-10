@@ -38,22 +38,30 @@ namespace knights_and_diamonds.Controllers
             }
         }
 
-        [Route("AddCardToDeck")]
-        [HttpPost]
-        public async Task<IActionResult> AddCardToDeck(int cardID,int deckID)
+        [Route("SetMainDeck")]
+        [HttpPut]
+        public async Task<IActionResult> SetMainDeck(int userID, int deckID)
         {
             try
             {
-                await this._deckService.AddCardToDeck(cardID, deckID);
-                return Ok();
+                if (userID <= 0)
+                {
+                    return BadRequest("UserID must be bigger then 0");
+                }
+                if (deckID <= 0)
+                {
+                    return BadRequest("DeckID must be bigger then 0");
+                }
+                var user = await this._deckService.SetMainDeckID(userID, deckID);
+                return Ok(user);
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(e);
             }
         }
 
-		[Route("GetDeck/{userID}")]
+        [Route("GetDeck/{userID}")]
         [HttpGet]
         public async Task<IActionResult> GetDeck(int userID)
         {
@@ -70,6 +78,54 @@ namespace knights_and_diamonds.Controllers
             {
                 return BadRequest(e.Message);
             }
-		}
+        }
+
+        [Route("AddCardToDeck/{cardID}/{deckID}")]
+        [HttpPost]
+        public async Task<IActionResult> AddCardToDeck(int cardID, int deckID)
+        {
+            try
+            {
+                await this._deckService.AddCardToDeck(cardID, deckID);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+        [Route("RemoveCardFromDeck/{cardID}/{deckID}")]
+        [HttpDelete]
+        public async Task<IActionResult> RemoveCardFromDeck(int cardID, int deckID)
+        {
+            try
+            {
+                await this._deckService.RemoveCardFromDeck(cardID, deckID);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [Route("CardCounter/{deckID}/{userID}")]
+        [HttpGet]
+        public async Task<IActionResult> CardCounter(int deckID, int userID)
+        {
+            try
+            {
+                if (userID <= 0 || deckID <= 0)
+                {
+                    return BadRequest("ID must be bigger than 0");
+                }
+                var count = await this._deckService.CardCounter(deckID, userID);
+                return new JsonResult(count);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

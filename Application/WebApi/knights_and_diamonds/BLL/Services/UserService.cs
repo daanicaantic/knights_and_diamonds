@@ -56,19 +56,5 @@ namespace BLL.Services
                 throw;
             }
         }
-
-        public async Task<User> SetMainDeckID(int userID, int deckID)
-        {
-
-            var deck = await this.unitOfWork.Deck.GetCardsFromDeck(userID, deckID);
-            if (deck == null)
-            {
-                throw new Exception("This user doesn't contains deck with this ID");
-            }
-            var user = await this.unitOfWork.User.SetMainDeck(userID, deckID);
-            await this.unitOfWork.Complete();
-            return user;
-
-        }
     }
 }

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
@@ -20,11 +20,13 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   constructor(
     public authService: AuthService,
     private route: ActivatedRoute,
-    private userService: UserService) { }
+    private userService: UserService,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id']
-    console.log('ID playera', this.id)
+
+    // console.log("u s e r c i n a",this.user.mainDeckID);
     this.getUser(this.id)
 
     if (this.id == this.authService?.userValue?.id) {
@@ -42,8 +44,14 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   getUser(userID: number) {
     this.userService.getUser(userID).subscribe((user) => {
       this.user = user;
+      console.log("u s e r c i n a",this.user.mainDeckID);
+      
       console.log(this.user)
     });
+  }
+
+  redirectToDeck(){
+    this.router.navigate(['/deck-create', this.user.mainDeckID]);
   }
 
 }

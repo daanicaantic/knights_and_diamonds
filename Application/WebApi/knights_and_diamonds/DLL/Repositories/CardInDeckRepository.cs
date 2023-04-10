@@ -17,7 +17,13 @@ namespace DAL.Repositories
 		}
 		public KnightsAndDiamondsContext Context
 		{
-			get { return Context as KnightsAndDiamondsContext; }
+			get { return _context as KnightsAndDiamondsContext; }
 		}
-	}
+
+        public async Task<CardInDeck> RemoveCardFromDeck(int cardID, int deckID)
+        {
+			var card = await Context.CardInDecks.Where(x => x.CardID == cardID && x.DeckID == deckID).FirstOrDefaultAsync();
+            return card;
+        }
+    }
 }

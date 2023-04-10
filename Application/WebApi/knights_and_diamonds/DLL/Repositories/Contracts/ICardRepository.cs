@@ -18,7 +18,8 @@ namespace DAL.Repositories.Contracts
 		Task<List<MonsterCard>> GetMonsterCards();
 		Task<Card> GetCard(int cardID);
 		Task<MonsterCard> GetMonsterCard(int cardID);
+		Task<List<CardType>> GetCardTypes();
 
 
-	}
+    }
 }

@@ -17,7 +17,6 @@ export class MenubarComponent implements OnInit {
   id!: number;
   menubarOptions:any[]=["Home","Deck","Rules"];
 
-
   constructor(
     public authService: AuthService,
     private router: Router,
@@ -34,7 +33,7 @@ export class MenubarComponent implements OnInit {
           label: 'Home', routerLink: ['/welcome']
         },
         {
-          label: 'Cards',routerLink:['/loading']
+          label: 'Cards', routerLink: ['/loading']
         },
         {
           label: 'Rules'

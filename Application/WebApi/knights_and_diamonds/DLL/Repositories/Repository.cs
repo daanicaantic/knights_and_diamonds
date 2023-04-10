@@ -36,7 +36,6 @@ namespace DAL.Repositories
 		}
 		public void Delete(T obj)
 		{
-
 			this._context.Set<T>().Remove(obj);
 		}
 		public void Update(T obj)

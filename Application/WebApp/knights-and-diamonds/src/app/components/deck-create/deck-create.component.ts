@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { AuthService } from 'src/app/services/auth.service';
 import { CardService } from 'src/app/services/card.service';
 import { DeckService } from 'src/app/services/deck.service';
@@ -22,29 +23,40 @@ export class DeckCreateComponent implements OnInit {
   startingvalue: any;
   cardsInDeck: any;
   userID = this.authService?.userValue?.id;
+  deckID: any;
+  sortType: any[]=[];
+  stats: any;
 
   constructor(private cardService: CardService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private deckService: DeckService,
-    private authService: AuthService) {
+    private authService: AuthService,
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService) {
     }
 
   ngOnInit(): void {
-    this.userID = this.route.snapshot.params['userID']
-    console.log('ID usera', this.userID)
+    this.deckID = this.route.snapshot.params['deckID']
+    console.log('ID deck', this.deckID)
     this.getCards();
     this.getCardTypes();
-    this.getUsersDeck(this.userID);
+    this.getUsersDeck();
+    this.cardCounter();
 
     this.form = this.fb.group({
       cardName: "",
       cardTypeID: 0,
+      cardSorting: 0,
     })
   }
 
   onCardTypeChange(){
     console.log(this.form.getRawValue())
+  }
+
+  onCardSortChange() {
+
   }
 
   getCards() {
@@ -72,7 +84,7 @@ export class DeckCreateComponent implements OnInit {
     })
   }
 
-  getUsersDeck(userID:any) {
+  getUsersDeck() {
     this.deckService.getUsersDeck(this.userID).subscribe({
       next: res => {
         console.log(res)
@@ -82,6 +94,54 @@ export class DeckCreateComponent implements OnInit {
         console.log("neuspesno getUsersDeck")
       }
     })
+  }
+
+  cardCounter() {
+    this.deckService.cardCounter(this.deckID, this.userID).subscribe({
+      next: res => {
+        this.stats = res;
+      },
+      error: err => {
+        console.log("neuspesno cardCounter")
+      }
+    })
+  }
+
+  addCardToDeck(cardID:any) {
+    this.confirmationService.confirm({
+      message: 'Add this card to your deck?',
+      accept: () => {
+        this.deckService.addCardToDeck(cardID, this.deckID).subscribe({
+          next: res => {
+            this.getUsersDeck();
+            this.cardCounter();
+            this.messageService.add({ key: 'br', severity: 'success', summary: 'Success', detail: 'Card added!'});
+          },
+          error: err => {
+            this.messageService.add({ key: 'br', severity: 'error', summary: 'Error', detail: err.error });
+          }
+        })
+      }
+    });
+  }
+
+  removeCardFromDeck(cardID:any) {
+    this.confirmationService.confirm({
+      message: 'Remove this card from your deck?',
+      accept: () => {
+        this.deckService.removeCardFromDeck(cardID, this.deckID).subscribe({
+          next: res => {
+            this.getUsersDeck();
+            this.cardCounter();
+            this.messageService.add({ key: 'br', severity: 'success', summary: 'Success', detail: 'Card removed!'});
+          },
+          error: err => {
+            console.log(err.error)
+            this.messageService.add({ key: 'br', severity: 'error', summary: 'Error', detail: err.error });
+          }
+        })
+      }
+    });
   }
 
 }

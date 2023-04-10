@@ -61,7 +61,12 @@ namespace DAL.Repositories
 			return cardType;
 		}
 
-		public async Task<List<Card>> GetSpellTrapCards()
+        public async Task<List<CardType>> GetCardTypes()
+        {
+			return await this.Context.CardTypes.ToListAsync();
+        }
+
+        public async Task<List<Card>> GetSpellTrapCards()
 		{
 			var cards = await this.Context.Cards
 				.Include(x => x.Effect)

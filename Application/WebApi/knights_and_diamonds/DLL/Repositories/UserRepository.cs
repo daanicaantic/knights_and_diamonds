@@ -32,13 +32,5 @@ namespace DAL.Repositories
             var user = await this.Context.Users.Where(x => x.UserName == username).FirstOrDefaultAsync();
             return user;
         }
-
-        public async Task<User> SetMainDeck(int userID, int deckID)
-        {
-            var user = await this.Context.Users.Where(x => x.ID == userID).FirstOrDefaultAsync();
-            user.MainDeckID = deckID;
-            this.Context.Users.Update(user);
-            return user;
-        }
     }
 }
