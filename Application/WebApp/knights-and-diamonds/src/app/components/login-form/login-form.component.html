@@ -15,17 +15,13 @@
                 <input class="field" formControlName="password" type="password" pPassword pInputText/>
               </div>
               <div class="button-submit-div">
-                <button class="button-submit p-button-rounded" pButton type="button" label="LOGIN" (click)="onSubmit()"></button>
+                <button class="button-submit" label="LOGIN" (click)="onSubmit()">LOGIN</button>
+                <!-- <button class="button-submit p-button-rounded" pButton type="button" label="LOGIN" (click)="onSubmit()"></button> -->
               </div>
             </div>
             <div class="reg-field mt-5">
               <label class="mt-10 mb-2 text-align-center">You don't have an account? </label>
-              <label class="reg-link font-bold" (click)="onRegistration()" [routerLink]="['/register']"
-                #hoverName
-                (mouseenter)="onMouseEnter(hoverName)"
-                (mouseleave)="onMouseOut(hoverName)">
-                Register.
-              </label>
+              <label class="reg-link font-bold" (click)="onRegistration()" [routerLink]="['/register']">Sign up.</label>
             </div>
         </form>
       </div>

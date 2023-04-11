@@ -40,7 +40,10 @@
     </div>
     <div class="container">
         <div class="header">
-            <h2>Online users</h2>
+            <h2>online users</h2>
+        </div>
+        <div class="header-text" *ngIf="usersOnline.length<1">
+            <h2>no active users...</h2>
         </div>
         <div class="online-users" *ngFor="let onlineuser of usersOnline">
             <div class="user">

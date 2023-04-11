@@ -1,4 +1,4 @@
-<p-menubar [model]="items">
+<!-- <p-menubar [model]="items">
         <ng-template pTemplate="end">
                 <button class="button" (click)="onClick()"
                         *ngIf="authService?.userValue?.role==='Admin' ||
@@ -21,4 +21,30 @@
                                                          authService?.userValue?.role!=='Player'"
                 pButton label="Login"></button>
         </ng-template>
-</p-menubar>
+</p-menubar> -->
+
+<div class="container">
+        <header>
+                <div class="logo-and-pages">
+                        <div class="logo-and-line">
+                                <div class="logo"><p>Knights&Diamonds</p></div>
+                                <div class="vl"></div>
+                        </div>
+                        <div class="pages">
+                                <div class="home-page">Home</div>
+                                <div class="rules-page">Rules</div>
+                                <div class="cards-page">Cards</div>
+                        </div>
+                </div>
+                <div class="buttons" *ngIf="user==undefined">
+                        <button class="button-login" [routerLink]="['/login']">Login</button>
+                        <button class="button-signup">Sign up</button>
+                </div>
+                <div class="buttons" *ngIf="user!=undefined">
+                        <!-- <button class="button-profile">P</button> -->
+                        <div class="avatar">
+                                <p style="color: #d15f1c;">{{user.name[0]}}{{user.surName[0]}}</p>
+                        </div>
+                </div>
+        </header>
+</div>
