@@ -23,9 +23,8 @@ namespace DAL.Repositories
 
 		public async Task<Effect> GetEffectByDescription(string description)
 		{
-			return await this.Context.Effects.Where(x => x.Description == description).FirstOrDefaultAsync();
+			return await this.Context.Effects.Where(x => x.Description == description).Include(x=>x.EffectType).FirstOrDefaultAsync();
 		}
-
 		public async Task<EffectType> GetEffectType(int effectTypeID)
 		{
 			return await this.Context.EffectTypes.FindAsync(effectTypeID);

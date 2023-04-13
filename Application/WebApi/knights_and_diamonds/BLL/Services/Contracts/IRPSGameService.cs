@@ -24,5 +24,6 @@ namespace BLL.Services.Contracts
         Task<int> CheckRPSWinner(int RPSgameID);
         Task<Player> GetPlayer(int gameID, int userID);
         Task RemoveUserFromUsersInGame(int userID);
-    }
+
+	}
 }

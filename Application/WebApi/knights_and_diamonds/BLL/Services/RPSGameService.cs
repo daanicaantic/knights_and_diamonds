@@ -240,7 +240,17 @@ namespace BLL.Services
 		public async Task<int> CheckRPSWinner(int RPSgameID)
 		{
             var game = await this._unitOfWork.RPSGame.GetGameWithPlayers(RPSgameID);
+			if (game == null)
+			{
+				throw new Exception("There is no game with this ID");
+			}
 			List<Player> players = game.Players;
+			var cardGame = await this._unitOfWork.Game.GetOne(players[0].GameID);
+			if (cardGame == null)
+			{
+				throw new Exception("There is no game with this ID");
+			}
+
 			int winner=new();
 
 
@@ -317,6 +327,8 @@ namespace BLL.Services
 			}
 
 			game.Winner = winner;
+			cardGame.PlayerOnTurn = winner;
+			this._unitOfWork.Game.Update(cardGame);
 			this._unitOfWork.RPSGame.Update(game);
 			await this._unitOfWork.Complete();
 			return winner;

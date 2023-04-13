@@ -13,6 +13,7 @@ namespace DAL.Models
 	{
 		public int ID { get; set; }
 		[JsonIgnore]
+		public int? CardOnFieldID { get; set; }
 		public CardInDeck? CardOnField { get; set; }
 		public int FieldIndex { get; set; }
 		public string? FieldType { get; set; }

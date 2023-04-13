@@ -4,6 +4,8 @@ using DAL.DataContext;
 using Microsoft.AspNetCore.Mvc;
 using DAL.Models;
 using Microsoft.EntityFrameworkCore;
+using BLL.Strategy.Context;
+using BLL.Strategy;
 
 namespace knights_and_diamonds.Controllers
 {
@@ -13,6 +15,7 @@ namespace knights_and_diamonds.Controllers
 	{
 		private readonly KnightsAndDiamondsContext _context;
 		public IEffectService _effectService { get; set; }
+		public StrategyContext	concreteStrategy { get; set; }
 		public TypesController(KnightsAndDiamondsContext context)
 		{
 			this._context = context;
@@ -96,6 +99,24 @@ namespace knights_and_diamonds.Controllers
             }
         }
 
-    }
+		[Route("Strategy")]
+		[HttpPut]
+		public async Task<IActionResult> Strategy([FromBody] List<int> listOfCards, string description, int playerID)
+		{
+			try
+			{
+				var cs = new ConcreteStrategy(this._context);
+				this.concreteStrategy=cs.SetStrategyContext("takeCardFromEnemiesField");
+				int area=concreteStrategy.GetAreaOfSelectingCards();
+				await concreteStrategy.ExecuteEffect(listOfCards,description,playerID);
+				return Ok(area);
+			}
+			catch (Exception e)
+			{
+				return BadRequest(e.Message);
+			}
+		}
+
+	}
 
 }

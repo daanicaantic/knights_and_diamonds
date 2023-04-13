@@ -77,5 +77,15 @@ namespace DAL.Repositories
 				.FirstOrDefaultAsync();
 			return field;
 		}
+
+		public async Task<Player> GetPlayerWithFields(int playerID)
+		{
+			var player = await this.Context.Players
+				.Include(x => x.Fields)
+				.ThenInclude(x => x.CardOnField)
+				.Where(p => p.ID == playerID)
+				.FirstOrDefaultAsync();
+			return player;
+		}
 	}
 }

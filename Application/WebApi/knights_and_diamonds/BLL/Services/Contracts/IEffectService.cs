@@ -11,5 +11,7 @@ namespace BLL.Services.Contracts
 	{
 		Task<IList<EffectType>> GetEffectTypes();
 		Task<EffectType> GetEffectTypeByID(int effectTypeID);
-    }
+		Task<int> GetAreaOfClickingAfterPlayCard(int effectTypeID);
+
+	}
 }

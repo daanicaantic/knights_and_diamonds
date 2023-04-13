@@ -14,5 +14,6 @@ namespace DAL.Repositories.Contracts
 		Task<Player> GetPlayerWithHandAndDeckByID(int playerID);
 		Task<PlayersHand> GetPlayersHand(int playerID);
 		Task<Player> GetPlayersField(int playerID);
+		Task<Player> GetPlayerWithFields(int playerID);
 	}
 }

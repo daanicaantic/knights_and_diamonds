@@ -1,4 +1,5 @@
 ﻿using DAL.DataContext;
+using DAL.Models;
 using DAL.Repositories;
 using DAL.Repositories.Contracts;
 using System;
@@ -25,6 +26,7 @@ namespace DAL.UnitOfWork
 			Game = new GameRepository(_context);
 			Effect = new EffectRepository(_context);
 			Turn = new TurnRepository(_context);
+			CardField = new CardFieldRepository(_context);
 		}
 
 		public ICardRepository Card { get; private set; }
@@ -44,6 +46,8 @@ namespace DAL.UnitOfWork
 		public IEffectRepository Effect { get; set; }
 
 		public ITurnRepository Turn { get; set; }
+		public ICardFieldRepository CardField { get; set; }
+
 
 
 		public async Task Complete()
