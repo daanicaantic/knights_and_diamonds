@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-menubar',
@@ -15,16 +16,23 @@ export class MenubarComponent implements OnInit {
   admin: any = " ";
   player: any = " ";
   id!: number;
-  menubarOptions:any[]=["Home","Deck","Rules"];
+  userID=this.authService?.userValue?.id
+  user: any;
 
   constructor(
     public authService: AuthService,
     private router: Router,
-    private confirmationService: ConfirmationService,) { }
+    private confirmationService: ConfirmationService,
+    private userService: UserService) { }
 
   ngOnInit(): void {
 
     console.log("ovdee user value:", this.authService.userValue)
+    console.log(this.userID)
+    if(this.userID!=undefined) {
+      this.getUser();
+    }
+    
 
     this.authService.loginStatusChange().subscribe(userSubject => {
 
@@ -68,6 +76,18 @@ export class MenubarComponent implements OnInit {
 
   onLogin() {
 
+  }
+
+  getUser() {
+    this.userService.getUser(this.userID).subscribe({
+      next: (res: any) => {
+        this.user = res;
+        console.log(this.user)
+      },
+      error: err => {
+        console.log(err.error.text);
+      }
+    })
   }
 
 }

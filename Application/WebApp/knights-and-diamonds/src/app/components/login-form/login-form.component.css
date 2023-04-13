@@ -1,20 +1,26 @@
 *{
     font-family: 'Roboto', sans-serif;
-    color: #231c3d;
+    color: white;
 }
 label {
-    color: #231c3d;
+    color: white;
 }
 .background {
     display: flex;
     justify-content: center;
-    margin-top: 2rem;
+    height: 100vh;
+    background-image: url("https://localhost:7250/Resources/Images/welcome-background.jpg");
+    background-size: 100% 100%;
+    width: 100%;
+    display: flex; 
+    background-position:top;
 }
 .item-container {
     width: 350px;
     /* box-shadow: 10px 5px 5px gray;
     border: 1px solid gray; */
     border-radius: 20px;
+    margin-top: 100px;
 }
 .item-header {
     display: flex;
@@ -32,27 +38,25 @@ h1 {
     padding: 1rem;
 }
 .button-submit {
+    font-size: 20px;
+    font-weight: 500;
+    font-family: 'Roboto', sans-serif;
     margin-top: 1rem;
     margin-bottom: 1rem;
     width: 18rem;
     height: 2.5rem;
-
-    background-image: linear-gradient(to right, #24C6DC 0%, #514A9D  51%, #24C6DC  100%);
+    background-image: linear-gradient(to right, #e8bd30 0%, #df6514  51%, #e24242  100%);
     margin: 10px;
-    /* padding: 15px 45px; */
     text-align: center;
     text-transform: uppercase;
-    transition: 0.5s;
-    background-size: 200% auto;
+    /* background-size: 200% auto; */
     color: white;            
-    box-shadow: 0 0 20px #eee;
     border-radius: 10px;
+    border: 2px solid rgb(69, 69, 69);
     display: block;
-    }
-    .btn-grad:hover {
-        background-position: right center; /* change the direction of the change here */
-        color: #fff;
-        text-decoration: none;
+}
+.button-submit:hover{
+    box-shadow: 0 0 10px #eee;
 }
 .button-submit-div {
     display: flex;
@@ -72,4 +76,7 @@ h1 {
 }
 .reg-link {
     cursor: pointer;
+}
+.reg-link:hover{
+    color: #d15f1c;
 }
