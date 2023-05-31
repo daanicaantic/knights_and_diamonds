@@ -29,9 +29,8 @@ namespace BLL.Strategy
 			return ChooseCardsFrom.Field;
 		}
 
-		public async Task ExecuteEffect(List<int> listOfCards, string description, int playerID)
+		public async Task ExecuteEffect(List<int> listOfCards, Effect effect, int playerID, int gameID,int fieldI)
 		{
-			var effect = await this.GetEffect(description);
 			if (effect.NumOfCardsAffected != listOfCards.Count)
 			{
 				throw new Exception("You didnt sellect all cards");
@@ -57,19 +56,6 @@ namespace BLL.Strategy
 				this._unitOfWork.Player.Update(playerField);
 				await this._unitOfWork.Complete();
 			}	
-		}
-		public async Task<Effect> GetEffect(string description)
-		{
-			var effect = await this._unitOfWork.Effect.GetEffectByDescription(description);
-			if (effect == null)
-			{
-				throw new Exception("There is no effect with this description");
-			}
-			if (effect.EffectType.Type != "returnCardFromFieldToHand")
-			{
-				throw new Exception("There is some Error");
-			}
-			return effect;
 		}
 	}
 }

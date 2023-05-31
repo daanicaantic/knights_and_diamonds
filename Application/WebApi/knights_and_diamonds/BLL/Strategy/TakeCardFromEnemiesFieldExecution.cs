@@ -30,16 +30,16 @@ namespace BLL.Strategy
 			return ChooseCardsFrom.EnemiesField;
 		}
 
-		public async Task ExecuteEffect(List<int> listOfFieldIDs, string description, int playerID)
+		public async Task ExecuteEffect(List<int> listOfFieldIDs, Effect effect, int playerID,int gameID, int fieldI)
 		{
-			var effect = await this.GetEffect(description);
+
 			
 			if(effect.NumOfCardsAffected != listOfFieldIDs.Count)
 			{
 				throw new Exception("You didn't select enough cards.");
 			}
 
-			var player = await this._unitOfWork.Player.GetPlayerWithFields(playerID);
+			var player = await this._unitOfWork.Player.GetPlayerWithFieldsAndHand(playerID);
 			if(player == null)
 			{
 			
@@ -84,18 +84,6 @@ namespace BLL.Strategy
 			await this._unitOfWork.Complete();
 		}
 
-		public async Task<Effect> GetEffect(string description)
-		{
-			var effect = await this._unitOfWork.Effect.GetEffectByDescription(description);
-			if (effect == null)
-			{
-				throw new Exception("There is no effect with this description");
-			}
-			if (effect.EffectType.Type != "takeCardFromEnemiesField")
-			{
-				throw new Exception("There is some Error");
-			}
-			return effect;
-		}
+
 	}
 }

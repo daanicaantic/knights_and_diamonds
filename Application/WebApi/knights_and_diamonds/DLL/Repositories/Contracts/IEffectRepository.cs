@@ -12,5 +12,6 @@ namespace DAL.Repositories.Contracts
 		Task<IList<EffectType>> GetEffectTypes();
 		Task<EffectType> GetEffectType(int EffectTypeID);
 		Task<Effect> GetEffectByDescription(string description);
+		Task<Effect> GetEffect(int effectID);
 	}
 }

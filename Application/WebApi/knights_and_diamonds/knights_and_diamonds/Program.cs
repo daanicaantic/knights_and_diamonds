@@ -85,7 +85,6 @@ builder.Services.AddDbContext<KnightsAndDiamondsContext>(opt => opt.UseSqlServer
 builder.Services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
 
 
-
 builder.Services.AddScoped(typeof(ICardService),typeof(CardService));
 
 var app = builder.Build();
@@ -103,6 +102,7 @@ if (app.Environment.IsDevelopment())
     app.UseEndpoints(endpoints =>
     {
         endpoints.MapControllers();
+     
         endpoints.MapHub<MyHub>("/toastr");
 
 	});

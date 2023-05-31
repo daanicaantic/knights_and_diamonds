@@ -1,5 +1,6 @@
 ﻿using BLL.Strategy.Context;
 using DAL.DataContext;
+using DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +27,7 @@ namespace BLL.Strategy
 			throw new NotImplementedException();
 		}
 
-		public Task ExecuteEffect(List<int> listOfCards, string description, int playerID)
+		public Task ExecuteEffect(List<int> listOfCards, Effect effect, int playerID, int gameID, int fieldID)
 		{
 			throw new NotImplementedException();
 		}

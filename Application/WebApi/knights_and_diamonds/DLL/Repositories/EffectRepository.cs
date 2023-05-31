@@ -29,6 +29,15 @@ namespace DAL.Repositories
 		{
 			return await this.Context.EffectTypes.FindAsync(effectTypeID);
 		}
+		public async Task<Effect> GetEffect(int effectID)
+		{
+			var effect=await this.Context.Effects?.Include(x=>x.EffectType).Where(x=>x.ID==effectID).FirstOrDefaultAsync();
+			if (effect == null)
+			{
+				throw new Exception("There is no effect eith this ID");
+			}
+			return effect;
+		}
 
 		public async Task<IList<EffectType>> GetEffectTypes()
 		{

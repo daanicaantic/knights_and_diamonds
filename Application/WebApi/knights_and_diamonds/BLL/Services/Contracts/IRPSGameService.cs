@@ -23,7 +23,7 @@ namespace BLL.Services.Contracts
 		Task PlayMove(int playerID, string moveName);
         Task<int> CheckRPSWinner(int RPSgameID);
         Task<Player> GetPlayer(int gameID, int userID);
-        Task RemoveUserFromUsersInGame(int userID);
+        void RemoveUserFromUsersInGame(int userID);
 
 	}
 }

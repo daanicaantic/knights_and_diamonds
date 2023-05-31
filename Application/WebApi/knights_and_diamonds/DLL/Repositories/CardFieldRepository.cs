@@ -22,7 +22,13 @@ namespace DAL.Repositories
 
 		public async Task<CardField> GetCardField(int fieldID)
 		{
-			return await this.Context.CardFields.Where(x => x.ID == fieldID).Include(x => x.CardOnField).FirstOrDefaultAsync();
+			var cardField= await this.Context.CardFields?.Where(x => x.ID == fieldID).Include(x => x.CardOnField).ThenInclude(x => x.Card).FirstOrDefaultAsync();
+			if (cardField == null)
+			{
+				throw new Exception("Field with this ID dose not exist");
+			}
+			return cardField;
+			
 		}
 	}
 }

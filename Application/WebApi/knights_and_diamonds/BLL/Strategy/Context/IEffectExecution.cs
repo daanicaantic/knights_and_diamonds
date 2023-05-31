@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DAL.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,6 @@ namespace BLL.Strategy.Context
 			EnemiesHand
 		}
 		public ChooseCardsFrom SelectCardsFrom();
-		Task ExecuteEffect(List<int> listOfIDs, string description, int playerID);
+		Task ExecuteEffect(List<int> listOfIDs, Effect effect, int playerID,int gameID,int fieldID);
 	}
 }

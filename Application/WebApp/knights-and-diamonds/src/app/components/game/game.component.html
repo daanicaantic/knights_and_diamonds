@@ -10,15 +10,17 @@
                 <div class="big-card" *ngIf="mediumCard!=undefined">
                     <app-card [card]="mediumCard" [isCardShowen]="this.iscardshowen"></app-card>
                 </div>
-                <div class="players-health">
+                <div class="players-health" (click)="changePhase()">
                     <h1>{{playerField.lifePoints}}</h1>
                 </div>
             </div>
-            <div class="phases-window">
-                <div class="draw-phase ">DP</div>
-                <div class="main-phase">MP</div>
-                <div class="battle-phase">BP</div>
-                <div class="end-phase">EP</div>
+            <div class="phases-window" *ngIf="isPlayerOnTurn==true">
+                <div *ngFor="let phase of phases" class="players-phase player-phase-{{phase.status}}">{{phase.name}}
+                </div>
+            </div>
+            <div class="phases-window" *ngIf="isPlayerOnTurn==false">
+                <div *ngFor="let phase of phases" class="enemies-phase enemies-phase-{{phase.status}}">{{phase.name}}
+                </div>
             </div>
             <div class="battle-window">
                 <div class="enemies-hand">
@@ -29,9 +31,10 @@
                 <div class="table-background">
                     <div class="deck-and-grave" style="justify-content: flex-end;">
                         <div class="grave" style="margin-bottom: 10px; ">
-                            <h3 style="color:black;text-align: center;">{{playerField.deckCount}}</h3>
+                            <h3 style="color:black;text-align: center;">{{grave.graveCount}}</h3>
                             <div class="deck graveBG">
-                                <app-card [card]="mediumCard" *ngIf="mediumCard!=undefined" style="font-size: 3px;"></app-card>
+                                <app-card [card]="grave.lastCard" *ngIf="grave.graveCount>0"
+                                    style="font-size: 3px;"></app-card>
                             </div>
                         </div>
                         <div class="player-deck">
@@ -41,52 +44,75 @@
                         </div>
                     </div>
                     <div class="table-all">
+
+                        <div class="card-summoning" *ngIf="cardToBeSummoned!=undefined">
+                            <!-- <app-card [card]="mediumCard" [isCardShowen]="this.iscardshowen"></app-card> -->
+                            <div class="exit-card-summoning-container" (click)="closeSummoningMonsterWindow()"></div>
+                            <div class="card-summoning-position-container">
+                                <div class="card-to-be-summoned">
+                                    <app-card [card]="cardToBeSummoned" [isCardShowen]="true"
+                                        (click)="summonMonsterInAttackPosition()"></app-card>
+                                </div>
+                                <div class="card-to-be-summoned small-card-deff-false">
+                                    <app-card [card]="cardToBeSummoned" [isCardShowen]="false"
+                                        (click)="summonMonsterInDeffencePosition()"></app-card>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="discard-card-from-hand" *ngIf="this.playerHand.length >=7">
+                            <h3>Discard {{playerHand.length-6}} cards from your hand</h3>
+                        </div>
                         <div class="enemies-table">
                             <div class="card-place" *ngFor="let field of enemiesField.cardFields">
-                                <div class="small-card" style="transform: scaleX(-1);">
-                                    <app-card [card]="this.field.cardOnField" [isCardShowen]="field.cardShowen"  (mouseover)="onEnemiesCardMouseOver(this.field)"></app-card>
+                                <div class="small-card small-card-deff-{{field.cardPosition}} enemies-small-card">
+                                    <app-card [card]="this.field.cardOnField" [isCardShowen]="field.cardShowen"
+                                        (mouseover)="onEnemiesCardMouseOver(this.field)"></app-card>
                                 </div>
-                                <div *ngIf="field.cardOnField!=undefined && this.field.fieldIndex>=0 && 5>this.field.fieldIndex " style="transform: scale(-1,-1); display: flex; flex-direction: row; justify-content: center;">
+                                <div *ngIf="field.cardOnField!=undefined && this.field.fieldIndex>=0 && 5>this.field.fieldIndex && field.cardShowen"
+                                    style="transform: scale(1,-1); display: flex; flex-direction: row; justify-content: center;">
                                     <p>{{this.field.cardOnField.attackPoints}} /</p>
                                     <p> {{this.field.cardOnField.attackPoints}}</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="player-table" >
+                        <div class="player-table">
                             <div class="card-place" *ngFor="let field of playerField.cardFields">
-                                <div class="small-card">
-                                    <app-card  [card]="this.field.cardOnField" [isCardShowen]="field.cardShowen" (mouseover)="this.mediumCard=this.field.cardOnField; this.iscardshowen=true"></app-card>
+                                <div class="small-card small-card-deff-{{field.cardPosition}}">
+                                    <app-card [card]="this.field.cardOnField" [isCardShowen]="field.cardShowen"
+                                        (mouseover)="this.mediumCard=this.field.cardOnField; this.iscardshowen=true"></app-card>
                                 </div>
-                                <div *ngIf="field.cardOnField!=undefined && this.field.fieldIndex>=0 && 5>this.field.fieldIndex " style="display: flex; flex-direction: row; justify-content: center;">
+                                <div *ngIf="field.cardOnField!=undefined && this.field.fieldIndex>=0 && 5>this.field.fieldIndex "
+                                    style="display: flex; flex-direction: row; justify-content: center;">
                                     <p>{{this.field.cardOnField.attackPoints}} /</p>
                                     <p> {{this.field.cardOnField.attackPoints}}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="deck-and-grave" >
+                    <div class="deck-and-grave">
                         <div class="enemies-deck" style="margin-bottom: 10px ;">
                             <div class="deck card-back" (mouseover)="this.iscardshowen=false"></div>
                             <h3 style="color:black;text-align: center;">{{enemiesField.deckCount}}</h3>
-    
+
                         </div>
                         <div class="grave">
                             <div class="deck graveBG">
-                                <app-card [card]="mediumCard" *ngIf="mediumCard!=undefined" style="font-size: 3px;"></app-card>
+                                <app-card [card]="grave.lastCard" *ngIf="grave.graveCount>0"
+                                    style="font-size: 3px;"></app-card>
                             </div>
-                            <h3 style="color:black;text-align: center;">{{enemiesField.deckCount}}</h3>
+                            <h3 style="color:black;text-align: center;">{{grave.graveCount}}</h3>
                         </div>
                     </div>
                 </div>
                 <div class="players-hand">
-                    <div class="medium-card" *ngFor="let card of playerField.hand;let i = index">
-                        <app-card [card]="card" (mouseover)="this.mediumCard=card; this.iscardshowen=true"> </app-card>
+                    <div class="medium-card" *ngFor="let card of playerHand;let i = index">
+                        <app-card [card]="card" (mouseover)="this.mediumCard=card; this.iscardshowen=true"
+                            (click)="playCard(card)">
+                        </app-card>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </body>
-<!-- <div class="card-summoning">
-    <app-card [card]="mediumCard" [isCardShowen]="this.iscardshowen"></app-card>
-</div> -->

@@ -53,10 +53,11 @@ namespace DAL.Models
 		{
 			if (this.Deck.Count <= 0) 
 			{
+				Console.WriteLine("Deck count " + this.Deck.Count.ToString());
 				throw new Exception("Error. There is no more cards in your deck!!");
 			}
-			int numberOfCards = this.Deck.Count - 1;
-			int randomIndex = new Random().Next(0, numberOfCards);
+			int numberOfCards = this.Deck.Count;
+			int randomIndex = new Random().Next(0, numberOfCards-1);
 			var card = this.Deck[randomIndex];
 			return card;
 		}

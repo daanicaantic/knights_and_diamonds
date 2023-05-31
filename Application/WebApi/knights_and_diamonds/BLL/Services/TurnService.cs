@@ -12,6 +12,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using static BLL.Services.Contracts.IGameService;
 
 namespace BLL.Services
 {
@@ -25,32 +26,71 @@ namespace BLL.Services
 			_unitOfWork = new UnitOfWork(_context);
 		}
 
-		public async Task<int> GetCurrentPhase(int turnID,int gameID)
+
+		public async Task<TurnInfo> NewTurn(int gameID)
 		{
-			var game = await this._unitOfWork.Game.GetGameWithTurns(turnID);
-			var turn = game.Turns.Find(x=>x.ID==turnID);
-			var turnPhase = -1;//0-dp,1-mp,2-bp,3-ep //-1 error
+			var game = await this._unitOfWork.Game.GetGameWithTurns(gameID);
+
+
+			/*  if (game.TurnNumber != 0)
+			  {
+				  var lastturn = game.Turns.Last();
+				  if (lastturn.EndPhase == false)
+				  {
+					  throw new Exception("Last turn is not finnished yet");
+				  }
+			  }*/
+			var turn = new Turn();
+			game.Turns.Add(turn);
+			game.TurnNumber = game.Turns.Count();
+			this._unitOfWork.Game.Update(game);
+			await this._unitOfWork.Complete();
+
+			var turnInfo = new TurnInfo();
+			turnInfo.PlayerOnTurn = game.PlayerOnTurn;
+			turnInfo.TurnPhase = (int)await this.GetTurnPhase(game);
+			return turnInfo;
+
+		}
+		public async Task<TurnInfo> GetTurnInfo(int gameID, int playerID)
+		{
+			var turnInfo = new TurnInfo();
+			var game = await this._unitOfWork.Game.GetGameWithTurns(gameID);
+			if (game.Turns.Count == 0)
+			{
+				turnInfo=await this.NewTurn(gameID);
+				return turnInfo;
+			}
+			turnInfo.PlayerOnTurn = game.PlayerOnTurn;
+			turnInfo.TurnPhase = (int)await this.GetTurnPhase(game);
+			return turnInfo;
+		}
+
+		public async Task<TurnPhase> GetTurnPhase(Game game)
+		{
+			var turn = game.Turns.LastOrDefault();
 			if (turn == null)
 			{
-				throw new Exception("Turn with this ID is not in this game");
+				throw new Exception("There is no turns in this game");
 			}
-			if (turn.DrawPhase == true)
+			if (turn.DrawPhase)
 			{
-				turnPhase = 0;
+				return TurnPhase.DrawPhase;
 			}
-			else if (turn.MainPhase==true)
+			else if (turn.MainPhase)
 			{
-				turnPhase = 1;
+				return TurnPhase.MainPhase;
 			}
-			else if (turn.BattlePhase == true)
+			else if (turn.BattlePhase)
 			{
-				turnPhase = 2;
+				return TurnPhase.BeatlePhase;
 			}
-			else if (turn.EndPhase == true)
+			else if (turn.EndPhase)
 			{
-				turnPhase = 3;
+				return TurnPhase.EndPhase;
 			}
-			return turnPhase;
+			throw new Exception("There is some error");
 		}
+
 	}
 }

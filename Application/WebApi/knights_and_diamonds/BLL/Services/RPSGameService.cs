@@ -359,16 +359,12 @@ namespace BLL.Services
 				default:return "Undefined";
 			}
 		}
-		public async Task RemoveUserFromUsersInGame(int userID)
+		public void RemoveUserFromUsersInGame(int userID)
         {
 			if(this._usersingame.UsersInGame.Contains(userID))
 			{
                 this._usersingame.UsersInGame.Remove(userID);
             }
-			else
-			{
-				throw new Exception("User with this ID is not in a game.");
-			}
         }
     }
 }

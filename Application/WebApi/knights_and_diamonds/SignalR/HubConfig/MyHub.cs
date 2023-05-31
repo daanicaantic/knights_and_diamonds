@@ -10,12 +10,15 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Threading.Tasks;
+using static BLL.Services.Contracts.IGameService;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace SignalR.HubConfig
@@ -31,6 +34,8 @@ namespace SignalR.HubConfig
 		public IRPSGameService _rpsGameService { get; set; }
 		public ILoginService _loginService { get; set; }
 		public IGameService _gameService { get; set; }
+		public ITurnService _turnService { get; set; }
+
 		public ConnectionsHub _connectedUsers { get; set; }
 
 		public MyHub(KnightsAndDiamondsContext context, IConfiguration config)
@@ -44,6 +49,8 @@ namespace SignalR.HubConfig
 			this._connectedUsers = ConnectionsHub.GetInstance();
 			this._gameService = new GameService(this._context);
 			this._playerService = new PlayerService(this._context);
+			this._turnService = new TurnService(this._context);
+
 		}
 		public async Task askServer(string someTextForClient)
 		{
@@ -140,18 +147,47 @@ namespace SignalR.HubConfig
 				}
 			}
 		}
-		/*---------------------------K-N-I-G-H-T-S-A-N-D-D-I-A-M-O-N-D-S----------------------------------------------*/
+		
+		/*---------------------------K-N-I-G-H-T-S-A-N-D-D-I-A-M-O-N-D-S------------------------------*/
 
 		public async Task GetHands(ConnectionsPerUser connections, List<MappedCard> playerHand)
 		{
-			var count = playerHand.Count;
 			foreach (var con in connections.MyConnections)
 			{
-				await Clients.Client(con).SendAsync("GetFirstCards", playerHand);
+				await Clients.Client(con).SendAsync("GetCardsInYourHand", playerHand);
 			}
 			foreach (var con in connections.EnemiesConnections)
 			{
-				await Clients.Client(con).SendAsync("GetNumberOfCardsInHand", count);
+				await Clients.Client(con).SendAsync("GetCardsInEnemiesHand", playerHand);
+			}
+		}
+		public async Task GetGrave(ConnectionsPerUser connections,GraveToDisplay grave)
+		{
+			foreach (var con in connections.MyConnections)
+			{
+				await Clients.Client(con).SendAsync("GetGraveData", grave);
+			}
+			foreach (var con in connections.EnemiesConnections)
+			{
+				await Clients.Client(con).SendAsync("GetGraveData", grave);
+			}
+		}
+		public async Task GetTurnInfo(ConnectionsPerUser connections,TurnInfo turnInfo)
+		{
+			foreach (var con in connections.MyConnections)
+			{
+				await Clients.Client(con).SendAsync("GetTurnInfo", turnInfo);
+			}
+			foreach (var con in connections.EnemiesConnections)
+			{
+				await Clients.Client(con).SendAsync("GetTurnInfo", turnInfo);
+			}
+		}
+		public async Task GetDataAffterPlayCardWithEffect(ConnectionsPerUser connections, AffterPlaySpellTrapCardData data)
+		{
+			foreach (var con in connections.MyConnections)
+			{
+				await Clients.Client(con).SendAsync("GetAreaOfClicking", data);
 			}
 		}
 		public async Task GetField(ConnectionsPerUser connections, FieldDTO field)
@@ -167,24 +203,48 @@ namespace SignalR.HubConfig
 			}
 		}
 
-		public async Task StartingDrawing(int gameID, int playerID)
+		public async Task GetStartingTurnInfo(int gameID,int playerID)
 		{
-			var player=await this._playerService.GetPlayer(playerID);
-			var connections = await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
-
-			var countOfCards = 0;
-
-			if (player.GaemeStarted == false)
+			var game=await this._gameService.GetGameByID(gameID);
+			if (game.PlayerOnTurn == playerID)
 			{
-				await this._playerService.SetGameStarted(player);
-				while (countOfCards < 5)
-				{
-					var card=await this._playerService.Draw(playerID);
-					countOfCards = countOfCards + 1;
-				}
+				var connections = await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
+				var turnInfo = await this._turnService.GetTurnInfo(gameID, playerID);
+				await this.GetTurnInfo(connections, turnInfo);
 			}
-			var playerHand = await this._playerService.GetPlayersHand(playerID);
-			await this.GetHands(connections, playerHand);
+		}
+
+
+		public async Task DrawPhase(int gameID, int playerID)
+		{
+			try
+			{
+				var hand = new List<MappedCard>();
+				var player = await this._playerService.GetPlayer(playerID);
+				var connections = await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
+				var game = await this._gameService.GetGameByID(gameID);
+				if (player.GaemeStarted == false)
+				{
+					await this._playerService.SetGameStarted(player);
+					await this._playerService.StartingDrawing(playerID);
+				}
+				if (game.PlayerOnTurn == playerID)
+				{
+					hand = await this._gameService.DrawPhase(gameID, playerID);
+				}
+				else
+				{
+					hand = await this._playerService.GetPlayersHand(playerID);
+				}
+				var turnInfo = await this._turnService.GetTurnInfo(gameID, playerID);
+
+				await this.GetHands(connections, hand);
+				await this.GetTurnInfo(connections, turnInfo);
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
 		}
 
 		public async Task GetPlayersField(int gameID, int playerID)
@@ -198,7 +258,67 @@ namespace SignalR.HubConfig
 			}
 			await this.GetField(connections,field);
 		}
+		public async Task NormalSummon(int gameID, int playerID, int cardID, bool position)
+		{
+			var connections = await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
+			var field=await this._gameService.NormalSummon(gameID,playerID,cardID,position);
+			if (field == null)
+			{
+				throw new Exception("This player has no field");
+			}
+			await this.GetField(connections, field);
+		}
 
+		public async Task TributeSummon(List<int> fieldsIDs, int gameID, int playerID, int cardInDeckID, int numberOfStars, bool position)
+		{
+			var connections = await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
+			var field = await this._gameService.TributeSummon(fieldsIDs,gameID,playerID, cardInDeckID,numberOfStars,position);
+			var grave = await this._gameService.GetGamesGrave(gameID);
+			if (field == null)
+			{
+				throw new Exception("This player has no field");
+			}
+			await this.GetField(connections, field);
+			await this.GetGrave(connections, grave);
+		}
 
+		public async Task PlaySpellCard(int gameID, int playerID, int cardInDeckID, int cardEffectID)
+		{
+			var connections = await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
+			var areaOfClicking = await this._gameService.PlaySpellCard(gameID, playerID, cardInDeckID, cardEffectID);
+
+			var field = await this._gameService.GetPlayersField(playerID);
+			if (field == null)
+			{
+				throw new Exception("This player has no field");
+			}
+			await this.GetField(connections, field);
+			await this.GetDataAffterPlayCardWithEffect(connections,areaOfClicking);
+		}
+		public async Task ExecuteEffect(List<int> listOfCards, int cardFieldID, int playerID, int gameID)
+		{
+			try
+			{
+				var connections = await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
+				await this._gameService.ExecuteEffect(listOfCards, cardFieldID, playerID, gameID);
+				var field = await this._gameService.GetPlayersField(playerID);
+				var grave = await this._gameService.GetGamesGrave(gameID);
+				if (field == null)
+				{
+					throw new Exception("This player has no field");
+				}
+				foreach (var item in field.CardFields)
+				{
+					Console.WriteLine(item.FieldIndex.ToString());
+				}
+				await this.GetField(connections, field);
+				await this.GetGrave(connections, grave);
+			}
+			catch(Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+			
+		}
 	}
 }

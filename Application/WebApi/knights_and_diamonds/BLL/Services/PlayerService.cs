@@ -66,8 +66,21 @@ namespace BLL.Services
             {
                 throw new Exception("There is no Player with this ID"); 
             }
-            var cardFromDeck = player.Draw();
-            player.Deck.Remove(cardFromDeck);
+
+			int numberOfCards = player.Deck.Count();
+			if (numberOfCards <= 0)
+			{
+				Console.WriteLine("Deck count " + player.Deck.Count.ToString());
+				throw new Exception("Error. There is no more cards in your deck!!");
+			}
+			Console.WriteLine("--------------------------------------------------------" + player.Deck.Count.ToString());
+			Console.WriteLine("--------------------------------------------------------" + player.Deck.Count.ToString());
+			Console.WriteLine("--------------------------------------------------------" + player.Deck.Count.ToString());
+
+			int randomIndex = new Random().Next(0, numberOfCards - 1);
+			var cardFromDeck = player.Deck[randomIndex];
+
+			player.Deck.Remove(cardFromDeck);
             player.Hand.CardsInHand.Add(cardFromDeck);
             await this._unitOfWork.Complete();
             return await this._cardservice.MapCard(cardFromDeck);
@@ -83,6 +96,16 @@ namespace BLL.Services
             }
 			var mappedHand = await this._cardservice.MapCards(playersHand.CardsInHand);
 			return mappedHand;
+		}
+
+		public async Task StartingDrawing(int playerID)
+		{
+			var countOfCards = 0;
+			while (countOfCards < 5)
+			{
+				var card = await this.Draw(playerID);
+				countOfCards = countOfCards + 1;
+			}
 		}
 	}
 }

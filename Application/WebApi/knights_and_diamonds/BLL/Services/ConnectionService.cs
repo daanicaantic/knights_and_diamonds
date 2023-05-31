@@ -5,6 +5,7 @@ using DAL.DTOs;
 using DAL.Models;
 using DAL.Repositories.Contracts;
 using DAL.UnitOfWork;
+using Microsoft.AspNetCore.Razor.Runtime.TagHelpers;
 using Microsoft.AspNetCore.Server.IIS.Core;
 using System;
 using System.Collections.Generic;
@@ -64,9 +65,12 @@ namespace BLL.Services
 		{
 			OnlineUserDto onlineUserDto;
 			List<OnlineUserDto> ListOfOnlineUsers = new List<OnlineUserDto>();
+			if (this._onlineUsers.ConnectedUsers.Keys.Count == 0)
+			{
+				throw new Exception("There is no online users");
+			}
 			foreach (var userID in this._onlineUsers.ConnectedUsers.Keys)
 			{
-
                 var user = await this._unitOfWork.User.GetOne(userID);
                 if (user != null)
                 {
@@ -75,7 +79,7 @@ namespace BLL.Services
                 }
                 else
                 {
-                    throw new Exception("This" + user.ID.ToString() + "does not exsists.");
+                    throw new Exception("This user does not exsists.");
                 }
 
             }

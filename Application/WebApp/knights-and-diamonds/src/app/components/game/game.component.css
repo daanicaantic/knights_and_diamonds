@@ -101,20 +101,33 @@ p {
 
 }
 
-.draw-phase,
-.main-phase,
-.battle-phase,
-.end-phase {
+.players-phase,.enemies-phase {
     background-color: #956e4a;
     width: 100%;
     height: 100px;
-    border: 1px solid #36281a;
     border-radius: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
-
-    /* background: linear-gradient(#956e4a 0%, #533d28 50%, #956e4a 100%); */
+}
+.players-phase
+{
+    color:rgb(28, 35, 95);
+    border: 1px solid rgb(28, 35, 95);
+}
+.enemies-phase{
+    color:rgb(117, 0, 0);
+    border: 1px solid rgb(117, 0, 0);
+}
+.enemies-phase-true{
+    box-shadow:0px 0px 10px rgb(175, 0, 0);
+    font-weight: bolder;
+    border: 2px solid;
+}
+.player-phase-true {
+    box-shadow:0px 0px 10px rgb(61, 73, 180);
+    font-weight: bolder;
+    border: 2px solid;
 }
 
 .battle-window {
@@ -220,6 +233,7 @@ p {
     height: 100%;
     display: flex;
     flex-direction: column;
+    position: relative;
 
 
 }
@@ -302,22 +316,81 @@ p {
     display: flex;
     flex-direction: row;
 }
-
-.small-card:hover {
+.enemies-small-card{
+    transform: scaleX(-1);
+}
+.small-card-deff-false {
     transform: rotate(-90deg);
+}
+.card-to-be-summoned{
+    width: 23%;
+    height: 72%;
+    font-size: 6px;
+    border: 2px solid #131313;
+    border-radius: 5%;
+    padding: 1%;
 }
 
 .deck{
     width: 70px;
     height: 110px; 
 }
-.card-summoning{
+.card-summoning,.discard-card-from-hand{
+    /* animation: summon-card-show-dialog 4s timing-function delay iteration-count direction fill-mode; */
     position: absolute;
-    right: calc(50% - 200px);
-    left: calc(50% - 200px);
-    top: calc(50% - 200px);
-    bottom: calc(50% - 200px);
-    width: 400px; 
-    height:400px; 
+    z-index: 1;
+    background: linear-gradient(#4C3825 0%, #463321 50%, #4C3825 100%);
+    border: 2px solid #131313;
+    border-radius: 5%;
+    display: flex;
     /* background-color: brown; */
 }
+.card-summoning{
+    animation: summon-card-show-dialog 1.5s linear forwards;
+    right: 30%;
+    left: 30%;
+    top: 25%;
+    bottom: 25%;
+    justify-content: center;
+    align-items: center;
+}
+.discard-card-from-hand{
+    right: 25%;
+    left: 25%;
+    top: 35%;
+    bottom: 35%;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-summoning-position-container{
+    width: 100%;
+    height: 50%;
+    display: flex;
+    background-color: #956E4A;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: row;
+    border-top: 2px solid #131313;
+    border-bottom: 2px solid #131313;
+}
+.exit-card-summoning-container{
+    width: 8%;
+    aspect-ratio: 1;
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-radius: 5%;
+    background-size: 100% 100%;
+    background-image: url("https://localhost:7250/Resources/Images/cancel.png");
+    cursor: pointer;
+}
+
+@keyframes summon-card-show-dialog {
+    0%   {
+      opacity: 0%;
+    }
+    100%   {
+      opacity: 100%;
+    }
+  }

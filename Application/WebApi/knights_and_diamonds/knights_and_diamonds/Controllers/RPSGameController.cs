@@ -234,7 +234,7 @@ namespace knights_and_diamonds.Controllers
 		{
 			try
 			{
-				await this._pregameservice.RemoveUserFromUsersInGame(userID);
+				this._pregameservice.RemoveUserFromUsersInGame(userID);
 				return Ok();
 			}
             catch (Exception e)

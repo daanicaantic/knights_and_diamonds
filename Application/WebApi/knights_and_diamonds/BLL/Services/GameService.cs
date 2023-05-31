@@ -1,6 +1,8 @@
 ﻿using BLL.Services.Contracts;
+using BLL.Strategy;
 using DAL.DataContext;
 using DAL.DTOs;
+using DAL.Migrations;
 using DAL.Models;
 using DAL.UnitOfWork;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -30,7 +32,7 @@ namespace BLL.Services
         public IConnectionService _connectionService { get; set; }
 		public ICardService _cardService { get; set; }
 		public IPlayerService _playerService { get; set; }
-
+        public ConcreteStrategy _concreteStrategy { get; set; }
 		public GameService(KnightsAndDiamondsContext context)
         {
             this._context = context;
@@ -39,10 +41,12 @@ namespace BLL.Services
 			this._connectionService = new ConnectionService(_context);
             this._cardService = new CardService(_context);
             this._playerService = new PlayerService(_context);
+            this._concreteStrategy = new ConcreteStrategy(_context);
 		}
 
 		public async Task<List<string>> GameGroup(int gameID)
         {
+
 			var group = new List<string>();
 			var game = await this._unitOfWork.Game.GetGameWithPlayers(gameID);
             if (game == null)
@@ -52,7 +56,14 @@ namespace BLL.Services
             foreach (var player in game.Players)
             {
 				var connections = await this._connectionService.GetConnectionByUser(player.UserID);
-                group.Concat(connections);
+                if (connections == null)
+                {
+					throw new Exception("There is no connections for this player");
+				}
+                foreach (var con in connections)
+                {
+                    group.Add(con);
+                }
 			}
             return group;
         }
@@ -113,7 +124,27 @@ namespace BLL.Services
 			game.GameID = gaame.ID;
 			return game;
 		}
-
+        public async Task<GraveToDisplay> GetGamesGrave(int gameID)
+        {
+            var graveForDisplay = new GraveToDisplay();
+            var grave = await this._unitOfWork.Grave.GetGraveByGameID(gameID);
+            if (grave.ListOfCardsInGrave.Count == 0)
+            {
+                graveForDisplay.GraveCount = 0;
+                graveForDisplay.LastCard = null;
+            }
+            else
+            {
+                graveForDisplay.GraveCount = grave.ListOfCardsInGrave.Count;
+                var lastCard = grave.ListOfCardsInGrave.LastOrDefault();
+                if (lastCard == null)
+                {
+                    throw new Exception("ERROR");
+                }
+                graveForDisplay.LastCard= await this._cardService.MapCard(lastCard);
+			}
+            return graveForDisplay;
+        }
         public async Task<FieldDTO> GetPlayersField(int playerID)
         {
 			var field = new FieldDTO();
@@ -143,6 +174,7 @@ namespace BLL.Services
                 cardOnField.FieldIndex = f.FieldIndex;
                 cardsOnField.Add(cardOnField);
             }
+            cardsOnField=cardsOnField.OrderBy(x => x.FieldID).ToList();
             field.CardFields = cardsOnField;
             return field;
         }
@@ -152,103 +184,19 @@ namespace BLL.Services
             field.LifePoints = enemiesField.LifePoints;
 		    field.DeckCount= enemiesField.DeckCount;
             field.CardFields= enemiesField.CardFields;
-            field.HandCount = enemiesField.Hand.Count;
+            field.Hand = enemiesField.Hand;
 			return field;
 		}
 
-		public async Task<GamePhase> GetGamePhase(int gameID)
-        {
-            var game = await this._unitOfWork.Game.GetOne(gameID);
-            if (game == null)
-            {
-                throw new Exception("There is no game with this ID");
-            }
-            if (game.TurnNumber == 0)
-            {
-                return GamePhase.DrawPhase;
-            }
-            var turn = await this._unitOfWork.Turn.GetOne(game.TurnNumber);
-            if (turn == null)
-            {
-                throw new Exception("There is no turn with this ID");
-			}
-            if (turn.DrawPhase)
-            {
-				return GamePhase.DrawPhase;
-			}
-            else if (turn.MainPhase)
-            {
-				return GamePhase.MainPhase;
-			}
-			else if (turn.BattlePhase)
-			{
-				return GamePhase.BeatlePhase;
-			}
-			else if (turn.EndPhase)
-			{
-				return GamePhase.EndPhase;
-			}
-            throw new Exception("There is some error");
-		}
 
-        public async Task<int> GetPlayerOnTurn(int gameID)
-        {
-			var game = await this._unitOfWork.Game.GetOne(gameID);
-			if (game == null)
-			{
-				throw new Exception("There is no game with this ID");
-			}
-            if (game.PlayerOnTurn == 0)
-            {
-                throw new Exception("Error no one is set for turn");
-            }
-            return game.PlayerOnTurn;
-		}
-
-		public async Task<Game> NewTurn(int gameID)
-        {
-            var game = await this._unitOfWork.Game.GetGameWithTurns(gameID);
-			if (game == null)
-			{
-				throw new Exception("There is no game with this ID");
-			}
-          /*  if (game.TurnNumber != 0)
-            {
-                var lastturn = game.Turns.Last();
-                if (lastturn.EndPhase == false)
-                {
-                    throw new Exception("Last turn is not finnished yet");
-                }
-            }*/
-            var turn = new Turn();
-            game.Turns.Add(turn);
-			game.TurnNumber = game.Turns.Count();
-            this._unitOfWork.Game.Update(game);
-            await this._unitOfWork.Complete();
-            return game;
-		}
-        public async Task<Turn> GetTurn(int gameID)
+		public async Task<List<MappedCard>> DrawPhase(int gameID,int playerID)
         {
 			var game = await this._unitOfWork.Game.GetGameWithTurns(gameID);
-			if (game == null)
-			{
-				throw new Exception("There is no game with this ID");
-			}
-            if (game.TurnNumber == 0)
+            if (game.PlayerOnTurn != playerID)
             {
-				throw new Exception("There is still no turns in this game");
+				throw new Exception("This player is not on turn");
 			}
-            var turn = game.Turns.Last();
-            return turn;
-		}
-		public async Task<List<MappedCard>> DrawPhase(int gameID)
-        {
-			var game = await this._unitOfWork.Game.GetGameWithTurns(gameID);
-			if (game == null)
-			{
-				throw new Exception("There is no game with this ID");
-			}
-            var turn = game.Turns.Last();
+			var turn = game.Turns.Last();
             if (turn.DrawPhase == false) 
             {
                 throw new Exception("You cant draw card out of draw phase");
@@ -273,38 +221,46 @@ namespace BLL.Services
             return hand;
 		}
 
-		public async Task<CardField> NormalSummon(int gameID,int playerID,int cardID,bool position)
+        public void CardToBePlayedCheck(Game game,Player player,int cardInDeckID)
         {
-            var game = await this._unitOfWork.Game.GetGameWithTurns(gameID);
-            if (game == null) 
-            { 
-                throw new Exception("There is no game with this ID");
-			}
-            if (game.Turns.Count == 0)
-            {
+			if (game.Turns.Count == 0)
+			{
 				throw new Exception("This game has no turns");
 			}
-			var turn = game.Turns.Last();
-            if (game.Turns.Last().MainPhase==false)
-            {
+			if (game.Turns.Last().MainPhase == false)
+			{
 				throw new Exception("You can play card only in main phase");
 			}
-            if (turn.MonsterSummoned == true)
-            {
-                throw new Exception("You already summon monster in this turn");
-            }
-			if (game.PlayerOnTurn != playerID)
-            {
+			if (game.PlayerOnTurn != player.ID)
+			{
 				throw new Exception("It is not your turn to play");
 			}
-			var player = await this._unitOfWork.Player.GetPlayerWithFields(playerID);
-            if (player == null)
+			if (player.Hand.CardsInHand?.Where(x => x.ID == cardInDeckID).FirstOrDefault() == null)
+			{
+				throw new Exception("Card with this ID is not in your hand");
+			}
+		}
+		public async Task<FieldDTO> NormalSummon(int gameID,int playerID,int cardInDeckID,bool position)
+        {
+            var game = await this._unitOfWork.Game.GetGameWithTurns(gameID);
+			var turn = game.Turns?.Last();
+			var player = await this._unitOfWork.Player.GetPlayerWithFieldsAndHand(playerID);
+            this.CardToBePlayedCheck(game, player,cardInDeckID);
+			if (turn.MonsterSummoned == true)
+			{
+				throw new Exception("You already summon monster in this turn");
+			}
+			var cardToBePlayed = await this._unitOfWork.CardInDeck.GetCardInDeckWithCard(cardInDeckID);
+            if (cardToBePlayed.Card.CardType.Type != "MonsterCard")
             {
-                throw new Exception("There is no player with this ID");
-            }
-            var cardToBePlayed = await this._unitOfWork.CardInDeck.GetOne(cardID);
-            var emptyField=player.Fields.Where(x => x.CardOnField == null && x.FieldType == "MonsterField").FirstOrDefault();
-            emptyField.CardOnField = cardToBePlayed;
+				throw new Exception("You can only summon monster card");
+			}
+			var emptyField=player.Fields.Where(x => x.CardOnField == null && x.FieldType == "MonsterField").FirstOrDefault();
+            if(emptyField == null)
+            {
+				throw new Exception("Your field is full");
+			}
+			emptyField.CardOnField = cardToBePlayed;
             emptyField.CardPosition = position;
             if (position)
             {
@@ -314,15 +270,150 @@ namespace BLL.Services
             {
 				emptyField.CardShowen = false;
 			}
+            player.Hand.CardsInHand.Remove(player.Hand.CardsInHand.Where(x=>x.ID==cardInDeckID).FirstOrDefault());
             turn.MonsterSummoned = true;
 			this._unitOfWork.Turn.Update(turn);
-			this._unitOfWork.CardField.Update(emptyField);
+			this._unitOfWork.Player.Update(player);
             await this._unitOfWork.Complete();
-            return emptyField;
+            var playerField = await this.GetPlayersField(playerID);
+            return playerField;
 		}
-/*        public async Task<CardField> SpetialSummon(int gameID, int playerID, int cardID, bool position,int numberOfStars)
+
+        public int NumberOfCardsRequiredForTribute(int numberOfStars)
+        {
+            if (numberOfStars <= 0)
+            {
+                throw new Exception("There is some error");
+            }
+            if (numberOfStars <= 4)
+            {
+                return 0;//ne treba zrtva
+            }
+            else if (numberOfStars > 4 && numberOfStars <= 6)
+            {
+                return 1;//jedna zrtva
+            }
+            else if (numberOfStars > 6 && numberOfStars <= 8)
+            {
+                return 2;
+            }
+            else if(numberOfStars > 8)
+            {
+                return 3;
+            }
+            throw new Exception("There is some error");
+
+        } 
+        public async Task<FieldDTO> TributeSummon(List<int> fieldsIDs,int gameID, int playerID, int cardInDeckID,int numberOfStars, bool position)
         {
 
-        }*/
-    }
+            var numberOfTributes = this.NumberOfCardsRequiredForTribute(numberOfStars);
+            var game = await this._unitOfWork.Game.GetOne(gameID);
+			if (game == null)
+			{
+				throw new Exception("There is no game with this id");
+			}
+			var grave = await this._unitOfWork.Grave.GetGrave(game.GraveID);
+     
+			if (numberOfTributes == 0)
+            {
+                return await this.NormalSummon(gameID,playerID,cardInDeckID,position);
+            }
+            if (numberOfTributes != fieldsIDs.Count())
+            {
+                throw new Exception("You didnt chose right number of tributes");
+            }
+            foreach (var fieldID in fieldsIDs)
+            {
+                var field = await this._unitOfWork.CardField.GetCardField(fieldID);
+                if (field == null)
+                {
+					throw new Exception("There is no field with this id");
+				}
+                if (field.PlayerID != playerID) 
+                {
+					throw new Exception("You cant tribute enemies card");
+				}
+				if (field.FieldType != "MonsterField")
+				{
+					throw new Exception("This is no monster field");
+				}
+				if (field.CardOnField == null)
+                {
+					throw new Exception("There is no card on this field");
+				}
+                grave.ListOfCardsInGrave.Add(field.CardOnField);
+                field.CardOnField=null;
+                this._unitOfWork.CardField.Update(field);
+			}
+            this._unitOfWork.Grave.Update(grave);
+            await this._unitOfWork.Complete();
+			var playerField = await this.GetPlayersField(playerID);
+			return playerField;
+		}
+        public async Task<AffterPlaySpellTrapCardData> PlaySpellCard(int gameID, int playerID, int cardInDeckID,int cardEffectID)
+        {
+            var affterPlayData = new AffterPlaySpellTrapCardData();
+			var game = await this._unitOfWork.Game.GetGameWithTurns(gameID);
+			var turn = game.Turns?.Last();
+			var player = await this._unitOfWork.Player.GetPlayerWithFieldsAndHand(playerID);
+            var effect = await this._unitOfWork.Effect.GetEffect(cardEffectID);
+            this.CardToBePlayedCheck(game, player, cardInDeckID);
+			var cardToBePlayed = await this._unitOfWork.CardInDeck.GetCardInDeckWithCard(cardInDeckID);
+			if (cardToBePlayed.Card.CardType.Type != "SpellCard")
+			{
+				throw new Exception("You can only play spell card with this function");
+			}
+			var emptyField = player.Fields.Where(x => x.CardOnField == null && x.FieldType == "SpellTrapField").FirstOrDefault();
+			if (emptyField == null)
+			{
+				throw new Exception("Your field is full");
+			}
+			emptyField.CardOnField = cardToBePlayed;
+
+			player.Hand.CardsInHand.Remove(player.Hand.CardsInHand.Where(x => x.ID == cardInDeckID).FirstOrDefault());
+			this._unitOfWork.Player.Update(player);
+			await this._unitOfWork.Complete();
+
+			var concreteStrategy = this._concreteStrategy.SetStrategyContext(effect.EffectType.Type);
+			int areaOfClicking = concreteStrategy.GetAreaOfSelectingCards();
+
+            affterPlayData.areaOfClicking = areaOfClicking;
+            affterPlayData.fieldID = emptyField.ID;
+            return affterPlayData;
+		}
+		public async Task ExecuteEffect(List<int> listOfCards, int cardFieldID,int playerID,int gameID)
+        {
+            var field = await this._unitOfWork.CardField.GetCardField(cardFieldID);
+            if (field.CardOnField == null)
+            {
+                throw new Exception("This card has no effect");
+            }
+            var effect = await this._unitOfWork.Effect.GetEffect((int)field.CardOnField.Card.EffectID);
+            if (listOfCards.First() != 0)
+            {
+                if (effect.NumOfCardsAffected != listOfCards.Count)
+                {
+                    throw new Exception("You didint chose right amount of cards");
+                }
+            }
+			var concreteStrategy = this._concreteStrategy.SetStrategyContext(effect.EffectType.Type);
+			await concreteStrategy.ExecuteEffect(listOfCards,effect,playerID,gameID, cardFieldID);
+
+		}
+        public async Task RemoveCardFromFieldToGrave(int fieldID, int gameID)
+        {
+            var cardField = await this._unitOfWork.CardField.GetCardField(fieldID);
+            if (cardField.CardOnField == null)
+            {
+                throw new Exception("There is no card on this field");
+            }
+            var grave = await this._unitOfWork.Grave.GetGraveByGameID(gameID);
+            grave.ListOfCardsInGrave.Add(cardField.CardOnField);
+            cardField.CardOnField =null;
+            this._unitOfWork.Grave.Update(grave);
+			this._unitOfWork.CardField.Update(cardField);
+            await this._unitOfWork.Complete();
+		}
+	}
 }

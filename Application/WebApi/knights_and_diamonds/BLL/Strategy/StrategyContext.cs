@@ -1,5 +1,7 @@
 ﻿using BLL.Strategy.Context;
 using DAL.DataContext;
+using DAL.Migrations;
+using DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,9 +24,9 @@ namespace BLL.Strategy
 		{
 			return (int)this._effectExecution.SelectCardsFrom();
 		}
-		public async Task ExecuteEffect(List<int> listOfCards, string description, int playerID)
+		public async Task ExecuteEffect(List<int> listOfCards, Effect effect, int playerID,int gameID,int fieldID)
 		{
-			await this._effectExecution.ExecuteEffect(listOfCards, description, playerID);
+			await this._effectExecution.ExecuteEffect(listOfCards, effect, playerID,gameID,fieldID);
 		}
 	}
 }

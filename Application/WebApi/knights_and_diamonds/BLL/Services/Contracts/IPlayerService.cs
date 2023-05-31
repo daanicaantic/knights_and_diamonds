@@ -15,6 +15,7 @@ namespace BLL.Services.Contracts
 		Task<List<MappedCard>> GetPlayersHand(int playerID);
 		Task<int> GetNumberOfCardsInDeck(int playerID);
 		Task<MappedCard> Draw(int playerID);
+		Task StartingDrawing(int playerID);
 		Task SetGameStarted(Player player);
 	}
 }

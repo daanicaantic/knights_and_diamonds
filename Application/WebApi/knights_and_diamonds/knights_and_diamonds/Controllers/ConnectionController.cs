@@ -49,7 +49,7 @@ namespace knights_and_diamonds.Controllers
 		}
 		[HttpGet]
 		[Route("GetOnlineUsers")]
-		public async Task<IActionResult> GetOnlineUsers(int userID)
+		public async Task<IActionResult> GetOnlineUsers()
 		{
 			try
 			{
@@ -57,9 +57,9 @@ namespace knights_and_diamonds.Controllers
 
 				return new JsonResult(c);
 			}
-			catch
+			catch(Exception ex)
 			{
-				return BadRequest();
+				return BadRequest(ex.Message);
 			}
 		}
 	}

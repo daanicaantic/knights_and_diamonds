@@ -29,7 +29,7 @@ namespace BLL.Strategy
 		{
 			return ChooseCardsFrom.NoChoose;
 		}
-		public async Task ExecuteEffect(List<int> listOfCards, string description, int playerID)
+		public async Task ExecuteEffect(List<int> listOfCards, Effect effect, int playerID, int gameID,int fieldID)
 		{
 			var player = await this._unitOfWork.Player.GetOne(playerID);
 			if (player == null)
@@ -46,7 +46,6 @@ namespace BLL.Strategy
 			{
 				throw new Exception("There is no enemie in this game");
 			}
-			var effect = await this.GetEffect(description);
 			if (effect.EffectType.Type == "lpchangeAdd")
 			{
 				player.LifePoints = (int)(player.LifePoints + effect.PointsAddedLost);
@@ -58,19 +57,6 @@ namespace BLL.Strategy
 				this._unitOfWork.Player.Update(player);
 			}
 			await this._unitOfWork.Complete();
-		}
-		public async Task<Effect> GetEffect(string description)
-		{
-			var effect = await this._unitOfWork.Effect.GetEffectByDescription(description);
-			if (effect == null)
-			{
-				throw new Exception("There is no effect with this description");
-			}
-			if (effect.EffectType.Type != "lpchangeAdd" || effect.EffectType.Type != "lpchangeReduce")
-			{
-				throw new Exception("There is some Error");
-			}
-			return effect;
 		}
 	}
 }

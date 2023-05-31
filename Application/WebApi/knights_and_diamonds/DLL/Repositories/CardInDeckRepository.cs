@@ -25,5 +25,15 @@ namespace DAL.Repositories
 			var card = await Context.CardInDecks.Where(x => x.CardID == cardID && x.DeckID == deckID).FirstOrDefaultAsync();
             return card;
         }
-    }
+
+		public async Task<CardInDeck> GetCardInDeckWithCard(int cardID)
+		{
+			var card = await this.Context.CardInDecks
+				.Include(x => x.Card)
+				.ThenInclude(x=>x.CardType)
+				.Where(x => x.ID == cardID)
+				.FirstOrDefaultAsync();
+			return card;
+		}
+	}
 }

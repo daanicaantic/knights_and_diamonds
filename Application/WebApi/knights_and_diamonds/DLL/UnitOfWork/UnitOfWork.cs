@@ -27,6 +27,7 @@ namespace DAL.UnitOfWork
 			Effect = new EffectRepository(_context);
 			Turn = new TurnRepository(_context);
 			CardField = new CardFieldRepository(_context);
+			Grave = new GraveRepository(_context);
 		}
 
 		public ICardRepository Card { get; private set; }
@@ -46,7 +47,10 @@ namespace DAL.UnitOfWork
 		public IEffectRepository Effect { get; set; }
 
 		public ITurnRepository Turn { get; set; }
+
 		public ICardFieldRepository CardField { get; set; }
+		public IGraveRepository Grave { get; set; }
+
 
 
 

@@ -17,7 +17,11 @@ namespace DAL.UnitOfWork
 		IPlayerRepository Player { get; }
 		IGameRepository Game { get; }
 		IEffectRepository Effect { get; }
+		ITurnRepository Turn { get; }
+		IGraveRepository Grave { get; }
 
-        Task Complete();
+
+
+		Task Complete();
 	}
 }

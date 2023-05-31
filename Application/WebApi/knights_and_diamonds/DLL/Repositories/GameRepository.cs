@@ -26,16 +26,24 @@ namespace DAL.Repositories
 				.Include(x => x.Players)
 				.Where(x => x.ID == gameID)
 				.FirstOrDefaultAsync();
+			if (game == null)
+			{
+				throw new Exception("There is no game with this ID");
+			}
 			return game;
 		}
 
 		public async Task<Game> GetGameWithTurns(int gameID)
         {
-            var game = await this.Context.Games
+            var game = await this.Context.Games?
                 .Include(x => x.Turns)
                 .Where(x => x.ID == gameID)
                 .FirstOrDefaultAsync();
-            return game;
+			if (game == null)
+			{
+				throw new Exception("There is no game with this ID");
+			}
+			return game;
         }
         
     }

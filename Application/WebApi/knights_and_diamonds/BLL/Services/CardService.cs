@@ -4,6 +4,7 @@ using DAL.DesignPatterns.Factory;
 using DAL.DesignPatterns.Factory.Contract;
 using DAL.DTOs;
 using DAL.Models;
+using DAL.Repositories;
 using DAL.UnitOfWork;
 using System;
 using System.Collections.Generic;
@@ -163,12 +164,12 @@ namespace BLL.Services
 			if (cardInDeck.Card.Discriminator == "Card")
 			{
 				var card = await this._unitOfWork.Card.GetCard(cardInDeck.CardID);
-				mappedCard = new MappedCard(card.ID, card.CardName, card.CardType.Type, card.Effect.NumOfCardsAffected, card.Effect.PointsAddedLost, card.EffectID, card.ImgPath, card.Effect.Description);
+				mappedCard = new MappedCard(cardInDeck.ID, card.CardName, card.CardType.Type, card.Effect.NumOfCardsAffected, card.Effect.PointsAddedLost, card.EffectID, card.ImgPath, card.Effect.Description);
 			}
 			else
 			{
 				var card = await this._unitOfWork.Card.GetMonsterCard(cardInDeck.CardID);
-				mappedCard = new MappedCard(card.ID, card.CardName, card.CardType.Type, card.Effect.NumOfCardsAffected, card.Effect.PointsAddedLost, card.EffectID, card.NumberOfStars, card.AttackPoints, card.DefencePoints, card.ImgPath, card.Effect.Description);
+				mappedCard = new MappedCard(cardInDeck.ID, card.CardName, card.CardType.Type, card.Effect.NumOfCardsAffected, card.Effect.PointsAddedLost, card.EffectID, card.NumberOfStars, card.AttackPoints, card.DefencePoints, card.ImgPath, card.Effect.Description);
 			}
 			return mappedCard;
 		}

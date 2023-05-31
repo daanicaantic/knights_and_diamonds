@@ -99,7 +99,7 @@ namespace knights_and_diamonds.Controllers
             }
         }
 
-		[Route("Strategy")]
+/*		[Route("Strategy")]
 		[HttpPut]
 		public async Task<IActionResult> Strategy([FromBody] List<int> listOfCards, string description, int playerID)
 		{
@@ -108,14 +108,14 @@ namespace knights_and_diamonds.Controllers
 				var cs = new ConcreteStrategy(this._context);
 				this.concreteStrategy=cs.SetStrategyContext("takeCardFromEnemiesField");
 				int area=concreteStrategy.GetAreaOfSelectingCards();
-				await concreteStrategy.ExecuteEffect(listOfCards,description,playerID);
+				await concreteStrategy.ExecuteEffect(listOfCards,effect,playerID);
 				return Ok(area);
 			}
 			catch (Exception e)
 			{
 				return BadRequest(e.Message);
 			}
-		}
+		}*/
 
 	}
 

@@ -8,26 +8,33 @@ using System.Threading.Tasks;
 
 namespace BLL.Services.Contracts
 {
-    public interface IGameService
+
+	public interface IGameService
     {
-		enum GamePhase
+	
+		struct GraveToDisplay
 		{
-			DrawPhase,
-			MainPhase,
-			BeatlePhase,
-			EndPhase,
+			public int GraveCount { get; set; }
+			public MappedCard? LastCard { get; set; }
+		}
+		struct AffterPlaySpellTrapCardData
+		{
+			public int areaOfClicking { get; set; }
+			public int fieldID { get; set; }
 		}
 		Task<Game> GetGameByID(int gameID);
 		Task<GameDTO> GetGame(int gameID, int userID);
 		Task<List<string>> GameGroup(int gameID);
+		Task<GraveToDisplay> GetGamesGrave(int gameID);
 		Task<ConnectionsPerUser> GameConnectionsPerPlayer(int gameID, int playerID);
 		Task<FieldDTO> GetPlayersField(int playerID);
 		EnemiesFieldDTO GetEneiesField(FieldDTO enemiesField);
-		Task<List<MappedCard>> DrawPhase(int gameID);
-		Task<Game> NewTurn(int gameID);
-		Task<Turn> GetTurn(int gameID);
-		Task<GamePhase> GetGamePhase(int gameID);
-		Task<int> GetPlayerOnTurn(int gameID);
+		Task<List<MappedCard>> DrawPhase(int gameID,int playerID);
+		Task<FieldDTO> NormalSummon(int gameID, int playerID, int cardID, bool position);
+		Task<FieldDTO> TributeSummon(List<int> fieldsIDs, int gameID, int playerID, int cardInDeckID, int numberOfStars, bool position);
+		Task<AffterPlaySpellTrapCardData> PlaySpellCard(int gameID, int playerID, int cardInDeckID, int cardEffectID);
+		Task RemoveCardFromFieldToGrave(int fieldID, int gameID);
+		Task ExecuteEffect(List<int> listOfCards, int cardFieldID, int playerID, int gameID);
 
 	}
 }

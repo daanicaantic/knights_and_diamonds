@@ -23,7 +23,7 @@ namespace BLL.Strategy
 		{
 			return ChooseCardsFrom.GraveMonsteCard;
 		}
-		public Task ExecuteEffect(List<int> listOfCards, string description, int playerID)
+		public Task ExecuteEffect(List<int> listOfCards, Effect effect, int playerID, int gameID, int fieldID)
 		{
 			throw new NotImplementedException();
 		}
