@@ -202,7 +202,17 @@ namespace SignalR.HubConfig
 				await Clients.Client(con).SendAsync("GetEnemiesField", enemiesField);
 			}
 		}
-
+		public async Task GetFieldsAbleToAttack(ConnectionsPerUser connections, List<int> fieldsAbleToAttack)
+		{
+			foreach (var con in connections.MyConnections)
+			{
+				await Clients.Client(con).SendAsync("GetFieldsAbleToAttack", fieldsAbleToAttack);
+			}
+			foreach (var con in connections.EnemiesConnections)
+			{
+				await Clients.Client(con).SendAsync("GetFieldsAbleToAttack", fieldsAbleToAttack);
+			}
+		}
 		public async Task GetStartingTurnInfo(int gameID,int playerID)
 		{
 			var game=await this._gameService.GetGameByID(gameID);
@@ -246,6 +256,15 @@ namespace SignalR.HubConfig
 				throw new Exception(ex.Message);
 			}
 		}
+		public async Task BattlePhase(int gameID, int playerID)
+		{
+			var connections = await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
+			var fieldsAbleToAttack=await this._turnService.BattlePhase(gameID, playerID);	
+			var turnInfo = await this._turnService.GetTurnInfo(gameID, playerID);
+			await this.GetTurnInfo(connections, turnInfo);
+			await this.GetFieldsAbleToAttack(connections, fieldsAbleToAttack);
+		}
+
 
 		public async Task GetPlayersField(int gameID, int playerID)
 		{
@@ -319,6 +338,18 @@ namespace SignalR.HubConfig
 				throw new Exception(ex.Message);
 			}
 			
+		}
+		public async Task AttackEnemiesField(int gameID,int playerID,int fieldThatAtackID,int attackedFieldID) 
+		{
+			var connections = await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
+			foreach (var con in connections.MyConnections)
+			{
+				await Clients.Client(con).SendAsync("GetFieldsIncludedInAttack",fieldThatAtackID, attackedFieldID);
+			}
+			foreach (var con in connections.EnemiesConnections)
+			{
+				await Clients.Client(con).SendAsync("GetFieldsIncludedInAttack", fieldThatAtackID, attackedFieldID);
+			}
 		}
 	}
 }

@@ -10,16 +10,17 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
-	public class TurnRepository:Repository<Turn>,ITurnRepository
+	public class AttackInTurnsRepository : Repository<AttackInTurn>, IAttackInTurnRepository
 	{
-		public TurnRepository(KnightsAndDiamondsContext context) : base(context)
+		public AttackInTurnsRepository(KnightsAndDiamondsContext context) : base(context)
 		{
-
 		}
 		public KnightsAndDiamondsContext Context
 		{
-			get { return _context as KnightsAndDiamondsContext; }
+			get
+			{
+				return _context as KnightsAndDiamondsContext; 
+			}
 		}
-
 	}
 }

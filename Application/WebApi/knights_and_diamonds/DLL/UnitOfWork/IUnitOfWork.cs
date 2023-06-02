@@ -19,6 +19,9 @@ namespace DAL.UnitOfWork
 		IEffectRepository Effect { get; }
 		ITurnRepository Turn { get; }
 		IGraveRepository Grave { get; }
+		ICardFieldRepository CardField { get; }
+		IAttackInTurnRepository AttackInTurn { get; }
+
 
 
 

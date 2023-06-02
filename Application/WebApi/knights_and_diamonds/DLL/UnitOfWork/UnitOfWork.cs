@@ -28,28 +28,22 @@ namespace DAL.UnitOfWork
 			Turn = new TurnRepository(_context);
 			CardField = new CardFieldRepository(_context);
 			Grave = new GraveRepository(_context);
+			AttackInTurn = new AttackInTurnsRepository(_context);
 		}
 
 		public ICardRepository Card { get; private set; }
-
         public IDeckRepository Deck { get; private set; }
-
 		public IUserRepository User { get; private set; }
-
 		public ICardInDeckRepository CardInDeck { get; private set; }
-
 		public IRPSGameRepository RPSGame { get; private set; }
-
 		public IPlayerRepository Player { get; private set; }
-
         public IGameRepository Game { get; private set; }
-
 		public IEffectRepository Effect { get; set; }
-
 		public ITurnRepository Turn { get; set; }
-
 		public ICardFieldRepository CardField { get; set; }
 		public IGraveRepository Grave { get; set; }
+		public IAttackInTurnRepository AttackInTurn { get; private set; }
+
 
 
 

@@ -18,7 +18,7 @@ namespace DAL.Models
         public List<Player>? Players { get; set; }
 		[JsonIgnore]
 		public List<Turn>? Turns { get; set; }
-        public int GraveID { get; set; }
+        public int? GraveID { get; set; }
         public Grave? Grave { get; set; }
 
         public Game()

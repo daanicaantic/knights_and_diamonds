@@ -63,12 +63,46 @@ namespace BLL.Services
 			}
 			turnInfo.PlayerOnTurn = game.PlayerOnTurn;
 			turnInfo.TurnPhase = (int)await this.GetTurnPhase(game);
+			turnInfo.IsMonsterSummoned = game.Turns.LastOrDefault().MonsterSummoned;
+			turnInfo.TurnNumber = game.TurnNumber;
 			return turnInfo;
+		}
+		public async Task<List<int>> BattlePhase(int gameID,int playerID)
+		{
+			var game = await this._unitOfWork.Game.GetGameWithTurns(gameID);
+			var currentTurn=game.Turns?.LastOrDefault();
+			var playerFields = await this._unitOfWork.CardField.GetPlayerFields(playerID, "MonsterField");
+			var listOfFieldsIDsReadyToAttack = new List<int>();
+			if (game.PlayerOnTurn != playerID)
+			{
+				throw new Exception("You are not on turn");
+			}
+			if (currentTurn.MainPhase == false)
+			{
+				throw new Exception("You must be in main phase if you want to enter battle phase");
+			}
+			if (playerFields != null)
+			{
+				foreach (var field in playerFields)
+				{
+					if (field.CardOnField != null && field.CardPosition==true) {
+						var fieldAbleToAttack = new AttackInTurn(true, currentTurn.ID,field.ID);
+						await this._unitOfWork.AttackInTurn.Add(fieldAbleToAttack);
+						listOfFieldsIDsReadyToAttack.Add(fieldAbleToAttack.CardFieldID);
+					}
+				}
+			}
+			currentTurn.MainPhase = false;
+			currentTurn.BattlePhase = true;
+			this._unitOfWork.Turn.Update(currentTurn);
+			await this._unitOfWork.Complete();
+			return listOfFieldsIDsReadyToAttack;
+
 		}
 
 		public async Task<TurnPhase> GetTurnPhase(Game game)
 		{
-			var turn = game.Turns.LastOrDefault();
+			var turn = game.Turns?.LastOrDefault();
 			if (turn == null)
 			{
 				throw new Exception("There is no turns in this game");

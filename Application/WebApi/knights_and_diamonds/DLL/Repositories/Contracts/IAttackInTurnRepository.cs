@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories.Contracts
 {
-	public interface ICardFieldRepository:IRepository<CardField>	
+	public interface IAttackInTurnRepository:IRepository<AttackInTurn>
 	{
-		Task<CardField> GetCardField(int fieldID);
-		Task<List<CardField>> GetPlayerFields(int playerID, string fieldType);
+
 	}
 }

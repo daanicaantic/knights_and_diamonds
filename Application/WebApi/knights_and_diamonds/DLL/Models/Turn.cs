@@ -19,6 +19,9 @@ namespace DAL.Models
 		public bool MonsterSummoned { get; set; }
 		[JsonIgnore]
 		public Game? Game { get; set; }
+		[JsonIgnore]
+		public List<AttackInTurn> AttackInTurn { get; set; }
+
 
 		public Turn()
 		{

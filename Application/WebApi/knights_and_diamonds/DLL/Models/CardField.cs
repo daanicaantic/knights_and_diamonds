@@ -22,6 +22,9 @@ namespace DAL.Models
 		public int PlayerID { get; set; }
 		[JsonIgnore]
 		public Player Player { get; set; }
+		[JsonIgnore]
+		public List<AttackInTurn> AttackInTurn { get; set; }
+
 
 		public CardField()
 		{

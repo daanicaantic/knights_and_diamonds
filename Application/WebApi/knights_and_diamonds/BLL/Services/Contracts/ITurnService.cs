@@ -11,6 +11,8 @@ namespace BLL.Services.Contracts
 	{
 		public int PlayerOnTurn { get; set; }
 		public int TurnPhase { get; set; }
+		public bool IsMonsterSummoned { get; set; }
+		public int TurnNumber { get;set; }
 	}
 	public enum TurnPhase
 	{
@@ -24,5 +26,6 @@ namespace BLL.Services.Contracts
 		Task<TurnInfo> NewTurn(int gameID);
 		Task<TurnInfo> GetTurnInfo(int gameID, int playerID);
 		Task<TurnPhase> GetTurnPhase(Game game);
+		Task<List<int>> BattlePhase(int gameID, int playerID);
 	}
 }

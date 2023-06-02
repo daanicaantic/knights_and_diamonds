@@ -22,9 +22,6 @@ namespace DAL.DataContext
 		public DbSet<Turn>? Turns { get; set; }
 		public DbSet<CardField>? CardFields { get; set; }
 		public DbSet<Grave>? Graves { get; set; }
-
-
-
-
+		public DbSet<AttackInTurn>? AttackInTurns { get; set; }
 	}
 }

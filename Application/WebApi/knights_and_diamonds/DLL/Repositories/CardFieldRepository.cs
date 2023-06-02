@@ -30,5 +30,11 @@ namespace DAL.Repositories
 			return cardField;
 			
 		}
+		public async Task<List<CardField>> GetPlayerFields(int playerID,string fieldType)
+		{
+			var cardField = await this.Context.CardFields?.Where(x => x.PlayerID ==playerID && x.FieldType==fieldType ).Include(x => x.CardOnField).ThenInclude(x => x.Card).ToListAsync();
+			return cardField;
+
+		}
 	}
 }

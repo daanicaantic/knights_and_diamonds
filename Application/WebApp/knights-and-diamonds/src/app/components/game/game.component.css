@@ -260,6 +260,7 @@ p {
     flex-direction: column;
     align-items: center;
     min-height: 121px;
+    position: relative;
 
     /* background-image: url("https://localhost:7250/Resources/Images/texture.jpg");
     background-size: cover;
@@ -384,6 +385,14 @@ p {
     background-size: 100% 100%;
     background-image: url("https://localhost:7250/Resources/Images/cancel.png");
     cursor: pointer;
+}
+.attack{
+    width: 20%;
+    height: 70%;
+    position:absolute;
+    z-index: 1;
+    background-size: 100% 100%;
+    background-image: url("https://localhost:7250/Resources/Images/attack_sword.png");
 }
 
 @keyframes summon-card-show-dialog {

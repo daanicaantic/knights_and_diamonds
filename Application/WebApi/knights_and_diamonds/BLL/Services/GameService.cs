@@ -313,7 +313,7 @@ namespace BLL.Services
 			{
 				throw new Exception("There is no game with this id");
 			}
-			var grave = await this._unitOfWork.Grave.GetGrave(game.GraveID);
+			var grave = await this._unitOfWork.Grave.GetGrave((int)game.GraveID);
      
 			if (numberOfTributes == 0)
             {

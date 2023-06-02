@@ -35,9 +35,24 @@ export class GameService {
       .invoke('DrawPhase', Number(gameID), playerID)
       .catch((err) => console.log(err));
   }
+  battlePhaseInv(gameID: any, playerID: any): void {
+    this.signalrService.hubConnection
+      .invoke('BattlePhase', Number(gameID), playerID)
+      .catch((err) => console.log(err));
+  }
   getTurnPhaseInv(gameID: any): void {
     this.signalrService.hubConnection
       .invoke('GetTurnPhase', gameID)
+      .catch((err) => console.error('O V D E', err));
+  }
+  attackEnemiesFieldInv(
+    gameID: any,
+    playerID: any,
+    fieldID: any,
+    attackedField: any
+  ) {
+    this.signalrService.hubConnection
+      .invoke('AttackEnemiesField', gameID, playerID, fieldID, attackedField)
       .catch((err) => console.error('O V D E', err));
   }
   executeEffectInv(

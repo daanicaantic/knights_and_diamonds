@@ -15,7 +15,8 @@
                 </div>
             </div>
             <div class="phases-window" *ngIf="isPlayerOnTurn==true">
-                <div *ngFor="let phase of phases" class="players-phase player-phase-{{phase.status}}">{{phase.name}}
+                <div *ngFor="let phase of phases" class="players-phase player-phase-{{phase.status}}"
+                    (click)="battlePhase(phase)">{{phase.name}}
                 </div>
             </div>
             <div class="phases-window" *ngIf="isPlayerOnTurn==false">
@@ -64,7 +65,12 @@
                             <h3>Discard {{playerHand.length-6}} cards from your hand</h3>
                         </div>
                         <div class="enemies-table">
-                            <div class="card-place" *ngFor="let field of enemiesField.cardFields">
+                            <div #attackedField id="{{field.fieldID}}" class="card-place"
+                                *ngFor="let field of enemiesField.cardFields"
+                                (click)="attackField(attackedField,field.fieldID)">
+                                <div #sword class="attack"
+                                    *ngIf="fieldsAbleToAttack!=undefined && fieldsAbleToAttack.includes(field.fieldID)">
+                                </div>
                                 <div class="small-card small-card-deff-{{field.cardPosition}} enemies-small-card">
                                     <app-card [card]="this.field.cardOnField" [isCardShowen]="field.cardShowen"
                                         (mouseover)="onEnemiesCardMouseOver(this.field)"></app-card>
@@ -77,7 +83,10 @@
                             </div>
                         </div>
                         <div class="player-table">
-                            <div class="card-place" *ngFor="let field of playerField.cardFields">
+                            <div class="card-place" id="{{field.fieldID}}" *ngFor="let field of playerField.cardFields">
+                                <div #sword (click)="getSword(sword,field.fieldID)" class="attack"
+                                    *ngIf="fieldsAbleToAttack!=undefined && fieldsAbleToAttack.includes(field.fieldID)">
+                                </div>
                                 <div class="small-card small-card-deff-{{field.cardPosition}}">
                                     <app-card [card]="this.field.cardOnField" [isCardShowen]="field.cardShowen"
                                         (mouseover)="this.mediumCard=this.field.cardOnField; this.iscardshowen=true"></app-card>
