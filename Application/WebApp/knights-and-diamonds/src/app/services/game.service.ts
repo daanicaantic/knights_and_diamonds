@@ -40,6 +40,11 @@ export class GameService {
       .invoke('BattlePhase', Number(gameID), playerID)
       .catch((err) => console.log(err));
   }
+  endPhaseInv(gameID: any, playerID: any, enemiesID: any): void {
+    this.signalrService.hubConnection
+      .invoke('EndPhase', Number(gameID), playerID, enemiesID)
+      .catch((err) => console.log(err));
+  }
   getTurnPhaseInv(gameID: any): void {
     this.signalrService.hubConnection
       .invoke('GetTurnPhase', gameID)
@@ -91,6 +96,11 @@ export class GameService {
     console.log(gameID, playerID, cardID, cardEffectID);
     this.signalrService.hubConnection
       .invoke('PlaySpellCard', gameID, playerID, cardID, cardEffectID)
+      .catch((err) => console.error('O V D E', err));
+  }
+  removeCardFromHandToGraveInv(playerID: any, cardID: any, gameID: any): void {
+    this.signalrService.hubConnection
+      .invoke('RemoveCardFromHandToGrave', playerID, cardID, Number(gameID))
       .catch((err) => console.error('O V D E', err));
   }
 

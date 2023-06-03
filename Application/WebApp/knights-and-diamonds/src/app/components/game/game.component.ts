@@ -42,13 +42,14 @@ export class GameComponent implements OnInit, OnDestroy {
   ];
 
   cardToBeSummoned: any;
-  fieldsAbleToAttack: any = [5571];
+  fieldsAbleToAttack: any = [5601, 5602, 5603, 5604, 5605];
   swordRadyToAttack: any;
   angle: any;
   transitionIsActive: any = false;
-
+  turnInfo: any;
   fieldReadyAttack: any;
-
+  pom1: any;
+  pom2: any;
   constructor(
     public inGameService: IngameService,
     public gameService: GameService,
@@ -109,37 +110,13 @@ export class GameComponent implements OnInit, OnDestroy {
       });
     }
   }
-  attackField(attackedFieldDiv: any, fieldID: any) {
+  attackField(fieldID: any) {
     this.gameService.attackEnemiesFieldInv(
       Number(this.gameID),
       this.playerID,
       this.fieldReadyAttack,
       fieldID
     );
-    // console.log(attackedFieldDiv);
-    // this.transitionIsActive = true;
-    // this.swordRadyToAttack.style.transform = `rotate(${this.angle - 30}rad)`;
-    // const fieldCentar = this.getCenter(attackedFieldDiv);
-    // const pom = this.getCenter(this.swordRadyToAttack);
-
-    // console.log(fieldCentar);
-
-    // const x = fieldCentar.x - pom.x;
-    // const y = fieldCentar.y - pom.y;
-    // console.log(x);
-    // console.log(y);
-
-    // if (this.swordRadyToAttack != undefined) {
-    //   this.swordRadyToAttack.style.transform = `translate(${x}px,${y}px) rotate(${
-    //     this.angle - 30
-    //   }rad)`;
-    //   this.swordRadyToAttack.style.transition = 'transform 0.5s ';
-
-    //   setTimeout(() => {
-    //     this.fieldsAbleToAttack = undefined;
-    //     this.transitionIsActive = true;
-    //   }, 500);
-    // }
   }
   pomfja(fieldID: any, attackedFieldID: any) {
     this.transitionIsActive = true;
@@ -159,20 +136,20 @@ export class GameComponent implements OnInit, OnDestroy {
           Math.pow(attackedCentar.y - attackCentar.y, 2)
       );
       var translateY = distance * Math.sin(angle) * -1;
-      var translateX = distance * Math.cos(angle);
-      angle = angle * (4 / 9);
+      var translateX = distance * Math.cos(angle) * -1;
+      angle = angle - 3.14 / 2;
     } else {
       var distance = Math.sqrt(
         Math.pow(attackedCentar.x - attackCentar.x, 2) +
           Math.pow(attackCentar.y - attackedCentar.y, 2)
       );
       var translateY = distance * Math.sin(angle);
-      var translateX = distance * Math.cos(angle);
-      angle = angle * (-4 / 9);
+      var translateX = distance * Math.cos(angle) * -1;
+      angle = -angle - 3.14 / 2;
     }
     attack.style.transform =
       'translate(' +
-      -translateX +
+      translateX +
       'px,' +
       translateY +
       'px) rotate(' +
@@ -181,7 +158,8 @@ export class GameComponent implements OnInit, OnDestroy {
     attack.style.transition = 'transform 0.5s ';
 
     setTimeout(() => {
-      this.fieldsAbleToAttack = undefined;
+      const index = this.fieldsAbleToAttack.indexOf(fieldID);
+      const x = this.fieldsAbleToAttack.splice(index, 1);
       this.transitionIsActive = false;
     }, 500);
     console.log(attackCentar);
@@ -209,8 +187,15 @@ export class GameComponent implements OnInit, OnDestroy {
   onLoadingOver(event: any) {
     this.isLoadingOver = event;
     console.log(this.playerField.gameStarted);
-    if (this.playerField.gameStarted == false) {
-      this.gameService.drawPhaseInv(Number(this.gameID), this.playerID);
+    if (
+      this.playerField != undefined &&
+      this.playerField.gameStarted == false
+    ) {
+      this.gameService.startingDrawingInv(Number(this.gameID), this.playerID);
+      if (this.isPlayerOnTurn) {
+        console.log('fiona2018xoffwhitevirginlabblock', this.isPlayerOnTurn);
+        this.gameService.drawPhaseInv(Number(this.gameID), this.playerID);
+      }
     }
     this.getStartingTurnInfo();
   }
@@ -245,7 +230,7 @@ export class GameComponent implements OnInit, OnDestroy {
   }
   getTurnInfo() {
     this.signalrService.hubConnection.on('GetTurnInfo', (turnInfo: any) => {
-      console.log('O V A A M O', turnInfo);
+      this.turnInfo = turnInfo;
       this.setTurnInfo(turnInfo);
     });
   }
@@ -256,22 +241,29 @@ export class GameComponent implements OnInit, OnDestroy {
     } else {
       this.isPlayerOnTurn = false;
     }
-    var timer: any = setTimeout(() => {
-      this.phases.forEach((element) => {
-        element.status = false;
-      });
+    // var timer: any = setTimeout(() => {
+    this.phases.forEach((element) => {
+      element.status = false;
+    });
+    if (turnInfo.turnPhase != 4) {
       let phase = this.phases.find((x) => x.key == turnInfo.turnPhase);
       phase.status = true;
       this.curentPhase = phase;
       console.log('f a z a', this.curentPhase);
-    }, 1000);
+    }
+    // }, 1000);
   }
   getHands() {
     this.signalrService.hubConnection.on(
       'GetCardsInYourHand',
       (playerHand: any) => {
         if (this.playerField.gameStarted == false) {
-          this.getStartingDrawingEffect(0, this.playerHand, playerHand);
+          this.getStartingDrawingEffect(
+            0,
+            this.playerHand,
+            playerHand,
+            this.pom1
+          );
         } else {
           this.playerHand = playerHand;
         }
@@ -281,7 +273,12 @@ export class GameComponent implements OnInit, OnDestroy {
       'GetCardsInEnemiesHand',
       (enemiesHand: any) => {
         if (this.playerField.gameStarted == false) {
-          this.getStartingDrawingEffect(0, this.enemiesHand, enemiesHand);
+          this.getStartingDrawingEffect(
+            0,
+            this.enemiesHand,
+            enemiesHand,
+            this.pom2
+          );
         } else {
           this.enemiesHand = enemiesHand;
         }
@@ -325,13 +322,23 @@ export class GameComponent implements OnInit, OnDestroy {
     });
   }
   //koristimo fju za prikaz pocetnog izvlacenja karata;
-  getStartingDrawingEffect(i: any, targetArray: any, sourceArray: any) {
+  getStartingDrawingEffect(
+    i: any,
+    targetArray: any,
+    sourceArray: any,
+    niz: any
+  ) {
     var timer = setInterval(() => {
       if (i == sourceArray.length) {
         clearInterval(timer);
         return;
       }
-      targetArray.push(sourceArray[i]);
+      const exists = targetArray.some(
+        (obj: any) => obj.id === sourceArray[i].id
+      );
+      if (!exists) {
+        targetArray.push(sourceArray[i]);
+      }
       // this.playerField.deckCount = this.playerField.deckCount - 1;
       i++;
     }, 300);
@@ -415,22 +422,36 @@ export class GameComponent implements OnInit, OnDestroy {
     }
   }
   playCard(card: any) {
-    if (card.cardType == 'MonsterCard') {
-      this.openSummoningMonsterWindow(card);
-    }
-    if (card.cardType == 'SpellCard') {
-      console.log(card);
-      this.playSpellCard(card.id, card.cardEffectID);
+    if (this.playerHand.length < 7) {
+      if (
+        card.cardType == 'MonsterCard' &&
+        this.turnInfo.isMonsterSummoned == false &&
+        this.curentPhase.name == 'MP'
+      ) {
+        this.turnInfo.isMonsterSummoned = true;
+        this.openSummoningMonsterWindow(card);
+      }
+      if (
+        card.cardType == 'SpellCard' &&
+        this.curentPhase.name == 'MP' &&
+        this.isPlayerOnTurn
+      ) {
+        this.playSpellCard(card.id, card.cardEffectID);
+      }
+    } else if (this.isPlayerOnTurn) {
+      this.gameService.removeCardFromHandToGraveInv(
+        this.playerID,
+        card.id,
+        this.gameID
+      );
     }
   }
   openSummoningMonsterWindow(card: any) {
-    console.log('cs', card);
     if (this.cardToBeSummoned == undefined && this.isPlayerOnTurn == true) {
       this.cardToBeSummoned = card;
     }
   }
   closeSummoningMonsterWindow() {
-    console.log('bravo');
     this.cardToBeSummoned = undefined;
   }
   summonMonsterInAttackPosition() {
@@ -440,8 +461,19 @@ export class GameComponent implements OnInit, OnDestroy {
     this.normalSummon(this.cardToBeSummoned.id, false);
   }
   battlePhase(phase: any) {
-    if ((phase.name = 'BP')) {
-      this.gameService.battlePhaseInv(this.gameID, this.playerID);
+    if (this.playerHand.length < 7) {
+      if (phase.name == 'BP' && this.curentPhase.name == 'MP') {
+        this.gameService.battlePhaseInv(this.gameID, this.playerID);
+      } else if (
+        (phase.name == 'EP' && this.curentPhase.name == 'MP') ||
+        this.curentPhase.name == 'BP'
+      ) {
+        this.gameService.endPhaseInv(
+          this.gameID,
+          this.playerID,
+          this.enemiesID
+        );
+      }
     }
   }
 }

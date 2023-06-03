@@ -223,32 +223,40 @@ namespace SignalR.HubConfig
 				await this.GetTurnInfo(connections, turnInfo);
 			}
 		}
+		public async Task StartingDrawing(int gameID, int playerID)
+		{
+			try
+			{
+				var connections = await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
+				var player = await this._playerService.GetPlayer(playerID);
+				if (player.GaemeStarted == false)
+				{
+					await this._playerService.SetGameStarted(player);
+					await this._playerService.StartingDrawing(playerID);
+				}
+
+				var hand =await this._playerService.GetPlayersHand(playerID);
+				await this.GetHands(connections, hand);
+			}
+			catch (Exception e)
+			{
+				throw new Exception(e.Message);
+			}
+		}
 
 
 		public async Task DrawPhase(int gameID, int playerID)
 		{
 			try
 			{
-				var hand = new List<MappedCard>();
-				var player = await this._playerService.GetPlayer(playerID);
-				var connections = await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
-				var game = await this._gameService.GetGameByID(gameID);
-				if (player.GaemeStarted == false)
-				{
-					await this._playerService.SetGameStarted(player);
-					await this._playerService.StartingDrawing(playerID);
-				}
-				if (game.PlayerOnTurn == playerID)
-				{
-					hand = await this._gameService.DrawPhase(gameID, playerID);
-				}
-				else
-				{
-					hand = await this._playerService.GetPlayersHand(playerID);
-				}
+				var hand = await this._turnService.DrawPhase(gameID, playerID);
 				var turnInfo = await this._turnService.GetTurnInfo(gameID, playerID);
-
+				var connections = await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
+				await this.GetTurnInfo(connections, turnInfo);
 				await this.GetHands(connections, hand);
+				await this._turnService.ChangeToMainPhase(gameID);
+				turnInfo = await this._turnService.GetTurnInfo(gameID, playerID);
+				await Task.Delay(1000);
 				await this.GetTurnInfo(connections, turnInfo);
 			}
 			catch (Exception ex)
@@ -258,11 +266,38 @@ namespace SignalR.HubConfig
 		}
 		public async Task BattlePhase(int gameID, int playerID)
 		{
-			var connections = await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
-			var fieldsAbleToAttack=await this._turnService.BattlePhase(gameID, playerID);	
-			var turnInfo = await this._turnService.GetTurnInfo(gameID, playerID);
-			await this.GetTurnInfo(connections, turnInfo);
-			await this.GetFieldsAbleToAttack(connections, fieldsAbleToAttack);
+			try 
+			{ 
+				var connections = await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
+				var fieldsAbleToAttack=await this._turnService.BattlePhase(gameID, playerID);	
+				var turnInfo = await this._turnService.GetTurnInfo(gameID, playerID);
+				await this.GetTurnInfo(connections, turnInfo);
+				await this.GetFieldsAbleToAttack(connections, fieldsAbleToAttack);
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+		}
+		public async Task EndPhase(int gameID, int playerID,int enemiesID)
+		{
+			try
+			{
+				var connections = await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
+				var game = await this._turnService.EndPhase(gameID, playerID, enemiesID);
+				game.PlayerOnTurn = enemiesID;
+				var turnInfo = await this._turnService.GetTurnInfo(gameID, playerID);
+				await this.GetTurnInfo(connections, turnInfo);
+				await this._turnService.NewTurn(game);
+				turnInfo = await this._turnService.GetTurnInfo(gameID, playerID);
+				await Task.Delay(1000);
+				await this.GetTurnInfo(connections, turnInfo);
+				await this.DrawPhase(gameID, enemiesID);
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
 		}
 
 
@@ -330,6 +365,7 @@ namespace SignalR.HubConfig
 				{
 					Console.WriteLine(item.FieldIndex.ToString());
 				}
+				await Task.Delay(1000);
 				await this.GetField(connections, field);
 				await this.GetGrave(connections, grave);
 			}
@@ -350,6 +386,23 @@ namespace SignalR.HubConfig
 			{
 				await Clients.Client(con).SendAsync("GetFieldsIncludedInAttack", fieldThatAtackID, attackedFieldID);
 			}
+		}
+		public async Task RemoveCardFromHandToGrave(int playerID,int cardID,int gameID)
+		{
+			try
+			{
+				var connections = await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
+				await this._gameService.RemoveCardFromHandToGrave(playerID, cardID, gameID);
+				var hand = await this._playerService.GetPlayersHand(playerID);
+				var grave = await this._gameService.GetGamesGrave(gameID);
+				await this.GetHands(connections, hand);
+				await this.GetGrave(connections, grave);
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+
 		}
 	}
 }

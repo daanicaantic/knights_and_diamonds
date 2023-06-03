@@ -21,9 +21,7 @@ namespace DAL.UnitOfWork
 		IGraveRepository Grave { get; }
 		ICardFieldRepository CardField { get; }
 		IAttackInTurnRepository AttackInTurn { get; }
-
-
-
+		IPlayerHandRepository PlayerHand { get; }
 
 		Task Complete();
 	}

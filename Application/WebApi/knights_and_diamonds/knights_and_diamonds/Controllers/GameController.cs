@@ -139,7 +139,7 @@ namespace knights_and_diamonds.Controllers
 				return BadRequest(e.Message);
 			}
 		}
-		[Route("NewTurn/{gameID}")]
+/*		[Route("NewTurn/{gameID}")]
 		[HttpPost]
 		public async Task<IActionResult> NewTurn(int gameID)
 		{
@@ -153,23 +153,8 @@ namespace knights_and_diamonds.Controllers
 			{
 				return BadRequest(e.Message);
 			}
-		}
+		}*/
 
-		[Route("DrawPhase/{gameID}")]
-		[HttpGet]
-		public async Task<IActionResult> DrawPhase(int gameID,int playerID)
-		{
-			try
-			{
-				var hand = await this._gameservice.DrawPhase(gameID,playerID);
-				return Ok(hand);
-
-			}
-			catch (Exception e)
-			{
-				return BadRequest(e.Message);
-			}
-		}
 		[Route("GetGrave/{gameID}")]
 		[HttpGet]
 		public async Task<IActionResult> GetGrave(int gameID)

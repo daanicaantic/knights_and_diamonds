@@ -29,6 +29,8 @@ namespace DAL.UnitOfWork
 			CardField = new CardFieldRepository(_context);
 			Grave = new GraveRepository(_context);
 			AttackInTurn = new AttackInTurnsRepository(_context);
+			PlayerHand = new PlayerHandRepository(_context);
+
 		}
 
 		public ICardRepository Card { get; private set; }
@@ -43,6 +45,8 @@ namespace DAL.UnitOfWork
 		public ICardFieldRepository CardField { get; set; }
 		public IGraveRepository Grave { get; set; }
 		public IAttackInTurnRepository AttackInTurn { get; private set; }
+		public IPlayerHandRepository PlayerHand { get; }
+
 
 
 

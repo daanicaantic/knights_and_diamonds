@@ -189,37 +189,6 @@ namespace BLL.Services
 		}
 
 
-		public async Task<List<MappedCard>> DrawPhase(int gameID,int playerID)
-        {
-			var game = await this._unitOfWork.Game.GetGameWithTurns(gameID);
-            if (game.PlayerOnTurn != playerID)
-            {
-				throw new Exception("This player is not on turn");
-			}
-			var turn = game.Turns.Last();
-            if (turn.DrawPhase == false) 
-            {
-                throw new Exception("You cant draw card out of draw phase");
-            }
-            var player = await this._unitOfWork.Player.GetPlayerWithHandAndDeckByID(game.PlayerOnTurn);
-            if (player == null)
-            {
-				throw new Exception("There is no player with this ID");
-			}
-
-			var card = await this._playerService.Draw(game.PlayerOnTurn);
-			if (player.Hand.CardsInHand.Count >= 7)
-			{
-                throw new Exception("Throw " + (player.Hand.CardsInHand.Count - 6).ToString() + " cards from your hand");
-			}
-            turn.DrawPhase = false;
-            turn.MainPhase = true;
-            this._unitOfWork.Turn.Update(turn);
-            await this._unitOfWork.Complete();
-
-            var hand=await this._cardService.MapCards(player.Hand.CardsInHand);
-            return hand;
-		}
 
         public void CardToBePlayedCheck(Game game,Player player,int cardInDeckID)
         {
@@ -414,6 +383,21 @@ namespace BLL.Services
             this._unitOfWork.Grave.Update(grave);
 			this._unitOfWork.CardField.Update(cardField);
             await this._unitOfWork.Complete();
+		}
+		public async Task RemoveCardFromHandToGrave(int playerID,int cardID, int gameID)
+		{
+			var playerHnad = await this._unitOfWork.Player.GetPlayersHand(playerID);
+            var card = playerHnad.CardsInHand?.Where(x => x.ID == cardID).FirstOrDefault();
+            if (card == null)
+            {
+                throw new Exception("This card is not in your hand");
+            }
+			var grave = await this._unitOfWork.Grave.GetGraveByGameID(gameID);
+			grave.ListOfCardsInGrave.Add(card);
+            playerHnad.CardsInHand.Remove(card);
+			this._unitOfWork.Grave.Update(grave);
+			this._unitOfWork.PlayerHand.Update(playerHnad);
+			await this._unitOfWork.Complete();
 		}
 	}
 }

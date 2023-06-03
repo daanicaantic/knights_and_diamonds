@@ -66,10 +66,9 @@
                         </div>
                         <div class="enemies-table">
                             <div #attackedField id="{{field.fieldID}}" class="card-place"
-                                *ngFor="let field of enemiesField.cardFields"
-                                (click)="attackField(attackedField,field.fieldID)">
+                                *ngFor="let field of enemiesField.cardFields" (click)="attackField(field.fieldID)">
                                 <div #sword class="attack"
-                                    *ngIf="fieldsAbleToAttack!=undefined && fieldsAbleToAttack.includes(field.fieldID)">
+                                    *ngIf="fieldsAbleToAttack!=undefined && fieldsAbleToAttack.includes(field.fieldID) && curentPhase.name == 'BP'">
                                 </div>
                                 <div class="small-card small-card-deff-{{field.cardPosition}} enemies-small-card">
                                     <app-card [card]="this.field.cardOnField" [isCardShowen]="field.cardShowen"
@@ -85,7 +84,7 @@
                         <div class="player-table">
                             <div class="card-place" id="{{field.fieldID}}" *ngFor="let field of playerField.cardFields">
                                 <div #sword (click)="getSword(sword,field.fieldID)" class="attack"
-                                    *ngIf="fieldsAbleToAttack!=undefined && fieldsAbleToAttack.includes(field.fieldID)">
+                                    *ngIf="fieldsAbleToAttack!=undefined && fieldsAbleToAttack.includes(field.fieldID) && curentPhase.name == 'BP'">
                                 </div>
                                 <div class="small-card small-card-deff-{{field.cardPosition}}">
                                     <app-card [card]="this.field.cardOnField" [isCardShowen]="field.cardShowen"
