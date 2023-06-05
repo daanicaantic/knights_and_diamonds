@@ -1,4 +1,5 @@
-﻿using BLL.Services.Contracts;
+﻿using BLL.AttackingStrategy;
+using BLL.Services.Contracts;
 using BLL.Strategy;
 using DAL.DataContext;
 using DAL.DTOs;
@@ -8,6 +9,7 @@ using DAL.UnitOfWork;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Intrinsics.X86;
 using System.Security.Cryptography.X509Certificates;
@@ -33,6 +35,8 @@ namespace BLL.Services
 		public ICardService _cardService { get; set; }
 		public IPlayerService _playerService { get; set; }
         public ConcreteStrategy _concreteStrategy { get; set; }
+		public ConcreteAttackingStrategy _concreteAttackingStrategy { get; set; }
+
 		public GameService(KnightsAndDiamondsContext context)
         {
             this._context = context;
@@ -42,6 +46,8 @@ namespace BLL.Services
             this._cardService = new CardService(_context);
             this._playerService = new PlayerService(_context);
             this._concreteStrategy = new ConcreteStrategy(_context);
+			this._concreteAttackingStrategy = new ConcreteAttackingStrategy(_context);
+
 		}
 
 		public async Task<List<string>> GameGroup(int gameID)
@@ -239,7 +245,7 @@ namespace BLL.Services
             {
 				emptyField.CardShowen = false;
 			}
-            player.Hand.CardsInHand.Remove(player.Hand.CardsInHand.Where(x=>x.ID==cardInDeckID).FirstOrDefault());
+            player.Hand.CardsInHand.Remove(player.Hand.CardsInHand?.Where(x=>x.ID==cardInDeckID).FirstOrDefault());
             turn.MonsterSummoned = true;
 			this._unitOfWork.Turn.Update(turn);
 			this._unitOfWork.Player.Update(player);
@@ -294,15 +300,7 @@ namespace BLL.Services
             }
             foreach (var fieldID in fieldsIDs)
             {
-                var field = await this._unitOfWork.CardField.GetCardField(fieldID);
-                if (field == null)
-                {
-					throw new Exception("There is no field with this id");
-				}
-                if (field.PlayerID != playerID) 
-                {
-					throw new Exception("You cant tribute enemies card");
-				}
+                var field = await this._unitOfWork.CardField.GetCardField(fieldID, playerID);
 				if (field.FieldType != "MonsterField")
 				{
 					throw new Exception("This is no monster field");
@@ -353,7 +351,7 @@ namespace BLL.Services
 		}
 		public async Task ExecuteEffect(List<int> listOfCards, int cardFieldID,int playerID,int gameID)
         {
-            var field = await this._unitOfWork.CardField.GetCardField(cardFieldID);
+            var field = await this._unitOfWork.CardField.GetCardField(cardFieldID,playerID);
             if (field.CardOnField == null)
             {
                 throw new Exception("This card has no effect");
@@ -370,9 +368,9 @@ namespace BLL.Services
 			await concreteStrategy.ExecuteEffect(listOfCards,effect,playerID,gameID, cardFieldID);
 
 		}
-        public async Task RemoveCardFromFieldToGrave(int fieldID, int gameID)
+        public async Task RemoveCardFromFieldToGrave(int fieldID, int gameID,int playerID)
         {
-            var cardField = await this._unitOfWork.CardField.GetCardField(fieldID);
+            var cardField = await this._unitOfWork.CardField.GetCardField(fieldID,playerID);
             if (cardField.CardOnField == null)
             {
                 throw new Exception("There is no card on this field");
@@ -399,5 +397,77 @@ namespace BLL.Services
 			this._unitOfWork.PlayerHand.Update(playerHnad);
 			await this._unitOfWork.Complete();
 		}
-	}
+        public async Task ChangeMonsterPosition(int playerID,int fieldID,int gameID)
+        {
+            var game = await this._unitOfWork.Game.GetGameWithTurns(gameID);
+            if (game.PlayerOnTurn != playerID)
+            {
+				throw new Exception("You are not on turn");
+			}
+			var curentTurn = game.Turns?.LastOrDefault();
+            if (curentTurn == null)
+            {
+				throw new Exception("This game has no turns");
+			}
+            if (curentTurn.MainPhase == false) 
+            { 
+				throw new Exception("You can change card position only in main phase");
+			}
+            var cardField=await this._unitOfWork.CardField.GetCardField(fieldID,playerID);
+            if (cardField.PlayerID != playerID)
+            {
+				throw new Exception("This is not your field");
+			}
+            if (cardField.CardOnField == null)
+            {
+				throw new Exception("There is no card on this field");
+			}
+            cardField.CardPosition=!cardField.CardPosition;
+            if (cardField.CardShowen == false)
+            {
+                cardField.CardShowen = true;
+            }
+            this._unitOfWork.CardField.Update(cardField);
+            await this._unitOfWork.Complete();
+		}
+        public async Task<int> AttackEnemiesField(int attackingFieldID, int attackedFieldID, int playerID, int enemiesPlayerID, int gameID)
+        {
+            var game = await this._unitOfWork.Game.GetGameWithTurns(gameID);
+            if (game.PlayerOnTurn != playerID)
+            {
+                throw new Exception("You are not on turn");
+            }
+            var curentTurn = game.Turns?.LastOrDefault();
+            if (curentTurn == null)
+            {
+                throw new Exception("This game has no turns");
+            }
+            if (curentTurn.BattlePhase == false)
+            {
+                throw new Exception("You can attack only in battle phase");
+            }
+			var attackingField = await this._unitOfWork.CardField.GetCardField(attackingFieldID, playerID);
+			if (attackingField.CardOnField == null)
+			{
+				throw new Exception("You cant attack from empty field");
+			}
+			if (attackingField.CardPosition == false)
+			{
+				throw new Exception("Your card is in deffence position");
+			}
+			var posibleAttack = await this._unitOfWork.AttackInTurn.GetAttackInTurnByTurnIDAndFieldID(attackingFieldID, curentTurn.ID);
+			var attackedField = await this._unitOfWork.CardField.GetCardField(attackedFieldID, enemiesPlayerID);
+			if (attackedField.CardOnField == null)
+			{
+				throw new Exception("You cant attack empty field");
+			}
+			var concreteStrategy = this._concreteAttackingStrategy.SetStrategyContext(attackedField.CardPosition);
+			var difference=await concreteStrategy.AttackEnemiesField(attackingField,attackedField,gameID);
+			posibleAttack.IsAttackingAbble = false;
+			this._unitOfWork.AttackInTurn.Update(posibleAttack);
+            await this._unitOfWork.Complete();
+            return difference;
+		}
+
+    }
 }

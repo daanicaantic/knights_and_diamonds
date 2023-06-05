@@ -87,7 +87,7 @@ namespace DAL.Repositories
 
 		public async Task<MonsterCard> GetMonsterCard(int cardID)
 		{
-			var card = await this.Context.MonsterCards
+			var card = await this.Context.MonsterCards?
 				.Include(x => x.Effect)
 				.Include(x => x.CardType)
 				.Where(x => x.ID==cardID)

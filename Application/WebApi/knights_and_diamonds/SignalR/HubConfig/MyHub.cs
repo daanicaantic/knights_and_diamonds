@@ -375,9 +375,13 @@ namespace SignalR.HubConfig
 			}
 			
 		}
-		public async Task AttackEnemiesField(int gameID,int playerID,int fieldThatAtackID,int attackedFieldID) 
+		public async Task AttackEnemiesField(int fieldThatAtackID, int attackedFieldID,int playerID,int enemiesID,int gameID) 
 		{
+			int fieldThatLostPoints= attackedFieldID;
 			var connections = await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
+			var enemiesConnections = await this._gameService.GameConnectionsPerPlayer(gameID, enemiesID);
+
+			var difference=await this._gameService.AttackEnemiesField(fieldThatAtackID, attackedFieldID, playerID, enemiesID, gameID);
 			foreach (var con in connections.MyConnections)
 			{
 				await Clients.Client(con).SendAsync("GetFieldsIncludedInAttack",fieldThatAtackID, attackedFieldID);
@@ -386,12 +390,35 @@ namespace SignalR.HubConfig
 			{
 				await Clients.Client(con).SendAsync("GetFieldsIncludedInAttack", fieldThatAtackID, attackedFieldID);
 			}
+			var field = await this._gameService.GetPlayersField(playerID);
+			var enemisfield = await this._gameService.GetPlayersField(enemiesID);
+			if (difference < 0)
+			{
+				fieldThatLostPoints = fieldThatAtackID;
+			}
+			await Task.Delay(1000);
+
+			foreach (var con in connections.MyConnections)
+			{
+				await Clients.Client(con).SendAsync("FieldsThatLostPoints", difference, fieldThatLostPoints);
+			}
+			foreach (var con in connections.EnemiesConnections)
+			{
+				await Clients.Client(con).SendAsync("FieldsThatLostPoints", difference, fieldThatLostPoints);
+			}
+
+			var grave = await this._gameService.GetGamesGrave(gameID);
+			await Task.Delay(1000);
+			await this.GetField(connections, field);
+			await this.GetField(enemiesConnections, enemisfield);
+			await this.GetGrave(connections, grave);
 		}
 		public async Task RemoveCardFromHandToGrave(int playerID,int cardID,int gameID)
 		{
 			try
 			{
 				var connections = await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
+
 				await this._gameService.RemoveCardFromHandToGrave(playerID, cardID, gameID);
 				var hand = await this._playerService.GetPlayersHand(playerID);
 				var grave = await this._gameService.GetGamesGrave(gameID);

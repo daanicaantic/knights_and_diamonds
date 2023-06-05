@@ -16,6 +16,7 @@ h2,
 h3 {
     color: white;
     /* -webkit-text-stroke: 0.5px black; */
+    font-family: monospace;
 }
 .background-container-false,.background-container-true{
     width: 100%;

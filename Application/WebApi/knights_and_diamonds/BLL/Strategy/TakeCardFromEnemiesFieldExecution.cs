@@ -54,7 +54,7 @@ namespace BLL.Strategy
 
 			foreach (var fieldID in listOfFieldIDs)
 			{
-				var cardField = await this._unitOfWork.CardField.GetCardField(fieldID);
+				var cardField = await this._unitOfWork.CardField.GetCardField(fieldID,playerID);
 				if (cardField == null)
 				{
 					throw new Exception("There is no field with this ID.");

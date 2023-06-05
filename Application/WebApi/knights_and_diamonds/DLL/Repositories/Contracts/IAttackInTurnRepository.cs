@@ -9,6 +9,6 @@ namespace DAL.Repositories.Contracts
 {
 	public interface IAttackInTurnRepository:IRepository<AttackInTurn>
 	{
-
+		Task<AttackInTurn> GetAttackInTurnByTurnIDAndFieldID(int fieldID, int turnID);
 	}
 }

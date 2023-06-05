@@ -20,7 +20,12 @@ namespace DAL.Repositories
 		}
 		public async Task<T> GetOne(int id)
 		{
-			return await this._context.Set<T>().FindAsync(id);
+			var obj=await this._context.Set<T>().FindAsync(id);
+			if (obj == null)
+			{
+				throw new Exception("Object with this ID dosent exists");
+			}
+			return obj;
 		}
 		public async Task<IQueryable<T>> GetAll()
 		{

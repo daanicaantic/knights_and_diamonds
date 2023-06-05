@@ -39,7 +39,7 @@ namespace BLL.Strategy
 				await this._playerService.Draw(playerID);
 			}
 
-			await this._gameService.RemoveCardFromFieldToGrave(fieldID, gameID);
+			await this._gameService.RemoveCardFromFieldToGrave(fieldID, gameID,playerID);
 		}
 	}
 }

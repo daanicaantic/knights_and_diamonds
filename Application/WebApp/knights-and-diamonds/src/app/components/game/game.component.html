@@ -61,23 +61,34 @@
                             </div>
                         </div>
 
-                        <div class="discard-card-from-hand" *ngIf="this.playerHand.length >=7">
+                        <div class="discard-card-from-hand"
+                            *ngIf="this.isPhaseMassageOver==true && this.playerHand.length >=7 ">
                             <h3>Discard {{playerHand.length-6}} cards from your hand</h3>
                         </div>
+                        <h1 class="phase-message-{{isPlayerOnTurn}}" *ngIf="phaseMessage!=undefined">
+                            {{phaseMessage}}
+                        </h1>
                         <div class="enemies-table">
                             <div #attackedField id="{{field.fieldID}}" class="card-place"
                                 *ngFor="let field of enemiesField.cardFields" (click)="attackField(field.fieldID)">
                                 <div #sword class="attack"
                                     *ngIf="fieldsAbleToAttack!=undefined && fieldsAbleToAttack.includes(field.fieldID) && curentPhase.name == 'BP'">
                                 </div>
+                                <h2 class="ponits-lost"
+                                    *ngIf="this.pointsLost!=undefined && this.fieldThatLostPoints==field.fieldID"
+                                    style="transform: scale(1,-1);">
+                                    {{this.pointsLost}}</h2>
+
                                 <div class="small-card small-card-deff-{{field.cardPosition}} enemies-small-card">
                                     <app-card [card]="this.field.cardOnField" [isCardShowen]="field.cardShowen"
                                         (mouseover)="onEnemiesCardMouseOver(this.field)"></app-card>
                                 </div>
-                                <div *ngIf="field.cardOnField!=undefined && this.field.fieldIndex>=0 && 5>this.field.fieldIndex && field.cardShowen"
+                                <div class="attack-deffence-points"
+                                    *ngIf="field.cardOnField!=undefined && this.field.fieldIndex>=0 && 5>this.field.fieldIndex && field.cardShowen"
                                     style="transform: scale(1,-1); display: flex; flex-direction: row; justify-content: center;">
-                                    <p>{{this.field.cardOnField.attackPoints}} /</p>
-                                    <p> {{this.field.cardOnField.attackPoints}}</p>
+                                    <p>{{this.field.cardOnField.attackPoints}} / {{this.field.cardOnField.attackPoints}}
+                                    </p>
+                                    <!-- <p> {{this.field.cardOnField.attackPoints}}</p> -->
                                 </div>
                             </div>
                         </div>
@@ -86,14 +97,19 @@
                                 <div #sword (click)="getSword(sword,field.fieldID)" class="attack"
                                     *ngIf="fieldsAbleToAttack!=undefined && fieldsAbleToAttack.includes(field.fieldID) && curentPhase.name == 'BP'">
                                 </div>
+                                <h2 class="ponits-lost"
+                                    *ngIf="this.pointsLost!=undefined && this.fieldThatLostPoints==field.fieldID">
+                                    {{this.pointsLost}}</h2>
                                 <div class="small-card small-card-deff-{{field.cardPosition}}">
                                     <app-card [card]="this.field.cardOnField" [isCardShowen]="field.cardShowen"
                                         (mouseover)="this.mediumCard=this.field.cardOnField; this.iscardshowen=true"></app-card>
                                 </div>
-                                <div *ngIf="field.cardOnField!=undefined && this.field.fieldIndex>=0 && 5>this.field.fieldIndex "
+                                <div class="attack-deffence-points"
+                                    *ngIf="field.cardOnField!=undefined && this.field.fieldIndex>=0 && 5>this.field.fieldIndex "
                                     style="display: flex; flex-direction: row; justify-content: center;">
-                                    <p>{{this.field.cardOnField.attackPoints}} /</p>
-                                    <p> {{this.field.cardOnField.attackPoints}}</p>
+                                    <p>{{this.field.cardOnField.attackPoints}} / {{this.field.cardOnField.attackPoints}}
+                                    </p>
+
                                 </div>
                             </div>
                         </div>

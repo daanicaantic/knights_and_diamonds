@@ -33,8 +33,9 @@ namespace BLL.Services.Contracts
 		Task<FieldDTO> TributeSummon(List<int> fieldsIDs, int gameID, int playerID, int cardInDeckID, int numberOfStars, bool position);
 		Task<AffterPlaySpellTrapCardData> PlaySpellCard(int gameID, int playerID, int cardInDeckID, int cardEffectID);
 		Task ExecuteEffect(List<int> listOfCards, int cardFieldID, int playerID, int gameID);
-		Task RemoveCardFromFieldToGrave(int fieldID, int gameID);
+		Task RemoveCardFromFieldToGrave(int fieldID, int gameID, int playerID);
 		Task RemoveCardFromHandToGrave(int playerID, int cardID, int gameID);
+		Task<int> AttackEnemiesField(int attackingFieldID, int attackedFieldID, int playerID, int enemiesPlayerID, int gameID);
 
 
 	}

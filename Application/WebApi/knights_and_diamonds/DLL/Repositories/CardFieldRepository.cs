@@ -20,9 +20,9 @@ namespace DAL.Repositories
 			get { return _context as KnightsAndDiamondsContext; }
 		}
 
-		public async Task<CardField> GetCardField(int fieldID)
+		public async Task<CardField> GetCardField(int fieldID,int playerID)
 		{
-			var cardField= await this.Context.CardFields?.Where(x => x.ID == fieldID).Include(x => x.CardOnField).ThenInclude(x => x.Card).FirstOrDefaultAsync();
+			var cardField= await this.Context.CardFields?.Where(x => x.ID == fieldID && x.PlayerID==playerID).Include(x => x.CardOnField).ThenInclude(x => x.Card).FirstOrDefaultAsync();
 			if (cardField == null)
 			{
 				throw new Exception("Field with this ID dose not exist");
@@ -30,10 +30,24 @@ namespace DAL.Repositories
 			return cardField;
 			
 		}
+		/*public async Task<CardField> GetCardFieldWithAttackInTurn (int fieldID, int playerID)
+		{
+			var cardField = await this.Context.CardFields?.Where(x => x.ID == fieldID && x.PlayerID == playerID).Include(x => x.CardOnField).ThenInclude(x => x.Card).FirstOrDefaultAsync();
+			if (cardField == null)
+			{
+				throw new Exception("Field with this ID dose not exist");
+			}
+			return cardField;
+
+		}*/
 		public async Task<List<CardField>> GetPlayerFields(int playerID,string fieldType)
 		{
-			var cardField = await this.Context.CardFields?.Where(x => x.PlayerID ==playerID && x.FieldType==fieldType ).Include(x => x.CardOnField).ThenInclude(x => x.Card).ToListAsync();
-			return cardField;
+			var cardFields = await this.Context.CardFields?.Where(x => x.PlayerID ==playerID && x.FieldType==fieldType ).Include(x => x.CardOnField).ThenInclude(x => x.Card).ToListAsync();
+			if (cardFields == null)
+			{
+				throw new Exception("There is no fields for this playerID");
+			}
+			return cardFields;
 
 		}
 	}

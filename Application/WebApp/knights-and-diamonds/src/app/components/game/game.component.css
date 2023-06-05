@@ -62,9 +62,10 @@ p {
 }
 
 .card-window {
+    min-width:200px;
+
     width: 24%;
     height: 100%;
-    min-width: 200px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -85,8 +86,8 @@ p {
 }
 
 .phases-window {
-    width: 4%;
     height: 100%;
+    width: 4%;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -362,6 +363,7 @@ p {
     bottom: 35%;
     justify-content: center;
     align-items: center;
+    text-align: center;
 }
 
 .card-summoning-position-container{
@@ -394,6 +396,36 @@ p {
     background-size: 100% 100%;
     background-image: url("https://localhost:7250/Resources/Images/attack_sword.png");
 }
+.ponits-lost{
+    position:absolute;
+    z-index: 1;
+    font-family: cursive;
+    color:rgb(255, 96, 96);
+    -webkit-text-stroke: 0.3vh black;
+    font-size: 7vh;
+
+}
+.phase-message-false,.phase-message-true{
+    position: absolute;
+    z-index: 1;
+    font-family: cursive;
+    font-size: 7vh;
+    width:100%;
+    top:42%;
+    text-align: center;
+}
+.phase-message-false{
+    
+    color:rgb(255, 96, 96);
+    -webkit-text-stroke: 0.3vh black;
+    
+    /* color: rgb(62, 2, 0); */
+}
+.phase-message-true{
+
+    color: rgb(0 161 255);
+    -webkit-text-stroke: 0.3vh rgb(0 10 101);
+}
 
 @keyframes summon-card-show-dialog {
     0%   {
@@ -401,5 +433,93 @@ p {
     }
     100%   {
       opacity: 100%;
+    }
+  }
+  /* @media screen and (min-width: 1900px) {
+    .small-card{
+        width: 115px;
+        height: 150px;
+        font-size: 10px;
+    }
+  } */
+  @media screen and (max-width: 1000px) {
+    .battle-window{
+        min-width:0%;
+        width: 100%;
+    }
+    .card-window{
+        min-width: 315px;
+    }
+    .small-card{
+        width: 60px;
+        height: 85px;
+        font-size: 6px;
+    }
+     .big-card{
+        height: 49%;
+    }
+    .medium-card{
+        font-size: 10px;
+        width: 20%;
+        height: 160px;
+    }
+    .card-to-be-summoned{
+        border: none;
+    }
+    .card-summoning{
+        left: 10%;
+        right: 10%;
+    }
+    .deck-and-grave{
+        width: fit-content;
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+  }
+  @media only screen and (max-width: 700px) {
+    .battle-window{
+        min-width:0%;
+        width: 100%;
+    }
+    .card-window{
+        min-width: 200px;
+    }
+    .small-card{
+        width: 40px;
+        height: 65px;
+        font-size: 2px;
+    }
+    .deck,.graveBG{
+        width: 50px;
+        height: 70px;
+    }
+    .deck-and-grave{
+        width: fit-content;
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+    .big-card{
+        height: 50%;
+        font-size: 16px;
+    }
+    .attack-deffence-points{
+        font-size: 11px;
+        text-align: center;
+    }
+    .phases-window{
+        width: fit-content;
+    }
+    .medium-card{
+        width: 70px;
+        height: 125px;
+        font-size: 6px;
+        
+    }
+    .card-to-be-summoned{
+        border: none;
+    }
+    .card-summoning{
+        left: 10%;
+        right: 10%;
     }
   }

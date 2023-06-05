@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SignalrService } from './signalr.service';
 import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,8 @@ export class GameService {
   constructor(
     private httpClient: HttpClient,
     private signalrService: SignalrService,
-    private router: Router
+    private router: Router,
+    private messageService: MessageService
   ) {}
 
   getTurnInfoInv(gameID: any, playerID: any): void {
@@ -54,10 +56,18 @@ export class GameService {
     gameID: any,
     playerID: any,
     fieldID: any,
-    attackedField: any
+    attackedField: any,
+    enemiesID: any
   ) {
     this.signalrService.hubConnection
-      .invoke('AttackEnemiesField', gameID, playerID, fieldID, attackedField)
+      .invoke(
+        'AttackEnemiesField',
+        fieldID,
+        attackedField,
+        playerID,
+        enemiesID,
+        gameID
+      )
       .catch((err) => console.error('O V D E', err));
   }
   executeEffectInv(
@@ -85,7 +95,14 @@ export class GameService {
   ): void {
     this.signalrService.hubConnection
       .invoke('NormalSummon', gameID, playerID, cardID, position)
-      .catch((err) => console.log('O V D E', err.message));
+      .catch((err) =>
+        this.messageService.add({
+          key: 'br',
+          severity: 'error',
+          summary: 'Neuspešno',
+          detail: err.toString(),
+        })
+      );
   }
   playSpellCardInv(
     gameID: any,

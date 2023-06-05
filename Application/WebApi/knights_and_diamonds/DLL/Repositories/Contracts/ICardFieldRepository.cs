@@ -9,7 +9,7 @@ namespace DAL.Repositories.Contracts
 {
 	public interface ICardFieldRepository:IRepository<CardField>	
 	{
-		Task<CardField> GetCardField(int fieldID);
+		Task<CardField> GetCardField(int fieldID,int playerID);
 		Task<List<CardField>> GetPlayerFields(int playerID, string fieldType);
 	}
 }

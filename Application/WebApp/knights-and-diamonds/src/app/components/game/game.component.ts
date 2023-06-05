@@ -50,6 +50,10 @@ export class GameComponent implements OnInit, OnDestroy {
   fieldReadyAttack: any;
   pom1: any;
   pom2: any;
+  fieldThatLostPoints: any;
+  pointsLost: any;
+  phaseMessage: any;
+  isPhaseMassageOver: any = false;
   constructor(
     public inGameService: IngameService,
     public gameService: GameService,
@@ -72,6 +76,7 @@ export class GameComponent implements OnInit, OnDestroy {
     this.getGraveByHub();
     this.getFieldsAbleToAttack();
     this.getFieldsIncludedInAttack();
+    this.getFieldThatLostPoints();
     // this.getStartingDrawing();
     if (this.playerID != undefined) {
       if (this.signalrService.hubConnection.state == 'Connected') {
@@ -115,7 +120,8 @@ export class GameComponent implements OnInit, OnDestroy {
       Number(this.gameID),
       this.playerID,
       this.fieldReadyAttack,
-      fieldID
+      fieldID,
+      this.enemiesID
     );
   }
   pomfja(fieldID: any, attackedFieldID: any) {
@@ -230,8 +236,29 @@ export class GameComponent implements OnInit, OnDestroy {
   }
   getTurnInfo() {
     this.signalrService.hubConnection.on('GetTurnInfo', (turnInfo: any) => {
+      console.log(turnInfo);
       this.turnInfo = turnInfo;
       this.setTurnInfo(turnInfo);
+      this.isPhaseMassageOver = false;
+      if (this.turnInfo.turnPhase == 0) {
+        this.phaseMessage = 'Draw Phase';
+      } else if (this.turnInfo.turnPhase == 1) {
+        this.phaseMessage = 'Main Phase';
+      } else if (this.turnInfo.turnPhase == 2) {
+        this.phaseMessage = 'Battle Phase';
+      } else if (this.turnInfo.turnPhase == 3) {
+        this.phaseMessage = 'End Phase';
+      } else {
+        this.phaseMessage = undefined;
+      }
+      if (this.turnInfo.turnPhase == 1 || this.turnInfo.turnPhase == 2) {
+        setTimeout(() => {
+          this.phaseMessage = undefined;
+          if (this.turnInfo.turnPhase == 1) {
+            this.isPhaseMassageOver = true;
+          }
+        }, 1000);
+      }
     });
   }
   setTurnInfo(turnInfo: any) {
@@ -292,6 +319,23 @@ export class GameComponent implements OnInit, OnDestroy {
       this.playerHand = field.hand;
       console.log(this.playerField);
     });
+  }
+  getFieldThatLostPoints() {
+    this.signalrService.hubConnection.on(
+      'FieldsThatLostPoints',
+      (diference: any, field: any) => {
+        console.log(diference, field);
+        this.fieldThatLostPoints = field;
+        if (diference > 0) {
+          diference = -diference;
+        }
+        this.pointsLost = diference;
+        setTimeout(() => {
+          this.pointsLost = undefined;
+          this.fieldThatLostPoints = undefined;
+        }, 2000);
+      }
+    );
   }
   getEnemiesField() {
     this.signalrService.hubConnection.on(
