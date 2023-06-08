@@ -22,7 +22,11 @@ namespace DAL.Repositories
 
         public async Task<CardInDeck> RemoveCardFromDeck(int cardID, int deckID)
         {
-			var card = await Context.CardInDecks.Where(x => x.CardID == cardID && x.DeckID == deckID).FirstOrDefaultAsync();
+			var card = await Context.CardInDecks?.Where(x => x.ID == cardID && x.DeckID == deckID).Include(x => x.Deck).Include(x => x.Grave).Include(x => x.Player).Include(x=>x.PlayersHand).Include(x=>x.CardFields).FirstOrDefaultAsync();
+			if (card == null)
+			{
+				throw new Exception("There is some error");
+			}
             return card;
         }
 

@@ -11,5 +11,8 @@ namespace DAL.Repositories.Contracts
 	{
 		Task<CardField> GetCardField(int fieldID,int playerID);
 		Task<List<CardField>> GetPlayerFields(int playerID, string fieldType);
+		Task<List<CardField>> GetEmptyPlayerFields(int playerID, string fieldType);
+		Task<List<CardField>> GetFieldByCardInDeckID(int cardInDeckID);
+		Task<List<CardField>> GetFieldsByPlayerID(int playerID);
 	}
 }

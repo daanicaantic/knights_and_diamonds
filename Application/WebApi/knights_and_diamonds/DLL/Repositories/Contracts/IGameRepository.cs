@@ -11,6 +11,7 @@ namespace DAL.Repositories.Contracts
     {
 		Task<Game> GetGameWithPlayers(int gameID);
 		Task<Game> GetGameWithTurns(int gameID);
+		Task<int> GetEnemiesPlayerID(int gameID, int playerID);
 
 	}
 }

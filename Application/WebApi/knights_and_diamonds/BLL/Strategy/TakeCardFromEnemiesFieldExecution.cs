@@ -18,12 +18,15 @@ namespace BLL.Strategy
 		private readonly KnightsAndDiamondsContext _context;
 		public UnitOfWork _unitOfWork { get; set; }
 		public IPlayerService _playerService { get; set; }
+		public IGameService _gameService { get; set; }
 
 		public TakeCardFromEnemiesFieldExecution(KnightsAndDiamondsContext context)
 		{
 			this._context = context;
 			this._unitOfWork = new UnitOfWork(_context);
 			this._playerService = new PlayerService(_context);
+			_gameService = new GameService(this._context);
+
 		}
 		public ChooseCardsFrom SelectCardsFrom()
 		{
@@ -32,43 +35,28 @@ namespace BLL.Strategy
 
 		public async Task ExecuteEffect(List<int> listOfFieldIDs, Effect effect, int playerID,int gameID, int fieldI)
 		{
-
-			
 			if(effect.NumOfCardsAffected != listOfFieldIDs.Count)
 			{
 				throw new Exception("You didn't select enough cards.");
 			}
-
-			var player = await this._unitOfWork.Player.GetPlayerWithFieldsAndHand(playerID);
-			if(player == null)
-			{
-			
-				throw new Exception("Player not found.");
-			}
-
-			var listOfPlayerFields = player.Fields.FindAll(f => f.CardOnField == null && f.FieldType=="MonsterField").ToList();
+			var listOfPlayerFields=await this._unitOfWork.CardField.GetEmptyPlayerFields(playerID, "MonsterField");
 			if(listOfPlayerFields.Count < listOfFieldIDs.Count)
 			{
 				throw new Exception("Player don't have enough empty fields.");
 			}
-
+			var enemiesID = await this._unitOfWork.Game.GetEnemiesPlayerID(gameID, playerID);
 			foreach (var fieldID in listOfFieldIDs)
 			{
-				var cardField = await this._unitOfWork.CardField.GetCardField(fieldID,playerID);
-				if (cardField == null)
+				var cardField = await this._unitOfWork.CardField.GetCardField(fieldID,enemiesID);
+				if (cardField.FieldType != "MonsterField")
 				{
-					throw new Exception("There is no field with this ID.");
+					throw new Exception("You didn't select Monster card.");
 				}
 				if (cardField.CardOnField == null)
 				{
 					throw new Exception("There is no card on this field.");
 				}
-				if(cardField.FieldType != "MonsterField")
-				{
-					throw new Exception("You didn't select Monster card.");
-				}
-
-				var emptyField = player.Fields.Where(x => x.FieldType == "MonsterField" && x.CardOnField == null).FirstOrDefault();
+				var emptyField = listOfPlayerFields.FirstOrDefault();
 
 				emptyField.CardPosition = cardField.CardPosition;
 				emptyField.CardShowen = cardField.CardShowen;
@@ -81,6 +69,7 @@ namespace BLL.Strategy
 				this._unitOfWork.CardField.Update(emptyField);
 				this._unitOfWork.CardField.Update(cardField);
 			}
+			await this._gameService.RemoveCardFromFieldToGrave(fieldI, gameID, playerID);
 			await this._unitOfWork.Complete();
 		}
 

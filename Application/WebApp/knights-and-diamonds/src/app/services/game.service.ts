@@ -74,15 +74,24 @@ export class GameService {
     listOfCards: any,
     cardFieldID: any,
     playerID: any,
+    enemiesID: any,
     gameID: any
   ) {
-    console.log('EXECUTEEFFECT', listOfCards, cardFieldID, playerID, gameID);
+    console.log(
+      'EXECUTEEFFECT',
+      listOfCards,
+      cardFieldID,
+      playerID,
+      enemiesID,
+      gameID
+    );
     this.signalrService.hubConnection
       .invoke(
         'ExecuteEffect',
         listOfCards,
         cardFieldID,
         playerID,
+        enemiesID,
         Number(gameID)
       )
       .catch((err) => console.error(err));

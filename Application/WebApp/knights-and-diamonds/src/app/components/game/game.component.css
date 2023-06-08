@@ -73,10 +73,16 @@ p {
     padding: 10px;
     background-color: #956E4A;
 }
+.lp-change-message{
+    font-family: cursive;
+    font-size: 7vh;
+    -webkit-text-stroke: 0.3vh black;
 
+}
 .enemies-health,
 .players-health {
     width: 100%;
+    position: relative;
     height: 8%;
     display: flex;    justify-content: center;
     align-items: center;
@@ -84,6 +90,7 @@ p {
     border-radius: 10px;
     background: linear-gradient(#4C3825 0%, #463321 50%, #4C3825 100%);
 }
+
 
 .phases-window {
     height: 100%;
@@ -130,7 +137,6 @@ p {
     font-weight: bolder;
     border: 2px solid;
 }
-
 .battle-window {
     min-width: 72%;
     height: 100%;
@@ -453,13 +459,13 @@ p {
     .small-card{
         width: 60px;
         height: 85px;
-        font-size: 6px;
+        font-size: 5px;
     }
      .big-card{
         height: 49%;
     }
     .medium-card{
-        font-size: 10px;
+        font-size: 9px;
         width: 20%;
         height: 160px;
     }

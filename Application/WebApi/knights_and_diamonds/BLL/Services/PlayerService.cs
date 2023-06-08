@@ -7,6 +7,7 @@ using Microsoft.Win32.SafeHandles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,12 +17,12 @@ namespace BLL.Services
     {
         private readonly KnightsAndDiamondsContext _context;
         public UnitOfWork _unitOfWork { get; set; }
-        public ICardService _cardservice { get; set; }
+        public ICardService _cardService { get; set; }
         public PlayerService(KnightsAndDiamondsContext context)
         {
             this._context = context;
             _unitOfWork = new UnitOfWork(_context);
-            _cardservice = new CardService(_context);
+            _cardService = new CardService(_context);
         }
 
         public async Task<Player> GetPlayer(int playerID)
@@ -55,6 +56,10 @@ namespace BLL.Services
 			{
 				throw new Exception("Player dosent exsist!");
 			}
+            if (player.Deck == null)
+            {
+				throw new Exception("Deck count is Null");
+			}
 			return player.Deck.Count();
         }
 
@@ -83,7 +88,7 @@ namespace BLL.Services
 			player.Deck.Remove(cardFromDeck);
             player.Hand.CardsInHand.Add(cardFromDeck);
             await this._unitOfWork.Complete();
-            return await this._cardservice.MapCard(cardFromDeck);
+            return await this._cardService.MapCard(cardFromDeck);
 
         }
 
@@ -94,8 +99,30 @@ namespace BLL.Services
             {
                 throw new Exception("This player dont have hands :(");
             }
-			var mappedHand = await this._cardservice.MapCards(playersHand.CardsInHand);
+
+			var mappedHand = await this._cardService.MapCards(playersHand.CardsInHand);
 			return mappedHand;
+		}
+		public async Task<List<CardOnFieldDisplay>> GetPlayersCardFields(int playerID)
+		{
+            var playerFields=await this._unitOfWork.CardField.GetFieldsByPlayerID(playerID);
+			var cardsOnField = new List<CardOnFieldDisplay>();
+			foreach (var field in playerFields)
+			{
+				var cardOnField = new CardOnFieldDisplay();
+				if (field.CardOnField != null)
+				{
+					var mappedCard = await this._cardService.MapCard(field.CardOnField);
+					cardOnField.CardOnField = mappedCard;
+				}
+				cardOnField.FieldID = field.ID;
+				cardOnField.CardPosition = field.CardPosition;
+				cardOnField.CardShowen = field.CardShowen;
+				cardOnField.FieldIndex = field.FieldIndex;
+				cardsOnField.Add(cardOnField);
+			}
+			cardsOnField = cardsOnField.OrderBy(x => x.FieldID).ToList();
+			return cardsOnField;
 		}
 
 		public async Task StartingDrawing(int playerID)

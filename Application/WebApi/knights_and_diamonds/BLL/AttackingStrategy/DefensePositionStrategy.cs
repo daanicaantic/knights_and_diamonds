@@ -45,5 +45,10 @@ namespace BLL.AttackingStrategy
 			return pointLost;
 			
 		}
+
+		public Task<int> DirectAttack(CardField attackingField, MonsterCard attackingCard, int eneimiesID)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

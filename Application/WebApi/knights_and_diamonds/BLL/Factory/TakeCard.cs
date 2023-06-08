@@ -42,7 +42,7 @@ namespace DAL.DesignPatterns.Factory
 		public void SetEffect(int numOFCardAffected)
 		{
 			this.Effect.NumOfCardsAffected = numOFCardAffected;
-			this.Description = this.Description;
+			this.Effect.Description = this.Description;
 		}
 		public Effect GetEffect()
 		{

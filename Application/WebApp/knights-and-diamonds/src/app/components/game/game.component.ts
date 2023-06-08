@@ -1,4 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  AfterViewChecked,
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { card } from 'src/classes/card-data';
 import { IngameService } from 'src/app/services/ingame.service';
 import { GameService } from 'src/app/services/game.service';
@@ -7,6 +15,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SignalrService } from 'src/app/services/signalr.service';
 import { TmplAstRecursiveVisitor } from '@angular/compiler';
 import { DOCUMENT } from '@angular/common';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-game',
@@ -14,6 +23,11 @@ import { DOCUMENT } from '@angular/common';
   styleUrls: ['./game.component.css'],
 })
 export class GameComponent implements OnInit, OnDestroy {
+  @ViewChild('enemiesLpChange', { static: false })
+  enemiesLpChange!: ElementRef;
+  @ViewChild('playersLpChange', { static: false })
+  playersLpChange!: ElementRef;
+
   userID = this.authService?.userValue?.id;
   playerID = this.authService?.userValue?.player;
   enemiesID = this.authService?.userValue?.enemie;
@@ -42,18 +56,19 @@ export class GameComponent implements OnInit, OnDestroy {
   ];
 
   cardToBeSummoned: any;
-  fieldsAbleToAttack: any = [5601, 5602, 5603, 5604, 5605];
+  fieldsAbleToAttack: any;
   swordRadyToAttack: any;
   angle: any;
   transitionIsActive: any = false;
   turnInfo: any;
   fieldReadyAttack: any;
-  pom1: any;
-  pom2: any;
   fieldThatLostPoints: any;
   pointsLost: any;
   phaseMessage: any;
   isPhaseMassageOver: any = false;
+  areaOfClicking: any;
+  subscriptions: Subscription[] = [];
+
   constructor(
     public inGameService: IngameService,
     public gameService: GameService,
@@ -73,7 +88,7 @@ export class GameComponent implements OnInit, OnDestroy {
     this.getHands();
     this.getTurnInfo();
     this.getDataAffterPlayedEffectCard();
-    this.getGraveByHub();
+    this.getGraveFromHub();
     this.getFieldsAbleToAttack();
     this.getFieldsIncludedInAttack();
     this.getFieldThatLostPoints();
@@ -90,16 +105,341 @@ export class GameComponent implements OnInit, OnDestroy {
       }
     }
   }
-
+  // setGameStatus() {
+  //   this.inGameService.setGameOn();
+  // }
+  onLoadingOver(event: any) {
+    this.isLoadingOver = event;
+    if (
+      this.playerField != undefined &&
+      this.playerField.gameStarted == false
+    ) {
+      this.gameService.startingDrawingInv(Number(this.gameID), this.playerID);
+      if (this.isPlayerOnTurn) {
+        this.gameService.drawPhaseInv(Number(this.gameID), this.playerID);
+      }
+    }
+    this.getStartingTurnInfo();
+  }
+  //koristimo fju prilikom ngOnInita vraca ceo prikaz table
+  getStartingField() {
+    this.subscriptions.push(
+      this.gameService
+        .getStartingField(this.playerID, this.enemiesID)
+        .subscribe({
+          next: (res: any) => {
+            console.log(res);
+            this.playerField = res.playerField;
+            this.enemiesField = res.enemiesField;
+            this.playerHand = res.playerField.hand;
+            this.enemiesHand = res.enemiesField.hand;
+          },
+          error: (err) => {
+            console.log(err.error);
+          },
+        })
+    );
+  }
+  //players field is huba
+  getPlayersField() {
+    this.signalrService.hubConnection.on('GetYourField', (field: any) => {
+      this.getPointsReduce(
+        this.playersLpChange,
+        this.playerField.lifePoints,
+        field.lifePoints
+      );
+      this.playerField = field;
+      this.playerHand = field.hand;
+      console.log(this.playerField);
+    });
+  }
+  //enemies field iz huba
+  getEnemiesField() {
+    this.signalrService.hubConnection.on(
+      'GetEnemiesField',
+      (enemiesField: any) => {
+        this.getPointsReduce(
+          this.enemiesLpChange,
+          this.enemiesField.lifePoints,
+          enemiesField.lifePoints
+        );
+        this.enemiesField = enemiesField;
+        this.enemiesHand = enemiesField.hand;
+        console.log(this.enemiesField);
+      }
+    );
+  }
+  //ruke iz huba
+  getHands() {
+    this.signalrService.hubConnection.on(
+      'GetCardsInYourHand',
+      (playerHand: any) => {
+        if (this.playerField.gameStarted == false) {
+          this.getStartingDrawingEffect(0, this.playerHand, playerHand);
+        } else {
+          this.playerHand = playerHand;
+        }
+      }
+    );
+    this.signalrService.hubConnection.on(
+      'GetCardsInEnemiesHand',
+      (enemiesHand: any) => {
+        if (this.playerField.gameStarted == false) {
+          this.getStartingDrawingEffect(0, this.enemiesHand, enemiesHand);
+        } else {
+          this.enemiesHand = enemiesHand;
+        }
+      }
+    );
+  }
+  //koristimo fju za prikaz pocetnog izvlacenja karata;targetArray=nasa ili protivnikova ruka,souceArray=nova ruka stigla sa servera
+  getStartingDrawingEffect(i: any, targetArray: any, sourceArray: any) {
+    var timer = setInterval(() => {
+      if (i == sourceArray.length) {
+        clearInterval(timer);
+        return;
+      }
+      const exists = targetArray.some(
+        (obj: any) => obj.id === sourceArray[i].id
+      );
+      if (!exists) {
+        targetArray.push(sourceArray[i]);
+      }
+      i++;
+    }, 300);
+  }
+  //grave iz controllera
+  getGrave() {
+    this.subscriptions.push(
+      this.gameService.getGrave(this.gameID).subscribe({
+        next: (res: any) => {
+          this.grave = res;
+        },
+        error: (err) => {
+          console.log(err.error);
+        },
+      })
+    );
+  }
+  //grave iz huba
+  getGraveFromHub() {
+    this.signalrService.hubConnection.on('GetGraveData', (grave: any) => {
+      this.grave = grave;
+    });
+  }
+  //turnInfoIz contrlera
+  getStartingTurnInfo() {
+    this.subscriptions.push(
+      this.gameService.getTurnInfo(this.gameID, this.playerID).subscribe({
+        next: (res: any) => {
+          this.setTurnInfo(res);
+        },
+        error: (err) => {
+          console.log(err.error);
+        },
+      })
+    );
+  }
+  //turninfo iz huba
+  getTurnInfo() {
+    this.signalrService.hubConnection.on('GetTurnInfo', (turnInfo: any) => {
+      console.log(turnInfo);
+      this.turnInfo = turnInfo;
+      this.setTurnInfo(turnInfo);
+      this.isPhaseMassageOver = false;
+      if (this.turnInfo.turnPhase == 0) {
+        this.phaseMessage = 'Draw Phase';
+      } else if (this.turnInfo.turnPhase == 1) {
+        this.phaseMessage = 'Main Phase';
+      } else if (this.turnInfo.turnPhase == 2) {
+        this.phaseMessage = 'Battle Phase';
+      } else if (this.turnInfo.turnPhase == 3) {
+        this.phaseMessage = 'End Phase';
+      } else {
+        this.phaseMessage = undefined;
+      }
+      if (this.turnInfo.turnPhase == 1 || this.turnInfo.turnPhase == 2) {
+        setTimeout(() => {
+          this.phaseMessage = undefined;
+          if (this.turnInfo.turnPhase == 1) {
+            this.isPhaseMassageOver = true;
+          }
+        }, 1000);
+      }
+    });
+  }
+  //setujemo trenutnu fazu,i menjamo prethodnu
+  setTurnInfo(turnInfo: any) {
+    this.curentPhase = turnInfo.turnPhase;
+    if (turnInfo.playerOnTurn == this.playerID) {
+      this.isPlayerOnTurn = true;
+    } else {
+      this.isPlayerOnTurn = false;
+    }
+    this.phases.forEach((element) => {
+      element.status = false;
+    });
+    //!=4 potrebno samo kod prvog poteza znaci da jos ne postoji potez
+    if (turnInfo.turnPhase != 4) {
+      let phase = this.phases.find((x) => x.key == turnInfo.turnPhase);
+      phase.status = true;
+      this.curentPhase = phase;
+    }
+  }
+  //menjanje faze
+  changePhaseInv(phase: any) {
+    //moras prvo izbaciti kartu iz ruke
+    if (this.playerHand.length < 7) {
+      if (phase.name == 'BP' && this.curentPhase.name == 'MP') {
+        this.gameService.battlePhaseInv(this.gameID, this.playerID);
+      } else if (
+        (phase.name == 'EP' && this.curentPhase.name == 'MP') ||
+        this.curentPhase.name == 'BP'
+      ) {
+        this.gameService.endPhaseInv(
+          this.gameID,
+          this.playerID,
+          this.enemiesID
+        );
+      }
+    }
+  }
+  //click na nasu ruku
+  onPlayersHandClick(card: any) {
+    if (this.playerHand.length < 7) {
+      if (
+        card.cardType == 'MonsterCard' &&
+        this.turnInfo.isMonsterSummoned == false &&
+        this.curentPhase.name == 'MP'
+      ) {
+        this.openSummoningMonsterWindow(card);
+      }
+      if (
+        card.cardType == 'SpellCard' &&
+        this.curentPhase.name == 'MP' &&
+        this.isPlayerOnTurn
+      ) {
+        this.playSpellCard(card.id, card.cardEffectID);
+      }
+    } else if (this.isPlayerOnTurn) {
+      this.gameService.removeCardFromHandToGraveInv(
+        this.playerID,
+        card.id,
+        this.gameID
+      );
+    }
+  }
+  onEnemiesCardMouseOver(field: any) {
+    this.mediumCard = field.cardOnField;
+    if (field.cardShowen == true) {
+      this.iscardshowen = true;
+    } else {
+      this.iscardshowen = false;
+    }
+  }
+  //click na protivnicko polje
+  onEnemiesFieldClick(field: any) {
+    if (
+      this.isPlayerOnTurn == true &&
+      this.curentPhase.name == 'BP' &&
+      this.fieldReadyAttack != undefined
+    ) {
+      console.log(field);
+      this.attackField(field);
+    }
+    if (this.areaOfClicking != undefined) {
+      console.log(this.areaOfClicking);
+      if (this.areaOfClicking.areaOfClicking == 4) {
+        this.gameService.executeEffectInv(
+          [field.fieldID],
+          this.areaOfClicking.fieldID,
+          this.playerID,
+          this.enemiesID,
+          Number(this.gameID)
+        );
+        this.areaOfClicking = undefined;
+      }
+    }
+  }
+  openSummoningMonsterWindow(card: any) {
+    if (this.cardToBeSummoned == undefined && this.isPlayerOnTurn == true) {
+      this.cardToBeSummoned = card;
+    }
+  }
+  closeSummoningMonsterWindow() {
+    this.cardToBeSummoned = undefined;
+    this.turnInfo.isMonsterSummoned = false;
+  }
+  summonMonsterInAttackPosition() {
+    this.normalSummon(this.cardToBeSummoned.id, true);
+  }
+  summonMonsterInDeffencePosition() {
+    this.normalSummon(this.cardToBeSummoned.id, false);
+  }
+  //pozivanje cudovista
+  normalSummon(cardID: any, position: any) {
+    console.log(cardID);
+    this.gameService.normalSummonInv(
+      Number(this.gameID),
+      this.playerID,
+      cardID,
+      position
+    );
+    this.cardToBeSummoned = undefined;
+    this.turnInfo.isMonsterSummoned = true;
+  }
+  //igranje spell karte
+  playSpellCard(cardID: any, cardEffectID: any) {
+    this.gameService.playSpellCardInv(
+      Number(this.gameID),
+      this.playerID,
+      cardID,
+      cardEffectID
+    );
+  }
+  //afterData -areaaOfClicking-gte treba da kliknes,i fieldID-polje na kome je karta odigrana
+  getDataAffterPlayedEffectCard() {
+    this.signalrService.hubConnection.on(
+      'GetAreaOfClicking',
+      (affterData: any) => {
+        console.log('AREAOFCLICKING', affterData);
+        this.setAfterData(affterData);
+      }
+    );
+  }
+  setAfterData(affterData: any) {
+    this.areaOfClicking = affterData;
+    //ako je 0 znaci da ne treba nigde da kliknemo
+    //[0] na beken za parametar CardIDs jer ne treba nista;
+    if (affterData.areaOfClicking == 0) {
+      this.gameService.executeEffectInv(
+        [0],
+        affterData.fieldID,
+        this.playerID,
+        this.enemiesID,
+        Number(this.gameID)
+      );
+      this.areaOfClicking = undefined;
+    }
+  }
+  //nakon ulaska u bp dobijamo koja polja mogu da napadnu u ovom potezu,tj pojavlju se macevi
+  getFieldsAbleToAttack() {
+    this.signalrService.hubConnection.on(
+      'GetFieldsAbleToAttack',
+      (listOFfieldsIDs: any) => {
+        this.fieldsAbleToAttack = listOFfieldsIDs;
+      }
+    );
+  }
+  //dobijamo centar elementa
   getCenter(element: any) {
     const { left, top, width, height } = element.getBoundingClientRect();
     return { x: left + width / 2, y: top + height / 2 };
   }
-  getSword(swordDiv: any, fieldID: any) {
+  //biramo mac tj polje tj kartu kojom zelimo da napadnemo
+  chooseSwordForAttack(swordDiv: any, fieldID: any) {
     console.log(swordDiv);
-
-    this.fieldReadyAttack = fieldID;
-    console.log('pomara', this.fieldReadyAttack);
+    this.fieldReadyAttack = fieldID; //setujemo id polja koje smo kliknuli
     this.swordRadyToAttack = swordDiv;
     if (this.swordRadyToAttack != undefined) {
       const arrowCenter = this.getCenter(this.swordRadyToAttack);
@@ -115,16 +455,46 @@ export class GameComponent implements OnInit, OnDestroy {
       });
     }
   }
-  attackField(fieldID: any) {
-    this.gameService.attackEnemiesFieldInv(
-      Number(this.gameID),
-      this.playerID,
-      this.fieldReadyAttack,
-      fieldID,
-      this.enemiesID
+  //nakon sto smo izabrali mac biramo polje koje zelimo da napadnemo
+  attackField(field: any) {
+    var canYouAttackThisField: any = false;
+    var counter = this.checkNumberOfMonstersOnField(
+      this.enemiesField.cardFields
+    );
+    //klikcemo na spellTrap polje tj napadamo direktno
+    if (counter == 0 && field.fieldIndex > 5) {
+      canYouAttackThisField = true;
+    }
+    //klikcemo na monsterField znaci napadamo kartu
+    else if (
+      counter > 0 &&
+      field.fieldIndex <= 5 &&
+      field.cardOnField != null
+    ) {
+      canYouAttackThisField = true;
+    }
+    if (canYouAttackThisField == true) {
+      this.gameService.attackEnemiesFieldInv(
+        Number(this.gameID),
+        this.playerID,
+        this.fieldReadyAttack,
+        field.fieldID,
+        this.enemiesID
+      );
+    }
+  }
+  //sa bekenda dobijamo polje sa koga smo napali i polje koje smo napali
+  getFieldsIncludedInAttack() {
+    this.signalrService.hubConnection.on(
+      'GetFieldsIncludedInAttack',
+      (fieldID: any, attackedFieldID: any) => {
+        this.getSwordsTranslation(fieldID, attackedFieldID);
+      }
     );
   }
-  pomfja(fieldID: any, attackedFieldID: any) {
+  //izracunavaju se centri napadackog polja i napadnutog,i ugao pod kojim mac treba da leti
+  getSwordsTranslation(fieldID: any, attackedFieldID: any) {
+    //da li mac jos uvek leti
     this.transitionIsActive = true;
     const fieldThatAttk = document.getElementById(fieldID);
     var attack: any = fieldThatAttk?.getElementsByClassName('attack')[0];
@@ -168,158 +538,8 @@ export class GameComponent implements OnInit, OnDestroy {
       const x = this.fieldsAbleToAttack.splice(index, 1);
       this.transitionIsActive = false;
     }, 500);
-    console.log(attackCentar);
-    console.log(attackedCentar);
-    console.log(angle);
   }
-  getFieldsIncludedInAttack() {
-    this.signalrService.hubConnection.on(
-      'GetFieldsIncludedInAttack',
-      (fieldID: any, attackedFieldID: any) => {
-        console.log('BAEBAEBAE', fieldID, attackedFieldID);
-        this.pomfja(fieldID, attackedFieldID);
-      }
-    );
-  }
-
-  ngOnDestroy(): void {
-    this.inGameService.setGameOff();
-    this.router.navigate(['/home']);
-  }
-
-  setGameStatus() {
-    this.inGameService.setGameOn();
-  }
-  onLoadingOver(event: any) {
-    this.isLoadingOver = event;
-    console.log(this.playerField.gameStarted);
-    if (
-      this.playerField != undefined &&
-      this.playerField.gameStarted == false
-    ) {
-      this.gameService.startingDrawingInv(Number(this.gameID), this.playerID);
-      if (this.isPlayerOnTurn) {
-        console.log('fiona2018xoffwhitevirginlabblock', this.isPlayerOnTurn);
-        this.gameService.drawPhaseInv(Number(this.gameID), this.playerID);
-      }
-    }
-    this.getStartingTurnInfo();
-  }
-
-  //koristimo fju prilikom ngOnInita vraca ceo prikaz table
-  //preko kontrolera,preko signalr-a,ukoliko dodje do refresha
-  //dolazi do gresaka
-  getStartingField() {
-    this.gameService.getStartingField(this.playerID, this.enemiesID).subscribe({
-      next: (res: any) => {
-        console.log(res);
-        this.playerField = res.playerField;
-        this.enemiesField = res.enemiesField;
-        this.playerHand = res.playerField.hand;
-        this.enemiesHand = res.enemiesField.hand;
-      },
-      error: (err) => {
-        console.log(err.error);
-      },
-    });
-  }
-  getStartingTurnInfo() {
-    this.gameService.getTurnInfo(this.gameID, this.playerID).subscribe({
-      next: (res: any) => {
-        this.setTurnInfo(res);
-        console.log('T U R N I N F O', res);
-      },
-      error: (err) => {
-        console.log(err.error);
-      },
-    });
-  }
-  getTurnInfo() {
-    this.signalrService.hubConnection.on('GetTurnInfo', (turnInfo: any) => {
-      console.log(turnInfo);
-      this.turnInfo = turnInfo;
-      this.setTurnInfo(turnInfo);
-      this.isPhaseMassageOver = false;
-      if (this.turnInfo.turnPhase == 0) {
-        this.phaseMessage = 'Draw Phase';
-      } else if (this.turnInfo.turnPhase == 1) {
-        this.phaseMessage = 'Main Phase';
-      } else if (this.turnInfo.turnPhase == 2) {
-        this.phaseMessage = 'Battle Phase';
-      } else if (this.turnInfo.turnPhase == 3) {
-        this.phaseMessage = 'End Phase';
-      } else {
-        this.phaseMessage = undefined;
-      }
-      if (this.turnInfo.turnPhase == 1 || this.turnInfo.turnPhase == 2) {
-        setTimeout(() => {
-          this.phaseMessage = undefined;
-          if (this.turnInfo.turnPhase == 1) {
-            this.isPhaseMassageOver = true;
-          }
-        }, 1000);
-      }
-    });
-  }
-  setTurnInfo(turnInfo: any) {
-    this.curentPhase = turnInfo.turnPhase;
-    if (turnInfo.playerOnTurn == this.playerID) {
-      this.isPlayerOnTurn = true;
-    } else {
-      this.isPlayerOnTurn = false;
-    }
-    // var timer: any = setTimeout(() => {
-    this.phases.forEach((element) => {
-      element.status = false;
-    });
-    if (turnInfo.turnPhase != 4) {
-      let phase = this.phases.find((x) => x.key == turnInfo.turnPhase);
-      phase.status = true;
-      this.curentPhase = phase;
-      console.log('f a z a', this.curentPhase);
-    }
-    // }, 1000);
-  }
-  getHands() {
-    this.signalrService.hubConnection.on(
-      'GetCardsInYourHand',
-      (playerHand: any) => {
-        if (this.playerField.gameStarted == false) {
-          this.getStartingDrawingEffect(
-            0,
-            this.playerHand,
-            playerHand,
-            this.pom1
-          );
-        } else {
-          this.playerHand = playerHand;
-        }
-      }
-    );
-    this.signalrService.hubConnection.on(
-      'GetCardsInEnemiesHand',
-      (enemiesHand: any) => {
-        if (this.playerField.gameStarted == false) {
-          this.getStartingDrawingEffect(
-            0,
-            this.enemiesHand,
-            enemiesHand,
-            this.pom2
-          );
-        } else {
-          this.enemiesHand = enemiesHand;
-        }
-      }
-    );
-  }
-
-  getPlayersField() {
-    this.signalrService.hubConnection.on('GetYourField', (field: any) => {
-      this.playerField = field;
-      this.playerHand = field.hand;
-      console.log(this.playerField);
-    });
-  }
+  //dobijamo broj izgubljenih poena i polje koje je te poene izgubilo
   getFieldThatLostPoints() {
     this.signalrService.hubConnection.on(
       'FieldsThatLostPoints',
@@ -337,187 +557,40 @@ export class GameComponent implements OnInit, OnDestroy {
       }
     );
   }
-  getEnemiesField() {
-    this.signalrService.hubConnection.on(
-      'GetEnemiesField',
-      (enemiesField: any) => {
-        this.enemiesField = enemiesField;
-        this.enemiesHand = enemiesField.hand;
-
-        console.log(this.enemiesField);
-      }
-    );
-  }
-  getGrave() {
-    this.gameService.getGrave(this.gameID).subscribe({
-      next: (res: any) => {
-        this.grave = res;
-        console.log('grave', res);
-      },
-      error: (err) => {
-        console.log(err.error);
-      },
-    });
-  }
-  getGraveByHub() {
-    this.signalrService.hubConnection.on('GetGraveData', (grave: any) => {
-      this.grave = grave;
-      console.log('grave', this.grave);
-    });
-  }
-  //koristimo fju za prikaz pocetnog izvlacenja karata;
-  getStartingDrawingEffect(
-    i: any,
-    targetArray: any,
-    sourceArray: any,
-    niz: any
+  //kad dodje do promene poena pojavljuje se ispod tj iznad zivotnih poena
+  getPointsReduce(
+    paragrafHtml: any,
+    curentLifePoints: any,
+    newLifePoints: any
   ) {
-    var timer = setInterval(() => {
-      if (i == sourceArray.length) {
-        clearInterval(timer);
-        return;
+    const lpReduce = newLifePoints - curentLifePoints;
+    if (lpReduce != 0) {
+      curentLifePoints = newLifePoints;
+      if (lpReduce < 0) {
+        paragrafHtml.nativeElement.style.color = 'rgb(255, 96, 96)';
+        paragrafHtml.nativeElement.innerText = lpReduce;
+      } else if (lpReduce > 0) {
+        paragrafHtml.nativeElement.style.color = 'rgb(0 161 255)';
+        paragrafHtml.nativeElement.innerText = '+' + lpReduce;
       }
-      const exists = targetArray.some(
-        (obj: any) => obj.id === sourceArray[i].id
-      );
-      if (!exists) {
-        targetArray.push(sourceArray[i]);
-      }
-      // this.playerField.deckCount = this.playerField.deckCount - 1;
-      i++;
-    }, 300);
-  }
-  //koristimo fju za pri
-
-  onEnemiesCardMouseOver(field: any) {
-    this.mediumCard = field.cardOnField;
-    if (field.cardShowen == true) {
-      this.iscardshowen = true;
-    } else {
-      this.iscardshowen = false;
+      setTimeout(() => {
+        paragrafHtml.nativeElement.innerText = null;
+      }, 1000);
     }
   }
 
-  changePhase() {
-    let nextPhase: any;
-    let phase = this.phases.find((x) => x.status == true);
-    phase.status = false;
-    if (phase.key == 3) {
-      nextPhase = 0;
-      if (this.isPlayerOnTurn == true) {
-        this.isPlayerOnTurn = false;
-      } else {
-        this.isPlayerOnTurn = true;
+  checkNumberOfMonstersOnField(cardFields: any) {
+    var counter: any = 0;
+    cardFields.forEach((element: any) => {
+      if (element.cardOnField != null) {
+        counter++;
       }
-    } else {
-      nextPhase = phase.key + 1;
-    }
-    phase = this.phases.find((x) => x.key == nextPhase);
-    phase.status = true;
-    console.log(this.phases);
+    });
+    return counter;
   }
-  normalSummon(cardID: any, position: any) {
-    console.log(cardID);
-    this.gameService.normalSummonInv(
-      Number(this.gameID),
-      this.playerID,
-      cardID,
-      position
-    );
-    this.cardToBeSummoned = undefined;
-  }
-  playSpellCard(cardID: any, cardEffectID: any) {
-    this.gameService.playSpellCardInv(
-      Number(this.gameID),
-      this.playerID,
-      cardID,
-      cardEffectID
-    );
-  }
-  getDataAffterPlayedEffectCard() {
-    this.signalrService.hubConnection.on(
-      'GetAreaOfClicking',
-      (affterData: any) => {
-        console.log('AREAOFCLICKING', affterData);
-
-        this.setAreaOfClicking(affterData);
-      }
-    );
-  }
-  getFieldsAbleToAttack() {
-    this.signalrService.hubConnection.on(
-      'GetFieldsAbleToAttack',
-      (listOFfieldsIDs: any) => {
-        console.log('BAEBAEBAE', listOFfieldsIDs);
-        this.fieldsAbleToAttack = listOFfieldsIDs;
-      }
-    );
-  }
-  setAreaOfClicking(affterData: any) {
-    console.log('AREAOFCLICKING', affterData);
-
-    if (affterData.areaOfClicking == 0) {
-      this.gameService.executeEffectInv(
-        [0],
-        affterData.fieldID,
-        this.playerID,
-        Number(this.gameID)
-      );
-    }
-  }
-  playCard(card: any) {
-    if (this.playerHand.length < 7) {
-      if (
-        card.cardType == 'MonsterCard' &&
-        this.turnInfo.isMonsterSummoned == false &&
-        this.curentPhase.name == 'MP'
-      ) {
-        this.turnInfo.isMonsterSummoned = true;
-        this.openSummoningMonsterWindow(card);
-      }
-      if (
-        card.cardType == 'SpellCard' &&
-        this.curentPhase.name == 'MP' &&
-        this.isPlayerOnTurn
-      ) {
-        this.playSpellCard(card.id, card.cardEffectID);
-      }
-    } else if (this.isPlayerOnTurn) {
-      this.gameService.removeCardFromHandToGraveInv(
-        this.playerID,
-        card.id,
-        this.gameID
-      );
-    }
-  }
-  openSummoningMonsterWindow(card: any) {
-    if (this.cardToBeSummoned == undefined && this.isPlayerOnTurn == true) {
-      this.cardToBeSummoned = card;
-    }
-  }
-  closeSummoningMonsterWindow() {
-    this.cardToBeSummoned = undefined;
-  }
-  summonMonsterInAttackPosition() {
-    this.normalSummon(this.cardToBeSummoned.id, true);
-  }
-  summonMonsterInDeffencePosition() {
-    this.normalSummon(this.cardToBeSummoned.id, false);
-  }
-  battlePhase(phase: any) {
-    if (this.playerHand.length < 7) {
-      if (phase.name == 'BP' && this.curentPhase.name == 'MP') {
-        this.gameService.battlePhaseInv(this.gameID, this.playerID);
-      } else if (
-        (phase.name == 'EP' && this.curentPhase.name == 'MP') ||
-        this.curentPhase.name == 'BP'
-      ) {
-        this.gameService.endPhaseInv(
-          this.gameID,
-          this.playerID,
-          this.enemiesID
-        );
-      }
-    }
+  ngOnDestroy(): void {
+    this.inGameService.setGameOff();
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
+    this.router.navigate(['/home']);
   }
 }

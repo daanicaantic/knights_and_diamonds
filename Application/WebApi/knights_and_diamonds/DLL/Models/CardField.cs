@@ -12,8 +12,8 @@ namespace DAL.Models
 	public class CardField
 	{
 		public int ID { get; set; }
-		[JsonIgnore]
 		public int? CardOnFieldID { get; set; }
+		[JsonIgnore]
 		public CardInDeck? CardOnField { get; set; }
 		public int FieldIndex { get; set; }
 		public string? FieldType { get; set; }

@@ -23,13 +23,19 @@ namespace BLL.AttackingStrategy
 			this._context = context;
 			this._attackingStrategy = strategy;
 			this._unitOfWork = new UnitOfWork(_context);
-
 		}
-		public async Task<int> AttackEnemiesField(CardField attackingField,CardField attackedField,int gameID)
+		public async Task<int> AttackEnemie(CardField attackingField,CardField attackedField,int gameID)
 		{
 			var attackingCard = await this._unitOfWork.Card.GetMonsterCard(attackingField.CardOnField.CardID);
-			var attackedCard = await this._unitOfWork.Card.GetMonsterCard(attackedField.CardOnField.CardID);
-			return await this._attackingStrategy.Attack(gameID,attackingField,attackedField,attackingCard, attackedCard);
+			if (attackedField.CardOnField != null && attackedField.FieldType=="MonsterField")
+			{
+				var attackedCard = await this._unitOfWork.Card.GetMonsterCard(attackedField.CardOnField.CardID);
+				return await this._attackingStrategy.Attack(gameID, attackingField, attackedField, attackingCard, attackedCard);
+			}
+			else
+			{
+				return await this._attackingStrategy.DirectAttack(attackingField, attackingCard, attackedField.PlayerID);
+			}
 		}
 	}
 }

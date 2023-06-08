@@ -2,6 +2,7 @@
 using DAL.DataContext;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,9 +18,13 @@ namespace BLL.AttackingStrategy
 		{
 			this._context = context;
 		}
-		public AttackingStrategyContext SetStrategyContext(bool CardPosition)
+		public AttackingStrategyContext SetStrategyContext(bool cardPosition,string fieldType)
 		{
-			if (CardPosition)
+			if (fieldType == "SpellTrapField")
+			{
+				return _strategyContext = new AttackingStrategyContext(this._context,new DirectAttackStrategy(this._context));
+			}
+			else if (cardPosition==true && fieldType=="MonsterField")
 			{
 				return _strategyContext = new AttackingStrategyContext(this._context,new AttackPositionStrategy(this._context));
 			}

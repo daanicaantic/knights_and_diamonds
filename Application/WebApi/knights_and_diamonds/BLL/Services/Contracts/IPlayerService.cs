@@ -17,5 +17,6 @@ namespace BLL.Services.Contracts
 		Task<MappedCard> Draw(int playerID);
 		Task StartingDrawing(int playerID);
 		Task SetGameStarted(Player player);
+		Task<List<CardOnFieldDisplay>> GetPlayersCardFields(int playerID);
 	}
 }

@@ -45,6 +45,14 @@ namespace DAL.Repositories
 			}
 			return game;
         }
-        
-    }
+		public async Task<int> GetEnemiesPlayerID(int gameID,int playerID)
+		{
+			var enemiesID = await this.Context.Players?
+				.Where(x => x.GameID == gameID && x.ID!=playerID)
+				.Select(x=>x.ID)
+				.FirstOrDefaultAsync();
+			return enemiesID;
+		}
+
+	}
 }

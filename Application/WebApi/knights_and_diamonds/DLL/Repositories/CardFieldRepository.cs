@@ -40,6 +40,16 @@ namespace DAL.Repositories
 			return cardField;
 
 		}*/
+		public async Task<List<CardField>> GetFieldsByPlayerID(int playerID)
+		{
+			var cardFields = await this.Context.CardFields?.Where(x => x.PlayerID == playerID).Include(x => x.CardOnField).ThenInclude(x => x.Card).ToListAsync();
+			if (cardFields == null)
+			{
+				throw new Exception("There is no fields for this playerID");
+			}
+			return cardFields;
+
+		}
 		public async Task<List<CardField>> GetPlayerFields(int playerID,string fieldType)
 		{
 			var cardFields = await this.Context.CardFields?.Where(x => x.PlayerID ==playerID && x.FieldType==fieldType ).Include(x => x.CardOnField).ThenInclude(x => x.Card).ToListAsync();
@@ -49,6 +59,20 @@ namespace DAL.Repositories
 			}
 			return cardFields;
 
+		}
+		public async Task<List<CardField>> GetEmptyPlayerFields(int playerID, string fieldType)
+		{
+			var cardFields = await this.Context.CardFields?.Where(x => x.PlayerID == playerID && x.FieldType == fieldType && x.CardOnField==null).Include(x => x.CardOnField).ToListAsync();
+			if (cardFields == null)
+			{
+				throw new Exception("There is no fields for this playerID");
+			}
+			return cardFields;
+		}
+		public async Task<List<CardField>> GetFieldByCardInDeckID (int cardInDeckID)
+		{
+			var cardField = await this.Context.CardFields?.Where(x => x.CardOnFieldID == cardInDeckID).Include(x => x.CardOnField).ToListAsync();
+			return cardField;
 		}
 	}
 }

@@ -50,7 +50,6 @@ namespace SignalR.HubConfig
 			this._gameService = new GameService(this._context);
 			this._playerService = new PlayerService(this._context);
 			this._turnService = new TurnService(this._context);
-
 		}
 		public async Task askServer(string someTextForClient)
 		{
@@ -349,13 +348,16 @@ namespace SignalR.HubConfig
 			await this.GetField(connections, field);
 			await this.GetDataAffterPlayCardWithEffect(connections,areaOfClicking);
 		}
-		public async Task ExecuteEffect(List<int> listOfCards, int cardFieldID, int playerID, int gameID)
+		public async Task ExecuteEffect(List<int> listOfCards, int cardFieldID, int playerID,int enemiesID,int gameID)
 		{
 			try
 			{
 				var connections = await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
+				var enemiesConnections = await this._gameService.GameConnectionsPerPlayer(gameID, enemiesID);
 				await this._gameService.ExecuteEffect(listOfCards, cardFieldID, playerID, gameID);
 				var field = await this._gameService.GetPlayersField(playerID);
+				var enemiesField = await this._gameService.GetPlayersField(enemiesID);
+
 				var grave = await this._gameService.GetGamesGrave(gameID);
 				if (field == null)
 				{
@@ -367,6 +369,7 @@ namespace SignalR.HubConfig
 				}
 				await Task.Delay(1000);
 				await this.GetField(connections, field);
+				await this.GetField(enemiesConnections, enemiesField);
 				await this.GetGrave(connections, grave);
 			}
 			catch(Exception ex)

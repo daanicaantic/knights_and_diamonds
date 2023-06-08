@@ -4,6 +4,7 @@ using BLL.Strategy.Context;
 using DAL.DataContext;
 using DAL.Models;
 using DAL.UnitOfWork;
+using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,11 +19,15 @@ namespace BLL.Strategy
 		private readonly KnightsAndDiamondsContext _context;
 		public UnitOfWork _unitOfWork { get; set; }
 		public IPlayerService _playerService { get; set; }
+		public IGameService _gameService { get; set; }
+
 		public LPChangeExecution(KnightsAndDiamondsContext context)
 		{
 			this._context = context;
 			this._unitOfWork = new UnitOfWork(_context);
 			_playerService = new PlayerService(this._context);
+			_gameService = new GameService(this._context);
+			
 		}
 
 		public ChooseCardsFrom SelectCardsFrom()
@@ -41,7 +46,7 @@ namespace BLL.Strategy
 			{
 				throw new Exception("There is no game with this ID");
 			}
-			var enemiesPlayer = game.Players.Where(x => x.ID != playerID).FirstOrDefault();
+			var enemiesPlayer = game?.Players?.Where(x => x.ID != playerID).FirstOrDefault();
 			if (enemiesPlayer == null)
 			{
 				throw new Exception("There is no enemie in this game");
@@ -53,10 +58,11 @@ namespace BLL.Strategy
 			}
 			else if(effect.EffectType.Type == "lpchangeReduce")
 			{
-				enemiesPlayer.LifePoints= (int)(player.LifePoints - effect.PointsAddedLost);
-				this._unitOfWork.Player.Update(player);
+				enemiesPlayer.LifePoints= (int)(enemiesPlayer.LifePoints - effect.PointsAddedLost);
+				this._unitOfWork.Player.Update(enemiesPlayer);
 			}
-			await this._unitOfWork.Complete();
+			await this._gameService.RemoveCardFromFieldToGrave(fieldID, gameID, playerID);
+
 		}
 	}
 }

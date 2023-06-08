@@ -4,19 +4,21 @@
     <div class="pom" *ngIf="this.playerField!=undefined && this.enemiesField!=undefined">
         <div class="background" *ngIf="isLoadingOver===true">
             <div class="card-window">
-                <div class="enemies-health">
+                <div *ngIf="isLoadingOver" class="enemies-health">
                     <h1>{{enemiesField.lifePoints}}</h1>
+                    <h2 style="position: absolute;top:100%" class="lp-change-message" #enemiesLpChange></h2>
                 </div>
                 <div class="big-card" *ngIf="mediumCard!=undefined">
                     <app-card [card]="mediumCard" [isCardShowen]="this.iscardshowen"></app-card>
                 </div>
-                <div class="players-health" (click)="changePhase()">
+                <div class="players-health">
                     <h1>{{playerField.lifePoints}}</h1>
+                    <h2 class="lp-change-message" style="position: absolute;bottom:100%;" #playersLpChange></h2>
                 </div>
             </div>
             <div class="phases-window" *ngIf="isPlayerOnTurn==true">
                 <div *ngFor="let phase of phases" class="players-phase player-phase-{{phase.status}}"
-                    (click)="battlePhase(phase)">{{phase.name}}
+                    (click)="changePhaseInv(phase)">{{phase.name}}
                 </div>
             </div>
             <div class="phases-window" *ngIf="isPlayerOnTurn==false">
@@ -34,8 +36,8 @@
                         <div class="grave" style="margin-bottom: 10px; ">
                             <h3 style="color:black;text-align: center;">{{grave.graveCount}}</h3>
                             <div class="deck graveBG">
-                                <app-card [card]="grave.lastCard" *ngIf="grave.graveCount>0"
-                                    style="font-size: 3px;"></app-card>
+                                <app-card [card]="grave.lastCard" *ngIf="grave.graveCount>0" style="font-size: 3px;"
+                                    (mouseover)="this.mediumCard=grave.lastCard; this.iscardshowen=true"></app-card>
                             </div>
                         </div>
                         <div class="player-deck">
@@ -70,7 +72,7 @@
                         </h1>
                         <div class="enemies-table">
                             <div #attackedField id="{{field.fieldID}}" class="card-place"
-                                *ngFor="let field of enemiesField.cardFields" (click)="attackField(field.fieldID)">
+                                *ngFor="let field of enemiesField.cardFields" (click)="onEnemiesFieldClick(field)">
                                 <div #sword class="attack"
                                     *ngIf="fieldsAbleToAttack!=undefined && fieldsAbleToAttack.includes(field.fieldID) && curentPhase.name == 'BP'">
                                 </div>
@@ -86,7 +88,8 @@
                                 <div class="attack-deffence-points"
                                     *ngIf="field.cardOnField!=undefined && this.field.fieldIndex>=0 && 5>this.field.fieldIndex && field.cardShowen"
                                     style="transform: scale(1,-1); display: flex; flex-direction: row; justify-content: center;">
-                                    <p>{{this.field.cardOnField.attackPoints}} / {{this.field.cardOnField.attackPoints}}
+                                    <p>{{this.field.cardOnField.attackPoints}} /
+                                        {{this.field.cardOnField.defencePoints}}
                                     </p>
                                     <!-- <p> {{this.field.cardOnField.attackPoints}}</p> -->
                                 </div>
@@ -94,7 +97,7 @@
                         </div>
                         <div class="player-table">
                             <div class="card-place" id="{{field.fieldID}}" *ngFor="let field of playerField.cardFields">
-                                <div #sword (click)="getSword(sword,field.fieldID)" class="attack"
+                                <div #sword (click)="chooseSwordForAttack(sword,field.fieldID)" class="attack"
                                     *ngIf="fieldsAbleToAttack!=undefined && fieldsAbleToAttack.includes(field.fieldID) && curentPhase.name == 'BP'">
                                 </div>
                                 <h2 class="ponits-lost"
@@ -107,7 +110,8 @@
                                 <div class="attack-deffence-points"
                                     *ngIf="field.cardOnField!=undefined && this.field.fieldIndex>=0 && 5>this.field.fieldIndex "
                                     style="display: flex; flex-direction: row; justify-content: center;">
-                                    <p>{{this.field.cardOnField.attackPoints}} / {{this.field.cardOnField.attackPoints}}
+                                    <p>{{this.field.cardOnField.attackPoints}} /
+                                        {{this.field.cardOnField.defencePoints}}
                                     </p>
 
                                 </div>
@@ -122,8 +126,8 @@
                         </div>
                         <div class="grave">
                             <div class="deck graveBG">
-                                <app-card [card]="grave.lastCard" *ngIf="grave.graveCount>0"
-                                    style="font-size: 3px;"></app-card>
+                                <app-card [card]="grave.lastCard" *ngIf="grave.graveCount>0" style="font-size: 3px;"
+                                    (mouseover)="this.mediumCard=grave.lastCard; this.iscardshowen=true"></app-card>
                             </div>
                             <h3 style="color:black;text-align: center;">{{grave.graveCount}}</h3>
                         </div>
@@ -132,7 +136,7 @@
                 <div class="players-hand">
                     <div class="medium-card" *ngFor="let card of playerHand;let i = index">
                         <app-card [card]="card" (mouseover)="this.mediumCard=card; this.iscardshowen=true"
-                            (click)="playCard(card)">
+                            (click)="onPlayersHandClick(card)">
                         </app-card>
                     </div>
                 </div>

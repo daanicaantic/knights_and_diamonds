@@ -256,7 +256,7 @@ namespace BLL.Services
 
         public int NumberOfCardsRequiredForTribute(int numberOfStars)
         {
-            if (numberOfStars <= 0)
+            if (numberOfStars < 0)
             {
                 throw new Exception("There is some error");
             }
@@ -366,6 +366,7 @@ namespace BLL.Services
             }
 			var concreteStrategy = this._concreteStrategy.SetStrategyContext(effect.EffectType.Type);
 			await concreteStrategy.ExecuteEffect(listOfCards,effect,playerID,gameID, cardFieldID);
+            await this._unitOfWork.Complete();
 
 		}
         public async Task RemoveCardFromFieldToGrave(int fieldID, int gameID,int playerID)
@@ -455,19 +456,24 @@ namespace BLL.Services
 			{
 				throw new Exception("Your card is in deffence position");
 			}
+			if (attackingField.FieldType == "MonsterType")
+			{
+				throw new Exception("You can only attack from MonterField");
+			}
 			var posibleAttack = await this._unitOfWork.AttackInTurn.GetAttackInTurnByTurnIDAndFieldID(attackingFieldID, curentTurn.ID);
 			var attackedField = await this._unitOfWork.CardField.GetCardField(attackedFieldID, enemiesPlayerID);
-			if (attackedField.CardOnField == null)
+			if (attackedField.FieldType=="MonsterField" && attackedField.CardOnField == null)
 			{
 				throw new Exception("You cant attack empty field");
 			}
-			var concreteStrategy = this._concreteAttackingStrategy.SetStrategyContext(attackedField.CardPosition);
-			var difference=await concreteStrategy.AttackEnemiesField(attackingField,attackedField,gameID);
+			var concreteStrategy = this._concreteAttackingStrategy.SetStrategyContext(attackedField.CardPosition,attackedField.FieldType);
+			var difference=await concreteStrategy.AttackEnemie(attackingField,attackedField,gameID);
 			posibleAttack.IsAttackingAbble = false;
 			this._unitOfWork.AttackInTurn.Update(posibleAttack);
             await this._unitOfWork.Complete();
             return difference;
 		}
 
-    }
+
+	}
 }
