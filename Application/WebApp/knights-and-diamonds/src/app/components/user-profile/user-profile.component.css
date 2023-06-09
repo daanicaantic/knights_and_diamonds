@@ -8,15 +8,23 @@ p, label{
 }
 
 .background {
+    height: 100vh;
     display: flex;
     justify-content: center;
-    margin-top: 3rem;
     align-items: center;
     width: auto;
     flex: 1 1 auto;
+    display: flex;
+    justify-content: center;
+    background-image: url("https://localhost:7250/Resources/Images/welcome-background.jpg");
+    background-size: 100% 100%;
+    width: 100%;
+    display: flex; 
+    background-position: top;
 }
 
 .user-profile-full {
+    /* margin-top: 100px; */
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -33,7 +41,7 @@ p, label{
     align-items: center;
     width: auto;
     border-radius: 5px;
-    background: linear-gradient(to right, #5a69ce, #47e2bb);
+    background: linear-gradient(to right, #d7a657, #6cc781);
     height: 400px;
     min-width: 280px;
     flex-shrink: 2;
@@ -66,20 +74,25 @@ p, label{
     margin-top: 2rem;
 }
 
+.user-profile-info-all {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 400px;
+    width: 450px;
+}
+
 .user-profile-info {
+    color: white;
     display: flex;
     flex-direction: column;
     border-radius: 5px;
-    width: auto;
-    height: 400px;
     width: 450px;
     border-radius: 5px;
     -webkit-box-shadow: 0 1px 20px 0 rgba(69, 88, 97, 0.08);
     box-shadow: 0 1px 20px 0 rgba(69, 88, 97, 0.08);
     border: none;
-    margin-bottom: 30px;
     padding: 2rem;
-    flex: 1 1 auto;
     flex-shrink: 3;
 }
 
@@ -99,10 +112,11 @@ hr {
     display: flex;
     flex-direction: row;
     align-items: center;
+    margin-bottom: 1rem;
 }
 
 .info-labels {
-    color: #979ea4;
+    color: #8ebe9f;
 }
 
 .info-span {
@@ -118,6 +132,33 @@ hr {
 
 .info-rank-email {
     margin-left: 2rem;
+}
+
+.header-info {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.button-deck-create {
+    font-size: 20px;
+    font-weight: 500;
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(to right, #6cc781, #d7a657);
+    padding: 10px;
+    /* margin-top: 1rem; */
+    text-align: center;
+    color: white;            
+    border-radius: 10px;
+    border: 2px solid rgb(69, 69, 69);
+    display: block;
+    cursor: pointer;
+    align-self: baseline;
+}
+
+.button-deck-create:hover{
+    color: #d15f1c;
+    transition: 0.3 ease 0s;
 }
 
 /* .background {

@@ -17,43 +17,45 @@
                     <i class="pi pi-discord" style="font-size: 1.3rem;"></i>
                     <i class="pi pi-github" style="font-size: 1.3rem;"></i>
                 </div>
-                <div class="deck-create">
-                    <button class="button" (click)="redirectToDeck()" pButton label="Deck"></button>
-                </div>
             </div>
         </div>
-        <div class="user-profile-info">
-            <div>
-                <p>Analytics</p>
-                <hr>
-            </div>
-            <div class="analytics-div">
-                <span class="info-span">
-                    <p class="text-info">Games won</p>
-                    <label class="info-labels">25</label>
-                </span>
-                <span class="info-span">
-                    <p class="text-info">Games lost</p>
-                    <label class="info-labels">25</label>
-                </span>
-            </div>
-            <br>
-            <br>
-            <div>
-                <p>Information</p>
-                <hr>
-            </div>
-            <div class="information-div">
-                <div>
-                    <span class="information-span">
-                        <p class="text-info">Rank</p>
-                        <label class="info-labels info-rank-email">ranked</label>
-                    </span>
-                    <span class="information-span">
-                        <p class="text-info">Email</p>
-                        <label class="info-labels info-rank-email">{{user.email}}</label>
-                    </span>                    
+        <div class="user-profile-info-all">
+            <div class="user-profile-info">
+                <div class="header-info">
+                    <p style="margin-bottom: 1rem;">Analytics</p>
+                    <hr>
                 </div>
+                <div class="analytics-div">
+                    <span class="info-span">
+                        <p class="text-info">Games won</p>
+                        <label class="info-labels">25</label>
+                    </span>
+                    <span class="info-span">
+                        <p class="text-info">Games lost</p>
+                        <label class="info-labels">25</label>
+                    </span>
+                </div>
+                <br>
+                <br>
+                <div class="header-info">
+                    <p style="margin-bottom: 1rem;">Information</p>
+                    <hr>
+                </div>
+                <div class="information-div">
+                    <div>
+                        <span class="information-span">
+                            <p class="text-info">Rank</p>
+                            <label class="info-labels info-rank-email">ranked</label>
+                        </span>
+                        <span class="information-span">
+                            <p class="text-info">Email</p>
+                            <label class="info-labels info-rank-email">{{user.email}}</label>
+                        </span>                    
+                    </div>
+                </div>
+            </div>
+            <div class="deck-create">
+                <button class="button-deck-create" label="deck-create" (click)="redirectToDeck()">Deck create</button>
             </div>
         </div>
     </div>

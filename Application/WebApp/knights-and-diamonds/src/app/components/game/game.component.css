@@ -37,14 +37,16 @@ p {
 }
 .card-in-hand,
 .card-back{
-    background-image: url("https://localhost:7250/Resources/Images/card-back.png");
     background-size: 100% 100%;
     background-repeat: no-repeat;
 }
-.card-in-hand:hover{
-    translate: 0px 50px;
-    z-index: 1;
+.card-back{
+    background-image: url("https://localhost:7250/Resources/Images/card-back.png");
 
+}
+.card-in-hand:hover{
+    translate: 0px -50px;
+    z-index: 1;
 }
 
 .small-card {
@@ -154,8 +156,11 @@ p {
     height: 100%;
 }
 .enemies-hand {
+    transform: scale(-1,-1);
     height: 40px;
     align-items: flex-end;
+    z-index: 1;
+    translate: 0 -30vh;
 }
 .players-hand {
     height: 100px;
@@ -169,10 +174,6 @@ p {
     background-position: center;
     background-size: contain;
 }
-
-
-
-
 .medium-card:hover {
     translate: 0px -30px;
 }
@@ -482,7 +483,7 @@ p {
         padding-bottom: 5px;
     }
   }
-  @media only screen and (max-width: 700px) {
+  @media only screen and (max-width: 800px) {
     .battle-window{
         min-width:0%;
         width: 100%;

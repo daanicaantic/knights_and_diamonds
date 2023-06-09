@@ -24,9 +24,9 @@ namespace BLL.Strategy
 		{
 			return (int)this._effectExecution.SelectCardsFrom();
 		}
-		public async Task ExecuteEffect(List<int> listOfCards, Effect effect, int playerID,int gameID,int fieldID)
+		public async Task ExecuteEffect(List<int> listOfCards, Effect effect, int playerID, int gameID, int fieldID)
 		{
-			await this._effectExecution.ExecuteEffect(listOfCards, effect, playerID,gameID,fieldID);
+			await this._effectExecution.ExecuteEffect(listOfCards, effect, playerID, gameID, fieldID);
 		}
 	}
 }

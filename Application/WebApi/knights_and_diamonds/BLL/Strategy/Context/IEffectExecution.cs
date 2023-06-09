@@ -13,7 +13,7 @@ namespace BLL.Strategy.Context
 		{
 			NoChoose,
 			Field,
-			GraveMonsteCard,
+			GraveMonsterCard,
 			GraveSTCard,
 			EnemiesField,
 			EnemiesHand

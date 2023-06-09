@@ -13,7 +13,7 @@ label {
     background-size: 100% 100%;
     width: 100%;
     display: flex; 
-    background-position:top;
+    background-position: top;
 }
 .item-container {
     width: 350px;
@@ -36,6 +36,7 @@ h1 {
 }
 .field {
     padding: 1rem;
+    color: #231c3d;
 }
 .button-submit {
     font-size: 20px;
@@ -49,11 +50,11 @@ h1 {
     margin: 10px;
     text-align: center;
     text-transform: uppercase;
-    /* background-size: 200% auto; */
     color: white;            
     border-radius: 10px;
     border: 2px solid rgb(69, 69, 69);
     display: block;
+    cursor: pointer;
 }
 .button-submit:hover{
     box-shadow: 0 0 10px #eee;
@@ -68,6 +69,7 @@ h1 {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    color: #231c3d;
 }
 .reg-field {
     padding: 1rem;

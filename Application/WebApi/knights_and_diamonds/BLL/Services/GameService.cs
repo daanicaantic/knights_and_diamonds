@@ -378,7 +378,7 @@ namespace BLL.Services
             }
             var grave = await this._unitOfWork.Grave.GetGraveByGameID(gameID);
             grave.ListOfCardsInGrave.Add(cardField.CardOnField);
-            cardField.CardOnField =null;
+            cardField.CardOnField = null;
             this._unitOfWork.Grave.Update(grave);
 			this._unitOfWork.CardField.Update(cardField);
             await this._unitOfWork.Complete();

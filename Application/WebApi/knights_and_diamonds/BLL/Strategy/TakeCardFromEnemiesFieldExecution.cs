@@ -25,7 +25,7 @@ namespace BLL.Strategy
 			this._context = context;
 			this._unitOfWork = new UnitOfWork(_context);
 			this._playerService = new PlayerService(_context);
-			_gameService = new GameService(this._context);
+			this._gameService = new GameService(_context);
 
 		}
 		public ChooseCardsFrom SelectCardsFrom()
@@ -42,7 +42,7 @@ namespace BLL.Strategy
 			var listOfPlayerFields=await this._unitOfWork.CardField.GetEmptyPlayerFields(playerID, "MonsterField");
 			if(listOfPlayerFields.Count < listOfFieldIDs.Count)
 			{
-				throw new Exception("Player don't have enough empty fields.");
+				throw new Exception("Player doesn't have enough empty fields.");
 			}
 			var enemiesID = await this._unitOfWork.Game.GetEnemiesPlayerID(gameID, playerID);
 			foreach (var fieldID in listOfFieldIDs)

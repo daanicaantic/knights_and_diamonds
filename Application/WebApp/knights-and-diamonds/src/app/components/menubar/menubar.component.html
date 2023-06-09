@@ -27,23 +27,27 @@
         <header>
                 <div class="logo-and-pages">
                         <div class="logo-and-line">
-                                <div class="logo"><p>Knights&Diamonds</p></div>
+                                <div class="logo">
+                                        <p class="logo-p" (click)="onLogo()">Knights&Diamonds</p>
+                                </div>
                                 <div class="vl"></div>
                         </div>
                         <div class="pages">
-                                <div class="home-page">Home</div>
-                                <div class="rules-page">Rules</div>
-                                <div class="cards-page">Cards</div>
+                                <div class="home-page" (click)="onHome()">Home</div>
+                                <div class="rules-page" (click)="onRules()">Rules</div>
+                                <div class="cards-page" (click)="onCards()">Cards</div>
                         </div>
                 </div>
                 <div class="buttons" *ngIf="user==undefined">
                         <button class="button-login" [routerLink]="['/login']">Login</button>
-                        <button class="button-signup">Sign up</button>
+                        <button class="button-signup" (click)="onSignUp()">Sign up</button>
                 </div>
                 <div class="buttons" *ngIf="user!=undefined">
-                        <!-- <button class="button-profile">P</button> -->
-                        <div class="avatar">
-                                <p style="color: #d15f1c;">{{user.name[0]}}{{user.surName[0]}}</p>
+                        <div class="buttons-user">
+                                <button class="button-logout" (click)="onLogout()">log out</button>
+                                <div class="avatar" (click)="onProfile()">
+                                        <p style="color: #d15f1c;">{{user.name[0]}}{{user.surName[0]}}</p>
+                                </div>
                         </div>
                 </div>
         </header>

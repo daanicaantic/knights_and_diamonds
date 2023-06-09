@@ -50,7 +50,7 @@ export class LoginFormComponent implements OnInit, OnDestroy {
     )
   }
 
-  onRegistration(){
+  onSignUp(){
     
   }
 

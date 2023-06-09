@@ -27,8 +27,13 @@
             </div>
             <div class="battle-window">
                 <div class="enemies-hand">
-                    <div class="card-in-hand" *ngFor="let num of enemiesHand" (mouseover)="this.iscardshowen=false">
-                        <!-- <app-card [isCardShowen]="false" (mouseover)="mediumCard=pom"> </app-card> -->
+                    <!-- <div class="card-in-hand" *ngFor="let num of enemiesHand" (mouseover)="this.iscardshowen=false">
+                        <app-card [isCardShowen]="false" (mouseover)="mediumCard=pom"> </app-card>
+                    </div> -->
+                    <div class="card-in-hand" *ngFor="let card of enemiesHand;let i = index">
+                        <app-card [card]="card" [isCardShowen]="this.isEnemiesHandShown" 
+                        (mouseover)="this.mediumCard=card; this.iscardshowen=this.isEnemiesHandShown"
+                        (click)="onEnemiesHandClick(card)"></app-card>
                     </div>
                 </div>
                 <div class="table-background">

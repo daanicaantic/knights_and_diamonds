@@ -98,6 +98,20 @@ namespace knights_and_diamonds.Controllers
 			}
 		}
 
+        [Route("SetFieldPosition/{playerID}/{position}")]
+        [HttpGet]
+        public async Task<IActionResult> SetFieldPosition(int playerID, bool position)
+		{
+			try
+			{
+				await this._playerservice.SetFieldPosition(playerID, position);
+				return Ok();
+			}
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
 
-	}
+    }
 }

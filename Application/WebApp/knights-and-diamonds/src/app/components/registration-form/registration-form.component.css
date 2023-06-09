@@ -1,16 +1,22 @@
 *{
     font-family: 'Roboto', sans-serif;
-    color: #231c3d;
+    color: white;
 }
 .background {
     display: flex;
     justify-content: center;
-    margin-top: 1rem;
+    height: 100vh;
+    background-image: url("https://localhost:7250/Resources/Images/welcome-background.jpg");
+    background-size: 100% 100%;
+    width: 100%;
+    display: flex; 
+    background-position: top;
 }
 .item-header {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    margin-top: 100px;
 }
 h1 {
     font-weight: 900;
@@ -19,32 +25,9 @@ h1 {
     display: flex;
     justify-content: center;
 }
-.button-submit {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-    width: 18rem;
-    height: 2.5rem;
-
-    background-image: linear-gradient(to right, #24C6DC 0%, #514A9D  51%, #24C6DC  100%);
-    margin: 10px;
-    /* padding: 15px 45px; */
-    text-align: center;
-    text-transform: uppercase;
-    transition: 0.5s;
-    background-size: 200% auto;
-    color: white;            
-    box-shadow: 0 0 20px #eee;
-    border-radius: 10px;
-    display: block;
-    }
-    .btn-grad:hover {
-        background-position: right center; /* change the direction of the change here */
-        color: #fff;
-        text-decoration: none;
-}
-.button-submit-div {
-    display: flex;
-    justify-content: space-around;
+.field{
+    /* padding: 1rem; */
+    color: #231c3d;
 }
 .registration {
     display: flex;
@@ -52,8 +35,35 @@ h1 {
     justify-content: center;
 }
 .registration-field {
+    color: #231c3d;;
     padding: 1rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+
+.button-submit {
+    font-size: 20px;
+    font-weight: 500;
+    font-family: 'Roboto', sans-serif;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    width: 18rem;
+    height: 2.5rem;
+    background-image: linear-gradient(to right, #e8bd30 0%, #df6514  51%, #e24242  100%);
+    margin: 10px;
+    text-align: center;
+    text-transform: uppercase;
+    color: white;            
+    border-radius: 10px;
+    border: 2px solid rgb(69, 69, 69);
+    display: block;
+    cursor: pointer;
+}
+.button-submit:hover{
+    box-shadow: 0 0 10px #eee;
+}
+.button-submit-div {
+    display: flex;
+    justify-content: space-around;
 }

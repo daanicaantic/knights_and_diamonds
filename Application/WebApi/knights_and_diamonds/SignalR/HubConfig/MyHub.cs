@@ -374,6 +374,7 @@ namespace SignalR.HubConfig
 			}
 			catch(Exception ex)
 			{
+				await this._gameService.RemoveCardFromFieldToGrave(cardFieldID, gameID, playerID);
 				throw new Exception(ex.Message);
 			}
 			

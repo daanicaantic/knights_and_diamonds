@@ -49,6 +49,7 @@ namespace BLL.Services
             var deck = await this._unitOfWork.Deck.GetCardsFromDeck(user.MainDeckID, userID);
             return deck;
         }
+
         public async Task<int> GetNumberOfCardsInDeck(int playerID)
         {
             var player = await this._unitOfWork.Player.GetPlayerByID(playerID);
@@ -62,7 +63,6 @@ namespace BLL.Services
 			}
 			return player.Deck.Count();
         }
-
         
         public async Task<MappedCard> Draw(int playerID) 
         {
@@ -124,6 +124,92 @@ namespace BLL.Services
 			cardsOnField = cardsOnField.OrderBy(x => x.FieldID).ToList();
 			return cardsOnField;
 		}
+
+        public async Task TakeCardFromEnemiesHand(PlayersHand enemiesHand, int playerID, int cardID)
+        {
+            if(enemiesHand.CardsInHand == null)
+            {
+                throw new Exception("This player doesn't have cards in hand.");
+            }
+
+            var chosenCard = enemiesHand.CardsInHand.Where(c => c.ID == cardID).FirstOrDefault();
+
+            if(chosenCard == null)
+            {
+                throw new Exception("Chosen card not found.");
+            }
+
+            var playersHand = await this._unitOfWork.Player.GetPlayersHand(playerID);
+
+            if (playersHand == null)
+            {
+                throw new Exception("This player doesn't have hands :(");
+            }
+
+            enemiesHand.CardsInHand.Remove((CardInDeck)chosenCard);
+            playersHand.CardsInHand.Add((CardInDeck)chosenCard);
+
+            this._unitOfWork.PlayerHand.Update(enemiesHand);
+            this._unitOfWork.PlayerHand.Update(playersHand);
+        }
+
+        public async Task TakeCardFromGraveToHand(Grave grave, int playerID, int cardID)
+        {
+            if(grave.ListOfCardsInGrave == null)
+            {
+                throw new Exception("Grave doesn't have cards.");
+            }
+
+            var chosenCard = grave.ListOfCardsInGrave.Where(c => c.ID == cardID).FirstOrDefault();
+            if (chosenCard == null)
+            {
+                throw new Exception("Chosen card not found.");
+            }
+
+            var playersHand = await this._unitOfWork.Player.GetPlayersHand(playerID);
+            if (playersHand == null)
+            {
+                throw new Exception("This player doesn't have hands :(");
+            }
+
+            playersHand.CardsInHand.Add(chosenCard);
+            grave.ListOfCardsInGrave.Remove(chosenCard);
+
+            this._unitOfWork.PlayerHand.Update(playersHand);
+            this._unitOfWork.Grave.Update(grave);
+        }
+
+        public void TakeCardFromGraveToField(Grave grave, CardField cardField, int cardID)
+        {
+            if (grave.ListOfCardsInGrave == null)
+            {
+                throw new Exception("Grave doesn't have cards.");
+            }
+
+            var chosenCard = grave.ListOfCardsInGrave.Where(c => c.ID == cardID).FirstOrDefault();
+            if (chosenCard == null)
+            {
+                throw new Exception("Chosen card not found.");
+            }
+
+            cardField.CardOnField = chosenCard;
+            grave.ListOfCardsInGrave.Remove(chosenCard);
+
+            this._unitOfWork.CardField.Update(cardField);
+            this._unitOfWork.Grave.Update(grave);
+        }
+
+        public async Task SetFieldPosition(int playerID, bool position)
+        {
+            var listOfPlayersField = await this._unitOfWork.CardField.GetEmptyPlayerFields(playerID, "MonsterField");
+            var emptyField = listOfPlayersField.FirstOrDefault();
+
+            emptyField.CardPosition = position;
+            emptyField.CardShowen = true;
+
+            this._unitOfWork.CardField.Update(emptyField);
+            await this._unitOfWork.Complete();
+        }
 
 		public async Task StartingDrawing(int playerID)
 		{

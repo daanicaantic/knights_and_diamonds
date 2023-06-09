@@ -36,6 +36,7 @@ import { LoadinscreenComponent } from './components/loadinscreen/loadinscreen.co
 import { ProgressBarModule } from 'primeng/progressbar';
 import { AnimateModule } from 'primeng/animate';
 import { DeckCreateComponent } from './components/deck-create/deck-create.component';
+import { SplitButtonModule } from 'primeng/splitbutton';
 
 
 @NgModule({
@@ -78,7 +79,8 @@ import { DeckCreateComponent } from './components/deck-create/deck-create.compon
     MessagesModule,
     MessageModule,
     MenubarModule,
-    AnimateModule
+    AnimateModule,
+    SplitButtonModule
   ],
   providers: [AppComponent, MessageService, ConfirmationService, { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }],
   bootstrap: [AppComponent]

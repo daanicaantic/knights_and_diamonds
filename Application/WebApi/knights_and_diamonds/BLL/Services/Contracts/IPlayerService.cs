@@ -18,5 +18,9 @@ namespace BLL.Services.Contracts
 		Task StartingDrawing(int playerID);
 		Task SetGameStarted(Player player);
 		Task<List<CardOnFieldDisplay>> GetPlayersCardFields(int playerID);
-	}
+		Task TakeCardFromEnemiesHand(PlayersHand enemiesHand, int playerID, int cardID);
+		Task TakeCardFromGraveToHand(Grave grave, int playerID, int cardID);
+		void TakeCardFromGraveToField(Grave grave, CardField cardField, int cardID);
+		Task SetFieldPosition(int playerID, bool position);
+    }
 }

@@ -30,9 +30,14 @@ namespace BLL.Strategy
 		{
 			return ChooseCardsFrom.NoChoose;
 		}
-		public async Task ExecuteEffect(List<int> listOfCards,Effect effect,int playerID,int gameID,int fieldID)
+		public async Task ExecuteEffect(List<int> listOfCards, Effect effect, int playerID, int gameID, int fieldID)
 		{
 			int cardsToDraw = 0;
+			var deckCount = await this._playerService.GetNumberOfCardsInDeck(playerID);
+			if (deckCount < effect.PointsAddedLost)
+			{
+				throw new Exception("There is not enough cards in deck.");
+			}
 			while (cardsToDraw!=effect.PointsAddedLost)
 			{
 				cardsToDraw++;

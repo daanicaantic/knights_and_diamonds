@@ -28,54 +28,12 @@ export class MenubarComponent implements OnInit {
   ngOnInit(): void {
 
     console.log("ovdee user value:", this.authService.userValue)
-    console.log(this.userID)
+    
     if(this.userID!=undefined) {
       this.getUser();
     }
-    
 
-    this.authService.loginStatusChange().subscribe(userSubject => {
-
-      this.items = [
-        {
-          label: 'Home', routerLink: ['/welcome']
-        },
-        {
-          label: 'Cards', routerLink: ['/loading']
-        },
-        {
-          label: 'Rules'
-        },
-      ];
-
-      if (this.authService?.userValue?.role === "Player") {
-        this.items = [
-          {
-            label: 'Home', routerLink: ['/home']
-          },
-          {
-            label: 'Cards'
-          },
-          {
-            label: 'Rules'
-          },
-        ];
-      }
-    })
-  }
-
-  onClick() {
-    this.confirmationService.confirm({
-      message: 'Are you sure you want to log out?',
-      accept: () => {
-        this.authService.logout();
-        this.router.navigate(['/welcome']);
-      }
-    });
-  }
-
-  onLogin() {
-
+    this.authService.loginStatusChange().subscribe(userSubject => {});
   }
 
   getUser() {
@@ -88,6 +46,49 @@ export class MenubarComponent implements OnInit {
         console.log(err.error.text);
       }
     })
+  }
+
+  onSignUp() {
+    this.router.navigate(['/register']);
+  }
+
+  onLogo() {
+    this.router.navigate(['/welcome']);
+  }
+
+  onHome() {
+    if(this.user != undefined) {
+      this.router.navigate(['/home']);
+    }
+    else this.router.navigate(['/welcome']);
+  }
+
+  onRules() {
+    if(this.user != undefined) {
+      this.router.navigate(['/home']);
+    }
+    else this.router.navigate(['/welcome']);
+  }
+
+  onCards() {
+    if(this.user != undefined) {
+      this.router.navigate(['/home']);
+    }
+    else this.router.navigate(['/welcome']);
+  }
+
+  onProfile() {
+    this.router.navigate(['/profil', this.authService.userValue?.id]);
+  }
+
+  onLogout() {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to log out?',
+      accept: () => {
+        this.authService.logout();
+        this.router.navigate(['/welcome']);
+      }
+    });
   }
 
 }

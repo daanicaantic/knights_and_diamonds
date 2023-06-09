@@ -54,7 +54,6 @@ export class GameComponent implements OnInit, OnDestroy {
     { name: 'BP', key: 2, status: false },
     { name: 'EP', key: 3, status: false },
   ];
-
   cardToBeSummoned: any;
   fieldsAbleToAttack: any;
   swordRadyToAttack: any;
@@ -67,7 +66,9 @@ export class GameComponent implements OnInit, OnDestroy {
   phaseMessage: any;
   isPhaseMassageOver: any = false;
   areaOfClicking: any;
+  isEnemiesHandShown: any = false;
   subscriptions: Subscription[] = [];
+
 
   constructor(
     public inGameService: IngameService,
@@ -329,6 +330,22 @@ export class GameComponent implements OnInit, OnDestroy {
       );
     }
   }
+  onEnemiesHandClick(card:any){
+    if (this.areaOfClicking != undefined && this.isEnemiesHandShown == true) {
+      console.log(this.areaOfClicking);
+      if (this.areaOfClicking.areaOfClicking == 5) {
+        this.gameService.executeEffectInv(
+          [card.id],
+          this.areaOfClicking.fieldID,
+          this.playerID,
+          this.enemiesID,
+          Number(this.gameID)
+        );
+        this.areaOfClicking = undefined;
+        this.isEnemiesHandShown = false;
+      }
+    }
+  }
   onEnemiesCardMouseOver(field: any) {
     this.mediumCard = field.cardOnField;
     if (field.cardShowen == true) {
@@ -420,6 +437,9 @@ export class GameComponent implements OnInit, OnDestroy {
         Number(this.gameID)
       );
       this.areaOfClicking = undefined;
+    }
+    if (this.areaOfClicking.areaOfClicking == 5) {
+      this.isEnemiesHandShown = true;
     }
   }
   //nakon ulaska u bp dobijamo koja polja mogu da napadnu u ovom potezu,tj pojavlju se macevi
