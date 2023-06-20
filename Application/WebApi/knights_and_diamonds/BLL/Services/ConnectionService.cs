@@ -48,7 +48,7 @@ namespace BLL.Services
 				_onlineUsers.ConnectedUsers[userID].Add(connectionId);
 			}
 		}
-		public async Task<List<string>> GetConnectionByUser(int UserID)
+		public List<string> GetConnectionByUser(int UserID)
 		{
 			var cons = new List<string>();
 			if (_onlineUsers.ConnectedUsers.ContainsKey(UserID)) 
@@ -63,6 +63,7 @@ namespace BLL.Services
 		}
 		public async Task<List<OnlineUserDto>> GetOnlineUsers()
 		{
+			#pragma warning disable
 			OnlineUserDto onlineUserDto;
 			List<OnlineUserDto> ListOfOnlineUsers = new List<OnlineUserDto>();
 			if (this._onlineUsers.ConnectedUsers.Keys.Count == 0)

@@ -4,11 +4,11 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { CardComponent } from './components/card/card.component';
 import { DeckComponent } from './components/deck/deck.component';
-import { ButtonModule} from 'primeng/button';
-import { InputTextModule} from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CardCreateComponent } from './components/card-create/card-create.component';
-import { Ng2FittextModule } from "ng2-fittext";
+import { Ng2FittextModule } from 'ng2-fittext';
 import { FileUploadModule } from 'primeng/fileupload';
 import { DropdownModule } from 'primeng/dropdown';
 import { RatingModule } from 'primeng/rating';
@@ -37,7 +37,8 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { AnimateModule } from 'primeng/animate';
 import { DeckCreateComponent } from './components/deck-create/deck-create.component';
 import { SplitButtonModule } from 'primeng/splitbutton';
-
+import { PaginatorModule } from 'primeng/paginator';
+import { CardsComponent } from './components/cards/cards.component';
 
 @NgModule({
   declarations: [
@@ -58,10 +59,11 @@ import { SplitButtonModule } from 'primeng/splitbutton';
     TestComponent,
     LoadinscreenComponent,
     DeckCreateComponent,
-
+    CardsComponent,
   ],
   imports: [
     BrowserModule,
+    PaginatorModule,
     ProgressBarModule,
     AppRoutingModule,
     ButtonModule,
@@ -80,9 +82,14 @@ import { SplitButtonModule } from 'primeng/splitbutton';
     MessageModule,
     MenubarModule,
     AnimateModule,
-    SplitButtonModule
+    SplitButtonModule,
   ],
-  providers: [AppComponent, MessageService, ConfirmationService, { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }],
-  bootstrap: [AppComponent]
+  providers: [
+    AppComponent,
+    MessageService,
+    ConfirmationService,
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+  ],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

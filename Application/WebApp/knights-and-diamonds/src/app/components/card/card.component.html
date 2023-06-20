@@ -1,6 +1,6 @@
 <div class="background-container-{{isCardShowen}}" *ngIf="card != undefined ">
     <div class="container" *ngIf="this.isCardShowen==true">
-        <div class="img img{{card.cardType}}" >
+        <div class="img img{{card.cardType}}">
             <div class="card-level" *ngIf="card.cardType=='MonsterCard'">
                 <h1>{{card.cardLevel}}</h1>
             </div>
@@ -17,8 +17,8 @@
                 <h6>{{card.description}}</h6>
             </div>
         </div>
-        <div class="picture" >
-            <img  src="https://localhost:7250/{{card.imgPath}}" alt="Name name name" style="width: 100%; height: 100%;">
+        <div class="picture">
+            <img src="https://localhost:7250/{{card.imgPath}}" alt="Name name name" style="width: 100%; height: 100%;">
         </div>
     </div>
 </div>

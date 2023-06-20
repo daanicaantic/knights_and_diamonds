@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BLL.Services.Contracts;
 using BLL.Services;
-
+#pragma warning disable
 namespace knights_and_diamonds.Controllers
 {
 	[ApiController]
@@ -43,7 +43,7 @@ namespace knights_and_diamonds.Controllers
 		[Route("GetConnectionByID")]
 		public async Task<IActionResult> GetConnectionByID(int id)
 		{
-			var c = await this._connectionService.GetConnectionByUser(id);
+			var c =  this._connectionService.GetConnectionByUser(id);
 			return new JsonResult(c);
 
 		}

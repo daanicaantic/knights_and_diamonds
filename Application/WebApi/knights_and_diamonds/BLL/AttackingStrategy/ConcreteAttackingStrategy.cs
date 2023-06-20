@@ -12,8 +12,7 @@ namespace BLL.AttackingStrategy
 	public class ConcreteAttackingStrategy
 	{
 		private readonly KnightsAndDiamondsContext _context;
-		public	AttackingStrategyContext _strategyContext { get; set; }
-
+		public	AttackingStrategyContext? _strategyContext { get; set; }
 		public ConcreteAttackingStrategy(KnightsAndDiamondsContext context)
 		{
 			this._context = context;

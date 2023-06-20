@@ -18,13 +18,13 @@ namespace DAL.DesignPatterns.Factory
         public DrawCard(int numberOfCardsToDraw) 
         {
             this.Effect = new Effect();
-            this.SetDescription(numberOfCardsToDraw);
+            this.Description=this.SetDescription(numberOfCardsToDraw);
             this.SetEffect(numberOfCardsToDraw);
         }
 
-        public void SetDescription(int numberOfCardsToDraw)
+        public string SetDescription(int numberOfCardsToDraw)
         {
-            this.Description = "Draw " + numberOfCardsToDraw.ToString() + " card(s) from your deck.";
+            return this.Description = "Draw " + numberOfCardsToDraw.ToString() + " card(s) from your deck.";
         }
 
         public string GetDescription()

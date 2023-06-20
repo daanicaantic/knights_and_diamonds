@@ -35,6 +35,7 @@ namespace knights_and_diamonds.Controllers
 		[HttpPost]
 		public async Task<IActionResult> NewLobby(int userID, int challengedUserID)
 		{
+			#pragma warning disable
 			try
 			{
 				if (userID == challengedUserID)
@@ -55,7 +56,7 @@ namespace knights_and_diamonds.Controllers
 
 				if (user != null && challengedUser!=null)
 				{
-					var lobbyID = await this._pregameservice.NewLobby(player1, player2);
+					var lobbyID = this._pregameservice.NewLobby(player1, player2);
 					return Ok(lobbyID);
 				}
 				else 
@@ -90,7 +91,7 @@ namespace knights_and_diamonds.Controllers
 		{
 			try
 			{
-				var games = await this._pregameservice.GetGames();
+				var games =  this._pregameservice.GetGames();
 				return new JsonResult(games);
 			}
 			catch (Exception e)
@@ -159,7 +160,7 @@ namespace knights_and_diamonds.Controllers
 		{
             try
             {
-				var game = await this._pregameservice.DenyGame(lobbyID);
+				var game = this._pregameservice.DenyGame(lobbyID);
 				return Ok(game);
             }
             catch (Exception e)

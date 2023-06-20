@@ -11,5 +11,7 @@ namespace DAL.Repositories.Contracts
     {
         Task<User> GetUserByEmail(string email);
         Task<User> GetUserByUsername(string username);
-    }
+        Task<User> FindUserPerMailAndPassword(string username, string password);
+
+	}
 }

@@ -2,6 +2,7 @@
 using BLL.Services.Contracts;
 using BLL.Strategy.Context;
 using DAL.DataContext;
+using DAL.Migrations;
 using DAL.Models;
 using DAL.UnitOfWork;
 using System;
@@ -31,6 +32,7 @@ namespace BLL.Strategy
 		public ChooseCardsFrom SelectCardsFrom()
 		{
 			Console.WriteLine("Enemies hand");
+/*			var enemieID = await this._unitOfWork.Game.GetEnemiesPlayerID(gameID, playerID);*/
 			return ChooseCardsFrom.EnemiesHand;
 		}
 
@@ -62,5 +64,10 @@ namespace BLL.Strategy
 
 			await this._gameService.RemoveCardFromFieldToGrave(fieldID, gameID, playerID);
         }
+
+		public string WhenCanYouActivateTrapCard()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

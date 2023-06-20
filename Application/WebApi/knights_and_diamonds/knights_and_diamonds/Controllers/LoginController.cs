@@ -42,6 +42,7 @@ namespace knights_and_diamonds.Controllers
         }
 		[HttpGet]
 		[Route("checkLoginToken")]
+		#pragma warning disable
 		public async Task<IActionResult> CheckTokenIsValid(string token)
 		{
 			var tokenTicks = CheckLoginToken(token);
@@ -64,7 +65,6 @@ namespace knights_and_diamonds.Controllers
         {
             try
             {
-
 				var t = await this._loginService.Login(userInfo);
 				return Ok(t);
                 
@@ -80,12 +80,12 @@ namespace knights_and_diamonds.Controllers
 		{
             try
             {
-                this._connetionService.RemoveUserFromOnlineUsers(userID);
+				this._connetionService.RemoveUserFromOnlineUsers(userID);
                 return Ok();
             }
-            catch 
-            {
-                return BadRequest();
+            catch(Exception e)
+			{
+                return BadRequest(e.Message);
             }
 		}
 	
@@ -95,7 +95,7 @@ namespace knights_and_diamonds.Controllers
 		{
 			try
 			{
-				var c = await this._connetionService.GetConnectionByUser(UserID);
+				var c =  this._connetionService.GetConnectionByUser(UserID);
 
 				return new JsonResult(c);
 			}

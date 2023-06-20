@@ -21,13 +21,19 @@ namespace DAL.Repositories
 			get { return _context as KnightsAndDiamondsContext; }
 		}
 
-		public async Task<Effect> GetEffectByDescription(string description)
+		public async Task<Effect?> GetEffectByDescription(string description)
 		{
-			return await this.Context.Effects.Where(x => x.Description == description).Include(x=>x.EffectType).FirstOrDefaultAsync();
+			var effect= await this.Context.Effects?.Where(x => x.Description == description).Include(x => x.EffectType).FirstOrDefaultAsync();
+			return effect;
 		}
 		public async Task<EffectType> GetEffectType(int effectTypeID)
 		{
-			return await this.Context.EffectTypes.FindAsync(effectTypeID);
+			var effectType= await this.Context.EffectTypes.FindAsync(effectTypeID);
+			if (effectType == null)
+			{
+				throw new Exception("There is no type with this ID");
+			}
+			return effectType;
 		}
 		public async Task<Effect> GetEffect(int effectID)
 		{
@@ -41,7 +47,8 @@ namespace DAL.Repositories
 
 		public async Task<IList<EffectType>> GetEffectTypes()
 		{
-			return await this.Context.EffectTypes.ToListAsync();
+			var effectTypes= await this.Context.EffectTypes?.ToListAsync();
+			return effectTypes;
 		}
 	}
 }

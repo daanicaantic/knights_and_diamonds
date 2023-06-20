@@ -15,7 +15,7 @@ namespace BLL.Strategy
 	public class ConcreteStrategy
 	{
 		private readonly KnightsAndDiamondsContext _context;
-		public StrategyContext _strategyContext { get; set; }
+		public StrategyContext? _strategyContext { get; set; }
 
 		public ConcreteStrategy(KnightsAndDiamondsContext context)
 		{
@@ -51,6 +51,10 @@ namespace BLL.Strategy
 			else if (effectType == "takeCardFromEnemiesField")
 			{
 				_strategyContext = new StrategyContext(new TakeCardFromEnemiesFieldExecution(this._context));
+			}
+			else if (effectType == "destroyesMonsterAfterItIsSummoned")
+			{
+				_strategyContext = new StrategyContext(new DestroyesMonsterAfterItIsSummoned(this._context));
 			}
 			else
 			{

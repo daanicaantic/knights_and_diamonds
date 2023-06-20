@@ -39,7 +39,7 @@ namespace BLL.Services.Contracts
 	{
 		Task<Turn> NewTurn(Game game);
 		Task<TurnInfo> GetTurnInfo(int gameID, int playerID);
-		Task<TurnPhase> GetTurnPhase(Game game);
+		TurnPhase GetTurnPhase(Game game);
 		Task<List<int>> BattlePhase(int gameID, int playerID);
 		Task<List<MappedCard>> DrawPhase(int gameID, int playerID);
 		Task<Game> EndPhase(int gameID, int playerID, int enemiesID);

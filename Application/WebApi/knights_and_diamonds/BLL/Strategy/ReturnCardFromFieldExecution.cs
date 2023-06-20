@@ -25,6 +25,8 @@ namespace BLL.Strategy
 			_playerService = new PlayerService(this._context);
 		}
 		public ChooseCardsFrom SelectCardsFrom()
+
+
 		{
 			return ChooseCardsFrom.Field;
 		}
@@ -56,6 +58,11 @@ namespace BLL.Strategy
 				this._unitOfWork.Player.Update(playerField);
 				await this._unitOfWork.Complete();
 			}	
+		}
+
+		public string WhenCanYouActivateTrapCard()
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

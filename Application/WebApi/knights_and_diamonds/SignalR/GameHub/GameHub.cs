@@ -22,10 +22,6 @@ namespace SignalR.GameHub
 			_gameService = new RPSGameService(this._context);
 		}
 
-		public async Task GetPossibleLobbiesForUser(int userID)
-		{
-			/*var games = await this._gameService.LobbiesPerUser(userID);*/
-			/*await Clients.All.SendAsync("GetUsersFromHub", games);*/
-		}
+	
 	}
 }

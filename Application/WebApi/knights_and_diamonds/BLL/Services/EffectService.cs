@@ -18,8 +18,7 @@ namespace BLL.Services
 		private readonly KnightsAndDiamondsContext _context;
 		public UnitOfWork _unitOfWork { get; set; }
 		public IEffectFactory _descriptionFactory { get; set; }
-		public IFactory _factory { get; set; }
-		public StrategyContext strategyContext { get; set; }
+		public StrategyContext? strategyContext { get; set; }
 		public ConcreteStrategy concreteStrategy { get; set; }
 
 		public EffectService(KnightsAndDiamondsContext context)

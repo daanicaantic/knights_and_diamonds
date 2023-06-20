@@ -15,15 +15,31 @@ body{
     background-size: 200px 200px;
     /* filter: blur(1.5rem); */
 }
+.wait-container{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top:0;
+    z-index: 1;
+    background-color: rgba(128, 128, 128, 0.286);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 36px;
+    text-align: center;
+
+    color:rgb(255, 96, 96);
+    -webkit-text-stroke: 0.3vh black;
+}
 p {
     margin: 0px;
     padding: 0px;
 }
 
 .big-card {
+    aspect-ratio: 1/1.25;
     width: 100%;
-    height: 65%;
-    font-size: 26px;
+    font-size: 2vw;
     /* -webkit-text-stroke: 0.5px black; */
 }
 
@@ -45,7 +61,7 @@ p {
 
 }
 .card-in-hand:hover{
-    translate: 0px -50px;
+    translate: 0px -10%;
     z-index: 1;
 }
 
@@ -160,7 +176,7 @@ p {
     height: 40px;
     align-items: flex-end;
     z-index: 1;
-    translate: 0 -30vh;
+    translate: 0 -505%;
 }
 .players-hand {
     height: 100px;
@@ -242,12 +258,13 @@ p {
     display: flex;
     flex-direction: column;
     position: relative;
-
-
+    justify-content: center;
+    align-items: center;
 }
 
 .player-table,.enemies-table{
     height: 50%;
+    width: 100%;
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
     background-color: rgba(108, 104, 102, 0.651);
@@ -344,7 +361,7 @@ p {
     width: 70px;
     height: 110px; 
 }
-.card-summoning,.discard-card-from-hand{
+.card-summoning,.discard-card-from-hand,.do-you-want-to-activate-trap-card{
     /* animation: summon-card-show-dialog 4s timing-function delay iteration-count direction fill-mode; */
     position: absolute;
     z-index: 1;
@@ -353,6 +370,7 @@ p {
     border-radius: 5%;
     display: flex;
     /* background-color: brown; */
+    text-align: center;
 }
 .card-summoning{
     animation: summon-card-show-dialog 1.5s linear forwards;
@@ -372,7 +390,30 @@ p {
     align-items: center;
     text-align: center;
 }
+.do-you-want-to-activate-trap-card{
+    width: 300px;
+    height: 200px;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    padding: 10px;
+}
+.cards-in-grave{
+    position: absolute;
+    z-index: 1;
+    border: 5px solid #17120c;
+    text-align: center;
+    background-image: url("https://localhost:7250/Resources/Images/wood.jpg");
+    background-size: contain;
+    background-position: center;
+    background-repeat: repeat;
+    align-items: center;
+    display: none;
+    justify-content: space-evenly;
+    box-shadow:0px 0px 40px black;
 
+}
 .card-summoning-position-container{
     width: 100%;
     height: 50%;
@@ -383,6 +424,18 @@ p {
     flex-direction: row;
     border-top: 2px solid #131313;
     border-bottom: 2px solid #131313;
+}
+.click{
+    background-color: #17120c;
+    text-align: center;
+    color: white;
+    padding:7px;
+    cursor:pointer;
+    margin:5px;
+    border:1px solid white;
+}
+.click:hover{
+    background-color:#444444 ;
 }
 .exit-card-summoning-container{
     width: 8%;
@@ -421,6 +474,9 @@ p {
     top:42%;
     text-align: center;
 }
+.card-description-container{
+    display: none;
+}
 .phase-message-false{
     
     color:rgb(255, 96, 96);
@@ -433,7 +489,30 @@ p {
     color: rgb(0 161 255);
     -webkit-text-stroke: 0.3vh rgb(0 10 101);
 }
+.additional-text {
+    /* Styles for the additional text */
+    position: absolute;
 
+    display: none;
+    /* Add other styles as needed */
+  }
+  
+  .additional-text.active {
+    position: fixed;
+    top: 0;
+    left: 0;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    width: fit-content; /* Set the desired width of the cursor follower div */
+    padding: 5px; /* Set the desired height of the cursor follower div */
+    background-color: rgb(68,145,74);
+    text-align: center;
+    color:#131313;
+    border: 2px solid #131313;
+    pointer-events: none;
+    display: block;
+    z-index: 9999;
+  }
 @keyframes summon-card-show-dialog {
     0%   {
       opacity: 0%;
@@ -450,6 +529,7 @@ p {
     }
   } */
   @media screen and (max-width: 1000px) {
+    
     .battle-window{
         min-width:0%;
         width: 100%;
@@ -462,10 +542,13 @@ p {
         height: 85px;
         font-size: 5px;
     }
-     .big-card{
+     /* .big-card{
         height: 49%;
+    } */
+    .enemies-hand{
+        translate: 0 -300%;
     }
-    .medium-card{
+    .medium-card,.card-in-hand{
         font-size: 9px;
         width: 20%;
         height: 160px;
@@ -505,10 +588,10 @@ p {
         padding-top: 5px;
         padding-bottom: 5px;
     }
-    .big-card{
+    /* .big-card{
         height: 50%;
         font-size: 16px;
-    }
+    } */
     .attack-deffence-points{
         font-size: 11px;
         text-align: center;
@@ -516,11 +599,13 @@ p {
     .phases-window{
         width: fit-content;
     }
-    .medium-card{
+    .enemies-hand{
+        translate: 0 -210%;
+    }
+    .medium-card,.card-in-hand{
         width: 70px;
         height: 125px;
-        font-size: 6px;
-        
+        font-size: 6px;  
     }
     .card-to-be-summoned{
         border: none;
@@ -528,5 +613,33 @@ p {
     .card-summoning{
         left: 10%;
         right: 10%;
+    }
+  }
+  @media only screen and (max-width: 450px) {
+    .card-window{
+        display: none;
+    }
+    .small-card{
+        width: 22.5px;
+        height: 40px;
+        font-size: 1px;
+    }
+    .background{
+        height: auto;
+    }
+    .phases-window{
+        height: auto;
+    }
+    .card-description-container{
+        display: flex;
+        font-size: 30px;
+        color: white;
+        justify-content:center ;
+        align-items: center;
+        text-align: center;
+        background-color: black;
+        margin: 10px;
+        padding: 10px;
+        border: 2px solid white;
     }
   }

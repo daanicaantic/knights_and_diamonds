@@ -109,7 +109,7 @@ body {
 
 body {
   height: 100vh;
-  background-image: url("https://localhost:7250/Resources/Images/home-background.jpg");
+  /* background-image: url("https://localhost:7250/Resources/Images/background1113.jpg"); */
   background-size: 100% 100%;
   width: 100%;
   display: flex;
@@ -130,14 +130,14 @@ body {
 }
 
 .header {
-  color: #b48664;
+  color: #9588a5;;
   margin: 5%;
   display: flex;
   justify-content: center;
 }
 
 .header-text{
-  color: #b48664;
+  color: #9588a5;;
   margin: 5%;
   margin-top: 60%;
   display: flex;

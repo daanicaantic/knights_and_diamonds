@@ -1,8 +1,25 @@
-body{
+/* body{
+    background-image: url("https://localhost:7250/Resources/Images/background1113.jpg");
+    background-size: 100% 100%;
+    background-attachment: fixed;
+    
+  }
+  .container2 {
     height: 100vh;
-    background-image: url("https://localhost:7250/Resources/Images/welcome-background.jpg");
+    width: 100%;
+    background-color: rebeccapurple;
+    opacity: 0; 
+    transition: opacity 0.5s ease; 
+  }
+  
+  .container2.visible {
+    opacity: 1;
+  }
+  .container{
+    height: 100vh;
+
     background-size: 100% 100%;
     width: 100%;
     display: flex; 
     background-position:top;
-  }
+  } */

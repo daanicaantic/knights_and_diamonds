@@ -17,7 +17,7 @@ namespace DAL.DesignPatterns.Factory
 		public LPChange(string effectType, int pointsAddedLost)
         {
 			this.Effect = new Effect();
-            this.SetDescription(effectType, pointsAddedLost);
+            this.Description=this.SetDescription(effectType, pointsAddedLost);
 			this.SetEffect(pointsAddedLost);
         }
 

@@ -31,7 +31,7 @@ namespace DAL.Repositories
 		}
 		public async Task<Grave> GetGraveByGameID(int gameID)
 		{
-			var grave = await this.Context.Games?.Include(x => x.Grave).ThenInclude(x=>x.ListOfCardsInGrave).ThenInclude(x=>x.Card).Where(x => x.ID == gameID).Select(x=>x.Grave).FirstOrDefaultAsync();
+			var grave = await this.Context.Games?.Include(x => x.Grave)?.ThenInclude(x => x.ListOfCardsInGrave).ThenInclude(x => x.Card).Where(x => x.ID == gameID).Select(x => x.Grave).FirstOrDefaultAsync();
 			if (grave == null)
 			{
 				throw new Exception("There is no grave with this gameid");

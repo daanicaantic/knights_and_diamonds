@@ -18,6 +18,7 @@ namespace DAL.DesignPatterns.Factory
 				case "lpchange": return new LPChange(effectType, pointsAddedLost);
 				case "return": return new ReturnCard(effectType, cardsAffected);
 				case "take": return new TakeCard(effectType, cardsAffected);
+				case "destroyes": return new DostroyesCard(effectType, cardsAffected);
 				default: return new NoEffect();
 			}
 		}

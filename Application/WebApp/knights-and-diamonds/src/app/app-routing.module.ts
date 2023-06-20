@@ -14,6 +14,7 @@ import { Error404Component } from './components/error404/error404.component';
 import { WelcomePageComponent } from './components/welcome-page/welcome-page.component';
 import { LoadinscreenComponent } from './components/loadinscreen/loadinscreen.component';
 import { DeckCreateComponent } from './components/deck-create/deck-create.component';
+import { CardsComponent } from './components/cards/cards.component';
 
 const routes: Routes = [
   {
@@ -31,18 +32,27 @@ const routes: Routes = [
   {
     path: 'card-create',
     component: CardCreateComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['Admin'] },
   },
   {
     path: 'home',
     component: HomeComponent,
     data: { roles: ['Player'] },
-
   },
   {
     path: 'profil/:id',
     component: UserProfileComponent,
     canActivate: [AuthGuard],
-    data: { roles: ['Player'] },
+    data: { roles: ['Player', 'Admin'] },
+  },
+  {
+    path: 'cards',
+    component: CardsComponent,
+  },
+  {
+    path: 'deck-create/:deckID',
+    component: CardsComponent,
   },
   {
     path: 'rpsGame/:rpsGameID',
@@ -53,12 +63,8 @@ const routes: Routes = [
     component: GameComponent,
   },
   {
-    path:'loading',
-    component : LoadinscreenComponent,
-  },
-  {
-    path:'deck-create/:deckID',
-    component : DeckCreateComponent,
+    path: 'loading',
+    component: LoadinscreenComponent,
   },
   {
     path: '',

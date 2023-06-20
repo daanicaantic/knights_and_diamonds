@@ -31,11 +31,13 @@ namespace BLL.Strategy
 		}
 
 		public ChooseCardsFrom SelectCardsFrom()
+
 		{
 			return ChooseCardsFrom.NoChoose;
 		}
 		public async Task ExecuteEffect(List<int> listOfCards, Effect effect, int playerID, int gameID,int fieldID)
 		{
+			#pragma warning disable
 			var player = await this._unitOfWork.Player.GetOne(playerID);
 			if (player == null)
 			{
@@ -63,6 +65,11 @@ namespace BLL.Strategy
 			}
 			await this._gameService.RemoveCardFromFieldToGrave(fieldID, gameID, playerID);
 
+		}
+
+		public string WhenCanYouActivateTrapCard()
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

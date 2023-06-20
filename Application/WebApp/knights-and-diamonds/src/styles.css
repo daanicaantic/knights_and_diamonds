@@ -4,3 +4,6 @@
     margin: 0px;
     padding: 0px;
 }
+.w-full{
+    width: 100% !important;
+}

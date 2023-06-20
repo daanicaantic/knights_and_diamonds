@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+#pragma warning disable
 namespace BLL.AttackingStrategy
 {
 	public class AttackPositionStrategy : IAttackingStrategy

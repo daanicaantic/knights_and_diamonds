@@ -16,7 +16,7 @@ namespace DAL.DesignPatterns.Factory
 		public ReturnCard(string effectType, int numOFCardAffected)
 		{
 			this.Effect = new Effect();
-			this.SetDescription(effectType, numOFCardAffected);
+			this.Description=this.SetDescription(effectType, numOFCardAffected);
 			this.SetEffect(numOFCardAffected);
 		}
 	

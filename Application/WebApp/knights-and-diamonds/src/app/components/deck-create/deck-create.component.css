@@ -2,9 +2,10 @@ h2, h3 {
     font-family: 'Roboto', sans-serif;
 }
 .container{
+    padding-top: 60px;
     width: 100%;
     min-width: 400px;
-    height: calc(100vh - 66px);
+    
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -17,6 +18,7 @@ h2, h3 {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    position: fixed;
 }
 .big-card{
     width: 100%;
@@ -71,6 +73,7 @@ h2, h3 {
     margin-bottom: 1%;
     border-radius: 5%;
     display: flex;
+    margin-left: 23%;
 }
 .cards-in-deck{
     width: 100%;
@@ -88,12 +91,16 @@ h2, h3 {
     width: 22%;
     padding: 1%;
 }
+.search-container,.cards-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .search-container{
     width: 100%;
-    height: 30%;
+    height: fit-content;
     background-color: rgb(53, 54, 109);
-    border-radius: 5%;
-    padding: 3%;
+    padding: 5%;
     margin: 1%;
 }
 .small-container {
@@ -104,32 +111,38 @@ h2, h3 {
     align-content: center;
 }
 .form-field, .data-field{
-    width: 90%;
+    width: 100%;
     margin: 1%;
 }
 .cards-container{
     width: 100%;
-    height: 70%;
+    min-height: 70%;
     margin: 1%;
-    padding-left: 3%;
     padding-top: 2%;
-    border-radius: 5%;
     background-color: rgb(119, 151, 212);
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-content: flex-start;
-    align-items: flex-start;
+    border:2px solid  rgb(32, 54, 95)  ;
+    flex-direction: column;
     flex-wrap: wrap;
     column-gap: 5%;
+    justify-content: space-between;
+}
+.p-paginator{
+    background-color: red;
+    border: 2px solid;
 }
 .mini-card{
     width: 85px;
     height: 114px;
     font-size: 8px;
 }
+.pag{
+    border: 2px solid;
+}
 .medium-card{
     width: 95px;
     height: 130px;
     font-size: 7px;
+}
+.form{
+    width: 90%;
 }

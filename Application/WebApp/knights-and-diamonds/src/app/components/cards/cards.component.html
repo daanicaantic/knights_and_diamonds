@@ -1,0 +1,109 @@
+<div class="main-container">
+    <div class="left-container">
+        <div class="big-card" style="position: relative;">
+            <!-- *ngFor="let card of cards" -->
+            <div class="big-card-text" style="position: absolute;">
+                <h2>Card display</h2>
+            </div>
+            <app-card [card]="bigCard"></app-card>
+
+        </div>
+        <div class="deck-stats">
+            <div class="deck-data-row">
+                <div class="deck-data number-of-spell-cards">
+                    <h3>S - 40</h3>
+                </div>
+                <div class="deck-data number-of-trap-cards">
+                    <h3>T - 1</h3>
+                </div>
+                <div class="deck-data number-of-monster-cards">
+                    <h3>M - 12</h3>
+                </div>
+            </div>
+            <div class="deck-data-row">
+                <div class="deck-data exit-deck"><i class="pi pi-arrow-circle-left" style="font-size: 1.5rem;"></i>
+                </div>
+                <div class="deck-data total-number-of-cards">
+                    <h2>50</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="right-container">
+        <div class="list-of-cards-deck">
+            <div class="cards-in-deck">
+                <div class="mini-card" *ngFor="let card of middleListOfCards">
+                    <app-card [card]="card" (mouseover)="bigCard=card" (click)="onMidleCardsClick(card)">
+                    </app-card>
+                </div>
+            </div>
+            <ng-container *ngIf="this.deckID==undefined">
+                <p-paginator #paginator (onPageChange)="onPageChanged($event)"
+                    [style]="{'background-color': 'transparent'}" styleClass="pag" [first]="0" [rows]="pageSize"
+                    [showPageLinks]="false" [totalRecords]="totalItems"></p-paginator>
+            </ng-container>
+        </div>
+        <div class="search-cards-contaier">
+            <div class="form" [formGroup]="form">
+                <div class="form-field">
+                    <input class="data-field" (ngModelChange)="onTextChange($event)" formControlName="cardName"
+                        placeholder="Card name" type="text" pInputText />
+                </div>
+                <div class="form-field">
+                    <p-dropdown class="custom-dropdown" styleClass="w-full" formControlName="cardTypeID"
+                        [options]="cardTypes" optionValue="type" optionLabel="type"
+                        (onChange)="onCardTypeChange()"></p-dropdown>
+                    <div class="form-field">
+                        <p-dropdown class="custom-dropdown" styleClass="w-full" formControlName="cardSorting"
+                            [options]="sortType" optionValue="key" optionLabel="name"
+                            (onChange)="onCardSortChange()"></p-dropdown>
+                    </div>
+                </div>
+            </div>
+            <ng-container *ngIf="this.deckID!=undefined">
+                <div class="list-of-cards">
+                    <ng-container *ngIf="this.rightListOFCards!=undefined">
+                        <div class="cards-container">
+                            <div class="small-card" *ngFor="let card of rightListOFCards">
+                                <app-card [card]="card" (mouseover)="bigCard=card" (click)="addCardToDeck(card.id)">
+                                </app-card>
+                            </div>
+
+                        </div>
+                        <p-paginator #paginator (onPageChange)="onPageChanged($event)"
+                            [style]="{'background-color': 'transparent'}" styleClass="pag" [first]="setPage"
+                            [rows]="pageSize" [showPageLinks]="false" [totalRecords]="totalItems"></p-paginator>
+                    </ng-container>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="this.user.role=='Admin' && this.deckID==undefined">
+                <div class="card-form-container">
+                    <div class="form" [formGroup]="changeCardForm">
+                        <div class="form-field">
+                            <input class="data-field" formControlName="cardName" [readonly]="readonly"
+                                placeholder="Card name" type="text" pInputText />
+                        </div>
+                        <div class="form-field">
+                            <input class="data-field" formControlName="cardLevel" [readonly]="readonlySpell"
+                                placeholder="Card level" type="text" pInputText />
+                        </div>
+                        <div class="form-field">
+                            <input class="data-field" formControlName="attackPoints" [readonly]="readonlySpell"
+                                placeholder="Attk" type="number" pInputText />
+                        </div>
+                        <div class="form-field">
+                            <input class="data-field" formControlName="defencePoints" [readonly]="readonlySpell"
+                                placeholder="Deff" type="number" pInputText />
+                        </div>
+                        <div class="form-field">
+                            <label class="input-file">
+                                <app-upload-file (onUploadFinished)="uploadFinished($event)"></app-upload-file>
+                            </label>
+                        </div>
+                    </div>
+                    <div style="background-color: red; width: 20px;height: 20px;" (click)="updateCard()"></div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>

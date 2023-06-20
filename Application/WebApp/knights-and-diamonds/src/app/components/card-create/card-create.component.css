@@ -4,7 +4,8 @@
 
 .card-create-container {
     width: 100%;
-    height: calc(100vh - 66px);
+    height: 100%;
+    padding-top:60px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -23,6 +24,8 @@
     border-radius: 6px;
     padding: 12px;
     flex-wrap: wrap;
+    backdrop-filter: blur(10px); /* Adjust the blur amount as needed */
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 .card-view {
@@ -40,8 +43,9 @@
 .small-container {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-evenly;
     margin-bottom: 1rem;
+    color: white;
 }
 
 .form-field {

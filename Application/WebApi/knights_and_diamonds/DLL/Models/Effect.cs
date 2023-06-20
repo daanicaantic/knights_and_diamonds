@@ -17,7 +17,7 @@ namespace DAL.Models
 		public int? NumOfCardsAffected { get; set; }
 		public int? PointsAddedLost { get; set; }
 		[JsonIgnore]
-		public List<Card> Cards { get; set; }
+		public List<Card>? Cards { get; set; }
 
 		public Effect()
 		{

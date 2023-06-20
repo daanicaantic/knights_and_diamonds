@@ -11,6 +11,10 @@ namespace DAL.Models
 	{
 		[Key]
 		public int ID { get; set; }
-		public List<CardInDeck>? ListOfCardsInGrave { get; set; }
+		public List<CardInDeck> ListOfCardsInGrave { get; set; }
+		public Grave()
+		{
+			this.ListOfCardsInGrave = new List<CardInDeck>();
+		}
 	}
 }

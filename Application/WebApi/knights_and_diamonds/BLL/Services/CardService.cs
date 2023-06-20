@@ -20,21 +20,21 @@ namespace BLL.Services
 		private readonly KnightsAndDiamondsContext _context;
 		public UnitOfWork _unitOfWork { get; set; }
 		public IEffectFactory _effectFactory { get; set; }
-		public IFactory _factory { get; set; }
+		public IFactory? _factory { get; set; }
 		public IEffectService _effectService { get; set; }
-
-
 		public CardService(KnightsAndDiamondsContext context)
 		{
 			this._context = context;
 			this._unitOfWork = new UnitOfWork(_context);
 			this._effectService = new EffectService(_context);
 			this._effectFactory = new ConcreteEffectFactory();
+/*			this._deckService = new DeckService(_context);*/
 			
 		}
 
 		public async Task AddCard(CardDTO card)
 		{
+			#pragma warning disable
 			/*	var doesCardExists = await this.unitOfWork.Card.GetCardByName(card.CardName);
 			if (doesCardExists != null)
 			{
@@ -71,6 +71,29 @@ namespace BLL.Services
 			await this._unitOfWork.Complete();
 		}
 
+		public async Task UpdateCard(UpdateCardDTO card)
+		{
+			var ca = await this._unitOfWork.Card.GetCard(card.ID);
+			if (ca.CardType.Type == "MonsterCard")
+			{
+				var c = await this._unitOfWork.Card.GetMonsterCard(card.ID);
+				c.CardName = card.CardName;
+				c.ImgPath = card.ImgPath;
+				c.AttackPoints = card.AttackPoints;
+				c.DefencePoints = card.DefencePoints;
+				c.NumberOfStars = card.CardLevel;
+				this._unitOfWork.Card.UpdateMonsterCard(c);
+			}
+			else
+			{
+				var c = await this._unitOfWork.Card.GetCard(card.ID);
+				c.CardName = card.CardName;
+				c.ImgPath = card.ImgPath;
+				this._unitOfWork.Card.Update(c);
+			}
+			await this._unitOfWork.Complete();
+		}
+
 		public async Task<Card> GetCard(int id)
 		{
 			try
@@ -83,29 +106,18 @@ namespace BLL.Services
 			}
 		}
 
-		public async Task RemoveCard(Card card)
+		public async Task RemoveCard(int cardID)
 		{
-			try
+			var card = await this._unitOfWork.Card.GetCardAndCardsInDeck(cardID);
+			card.Effect = null;
+			card.CardType = null;
+			foreach (var cardInDeck in card.CardInDecks)
 			{
-				this._unitOfWork.Card.Delete(card);
-				await this._unitOfWork.Complete();
+				var cid = await this._unitOfWork.CardInDeck.RemoveCardFromDeck(cardInDeck.ID, cardInDeck.DeckID);
+				this._unitOfWork.CardInDeck.Delete(cid);
 			}
-			catch
-			{
-				throw;
-			}
-		}
-		public async Task UpdateCard(Card card)
-		{
-			try
-			{
-				this._unitOfWork.Card.Update(card);
-				await this._unitOfWork.Complete();
-			}
-			catch
-			{
-				throw;
-			}
+			this._unitOfWork.Card.Update(card);
+			await this._unitOfWork.Complete();
 		}
 
 		public IQueryable<Card> FindCardByName(string name)
@@ -183,30 +195,58 @@ namespace BLL.Services
 			}
 			return mappedCards;
         }
+		public async Task<object> GetFillteredAndOrderedCards(string typleFilter, string sortOrder, string nameFilter, int pageNumber, int pageSize)
+		{
+			var cards = new List<MappedCard>();
 
+			var listOfCards = await this._unitOfWork.Card.FilterAndOrderCards(typleFilter, sortOrder, nameFilter,pageNumber,pageSize);
+			foreach (var card in listOfCards.Cards)
+			{
+				if (card.CardType.Type == "MonsterCard")
+				{
+					var monsterCard = await this._unitOfWork.Card.GetMonsterCard(card.ID);
+					var c = new MappedCard(monsterCard.ID, monsterCard.CardName, monsterCard.CardType.Type, monsterCard.Effect.NumOfCardsAffected, monsterCard.Effect.PointsAddedLost, monsterCard.EffectID, monsterCard.NumberOfStars, monsterCard.AttackPoints, monsterCard.DefencePoints, monsterCard.ImgPath, monsterCard.Effect.Description);
+					cards.Add(c);
+				}
+				else
+				{
+					var c = new MappedCard(card.ID, card.CardName, card.CardType.Type, card.Effect.NumOfCardsAffected, card.Effect.PointsAddedLost, card.EffectID, card.ImgPath, card.Effect.Description);
+					cards.Add(c);
+				}
+			}
+			var result = new
+			{
+				cards = cards,
+				pageSize = listOfCards.PageSize,
+				pageNumber = listOfCards.PageNumber,
+				totalPages = listOfCards.TotalPages,
+				totalItems = listOfCards.TotalItems
+			};
+			return result;
+		}
 /*		public async Task<CardDisplayDTO> MapMonsterCard(int cardID)
 		{
             var mappedCard = new CardDisplayDTO();
             var card = await this.unitOfWork.Card.GetMonsterCard(cardID);
         }*/
 
-/*		public async Task<List<CardDisplayDTO>> GetFilteredCards(int cardTypeID, string name)
-		{
-            *//*Expression<Func<T, bool>> predicate;*//*
-            var cardType = await unitOfWork.Card.GetCardType(cardTypeID);
+		/*		public async Task<List<CardDisplayDTO>> GetFilteredCards(int cardTypeID, string name)
+				{
+					*//*Expression<Func<T, bool>> predicate;*//*
+					var cardType = await unitOfWork.Card.GetCardType(cardTypeID);
 
-			
-			//var cards = new List<CardDisplayDTO>();
-			if(cardType == null && name == " ")
-			{
-				return await this.GetAllCards();
-			}
-			else if(cardType == null) 
-			{
-                Expression predicate = x => x.CardName == name;
-				var cards = await unitOfWork.Card.Find(predicate);
-			}
-			
-        }*/
-    }
+
+					//var cards = new List<CardDisplayDTO>();
+					if(cardType == null && name == " ")
+					{
+						return await this.GetAllCards();
+					}
+					else if(cardType == null) 
+					{
+						Expression predicate = x => x.CardName == name;
+						var cards = await unitOfWork.Card.Find(predicate);
+					}
+
+				}*/
+	}
 }

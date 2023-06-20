@@ -42,5 +42,6 @@ namespace BLL.Strategy.Context
 		}
 		public ChooseCardsFrom SelectCardsFrom();
 		Task ExecuteEffect(List<int> listOfIDs, Effect effect, int playerID,int gameID,int fieldID);
+		string WhenCanYouActivateTrapCard();
 	}
 }

@@ -22,7 +22,7 @@ namespace DAL.Repositories
         }
 		public async Task<Game> GetGameWithPlayers(int gameID)
 		{
-			var game = await this.Context.Games
+			var game = await this.Context.Games?
 				.Include(x => x.Players)
 				.Where(x => x.ID == gameID)
 				.FirstOrDefaultAsync();

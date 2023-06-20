@@ -3,7 +3,7 @@ using BLL.Services.Contracts;
 using DAL.DataContext;
 using DAL.DesignPatterns;
 using DAL.DTOs;
-
+using DAL.Migrations;
 using DAL.Models;
 using Microsoft.AspNetCore.Connections;
 using Microsoft.AspNetCore.Http;
@@ -20,6 +20,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static BLL.Services.Contracts.IGameService;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+#pragma warning disable
 
 namespace SignalR.HubConfig
 {
@@ -104,7 +105,7 @@ namespace SignalR.HubConfig
 			var player1 = new OnlineUserDto(user1.ID, user1.Name, user1.SurName, user1.UserName);
 			var player2 = new OnlineUserDto(user2.ID, user2.Name, user2.SurName, user2.UserName);
 
-			await this._rpsGameService.NewLobby(player1, player2);
+			this._rpsGameService.NewLobby(player1, player2);
 
 			await Clients.All.SendAsync("AddUsersToLobby");
 		}
@@ -113,7 +114,7 @@ namespace SignalR.HubConfig
 		{
 			var lobbiesYouDelivered = this._rpsGameService.LobbiesPerUser(userID);
 			var lobbiesYouCreated = this._rpsGameService.LobbiesYouCreated(userID);
-			var connections = await this._connectionService.GetConnectionByUser(userID);
+			var connections =  this._connectionService.GetConnectionByUser(userID);
 			foreach (var con in connections)
 			{
 				await Clients.Client(con).SendAsync("GetGamesRequests", lobbiesYouDelivered, lobbiesYouCreated);
@@ -125,7 +126,7 @@ namespace SignalR.HubConfig
 			var userIDs = await this._rpsGameService.RedirectToGame(rpsGameID);
 			foreach (var userID in userIDs)
 			{
-				var connections = await this._connectionService.GetConnectionByUser(userID);
+				var connections =  this._connectionService.GetConnectionByUser(userID);
 				foreach (var con in connections)
 				{
 					await Clients.Client(con).SendAsync("RPSGameStarted", rpsGameID);
@@ -139,7 +140,7 @@ namespace SignalR.HubConfig
 			var userIDs = await this._rpsGameService.RedirectToGame(rpsGameID);
 			foreach (var userID in userIDs)
 			{
-				var connections = await this._connectionService.GetConnectionByUser(userID);
+				var connections =  this._connectionService.GetConnectionByUser(userID);
 				foreach (var con in connections)
 				{
 					await Clients.Client(con).SendAsync("GetRPSWinner", RPSwinner);
@@ -314,14 +315,55 @@ namespace SignalR.HubConfig
 		public async Task NormalSummon(int gameID, int playerID, int cardID, bool position)
 		{
 			var connections = await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
-			var field=await this._gameService.NormalSummon(gameID,playerID,cardID,position);
+			var fieldID=await this._gameService.NormalSummon(gameID,playerID,cardID,position);
+			var field = await this._gameService.GetPlayersField(playerID);
+			var listOfFieldsThatCanActivateTrapCard = await this._gameService.CanEnemieActivateTrapCard("AfterMonsterIsSummoned", playerID, gameID);
 			if (field == null)
 			{
 				throw new Exception("This player has no field");
 			}
 			await this.GetField(connections, field);
+			await this.LastSummonedMonster(connections, fieldID);
+			if (listOfFieldsThatCanActivateTrapCard.Count > 0)
+			{
+				await this.GetFieldsThatCanActivateTrapCard(connections, listOfFieldsThatCanActivateTrapCard);
+			}
 		}
+		public async Task LastSummonedMonster(ConnectionsPerUser connections, int fieldID)
+		{
+			foreach (var con in connections.MyConnections)
+			{
+				await Clients.Client(con).SendAsync("GetLastSummonedMonster", fieldID);
+			}
+			foreach (var con in connections.EnemiesConnections)
+			{
+				await Clients.Client(con).SendAsync("GetLastSummonedEnemiesMonster", fieldID);
+			}
 
+		}
+		public async Task GetFieldsThatCanActivateTrapCard(ConnectionsPerUser connections, List<int> fieldsThatCanActivateTrapCard)
+		{
+			foreach (var con in connections.MyConnections)
+			{
+				await Clients.Client(con).SendAsync("EnemiseFieldsThatCanActivateTrapCard", fieldsThatCanActivateTrapCard);
+			}
+			foreach (var con in connections.EnemiesConnections)
+			{
+				await Clients.Client(con).SendAsync("EnemiseFieldsThatCanActivateTrapCard", fieldsThatCanActivateTrapCard);
+			}
+		}
+		public async Task DidTrapEffectExecuted(int gameID,int playerID)
+		{
+			var connections = await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
+			foreach (var con in connections.MyConnections)
+			{
+				await Clients.Client(con).SendAsync("DidTrapEffectExecuted");
+			}
+			foreach (var con in connections.EnemiesConnections)
+			{
+				await Clients.Client(con).SendAsync("DidTrapEffectExecuted");
+			}
+		}
 		public async Task TributeSummon(List<int> fieldsIDs, int gameID, int playerID, int cardInDeckID, int numberOfStars, bool position)
 		{
 			var connections = await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
@@ -335,10 +377,18 @@ namespace SignalR.HubConfig
 			await this.GetGrave(connections, grave);
 		}
 
-		public async Task PlaySpellCard(int gameID, int playerID, int cardInDeckID, int cardEffectID)
+		public async Task PlaySpellTrapCard(int gameID, int playerID, int cardInDeckID, int cardEffectID,string isSpellOrTrap)
 		{
+			var areaOfClicking = new AffterPlaySpellTrapCardData();
 			var connections = await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
-			var areaOfClicking = await this._gameService.PlaySpellCard(gameID, playerID, cardInDeckID, cardEffectID);
+			if (isSpellOrTrap == "SpellCard")
+			{
+				areaOfClicking = await this._gameService.PlaySpellCard(gameID, playerID, cardInDeckID, cardEffectID);
+			}
+			else if(isSpellOrTrap=="TrapCard")
+			{
+				await this._gameService.PlayTrapCard(gameID, playerID, cardInDeckID, cardEffectID);
+			}
 
 			var field = await this._gameService.GetPlayersField(playerID);
 			if (field == null)
@@ -346,7 +396,18 @@ namespace SignalR.HubConfig
 				throw new Exception("This player has no field");
 			}
 			await this.GetField(connections, field);
-			await this.GetDataAffterPlayCardWithEffect(connections,areaOfClicking);
+			if (isSpellOrTrap == "SpellCard")
+			{
+				await this.GetDataAffterPlayCardWithEffect(connections, areaOfClicking);
+			}
+		}
+		public async Task ActiveTrapCard(int gameID, int playerID,int fieldID)
+		{
+			var connections = await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
+			var afterData = await this._gameService.ActiveTrapCard(gameID, playerID, fieldID);
+			var field = await this._gameService.GetPlayersField(playerID);
+			await this.GetField(connections, field);
+			await this.GetDataAffterPlayCardWithEffect(connections, afterData);
 		}
 		public async Task ExecuteEffect(List<int> listOfCards, int cardFieldID, int playerID,int enemiesID,int gameID)
 		{
@@ -374,7 +435,6 @@ namespace SignalR.HubConfig
 			}
 			catch(Exception ex)
 			{
-				await this._gameService.RemoveCardFromFieldToGrave(cardFieldID, gameID, playerID);
 				throw new Exception(ex.Message);
 			}
 			
@@ -422,7 +482,6 @@ namespace SignalR.HubConfig
 			try
 			{
 				var connections = await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
-
 				await this._gameService.RemoveCardFromHandToGrave(playerID, cardID, gameID);
 				var hand = await this._playerService.GetPlayersHand(playerID);
 				var grave = await this._gameService.GetGamesGrave(gameID);
@@ -433,7 +492,23 @@ namespace SignalR.HubConfig
 			{
 				throw new Exception(ex.Message);
 			}
-
+		}
+		public async Task RemoveCardFromFieldToGrave(int fieldID,int playerID,int gameID)
+		{
+			try
+			{
+				var connections = await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
+				await this._gameService.RemoveCardFromFieldToGrave(fieldID, gameID, playerID);
+				var field = await this._gameService.GetPlayersField(playerID);
+				var grave = await this._gameService.GetGamesGrave(gameID);
+				await Task.Delay(1000);
+				await this.GetField(connections, field);
+				await this.GetGrave(connections, grave);
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
 		}
 	}
 }

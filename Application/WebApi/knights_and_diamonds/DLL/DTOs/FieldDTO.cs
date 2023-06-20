@@ -21,16 +21,16 @@ namespace DAL.DTOs
         public int LifePoints { get; set; }
 		public bool GameStarted { get; set; }
         public int DeckCount { get; set; }
-		public List<MappedCard> Hand { get; set; }
-		public List<CardOnFieldDisplay> CardFields { get; set; }
+		public List<MappedCard>? Hand { get; set; }
+		public List<CardOnFieldDisplay>? CardFields { get; set; }
 
 	}
 	public class EnemiesFieldDTO
 	{
 		public int LifePoints { get; set; }
 		public int DeckCount { get; set; }
-		public List<MappedCard> Hand { get; set; }
-		public List<CardOnFieldDisplay> CardFields { get; set; }
+		public List<MappedCard>? Hand { get; set; }
+		public List<CardOnFieldDisplay>? CardFields { get; set; }
 
 	}
 }

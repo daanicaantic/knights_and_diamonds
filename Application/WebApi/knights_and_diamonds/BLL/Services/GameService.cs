@@ -61,7 +61,7 @@ namespace BLL.Services
             }
             foreach (var player in game.Players)
             {
-				var connections = await this._connectionService.GetConnectionByUser(player.UserID);
+				var connections = this._connectionService.GetConnectionByUser(player.UserID);
                 if (connections == null)
                 {
 					throw new Exception("There is no connections for this player");
@@ -83,7 +83,7 @@ namespace BLL.Services
             }
 			foreach (var player in game.Players)
 			{
-                    var connections = await this._connectionService.GetConnectionByUser(player.UserID);
+                    var connections =  this._connectionService.GetConnectionByUser(player.UserID);
                     if (player.ID == playerID)
                     {
                         connectionsPerUser.MyConnections = connections;
@@ -153,6 +153,7 @@ namespace BLL.Services
         }
         public async Task<FieldDTO> GetPlayersField(int playerID)
         {
+			#pragma warning disable
 			var field = new FieldDTO();
             var player = await this._unitOfWork.Player.GetPlayersField(playerID);
             if (player == null)
@@ -215,7 +216,7 @@ namespace BLL.Services
 				throw new Exception("Card with this ID is not in your hand");
 			}
 		}
-		public async Task<FieldDTO> NormalSummon(int gameID,int playerID,int cardInDeckID,bool position)
+		public async Task<int> NormalSummon(int gameID,int playerID,int cardInDeckID,bool position)
         {
             var game = await this._unitOfWork.Game.GetGameWithTurns(gameID);
 			var turn = game.Turns?.Last();
@@ -245,13 +246,13 @@ namespace BLL.Services
             {
 				emptyField.CardShowen = false;
 			}
+
             player.Hand.CardsInHand.Remove(player.Hand.CardsInHand?.Where(x=>x.ID==cardInDeckID).FirstOrDefault());
             turn.MonsterSummoned = true;
 			this._unitOfWork.Turn.Update(turn);
 			this._unitOfWork.Player.Update(player);
             await this._unitOfWork.Complete();
-            var playerField = await this.GetPlayersField(playerID);
-            return playerField;
+            return emptyField.ID;
 		}
 
         public int NumberOfCardsRequiredForTribute(int numberOfStars)
@@ -290,10 +291,10 @@ namespace BLL.Services
 			}
 			var grave = await this._unitOfWork.Grave.GetGrave((int)game.GraveID);
      
-			if (numberOfTributes == 0)
+			/*if (numberOfTributes == 0)
             {
                 return await this.NormalSummon(gameID,playerID,cardInDeckID,position);
-            }
+            }*/
             if (numberOfTributes != fieldsIDs.Count())
             {
                 throw new Exception("You didnt chose right number of tributes");
@@ -349,6 +350,74 @@ namespace BLL.Services
             affterPlayData.fieldID = emptyField.ID;
             return affterPlayData;
 		}
+
+        public async Task PlayTrapCard(int gameID, int playerID, int cardInDeckID, int cardEffectID)
+		{
+			var game = await this._unitOfWork.Game.GetGameWithTurns(gameID);
+			var turn = game.Turns?.Last();
+			var player = await this._unitOfWork.Player.GetPlayerWithFieldsAndHand(playerID);
+			this.CardToBePlayedCheck(game, player, cardInDeckID);
+			var cardToBePlayed = await this._unitOfWork.CardInDeck.GetCardInDeckWithCard(cardInDeckID);
+			if (cardToBePlayed.Card.CardType.Type != "TrapCard")
+			{
+				throw new Exception("You can only play trap card with this function");
+			}
+			var emptyField = player.Fields.Where(x => x.CardOnField == null && x.FieldType == "SpellTrapField").FirstOrDefault();
+			if (emptyField == null)
+			{
+				throw new Exception("Your field is full");
+			}
+			emptyField.CardOnField = cardToBePlayed;
+            emptyField.CardShowen = false;
+
+			player.Hand.CardsInHand.Remove(player.Hand.CardsInHand.Where(x => x.ID == cardInDeckID).FirstOrDefault());
+			this._unitOfWork.Player.Update(player);
+			await this._unitOfWork.Complete();
+		}
+		public async Task<AffterPlaySpellTrapCardData> ActiveTrapCard(int gameID, int playerID, int fieldID)
+        {
+			var affterPlayData = new AffterPlaySpellTrapCardData();
+            var field = await this._unitOfWork.CardField.GetCardField(fieldID, playerID);
+            if (field.CardOnField == null)
+            {
+                throw new Exception("There is no card on this field");
+            }
+			var effect = await this._unitOfWork.Effect.GetEffect((int)field.CardOnField.Card.EffectID);
+			var concreteStrategy = this._concreteStrategy.SetStrategyContext(effect.EffectType.Type);
+			int areaOfClicking = concreteStrategy.GetAreaOfSelectingCards();
+            field.CardShowen = true;
+            affterPlayData.areaOfClicking = areaOfClicking;
+            affterPlayData.fieldID = fieldID;
+            this._unitOfWork.CardField.Update(field);
+            await this._unitOfWork.Complete();
+            return affterPlayData;
+		}
+
+		public async Task<List<int>> CanEnemieActivateTrapCard(string activationString,int playerID,int gameID)
+        {
+            var trapFieldsThatCanBeActivated = new List<int>();
+			var enemiesID = await this._unitOfWork.Game.GetEnemiesPlayerID(gameID, playerID);
+			var type = await this._unitOfWork.Card.GetCardTypeByName("TrapCard");
+            var fields = await _unitOfWork.CardField.GetPlayerFields(enemiesID, "SpellTrapField");
+            fields=fields.Where(x=>x.CardOnField!=null).ToList();
+            if (fields != null)
+            {
+                foreach (var field in fields)
+                {
+                    if (field.CardOnField.Card.CardTypeID == type.ID)
+                    {
+						var effect = await this._unitOfWork.Effect.GetEffect((int)field.CardOnField.Card.EffectID);
+						var concreteStrategy = this._concreteStrategy.SetStrategyContext(effect.EffectType.Type);
+						var whenTrapCanBeActivated = concreteStrategy.CanYouActivateTrapCard();
+                        if (whenTrapCanBeActivated == activationString)
+                        {
+                            trapFieldsThatCanBeActivated.Add(field.ID);
+                        }
+					}
+                }
+            }
+            return trapFieldsThatCanBeActivated;
+        }
 		public async Task ExecuteEffect(List<int> listOfCards, int cardFieldID,int playerID,int gameID)
         {
             var field = await this._unitOfWork.CardField.GetCardField(cardFieldID,playerID);
@@ -379,6 +448,7 @@ namespace BLL.Services
             var grave = await this._unitOfWork.Grave.GetGraveByGameID(gameID);
             grave.ListOfCardsInGrave.Add(cardField.CardOnField);
             cardField.CardOnField = null;
+            cardField.CardShowen = true;
             this._unitOfWork.Grave.Update(grave);
 			this._unitOfWork.CardField.Update(cardField);
             await this._unitOfWork.Complete();
@@ -473,7 +543,6 @@ namespace BLL.Services
             await this._unitOfWork.Complete();
             return difference;
 		}
-
 
 	}
 }

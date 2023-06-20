@@ -24,8 +24,7 @@ namespace DAL.Models
 		public PlayersHand? PlayersHand { get; set; }
 		[JsonIgnore]
 		public Grave? Grave { get; set; }
-		public List<CardField> CardFields { get; set; }
-
+		public List<CardField>? CardFields { get; set; }
 
 	}
 }

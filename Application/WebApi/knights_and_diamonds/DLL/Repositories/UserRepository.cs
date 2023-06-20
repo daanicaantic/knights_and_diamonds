@@ -2,11 +2,6 @@
 using DAL.Models;
 using DAL.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
@@ -23,14 +18,24 @@ namespace DAL.Repositories
 
         public async Task<User> GetUserByEmail(string email)
         {
-            var user = await this.Context.Users.Where(x => x.Email == email).FirstOrDefaultAsync();
-            return user;
+            var user = await this.Context.Users?.Where(x => x.Email == email).FirstOrDefaultAsync();
+			return user;
         }
 
         public async Task<User> GetUserByUsername(string username)
         {
-            var user = await this.Context.Users.Where(x => x.UserName == username).FirstOrDefaultAsync();
+            var user = await this.Context.Users?.Where(x => x.UserName == username).FirstOrDefaultAsync();
             return user;
         }
-    }
+		public async Task<User> FindUserPerMailAndPassword(string email,string password)
+		{
+			var user = await this.Context.Users?.Where(x => x.Email == email && x.Password == password).FirstOrDefaultAsync();
+			if (user == null)
+			{
+				throw new Exception("Wrong email or password");
+			}
+			return user;
+		}
+
+	}
 }

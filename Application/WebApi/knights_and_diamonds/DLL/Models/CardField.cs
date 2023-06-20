@@ -21,9 +21,9 @@ namespace DAL.Models
 		public bool CardShowen { get; set; } //0-otkrivena,1-neotkrivena
 		public int PlayerID { get; set; }
 		[JsonIgnore]
-		public Player Player { get; set; }
+		public Player? Player { get; set; }
 		[JsonIgnore]
-		public List<AttackInTurn> AttackInTurn { get; set; }
+		public List<AttackInTurn>? AttackInTurn { get; set; }
 
 
 		public CardField()

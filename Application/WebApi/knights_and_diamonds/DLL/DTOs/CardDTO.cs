@@ -23,5 +23,16 @@ namespace DAL.DTOs
 
 		public CardDTO() { }
     }
+	public class UpdateCardDTO
+	{
+		public int ID { get; set; }
+		public string? CardName { get; set; }
+		public string? ImgPath { get; set; }
+		public int CardLevel { get; set; }
+		public int AttackPoints { get; set; }
+		public int DefencePoints { get; set; }
+
+		public UpdateCardDTO() { }
+	}
 
 }

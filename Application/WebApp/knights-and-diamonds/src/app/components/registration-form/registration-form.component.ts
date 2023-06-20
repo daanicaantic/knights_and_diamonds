@@ -9,10 +9,9 @@ import { UserService } from 'src/app/services/user.service';
 @Component({
   selector: 'app-registration-form',
   templateUrl: './registration-form.component.html',
-  styleUrls: ['./registration-form.component.css']
+  styleUrls: ['./registration-form.component.css'],
 })
 export class RegistrationFormComponent implements OnInit {
-  
   form!: FormGroup;
   subscriptions: Subscription[] = [];
   submitted = false;
@@ -23,7 +22,7 @@ export class RegistrationFormComponent implements OnInit {
     private authService: AuthService,
     private messageService: MessageService,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
@@ -32,19 +31,32 @@ export class RegistrationFormComponent implements OnInit {
       username: [],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
-      role: ["Player"]
-  });
+      role: ['Player'],
+    });
   }
   onSubmit() {
+    this.addUser();
+  }
+  addUser() {
     console.log(this.form.getRawValue());
     this.userService.addUser(this.form.getRawValue()).subscribe({
-      next: (res: any)=>{
-        this.messageService.add({key: 'br', severity:'success', summary: 'Uspešno', detail: 'Registracija je uspela!'});
+      next: (res: any) => {
+        this.messageService.add({
+          key: 'br',
+          severity: 'success',
+          summary: 'Uspešno',
+          detail: 'Registracija je uspela!',
+        });
       },
-      error: (err: any)=>{
-        console.log(err.error)
-        this.messageService.add({key: 'br', severity:'error', summary: 'Neuspešno', detail: err.error});
-      }
+      error: (err: any) => {
+        console.log(err.error);
+        this.messageService.add({
+          key: 'br',
+          severity: 'error',
+          summary: 'Neuspešno',
+          detail: err.error,
+        });
+      },
     });
   }
 }

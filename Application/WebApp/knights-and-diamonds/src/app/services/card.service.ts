@@ -1,4 +1,9 @@
-import {HttpClient,HttpErrorResponse,HttpEventType,HttpHeaders } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpEventType,
+  HttpHeaders,
+} from '@angular/common/http';
 
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -10,15 +15,18 @@ const httpOptions = {
 };
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CardService {
   progress!: number;
   message!: string;
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {}
 
   addCard(card: any): any {
     return this.httpClient.post(`https://localhost:7250/Card/AddCard`, card);
+  }
+  updateCard(card: any): any {
+    return this.httpClient.put(`https://localhost:7250/Card/UpdateCard`, card);
   }
 
   getCards() {
@@ -31,5 +39,16 @@ export class CardService {
 
   getEffectTypes() {
     return this.httpClient.get(`https://localhost:7250/Types/GetEffectTypes`);
+  }
+  getFilteredCards(
+    typeFilter: any,
+    sortOrder: any,
+    nameFilter: any,
+    pageNumber: any,
+    pageSize: any
+  ) {
+    return this.httpClient.get(
+      `https://localhost:7250/Card/GetFillteredCards?typeFilter=${typeFilter}&sortOrder=${sortOrder}&nameFilter=${nameFilter}&pageNumber=${pageNumber}&pageSize=${pageSize}`
+    );
   }
 }

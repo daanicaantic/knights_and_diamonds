@@ -16,7 +16,7 @@ namespace BLL.Factory
 		public NoEffect()
 		{
 			this.Effect = new Effect();
-			this.SetDescription();
+			this.Description=this.SetDescription();
 			this.SetEffect();
 		}
 

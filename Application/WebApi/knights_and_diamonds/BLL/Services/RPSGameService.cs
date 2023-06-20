@@ -28,7 +28,7 @@ namespace BLL.Services
 			_usersingame = InGameUsers.GetInstance();
 		}
 
-		public async Task<int> NewLobby(OnlineUserDto user, OnlineUserDto challengedUser)
+		public int NewLobby(OnlineUserDto user, OnlineUserDto challengedUser)
 		{
 			if (!this._usersingame.UsersInGame.Contains(user.ID) && !this._usersingame.UsersInGame.Contains(challengedUser.ID))
 			{
@@ -50,7 +50,7 @@ namespace BLL.Services
                 if (!lobbies.Any(x => x.ID == lobbyID))
 				{
 					lobby = new Lobby(lobbyID, user, challengedUser);
-					lobbies.Add(lobby);
+					lobbies.Add (lobby);
 				}
 
 				else
@@ -79,7 +79,7 @@ namespace BLL.Services
 				throw new Exception("There is no lobby with this ID");
 			}
 
-			Lobby lobby = lobbies.Find(x => x.ID == lobbyID);
+			var lobby = lobbies.Find(x => x.ID == lobbyID);
 
 			if (lobby.User1 == null && lobby.User2 == null)
 			{
@@ -131,22 +131,22 @@ namespace BLL.Services
 
 			return rpsGame.ID;
 		}
-        public async Task<int> DenyGame(int lobbyID)
+        public int DenyGame(int lobbyID)
         {
             var lobbies = this._usersingame.Lobbies;
 
-            if (!lobbies.Any(x => x.ID == lobbyID))
-            {
-                throw new Exception("There is no lobby with this ID");
-            }
+            var lobby = lobbies.Find(x => x.ID == lobbyID);
+			if (lobby == null)
+			{
+				throw new Exception("There is no lobby with this ID");
 
-            Lobby lobby = lobbies.Find(x => x.ID == lobbyID);
+			}
 
-            lobbies.Remove(lobby);
+			lobbies.Remove(lobby);
 
             return lobby.ID;
         }
-        public async Task<Dictionary<int,List<int>>> GetGames()
+        public Dictionary<int,List<int>> GetGames()
 		{
 			try
 			{
@@ -244,7 +244,7 @@ namespace BLL.Services
 			{
 				throw new Exception("There is no game with this ID");
 			}
-			List<Player> players = game.Players;
+			var players = game.Players;
 			var cardGame = await this._unitOfWork.Game.GetOne(players[0].GameID);
 			if (cardGame == null)
 			{

@@ -49,7 +49,7 @@ namespace BLL.Services
 			var turnInfo = new TurnInfo();
 			var game = await this._unitOfWork.Game.GetGameWithTurns(gameID);
 			turnInfo.PlayerOnTurn = game.PlayerOnTurn;
-			turnInfo.TurnPhase = (int)await this.GetTurnPhase(game);
+			turnInfo.TurnPhase = (int)this.GetTurnPhase(game);
 			if (game.Turns?.LastOrDefault() == null)
 			{
 				turnInfo.IsMonsterSummoned = false;
@@ -148,7 +148,7 @@ namespace BLL.Services
 			await this._unitOfWork.Complete();
 			return game;
 		}
-		public async Task<TurnPhase> GetTurnPhase(Game game)
+		public TurnPhase GetTurnPhase(Game game)
 		{
 			var turn = game.Turns?.LastOrDefault();
 			if (turn == null)

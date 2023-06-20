@@ -29,6 +29,7 @@ namespace BLL.Strategy
 
 		}
 		public ChooseCardsFrom SelectCardsFrom()
+
 		{
 			return ChooseCardsFrom.EnemiesField;
 		}
@@ -73,6 +74,9 @@ namespace BLL.Strategy
 			await this._unitOfWork.Complete();
 		}
 
-
+		public string WhenCanYouActivateTrapCard()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

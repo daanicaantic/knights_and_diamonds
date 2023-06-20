@@ -7,7 +7,7 @@ using DAL.DesignPatterns.Factory.Contract;
 using DAL.DTOs;
 using DAL.Models;
 using Microsoft.AspNetCore.Mvc;
-
+#pragma warning disable
 namespace knights_and_diamonds.Controllers
 {
 	[ApiController]
@@ -21,9 +21,7 @@ namespace knights_and_diamonds.Controllers
 		private readonly KnightsAndDiamondsContext _context;
 		public ICardService _cardService { get; set; }
 		public IEffectService _effService { get; set; }
-
 		public IEffectFactory _descriptionFactory { get; set; }
-		public IFactory _factory { get; set; }
 		public CardController(KnightsAndDiamondsContext context)
 		{
 			this._context = context;
@@ -96,16 +94,9 @@ namespace knights_and_diamonds.Controllers
 		{
 			try
 			{
-				var c = await this._cardService.GetCard(id);
-				if (c != null)
-				{
-					await this._cardService.RemoveCard(c);
-					return Ok(c);
-				}
-				else
-				{
-					return NotFound("Card with this ID doesnt exist");
-				}
+				await this._cardService.RemoveCard(id);
+				return Ok(id);
+
 			}
 			catch (Exception e)
 			{
@@ -115,7 +106,7 @@ namespace knights_and_diamonds.Controllers
 
 		[Route("UpdateCard")]
 		[HttpPut]
-		public async Task<IActionResult> UpdateCard([FromBody] Card card)
+		public async Task<IActionResult> UpdateCard([FromBody] UpdateCardDTO card)
 		{
 			try
 			{
@@ -131,7 +122,7 @@ namespace knights_and_diamonds.Controllers
 			}
 			catch (Exception e)
 			{
-				return BadRequest(e);
+				return BadRequest(e.Message);
 			}
 		}
 
@@ -167,5 +158,20 @@ namespace knights_and_diamonds.Controllers
                 return BadRequest(e);
             }
         }
-    }
+		[Route("GetFillteredCards")]
+		[HttpGet]
+		public async Task<IActionResult> GetFillteredCards(string? typeFilter = "", string? nameFilter = "", string? sortOrder = "",int pageNumber=1,int pageSize=10)
+		{
+			#pragma warning disable
+			try
+			{
+				var cards = await this._cardService.GetFillteredAndOrderedCards(typeFilter,sortOrder,nameFilter,pageNumber,pageSize);
+				return Ok(cards);
+			}
+			catch (Exception e)
+			{
+				return BadRequest(e);
+			}
+		}
+	}
 }

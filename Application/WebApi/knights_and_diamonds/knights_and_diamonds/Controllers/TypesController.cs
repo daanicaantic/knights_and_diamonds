@@ -15,7 +15,6 @@ namespace knights_and_diamonds.Controllers
 	{
 		private readonly KnightsAndDiamondsContext _context;
 		public IEffectService _effectService { get; set; }
-		public StrategyContext	concreteStrategy { get; set; }
 		public TypesController(KnightsAndDiamondsContext context)
 		{
 			this._context = context;
@@ -75,7 +74,8 @@ namespace knights_and_diamonds.Controllers
 		{
 			try
 			{
-				var cardTypes = await this._context.CardTypes.ToListAsync();
+				var cardTypes = await this._context.CardTypes?.ToListAsync();
+
 				return Ok(cardTypes);
 			}
 			catch (Exception e)

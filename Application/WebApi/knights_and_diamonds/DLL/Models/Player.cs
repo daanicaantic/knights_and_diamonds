@@ -30,7 +30,7 @@ namespace DAL.Models
 		public bool GaemeStarted { get; set; }
 		public List<CardInDeck>? Deck { get; set; }
 		public PlayersHand? Hand { get; set; }
-		public List<CardField> Fields { get; set; }
+		public List<CardField>? Fields { get; set; }
 
 		public Player() 
 		{ 

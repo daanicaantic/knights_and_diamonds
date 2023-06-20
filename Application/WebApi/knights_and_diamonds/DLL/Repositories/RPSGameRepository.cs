@@ -24,7 +24,11 @@ namespace DAL.Repositories
 
 		public async Task<RockPaperScissorsGame> GetGameWithPlayers(int gameID)
 		{
-			var game = await this.Context.RockPaperScissorsGames.Include(x => x.Players).Where(x => x.ID == gameID).FirstOrDefaultAsync();
+			var game = await this.Context.RockPaperScissorsGames?.Include(x => x.Players).Where(x => x.ID == gameID).FirstOrDefaultAsync();
+			if (game == null)
+			{
+				throw new Exception("There is no game with this ID");
+			}
 			return game;
 		}
 		public async Task<int> GetRpsGameWinner(int rpsGameID)

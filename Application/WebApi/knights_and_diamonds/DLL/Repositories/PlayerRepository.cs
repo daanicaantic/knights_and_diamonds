@@ -8,7 +8,6 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-#pragma warning disable CS8620;
 
 namespace DAL.Repositories
 {
@@ -25,7 +24,7 @@ namespace DAL.Repositories
 
         public async Task<Player> GetPlayer(int rpsGameID, int userID)
         {
-			var player = await this.Context.Players.Where(g => g.RPSGameID == rpsGameID && g.UserID == userID).FirstOrDefaultAsync();
+			var player = await this.Context.Players?.Where(g => g.RPSGameID == rpsGameID && g.UserID == userID).FirstOrDefaultAsync();
 			if (player == null)
 			{
 				throw new Exception("There is no player with this ID");
@@ -35,7 +34,7 @@ namespace DAL.Repositories
 
         public async Task<Player> GetPlayerByID(int playerID)
         {
-			var player = await this.Context.Players
+			var player = await this.Context.Players?
 				.Include(x => x.User)
 				.Include(x => x.Deck)
 				.Where(p => p.ID == playerID)
@@ -49,7 +48,8 @@ namespace DAL.Repositories
 
 		public async Task<Player> GetPlayerWithHandAndDeckByID(int playerID)
 		{
-			var player = await this.Context.Players
+			#pragma warning disable
+			var player = await this.Context.Players?
 				.Include(x=>x.Deck)
 				.ThenInclude(x=>x.Card)
 				.Include(x => x.Hand)
@@ -65,7 +65,7 @@ namespace DAL.Repositories
 
 		public async Task<PlayersHand> GetPlayersHand(int playerID)
 		{
-			var playerHand = await this.Context.Players
+			var playerHand = await this.Context.Players?
 				.Include(x => x.Hand)
 				.ThenInclude(x => x.CardsInHand)
 				.ThenInclude(x => x.Card)
@@ -81,11 +81,12 @@ namespace DAL.Repositories
 
 		public async Task<Player> GetPlayersField(int playerID)
 		{
-			var field = await this.Context.Players
-				.Include(x => x.Hand)
-				.ThenInclude(x => x.CardsInHand)
-				.ThenInclude(x => x.Card)
-				.Include(x => x.Deck)
+			#pragma warning disable
+			var field = await this.Context.Players?
+				.Include(x => x.Hand)?
+				.ThenInclude(x => x.CardsInHand)?
+				.ThenInclude(x => x.Card)?
+				.Include(x => x.Deck)?
 				.ThenInclude(x => x.Card)
 				.Include(x => x.Fields)
 				.ThenInclude(x => x.CardOnField)
@@ -101,7 +102,7 @@ namespace DAL.Repositories
 
 		public async Task<Player> GetPlayerWithFieldsAndHand(int playerID)
 		{
-			var player = await this.Context.Players
+			var player = await this.Context.Players?
 				.Include(x => x.Fields)
 				.ThenInclude(x => x.CardOnField)
 				.Include(x=>x.Hand)

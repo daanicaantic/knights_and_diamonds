@@ -23,7 +23,7 @@ namespace BLL.Services
         }
         public async Task AddUser(UserDTO u)
         {
-            var userFound = await this._unitOfWork.User.GetUserByEmail(u.Email);
+			var userFound = await this._unitOfWork.User.GetUserByEmail(u.Email);
             if(userFound != null)
             {
                 throw new Exception("User with this email already exists.");

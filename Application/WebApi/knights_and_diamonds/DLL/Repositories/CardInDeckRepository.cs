@@ -22,21 +22,33 @@ namespace DAL.Repositories
 
         public async Task<CardInDeck> RemoveCardFromDeck(int cardID, int deckID)
         {
-			var card = await Context.CardInDecks?.Where(x => x.ID == cardID && x.DeckID == deckID).Include(x => x.Deck).Include(x => x.Grave).Include(x => x.Player).Include(x=>x.PlayersHand).Include(x=>x.CardFields).FirstOrDefaultAsync();
-			if (card == null)
+			var cardInDeck = await Context.CardInDecks?.Where(x => x.ID == cardID && x.DeckID == deckID).Include(x => x.Deck).Include(x => x.Grave).Include(x => x.Player).Include(x=>x.PlayersHand).Include(x=>x.CardFields).FirstOrDefaultAsync();
+			if (cardInDeck == null)
 			{
 				throw new Exception("There is some error");
 			}
-            return card;
+			foreach (var field in cardInDeck.CardFields)
+			{
+				field.CardOnFieldID = null;
+			}
+			cardInDeck.Deck = null;
+			cardInDeck.Player = null;
+			cardInDeck.PlayersHand = null;
+			cardInDeck.Grave = null;
+			return cardInDeck;
         }
 
 		public async Task<CardInDeck> GetCardInDeckWithCard(int cardID)
 		{
-			var card = await this.Context.CardInDecks
+			var card = await this.Context.CardInDecks?
 				.Include(x => x.Card)
 				.ThenInclude(x=>x.CardType)
 				.Where(x => x.ID == cardID)
 				.FirstOrDefaultAsync();
+			if (card == null)
+			{
+				throw new Exception("There is no card with this ID");
+			}
 			return card;
 		}
 	}

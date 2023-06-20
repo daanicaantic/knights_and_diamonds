@@ -71,7 +71,10 @@ namespace BLL.Services
             {
                 throw new Exception("There is no Player with this ID"); 
             }
-
+            if (player.Deck == null)
+            {
+                throw new Exception("DeckError"); 
+            }
 			int numberOfCards = player.Deck.Count();
 			if (numberOfCards <= 0)
 			{
@@ -94,12 +97,12 @@ namespace BLL.Services
 
         public async Task<List<MappedCard>> GetPlayersHand(int playerID) 
         {
+            #pragma warning disable
 			var playersHand = await this._unitOfWork.Player.GetPlayersHand(playerID);
             if (playersHand == null)
             {
                 throw new Exception("This player dont have hands :(");
             }
-
 			var mappedHand = await this._cardService.MapCards(playersHand.CardsInHand);
 			return mappedHand;
 		}

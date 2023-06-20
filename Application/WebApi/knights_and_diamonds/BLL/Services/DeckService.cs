@@ -74,11 +74,8 @@ namespace BLL.Services
             {
                 throw new Exception("This user doesn't have main deck.");
             }
-
-
             cards = cards.OrderBy(x => x.CardID).ToList();
             cards = cards.OrderBy(x => x.Card.CardTypeID).ToList();
-
 			var deck = await this._cardservice.MapCards(cards);
 
 			return deck;
@@ -112,15 +109,6 @@ namespace BLL.Services
         public async Task RemoveCardFromDeck(int cardID, int deckID)
         {
             var cardInDeck = await this._unitOfWork.CardInDeck.RemoveCardFromDeck(cardID, deckID);
-            foreach (var field in cardInDeck.CardFields)
-            {
-                field.CardOnFieldID = null;
-            }
-            cardInDeck.Deck = null;
-			cardInDeck.Player = null;
-			cardInDeck.PlayersHand = null;
-			cardInDeck.Grave = null;
-
 			this._unitOfWork.CardInDeck.Update(cardInDeck);
             await this._unitOfWork.Complete();
         }

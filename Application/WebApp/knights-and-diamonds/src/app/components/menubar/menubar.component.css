@@ -72,6 +72,7 @@
 .container{
   position: absolute;
   width: 100%;
+  z-index: 1;
 }
 
 header{
@@ -135,7 +136,7 @@ header{
 }
 
 .home-page:hover, .rules-page:hover, .cards-page:hover{
-  color: #d15f1c;
+  color: #a4fff8;
   cursor: pointer;
 }
 
@@ -161,7 +162,7 @@ button{
 }
 
 .button-login:hover{
-  color: #d15f1c;
+  color: #52e4f8;
   transition: 0.3 ease 0s;
 }
 
@@ -180,7 +181,7 @@ button{
   border-radius: 100%;
   color: white;
   aspect-ratio: 1/1;
-  background-color: #f5dfd0;
+  background-color: #9588a5;
   border-radius: 100%;
   display: flex;
   align-items: center;

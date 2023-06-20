@@ -46,5 +46,10 @@ namespace BLL.Strategy
 
 			await this._gameService.RemoveCardFromFieldToGrave(fieldID, gameID,playerID);
 		}
+
+		public string WhenCanYouActivateTrapCard()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

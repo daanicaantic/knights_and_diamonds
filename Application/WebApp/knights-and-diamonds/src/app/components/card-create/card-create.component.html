@@ -12,41 +12,56 @@
                     <div class="small-container">
                         <span class="form-field">
                             <small>Card Name</small>
-                            <input class="data-field" formControlName="cardName" placeholder="Card name" type="text" pInputText (input)="onCardNameChange()" />
+                            <input class="data-field" formControlName="cardName" placeholder="Card name" type="text"
+                                pInputText (input)="onCardNameChange()" />
                         </span>
                         <span class="form-field">
                             <small>Card Type</small>
-                            <p-dropdown class="data-field" formControlName="cardTypeID" [options]="cardTypes"  optionValue="id" optionLabel="type" (onChange)="onCardTypeChange()"></p-dropdown>
+                            <p-dropdown styleClass="w-full" class="data-field" formControlName="cardTypeID"
+                                [options]="cardTypes" optionValue="id" optionLabel="type"
+                                (onChange)="onCardTypeChange()"></p-dropdown>
                         </span>
                     </div>
                     <div class="small-container">
                         <span class="form-field">
                             <small>Card Effect</small>
-                            <p-dropdown class="data-field" formControlName="effectTypeID" [options]="cardEffects" optionValue="id" optionLabel="type" (onChange)="onCardEffectChange()"></p-dropdown>
+                            <p-dropdown styleClass="w-full" class="data-field" formControlName="effectTypeID"
+                                [options]="cardEffects" optionValue="id" optionLabel="type"
+                                (onChange)="onCardEffectChange()"></p-dropdown>
                         </span>
                         <span class="form-field">
                             <small>Card Level</small>
-                            <input class="data-field" [readonly]="isSpellOrTrapCard" formControlName="cardLevel" placeholder="Card level" type="number" [min]="0" [max]="7" [maxlength]="1" pInputText (input)="onCardLevelChange()" />
+                            <input class="data-field" [readonly]="isSpellOrTrapCard" formControlName="cardLevel"
+                                placeholder="Card level" type="number" [min]="0" [max]="7" [maxlength]="1" pInputText
+                                (input)="onCardLevelChange()" />
                         </span>
                     </div>
                     <div class="small-container">
                         <span class="form-field">
                             <small>Number of cards affected</small>
-                            <input class="data-field" [readonly]="isEffectNone" formControlName="numOfCardsAffected" placeholder="Cards affected" type="number" [min]="0" [max]="5" [maxlength]="2" pInputText (input)="onCardsAffectedChange()" />
+                            <input class="data-field" [readonly]="isEffectNone" formControlName="numOfCardsAffected"
+                                placeholder="Cards affected" type="number" [min]="0" [max]="5" [maxlength]="2"
+                                pInputText (input)="onCardsAffectedChange()" />
                         </span>
                         <span class="form-field">
                             <small>Points added/lost</small>
-                            <input class="data-field" [readonly]="isEffectNone" formControlName="pointsAddedLost" placeholder="Points added/lost" type="number" [min]="0" [max]="999" [maxlength]="3" pInputText (input)="onPointsAddedLostChange()" />
+                            <input class="data-field" [readonly]="isEffectNone" formControlName="pointsAddedLost"
+                                placeholder="Points added/lost" type="number" [min]="0" [max]="999" [maxlength]="3"
+                                pInputText (input)="onPointsAddedLostChange()" />
                         </span>
                     </div>
                     <div class="small-container">
                         <span class="form-field">
                             <small>ATK</small>
-                            <input class="data-field" [readonly]="isSpellOrTrapCard" formControlName="attackPoints" placeholder='Attack' type="number" [min]="0" [max]="999" [maxlength]="3" pInputText (input)="onAttackChange()" />
+                            <input class="data-field" [readonly]="isSpellOrTrapCard" formControlName="attackPoints"
+                                placeholder='Attack' type="number" [min]="0" [max]="999" [maxlength]="3" pInputText
+                                (input)="onAttackChange()" />
                         </span>
                         <span class="form-field">
                             <small>DEF</small>
-                            <input class="data-field" [readonly]="isSpellOrTrapCard" formControlName="defencePoints" placeholder='Defence' type="number" [min]="0" [max]="999" [maxlength]="3" pInputText (input)="onDefenceChange()" />
+                            <input class="data-field" [readonly]="isSpellOrTrapCard" formControlName="defencePoints"
+                                placeholder='Defence' type="number" [min]="0" [max]="999" [maxlength]="3" pInputText
+                                (input)="onDefenceChange()" />
                         </span>
                     </div>
                     <div class="small-container">
@@ -57,7 +72,8 @@
                             </label>
                         </span>
                         <span class="form-field button-span">
-                            <button pButton label="Click" class="p-button-secondary" [disabled]="!form.valid" (click)="handleClick()"></button>
+                            <button pButton label="Click" class="p-button-secondary" [disabled]="!form.valid"
+                                (click)="handleClick()"></button>
                         </span>
                     </div>
                 </div>

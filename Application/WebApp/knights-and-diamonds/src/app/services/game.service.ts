@@ -113,20 +113,48 @@ export class GameService {
         })
       );
   }
-  playSpellCardInv(
+  playSpellTrapCardInv(
     gameID: any,
     playerID: any,
     cardID: any,
-    cardEffectID: any
+    cardEffectID: any,
+    isSpellOrTrap: any
   ): void {
     console.log(gameID, playerID, cardID, cardEffectID);
     this.signalrService.hubConnection
-      .invoke('PlaySpellCard', gameID, playerID, cardID, cardEffectID)
+      .invoke(
+        'PlaySpellTrapCard',
+        gameID,
+        playerID,
+        cardID,
+        cardEffectID,
+        isSpellOrTrap
+      )
+      .catch((err) => console.error('O V D E', err));
+  }
+  activateTrapCard(gameID: any, playerID: any, cardFieldID: any): void {
+    console.log(gameID, playerID, cardFieldID);
+    this.signalrService.hubConnection
+      .invoke('ActiveTrapCard', Number(gameID), playerID, cardFieldID)
       .catch((err) => console.error('O V D E', err));
   }
   removeCardFromHandToGraveInv(playerID: any, cardID: any, gameID: any): void {
     this.signalrService.hubConnection
       .invoke('RemoveCardFromHandToGrave', playerID, cardID, Number(gameID))
+      .catch((err) => console.error('O V D E', err));
+  }
+  removeCardFromFieldToGraveInv(
+    fieldID: any,
+    playerID: any,
+    gameID: any
+  ): void {
+    this.signalrService.hubConnection
+      .invoke('RemoveCardFromFieldToGrave', fieldID, playerID, Number(gameID))
+      .catch((err) => console.error('O V D E', err));
+  }
+  didTrapEffectExecutedInv(gameID: any, playerID: any): void {
+    this.signalrService.hubConnection
+      .invoke('DidTrapEffectExecuted', Number(gameID), playerID)
       .catch((err) => console.error('O V D E', err));
   }
 

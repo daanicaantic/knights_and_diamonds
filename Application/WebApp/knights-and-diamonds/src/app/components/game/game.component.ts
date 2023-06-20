@@ -16,6 +16,7 @@ import { SignalrService } from 'src/app/services/signalr.service';
 import { TmplAstRecursiveVisitor } from '@angular/compiler';
 import { DOCUMENT } from '@angular/common';
 import { Subscription } from 'rxjs';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-game',
@@ -27,6 +28,8 @@ export class GameComponent implements OnInit, OnDestroy {
   enemiesLpChange!: ElementRef;
   @ViewChild('playersLpChange', { static: false })
   playersLpChange!: ElementRef;
+  @ViewChild('activateTrapCard', { static: false })
+  activateTrapCard!: ElementRef;
 
   userID = this.authService?.userValue?.id;
   playerID = this.authService?.userValue?.player;
@@ -67,8 +70,16 @@ export class GameComponent implements OnInit, OnDestroy {
   isPhaseMassageOver: any = false;
   areaOfClicking: any;
   isEnemiesHandShown: any = false;
+  doYouNeedToWaitEnemiesChoice: any = false;
+  fieldsThatCanActivateTrapCard: any;
+  canYouActivateTrapCard: any;
+  doYouWantToActivateTrapCard: any;
+  cardActivated: any;
+  textLeft = 0;
+  textTop = 0;
+  lastSummonedMonster: any;
+  listOfIds: any = [0];
   subscriptions: Subscription[] = [];
-
 
   constructor(
     public inGameService: IngameService,
@@ -76,7 +87,8 @@ export class GameComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private authService: AuthService,
-    private signalrService: SignalrService
+    private signalrService: SignalrService,
+    private confirmationService: ConfirmationService
   ) {}
 
   ngOnInit(): void {
@@ -93,6 +105,9 @@ export class GameComponent implements OnInit, OnDestroy {
     this.getFieldsAbleToAttack();
     this.getFieldsIncludedInAttack();
     this.getFieldThatLostPoints();
+    this.getFieldsIDsThatCanActivateTrapCard();
+    this.getFieldThatMonsterIsSummonedOn();
+    this.getIfYouCanContinuePlaying();
     // this.getStartingDrawing();
     if (this.playerID != undefined) {
       if (this.signalrService.hubConnection.state == 'Connected') {
@@ -316,11 +331,12 @@ export class GameComponent implements OnInit, OnDestroy {
         this.openSummoningMonsterWindow(card);
       }
       if (
-        card.cardType == 'SpellCard' &&
-        this.curentPhase.name == 'MP' &&
-        this.isPlayerOnTurn
+        card.cardType == 'SpellCard' ||
+        (card.cardType == 'TrapCard' &&
+          this.curentPhase.name == 'MP' &&
+          this.isPlayerOnTurn)
       ) {
-        this.playSpellCard(card.id, card.cardEffectID);
+        this.playSpellTrapCard(card.id, card.cardEffectID, card.cardType);
       }
     } else if (this.isPlayerOnTurn) {
       this.gameService.removeCardFromHandToGraveInv(
@@ -330,7 +346,7 @@ export class GameComponent implements OnInit, OnDestroy {
       );
     }
   }
-  onEnemiesHandClick(card:any){
+  onEnemiesHandClick(card: any) {
     if (this.areaOfClicking != undefined && this.isEnemiesHandShown == true) {
       console.log(this.areaOfClicking);
       if (this.areaOfClicking.areaOfClicking == 5) {
@@ -354,6 +370,42 @@ export class GameComponent implements OnInit, OnDestroy {
       this.iscardshowen = false;
     }
   }
+  onPlayersFieldMouseOver(field: any) {
+    this.mediumCard = field.cardOnField;
+    this.iscardshowen = true;
+    if (
+      this.fieldsThatCanActivateTrapCard != undefined &&
+      this.doYouWantToActivateTrapCard == true
+    ) {
+      if (this.fieldsThatCanActivateTrapCard.indexOf(field.fieldID) >= 0) {
+        this.cardActivated = true;
+      }
+    }
+  }
+  updateTextPosition(event: MouseEvent) {
+    this.textLeft = event.pageX;
+    this.textTop = event.pageY;
+  }
+  onPlayersFieldClick(field: any) {
+    console.log(field);
+    if (field.cardOnField != undefined) {
+      if (field.cardOnField.cardType == 'TrapCard') {
+        if (this.cardActivated) {
+          this.canYouActivateTrapCard = false;
+          this.fieldsThatCanActivateTrapCard = undefined;
+          this.doYouWantToActivateTrapCard = undefined;
+          this.listOfIds = [this.lastSummonedMonster];
+          this.cardActivated = false;
+          this.gameService.activateTrapCard(
+            this.gameID,
+            this.playerID,
+            field.fieldID
+          );
+          this.gameService.didTrapEffectExecutedInv(this.gameID, this.playerID);
+        }
+      }
+    }
+  }
   //click na protivnicko polje
   onEnemiesFieldClick(field: any) {
     if (
@@ -364,7 +416,7 @@ export class GameComponent implements OnInit, OnDestroy {
       console.log(field);
       this.attackField(field);
     }
-    if (this.areaOfClicking != undefined) {
+    if (this.areaOfClicking != undefined && field.cardOnField != undefined) {
       console.log(this.areaOfClicking);
       if (this.areaOfClicking.areaOfClicking == 4) {
         this.gameService.executeEffectInv(
@@ -406,12 +458,13 @@ export class GameComponent implements OnInit, OnDestroy {
     this.turnInfo.isMonsterSummoned = true;
   }
   //igranje spell karte
-  playSpellCard(cardID: any, cardEffectID: any) {
-    this.gameService.playSpellCardInv(
+  playSpellTrapCard(cardID: any, cardEffectID: any, cardType: any) {
+    this.gameService.playSpellTrapCardInv(
       Number(this.gameID),
       this.playerID,
       cardID,
-      cardEffectID
+      cardEffectID,
+      cardType
     );
   }
   //afterData -areaaOfClicking-gte treba da kliknes,i fieldID-polje na kome je karta odigrana
@@ -430,14 +483,16 @@ export class GameComponent implements OnInit, OnDestroy {
     //[0] na beken za parametar CardIDs jer ne treba nista;
     if (affterData.areaOfClicking == 0) {
       this.gameService.executeEffectInv(
-        [0],
+        this.listOfIds,
         affterData.fieldID,
         this.playerID,
         this.enemiesID,
         Number(this.gameID)
       );
       this.areaOfClicking = undefined;
+      this.listOfIds = [0];
     }
+    this.chackAreaOfCliciking();
     if (this.areaOfClicking.areaOfClicking == 5) {
       this.isEnemiesHandShown = true;
     }
@@ -603,14 +658,86 @@ export class GameComponent implements OnInit, OnDestroy {
     var counter: any = 0;
     cardFields.forEach((element: any) => {
       if (element.cardOnField != null) {
-        counter++;
+        if (element.fieldIndex < 5) {
+          counter++;
+        }
       }
     });
     return counter;
+  }
+  getFieldsIDsThatCanActivateTrapCard() {
+    this.signalrService.hubConnection.on(
+      'EnemiseFieldsThatCanActivateTrapCard',
+      (listOFfieldsIDs: any) => {
+        console.log('odje', listOFfieldsIDs);
+        const allIDsMatch = listOFfieldsIDs.every((id: any) =>
+          this.enemiesField.cardFields.some((obj: any) => obj.fieldID === id)
+        );
+        console.log(allIDsMatch);
+        if (allIDsMatch == true) {
+          this.doYouNeedToWaitEnemiesChoice = allIDsMatch;
+        } else {
+          this.fieldsThatCanActivateTrapCard = listOFfieldsIDs;
+          this.canYouActivateTrapCard = true;
+        }
+      }
+    );
+  }
+  onYouWantToActivateTrapCardClick() {
+    this.doYouWantToActivateTrapCard = true;
+  }
+  onYouDontWantToActivateTrapCardClick() {
+    this.gameService.didTrapEffectExecutedInv(this.gameID, this.playerID);
+  }
+  getFieldThatMonsterIsSummonedOn() {
+    this.signalrService.hubConnection.on(
+      'GetLastSummonedEnemiesMonster',
+      (fieldID: any) => {
+        this.lastSummonedMonster = fieldID;
+      }
+    );
+  }
+  getIfYouCanContinuePlaying() {
+    this.signalrService.hubConnection.on('DidTrapEffectExecuted', () => {
+      console.log('bababababa');
+      this.canYouActivateTrapCard = undefined;
+      this.fieldsThatCanActivateTrapCard = undefined;
+      this.doYouWantToActivateTrapCard = undefined;
+      setTimeout(() => {
+        this.doYouNeedToWaitEnemiesChoice = false;
+      }, 1000);
+    });
   }
   ngOnDestroy(): void {
     this.inGameService.setGameOff();
     this.subscriptions.forEach((sub) => sub.unsubscribe());
     this.router.navigate(['/home']);
+  }
+
+  chackAreaOfCliciking() {
+    if (this.areaOfClicking.areaOfClicking == 5) {
+      if (this.enemiesHand.length == 0) {
+        console.log('hahahahhahahahahha');
+        this.gameService.removeCardFromFieldToGraveInv(
+          this.areaOfClicking.fieldID,
+          this.playerID,
+          this.gameID
+        );
+      }
+    } else if (this.areaOfClicking.areaOfClicking == 4) {
+      var monsterOnYourField = this.checkNumberOfMonstersOnField(
+        this.playerField.cardFields
+      );
+      var monstersOnEnemies = this.checkNumberOfMonstersOnField(
+        this.enemiesField.cardFields
+      );
+      if (monsterOnYourField == 5 || monstersOnEnemies == 0) {
+        this.gameService.removeCardFromFieldToGraveInv(
+          this.areaOfClicking.fieldID,
+          this.playerID,
+          this.gameID
+        );
+      }
+    }
   }
 }

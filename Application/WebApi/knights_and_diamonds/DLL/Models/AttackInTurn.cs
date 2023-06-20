@@ -14,10 +14,10 @@ namespace DAL.Models
 		public bool IsAttackingAbble { get; set; }
 		public int TurnID { get; set; }
 		[JsonIgnore]
-		public Turn Turn { get; set; }
+		public Turn? Turn { get; set; }
 		public int CardFieldID { get; set; }
 		[JsonIgnore]
-		public CardField CardField { get; set; }
+		public CardField? CardField { get; set; }
 		public AttackInTurn()
 		{
 

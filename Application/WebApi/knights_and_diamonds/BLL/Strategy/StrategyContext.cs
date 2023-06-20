@@ -28,5 +28,9 @@ namespace BLL.Strategy
 		{
 			await this._effectExecution.ExecuteEffect(listOfCards, effect, playerID, gameID, fieldID);
 		}
+		public string CanYouActivateTrapCard()
+		{
+			return this._effectExecution.WhenCanYouActivateTrapCard();
+		}
 	}
 }

@@ -31,9 +31,9 @@
                         <app-card [isCardShowen]="false" (mouseover)="mediumCard=pom"> </app-card>
                     </div> -->
                     <div class="card-in-hand" *ngFor="let card of enemiesHand;let i = index">
-                        <app-card [card]="card" [isCardShowen]="this.isEnemiesHandShown" 
-                        (mouseover)="this.mediumCard=card; this.iscardshowen=this.isEnemiesHandShown"
-                        (click)="onEnemiesHandClick(card)"></app-card>
+                        <app-card [card]="card" [isCardShowen]="this.isEnemiesHandShown"
+                            (mouseover)="this.mediumCard=card; this.iscardshowen=this.isEnemiesHandShown"
+                            (click)="onEnemiesHandClick(card)"></app-card>
                     </div>
                 </div>
                 <div class="table-background">
@@ -65,12 +65,44 @@
                                     <app-card [card]="cardToBeSummoned" [isCardShowen]="false"
                                         (click)="summonMonsterInDeffencePosition()"></app-card>
                                 </div>
+
                             </div>
                         </div>
+                        <div class="cards-in-grave">
 
+                            <div class="click" *ngIf="grave.graveCount>0">
+                                <p>Back</p>
+                            </div>
+                            <div class="small-card" style="margin: 10px;background-color:white;">
+                                <app-card [card]="mediumCard" [isCardShowen]="true"></app-card>
+                            </div>
+                            <div class="small-card" style="margin: 10px;">
+                                <app-card [card]="mediumCard" [isCardShowen]="true"></app-card>
+                            </div>
+                            <div class="small-card" style="margin: 10px;">
+                                <app-card [card]="mediumCard" [isCardShowen]="true"></app-card>
+                            </div>
+                            <div class="small-card" style="margin: 10px;">
+                                <app-card [card]="mediumCard" [isCardShowen]="true"></app-card>
+                            </div>
+                            <div class="small-card" style="margin: 10px;">
+                                <app-card [card]="mediumCard" [isCardShowen]="true"></app-card>
+                            </div>
+                            <div class="click" *ngIf="grave.graveCount>5"> Next </div>
+                        </div>
                         <div class="discard-card-from-hand"
                             *ngIf="this.isPhaseMassageOver==true && this.playerHand.length >=7 ">
                             <h3>Discard {{playerHand.length-6}} cards from your hand</h3>
+                        </div>
+                        <div class="do-you-want-to-activate-trap-card"
+                            *ngIf="this.canYouActivateTrapCard==true && doYouWantToActivateTrapCard==undefined">
+                            <h3>Do you want to activate trap card?</h3>
+                            <div class="trap-buttones-container"
+                                style="width: 100%;display: flex;justify-content:space-evenly">
+                                <p-button label="Yes" (click)="onYouWantToActivateTrapCardClick()"></p-button>
+                                <p-button label="No" (click)="onYouDontWantToActivateTrapCardClick()"
+                                    styleClass="p-button-raised p-button-danger"></p-button>
+                            </div>
                         </div>
                         <h1 class="phase-message-{{isPlayerOnTurn}}" *ngIf="phaseMessage!=undefined">
                             {{phaseMessage}}
@@ -101,7 +133,8 @@
                             </div>
                         </div>
                         <div class="player-table">
-                            <div class="card-place" id="{{field.fieldID}}" *ngFor="let field of playerField.cardFields">
+                            <div class="card-place" id="{{field.fieldID}}" *ngFor="let field of playerField.cardFields"
+                                (click)="onPlayersFieldClick(field)">
                                 <div #sword (click)="chooseSwordForAttack(sword,field.fieldID)" class="attack"
                                     *ngIf="fieldsAbleToAttack!=undefined && fieldsAbleToAttack.includes(field.fieldID) && curentPhase.name == 'BP'">
                                 </div>
@@ -110,7 +143,9 @@
                                     {{this.pointsLost}}</h2>
                                 <div class="small-card small-card-deff-{{field.cardPosition}}">
                                     <app-card [card]="this.field.cardOnField" [isCardShowen]="field.cardShowen"
-                                        (mouseover)="this.mediumCard=this.field.cardOnField; this.iscardshowen=true"></app-card>
+                                        (mousemove)="updateTextPosition($event)"
+                                        (mouseenter)="onPlayersFieldMouseOver(field)"
+                                        (mouseleave)="this.cardActivated=false"></app-card>
                                 </div>
                                 <div class="attack-deffence-points"
                                     *ngIf="field.cardOnField!=undefined && this.field.fieldIndex>=0 && 5>this.field.fieldIndex "
@@ -118,8 +153,8 @@
                                     <p>{{this.field.cardOnField.attackPoints}} /
                                         {{this.field.cardOnField.defencePoints}}
                                     </p>
-
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -147,5 +182,14 @@
                 </div>
             </div>
         </div>
+        <div class="card-description-container">
+            <p>"This card reduces 950 life points from your opponent."
+            </p>
+        </div>
     </div>
+    <div class="wait-container" *ngIf="doYouNeedToWaitEnemiesChoice==true">
+        <h1 style="color:rgb(255, 96, 96);font-family: cursive;">Waiting for opponent...</h1>
+    </div>
+    <div #activateTrapCard class="additional-text" [class.active]="cardActivated" [style.left.px]="textLeft"
+        [style.top.px]="textTop">Activate</div>
 </body>

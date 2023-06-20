@@ -29,8 +29,9 @@ namespace BLL.Strategy
         }
 
 		public ChooseCardsFrom SelectCardsFrom()
+
 		{
-            Console.WriteLine("Grave ST Card");
+			Console.WriteLine("Grave ST Card");
             return ChooseCardsFrom.GraveSTCard;
 		}
 
@@ -64,5 +65,10 @@ namespace BLL.Strategy
 
             await this._gameService.RemoveCardFromFieldToGrave(fieldID, gameID, playerID);
         }
-	}
+
+        public string WhenCanYouActivateTrapCard()
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

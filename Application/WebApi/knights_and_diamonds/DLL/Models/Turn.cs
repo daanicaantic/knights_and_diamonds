@@ -20,7 +20,7 @@ namespace DAL.Models
 		[JsonIgnore]
 		public Game? Game { get; set; }
 		[JsonIgnore]
-		public List<AttackInTurn> AttackInTurn { get; set; }
+		public List<AttackInTurn>? AttackInTurn { get; set; }
 
 
 		public Turn()
