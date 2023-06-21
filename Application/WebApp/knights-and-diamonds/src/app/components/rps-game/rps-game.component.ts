@@ -170,7 +170,7 @@ export class RpsGameComponent implements OnInit, OnDestroy {
       }, 3000);
     } else if (this.winner == 0) {
       console.log('W I N N E R ', this.winner);
-      this.message = 'It is draw';
+      this.message = 'Draw';
       this.enemiesOptions.forEach((element) => {
         element.choosen = true;
       });

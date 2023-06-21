@@ -29,8 +29,8 @@ namespace DAL.Repositories.Contracts
 		Task<List<CardType>> GetCardTypes();
 		Task<Card> GetCardAndCardsInDeck(int cardID);
 		Task<FilteredCards> FilterAndOrderCards(string typleFilter, string sortOrder, string nameFilter, int pageNumber, int pageSize);
+		Task<int> CardCount(string cardType);
 
 
-
-	}
+    }
 }

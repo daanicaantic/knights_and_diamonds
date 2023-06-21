@@ -130,14 +130,14 @@ body {
 }
 
 .header {
-  color: #9588a5;;
+  color: #d2ccd8;;
   margin: 5%;
   display: flex;
   justify-content: center;
 }
 
 .header-text{
-  color: #9588a5;;
+  color: #d2ccd8;;
   margin: 5%;
   margin-top: 60%;
   display: flex;
@@ -186,7 +186,7 @@ body {
   height: 100%;
   aspect-ratio: 1/1;
   /* border: 2px solid #0a1113; */
-  background-color: #f5dfd0;
+  background-color: #9588a5;
   border-radius: 100%;
   display: flex;
   align-items: center;
@@ -212,9 +212,9 @@ body {
 }
 
 .game-request-sent {
-  height: 60%;
+  height: 55%;
   aspect-ratio: 1/1;
-  background-image: url("https://localhost:7250/Resources/Images/hourglass.png");
+  background-image: url("https://localhost:7250/Resources/Images/sandglass.png");
   background-size: 100% 100%;
 }
 

@@ -136,7 +136,7 @@ header{
 }
 
 .home-page:hover, .rules-page:hover, .cards-page:hover{
-  color: #a4fff8;
+  color: #52e4f8;
   cursor: pointer;
 }
 
@@ -167,7 +167,7 @@ button{
 }
 
 .button-signup:hover{
-  background-color: rgba(255, 195, 135, 0.2);
+  background-color: rgba(82, 228, 248, 0.2);
   transition: 0.3 ease 0s;
 }
 
@@ -231,6 +231,6 @@ button{
 }
 
 .buttons-user:hover{
-  background-color: rgba(255, 195, 135, 0.2);
+  background-color: rgba(82, 228, 248, 0.2);
   transition: 0.3 ease 0s;
 }

@@ -20,6 +20,7 @@ namespace BLL.Services.Contracts
 		Task<MappedCard> MapCard(CardInDeck cardInDeck);
 		Task<List<MappedCard>> MapCards(List<CardInDeck> cardsInDeck);
 		Task<object> GetFillteredAndOrderedCards(string typleFilter, string sortOrder, string nameFilter, int pageNumber, int pageSize);
+		Task<object> CardCount();
 
-	}
+    }
 }

@@ -1,3 +1,7 @@
+*{
+  font-family: 'Roboto', sans-serif;
+  color: #212121;
+}
 p, label{
   font-family: 'Roboto', sans-serif;
 }
@@ -75,7 +79,7 @@ body{
   align-items: center;
   padding: 10px;
   border-radius: 5px;
-  border:2px solid black
+  border: 3px solid #212121;
 }
 .rpsoption{
   width: 200px;

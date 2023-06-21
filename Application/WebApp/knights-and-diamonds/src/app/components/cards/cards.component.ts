@@ -63,12 +63,12 @@ export class CardsComponent implements OnInit {
       this.cardsPerPage = 50;
     } else {
       this.getUsersDeck();
-      this.cardCounter();
       this.cardsPerPage = 12;
     }
     console.log('ID deck', this.deckID);
     this.getFilteredCards('', '', '', 1);
     this.getCardTypes();
+    this.getCardsCounter();
 
     this.form = this.fb.group({
       cardName: '',
@@ -96,15 +96,18 @@ export class CardsComponent implements OnInit {
 
     this.getFilteredCards(cardTypeID, cardSorting, cardName, pageNumber);
   }
+  
   onCardTypeChange() {
     this.setData(1);
     this.paginator.changePage(0);
     console.log(this.setPage);
   }
+
   onCardSortChange() {
     this.setData(1);
     this.paginator.changePage(0);
   }
+
   onTextChange(event: any) {
     clearTimeout(this.timeout);
     this.timeout = setTimeout(() => {
@@ -112,6 +115,7 @@ export class CardsComponent implements OnInit {
       this.paginator.changePage(0);
     }, 500);
   }
+
   onPageChanged(event: any) {
     const nextPageIndex = event.page + 1;
     event.page = 0;
@@ -176,6 +180,7 @@ export class CardsComponent implements OnInit {
       },
     });
   }
+
   uploadFinished = (event: any) => {
     console.log(event.dbPath);
     this.changeCardForm.patchValue({
@@ -183,6 +188,7 @@ export class CardsComponent implements OnInit {
     });
     console.log(this.changeCardForm.getRawValue());
   };
+
   getUsersDeck() {
     this.deckService.getUsersDeck(this.userID).subscribe({
       next: (res) => {
@@ -195,8 +201,19 @@ export class CardsComponent implements OnInit {
     });
   }
 
-  cardCounter() {
+  deckCounter() {
     this.deckService.cardCounter(this.deckID, this.userID).subscribe({
+      next: (res) => {
+        this.stats = res;
+      },
+      error: (err) => {
+        console.log('neuspesno deckCounter');
+      },
+    });
+  }
+
+  cardCounter() {
+    this.cardService.cardCount().subscribe({
       next: (res) => {
         this.stats = res;
       },
@@ -206,6 +223,13 @@ export class CardsComponent implements OnInit {
     });
   }
 
+  getCardsCounter() {
+    if(this.deckID == undefined)
+      this.cardCounter();
+    else
+      this.deckCounter();
+  }
+
   addCardToDeck(cardID: any) {
     this.confirmationService.confirm({
       message: 'Add this card to your deck?',
@@ -213,7 +237,7 @@ export class CardsComponent implements OnInit {
         this.deckService.addCardToDeck(cardID, this.deckID).subscribe({
           next: (res) => {
             this.getUsersDeck();
-            this.cardCounter();
+            this.getCardsCounter();
             this.messageService.add({
               key: 'br',
               severity: 'success',
@@ -233,17 +257,20 @@ export class CardsComponent implements OnInit {
       },
     });
   }
+
   onMidleCardsClick(card: any) {
     if (this.deckID != undefined) {
       this.removeCardFromDeck(card.id);
     }
     if (this.user != undefined) {
       if (this.user.role == 'Admin') {
+
         this.setFormData(card);
         this.changeReadonlyParrametar(card);
       }
     }
   }
+
   changeReadonlyParrametar(card: any) {
     if (this.changeCardForm.value['id'] == '') {
       this.readonly = true;
@@ -257,6 +284,7 @@ export class CardsComponent implements OnInit {
       this.readonly = false;
     }
   }
+
   setFormData(card: any) {
     this.changeCardForm.setValue({
       id: card.id,
@@ -268,6 +296,7 @@ export class CardsComponent implements OnInit {
     });
     console.log(this.changeCardForm.getRawValue());
   }
+
   updateCard() {
     this.cardService.updateCard(this.changeCardForm.getRawValue()).subscribe({
       next: (res: any) => {
@@ -285,6 +314,29 @@ export class CardsComponent implements OnInit {
       error: (err: any) => {},
     });
   }
+
+  deleteCard() {
+    var id=this.changeCardForm.value['id'];
+    if(id!=''){
+    this.cardService.deleteCard(id).subscribe({
+      next: (res: any) => {
+        this.setData(1);
+        this.changeCardForm.setValue({
+          id: '',
+          cardName: '',
+          cardLevel: '',
+          imgPath: '',
+          attackPoints: '',
+          defencePoints: '',
+        });
+        this.changeReadonlyParrametar(null);
+        this.getCardsCounter();
+        this.bigCard = undefined;
+      },
+      error: (err: any) => {},
+    });
+  }
+  }
   removeCardFromDeck(cardID: any) {
     this.confirmationService.confirm({
       message: 'Remove this card from your deck?',
@@ -292,7 +344,7 @@ export class CardsComponent implements OnInit {
         this.deckService.removeCardFromDeck(cardID, this.deckID).subscribe({
           next: (res) => {
             this.getUsersDeck();
-            this.cardCounter();
+            this.getCardsCounter();
             this.messageService.add({
               key: 'br',
               severity: 'success',

@@ -59,7 +59,7 @@ h1 {
     color: #231c3d;;
     padding: 0.67rem;
     display: flex;
-    font-size: 11px;
+    font-size: 14px;
     flex-direction: column;
     justify-content: space-between;
 }
@@ -72,7 +72,7 @@ h1 {
     margin-bottom: 1rem;
     width: 220px;
     height: 2.5rem;
-    background-image: linear-gradient(to right, #4b9cad 0%, #2a5c7b  25%,#2a5c7b  75%,#4b9cad  100%);
+    background-image: linear-gradient(to right, #4b9cad 0%, #2a5c7b  25%,#1a3c51  75%,#0b2f36  100%);
     margin-left: 10px;
     margin-right: 10px;
 

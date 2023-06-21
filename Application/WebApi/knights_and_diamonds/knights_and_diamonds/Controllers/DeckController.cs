@@ -23,13 +23,13 @@ namespace knights_and_diamonds.Controllers
             _deckService = new DeckService(this._context);
         }
 
-        [Route("AddDeck")]
+        [Route("AddDeck/{userID}")]
         [HttpPost]
-        public async Task<IActionResult> AddDeck([FromBody] Deck deck)
+        public async Task<IActionResult> AddDeck(int userID)
         {
             try
             {
-                var d=await this._deckService.AddDeck(deck);
+                var d = await this._deckService.AddDeck(userID);
                 return Ok(d);
             }
             catch (Exception e)

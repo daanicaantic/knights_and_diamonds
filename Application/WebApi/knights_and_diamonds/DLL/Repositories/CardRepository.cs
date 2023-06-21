@@ -160,5 +160,14 @@ namespace DAL.Repositories
 
 			return filteredCard;
 		}
+
+		public async Task<int> CardCount(string cardType)
+		{
+			var count = await this.Context?.Cards?.Include(x => x.CardType)
+				.Where(x => (string.IsNullOrEmpty(cardType) || x.CardType.Type == cardType) &&
+					x.ImgPath.StartsWith("Resources/Images/")).CountAsync();
+
+			return count;
+        }
 	}
 }

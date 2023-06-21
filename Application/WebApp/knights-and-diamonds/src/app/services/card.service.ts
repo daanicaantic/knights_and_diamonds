@@ -28,6 +28,9 @@ export class CardService {
   updateCard(card: any): any {
     return this.httpClient.put(`https://localhost:7250/Card/UpdateCard`, card);
   }
+  deleteCard(cardID: any):any {
+    return this.httpClient.delete(`https://localhost:7250/Card/DeleteCard/`+ `${cardID}`);
+  }
 
   getCards() {
     return this.httpClient.get(`https://localhost:7250/Card/GetAllCards`);
@@ -46,9 +49,12 @@ export class CardService {
     nameFilter: any,
     pageNumber: any,
     pageSize: any
-  ) {
+    ) {
     return this.httpClient.get(
       `https://localhost:7250/Card/GetFillteredCards?typeFilter=${typeFilter}&sortOrder=${sortOrder}&nameFilter=${nameFilter}&pageNumber=${pageNumber}&pageSize=${pageSize}`
     );
+  }
+  cardCount() {
+    return this.httpClient.get(`https://localhost:7250/Card/CardCount`);
   }
 }

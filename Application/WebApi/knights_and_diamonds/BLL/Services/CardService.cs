@@ -224,13 +224,31 @@ namespace BLL.Services
 			};
 			return result;
 		}
-/*		public async Task<CardDisplayDTO> MapMonsterCard(int cardID)
-		{
-            var mappedCard = new CardDisplayDTO();
-            var card = await this.unitOfWork.Card.GetMonsterCard(cardID);
-        }*/
 
-		/*		public async Task<List<CardDisplayDTO>> GetFilteredCards(int cardTypeID, string name)
+        public async Task<object> CardCount()
+        {
+			var monsterCount = await this._unitOfWork.Card.CardCount("MonsterCard");
+            var spellCount = await this._unitOfWork.Card.CardCount("SpellCard");
+            var trapCount = await this._unitOfWork.Card.CardCount("TrapCard");
+			var allCardsCount = monsterCount + spellCount + trapCount;
+
+            var result = new
+            {
+                MonsterCardsCount = monsterCount,
+                SpellCardsCount = spellCount,
+                TrapCardsCount = trapCount,
+                AllCardsCount = allCardsCount
+            };
+            return result;
+        }
+
+        /*		public async Task<CardDisplayDTO> MapMonsterCard(int cardID)
+                {
+                    var mappedCard = new CardDisplayDTO();
+                    var card = await this.unitOfWork.Card.GetMonsterCard(cardID);
+                }*/
+
+        /*		public async Task<List<CardDisplayDTO>> GetFilteredCards(int cardTypeID, string name)
 				{
 					*//*Expression<Func<T, bool>> predicate;*//*
 					var cardType = await unitOfWork.Card.GetCardType(cardTypeID);
@@ -248,5 +266,5 @@ namespace BLL.Services
 					}
 
 				}*/
-	}
+    }
 }

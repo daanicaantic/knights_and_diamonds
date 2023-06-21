@@ -38,7 +38,8 @@ const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
-    data: { roles: ['Player'] },
+    canActivate: [AuthGuard],
+    data: { roles: ['Player', 'Admin'] },
   },
   {
     path: 'profil/:id',

@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace BLL.Factory
 {
-	public class DostroyesCard:IFactory
+	public class DestroysCard : IFactory
 	{
 		public string Description { get; set; }
 		public Effect Effect { get; set; }
 
-		public DostroyesCard(string effectType, int numOFCardAffected)
+		public DestroysCard(string effectType, int numOFCardAffected)
 		{
 			this.Effect = new Effect();
 			this.Description=this.SetDescription(effectType, numOFCardAffected);
@@ -29,7 +29,7 @@ namespace BLL.Factory
 			}
 			switch (effectType)
 			{
-				case "destroyesMonsterAfterItIsSummoned": return this.Description = "This "+Plural+" destroys enemies monster after it is summoned";
+				case "destroyesMonsterAfterItIsSummoned": return this.Description = "This "+Plural+" destroys enemies monster after it is summoned.";
 					
 				default: throw new ArgumentException("Invalid type", effectType);
 			}

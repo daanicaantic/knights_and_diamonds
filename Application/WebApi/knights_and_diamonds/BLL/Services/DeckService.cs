@@ -33,10 +33,14 @@ namespace BLL.Services
             _cardservice = new CardService(_context);
         }
 
-        public async Task<Deck> AddDeck(Deck deck)
+        public async Task<Deck> AddDeck(int userID)
         {
+            var deck = new Deck();
+            deck.UserID = userID;
             var d = await this._unitOfWork.Deck.AddDeck(deck);
-            var user = await this._unitOfWork.User.GetOne(deck.UserID);
+            await this._unitOfWork.Complete();
+
+            var user = await this._unitOfWork.User.GetOne(userID);
             if (user.MainDeckID == 0)
             {
                 user.MainDeckID = d.ID;

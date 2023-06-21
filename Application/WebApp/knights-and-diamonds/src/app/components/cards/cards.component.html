@@ -11,20 +11,20 @@
         <div class="deck-stats">
             <div class="deck-data-row">
                 <div class="deck-data number-of-spell-cards">
-                    <h3>S - 40</h3>
+                    <h3>S - {{stats.spellCardsCount}}</h3>
                 </div>
                 <div class="deck-data number-of-trap-cards">
-                    <h3>T - 1</h3>
+                    <h3>T - {{stats.trapCardsCount}}</h3>
                 </div>
                 <div class="deck-data number-of-monster-cards">
-                    <h3>M - 12</h3>
+                    <h3>M - {{stats.monsterCardsCount}}</h3>
                 </div>
             </div>
             <div class="deck-data-row">
                 <div class="deck-data exit-deck"><i class="pi pi-arrow-circle-left" style="font-size: 1.5rem;"></i>
                 </div>
                 <div class="deck-data total-number-of-cards">
-                    <h2>50</h2>
+                    <h2>{{stats.allCardsCount}}</h2>
                 </div>
             </div>
         </div>
@@ -78,7 +78,10 @@
             </ng-container>
             <ng-container *ngIf="this.user.role=='Admin' && this.deckID==undefined">
                 <div class="card-form-container">
-                    <div class="form" [formGroup]="changeCardForm">
+                    <div class="update-form" [formGroup]="changeCardForm">
+                        <div class="form-field card-edit">
+                            <h2>Card Edit</h2>
+                        </div>
                         <div class="form-field">
                             <input class="data-field" formControlName="cardName" [readonly]="readonly"
                                 placeholder="Card name" type="text" pInputText />
@@ -101,7 +104,10 @@
                             </label>
                         </div>
                     </div>
-                    <div style="background-color: red; width: 20px;height: 20px;" (click)="updateCard()"></div>
+                    <div class="edit-buttons">
+                        <button class="button-update-card" label="Update" (click)="updateCard()">Update</button>
+                        <button class="button-delete-card" label="Delete" (click)="deleteCard()">Delete</button>
+                    </div>
                 </div>
             </ng-container>
         </div>

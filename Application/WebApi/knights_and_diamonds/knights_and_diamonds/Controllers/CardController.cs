@@ -88,14 +88,14 @@ namespace knights_and_diamonds.Controllers
 			}
 		}
 
-		[Route("DeleteCard")]
+		[Route("DeleteCard/{cardID}")]
 		[HttpDelete]
-		public async Task<IActionResult> DeleteCard(int id)
+		public async Task<IActionResult> DeleteCard(int cardID)
 		{
 			try
 			{
-				await this._cardService.RemoveCard(id);
-				return Ok(id);
+				await this._cardService.RemoveCard(cardID);
+				return Ok(cardID);
 
 			}
 			catch (Exception e)
@@ -167,6 +167,20 @@ namespace knights_and_diamonds.Controllers
 			{
 				var cards = await this._cardService.GetFillteredAndOrderedCards(typeFilter,sortOrder,nameFilter,pageNumber,pageSize);
 				return Ok(cards);
+			}
+			catch (Exception e)
+			{
+				return BadRequest(e);
+			}
+		}
+		[Route("CardCount")]
+		[HttpGet]
+		public async Task<IActionResult> CardCount()
+		{
+			try
+			{
+				var counters = await this._cardService.CardCount();
+				return Ok(counters);
 			}
 			catch (Exception e)
 			{
