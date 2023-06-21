@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { timer } from 'rxjs';
+import { Subscription, timer } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { SignalrService } from 'src/app/services/signalr.service';
 import { RpsGameService } from 'src/app/services/rps-game.service';
@@ -44,6 +44,7 @@ export class RpsGameComponent implements OnInit, OnDestroy {
   gameID: any;
   winner: any;
   user: any;
+  subscripions: Subscription[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -64,17 +65,19 @@ export class RpsGameComponent implements OnInit, OnDestroy {
     this.getRPSWinner();
   }
   getRpsGame() {
-    this.rpsGameService.getRPSGame(this.rpsGameID, this.userID).subscribe({
-      next: (res: any) => {
-        this.playerID = res.playerID;
-        this.enemiePlayerID = res.enemiePlayerID;
-        this.gameID = res.gameID;
-        this.setNewUserValue();
-      },
-      error: (err) => {
-        console.log(err);
-      },
-    });
+    this.subscripions.push(
+      this.rpsGameService.getRPSGame(this.rpsGameID, this.userID).subscribe({
+        next: (res: any) => {
+          this.playerID = res.playerID;
+          this.enemiePlayerID = res.enemiePlayerID;
+          this.gameID = res.gameID;
+          this.setNewUserValue();
+        },
+        error: (err) => {
+          console.log(err);
+        },
+      })
+    );
   }
   setNewUserValue() {
     this.user = {
@@ -87,25 +90,27 @@ export class RpsGameComponent implements OnInit, OnDestroy {
     console.log(this.authService.userValue);
   }
   chooseRPSMove(move: string) {
-    this.rpsGameService.playRPSMove(this.playerID, move).subscribe({
-      next: (res: any) => {
-        this.filterOptions(move, this.options);
-        this.messageService.add({
-          key: 'br',
-          severity: 'success',
-          summary: 'Success',
-          detail: 'You choose ' + move,
-        });
-      },
-      error: (err) => {
-        this.messageService.add({
-          key: 'br',
-          severity: 'error',
-          summary: 'Error',
-          detail: err.error,
-        });
-      },
-    });
+    this.subscripions.push(
+      this.rpsGameService.playRPSMove(this.playerID, move).subscribe({
+        next: (res: any) => {
+          this.filterOptions(move, this.options);
+          this.messageService.add({
+            key: 'br',
+            severity: 'success',
+            summary: 'Success',
+            detail: 'You choose ' + move,
+          });
+        },
+        error: (err) => {
+          this.messageService.add({
+            key: 'br',
+            severity: 'error',
+            summary: 'Error',
+            detail: err.error,
+          });
+        },
+      })
+    );
   }
 
   getTimer(event: any) {
@@ -124,19 +129,6 @@ export class RpsGameComponent implements OnInit, OnDestroy {
       }
     });
   }
-
-  ngOnDestroy(): void {
-    clearInterval(this.progress);
-    this.rpsGameService.removeUserFromUsersInGame(this.userID).subscribe({
-      next: (res: any) => {
-        console.log('res', res);
-      },
-      error: (err) => {
-        console.log(err.error);
-      },
-    });
-  }
-
   checkRPSWinnerInv(): void {
     this.signalrService.hubConnection
       .invoke('CheckRPSWinner', Number(this.rpsGameID))
@@ -180,16 +172,18 @@ export class RpsGameComponent implements OnInit, OnDestroy {
   }
 
   getEnemiesMove() {
-    this.rpsGameService.getPlayerMove(this.enemiePlayerID).subscribe({
-      next: (res: any) => {
-        console.log(res);
-      },
-      error: (err) => {
-        this.filterOptions(err.error.text, this.enemiesOptions);
+    this.subscripions.push(
+      this.rpsGameService.getPlayerMove(this.enemiePlayerID).subscribe({
+        next: (res: any) => {
+          console.log(res);
+        },
+        error: (err) => {
+          this.filterOptions(err.error.text, this.enemiesOptions);
 
-        console.log(err.error.text);
-      },
-    });
+          console.log(err.error.text);
+        },
+      })
+    );
   }
 
   progressionFunction() {
@@ -213,5 +207,10 @@ export class RpsGameComponent implements OnInit, OnDestroy {
 
   setGameStatus() {
     this.inGameService.setGameOn();
+  }
+  ngOnDestroy(): void {
+    clearInterval(this.progress);
+    this.subscripions.forEach((sub) => sub.unsubscribe());
+    this.signalrService.hubConnection.off('GetRPSWinner');
   }
 }

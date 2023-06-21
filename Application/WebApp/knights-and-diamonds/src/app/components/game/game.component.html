@@ -107,6 +107,10 @@
                         <h1 class="phase-message-{{isPlayerOnTurn}}" *ngIf="phaseMessage!=undefined">
                             {{phaseMessage}}
                         </h1>
+                        <h1 class="winner-message-{{didYouWin}}" *ngIf="winnerMessage!=undefined">
+                            {{winnerMessage}}</h1>
+                        <h1 class="winner-message" *ngIf="doYouNeedToWaitEnemiesChoice==true">Waiting for opponent...
+                        </h1>
                         <div class="enemies-table">
                             <div #attackedField id="{{field.fieldID}}" class="card-place"
                                 *ngFor="let field of enemiesField.cardFields" (click)="onEnemiesFieldClick(field)">
@@ -188,7 +192,10 @@
         </div>
     </div>
     <div class="wait-container" *ngIf="doYouNeedToWaitEnemiesChoice==true">
-        <h1 style="color:rgb(255, 96, 96);font-family: cursive;">Waiting for opponent...</h1>
+
+    </div>
+    <div class="wait-container" *ngIf="winnerMessage!=undefined">
+
     </div>
     <div #activateTrapCard class="additional-text" [class.active]="cardActivated" [style.left.px]="textLeft"
         [style.top.px]="textTop">Activate</div>

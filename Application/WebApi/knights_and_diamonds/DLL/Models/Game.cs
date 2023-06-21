@@ -20,8 +20,10 @@ namespace DAL.Models
 		public List<Turn>? Turns { get; set; }
         public int? GraveID { get; set; }
         public Grave? Grave { get; set; }
+        public int Winner { get; set; }
+		public int Loser { get; set; }
 
-        public Game()
+		public Game()
         {
             Grave = new Grave();
             GraveID=Grave.ID;

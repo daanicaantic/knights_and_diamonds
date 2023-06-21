@@ -30,6 +30,8 @@ export class GameComponent implements OnInit, OnDestroy {
   playersLpChange!: ElementRef;
   @ViewChild('activateTrapCard', { static: false })
   activateTrapCard!: ElementRef;
+  @ViewChild('pom', { static: false })
+  winnerMessageDiv!: ElementRef;
 
   userID = this.authService?.userValue?.id;
   playerID = this.authService?.userValue?.player;
@@ -80,6 +82,8 @@ export class GameComponent implements OnInit, OnDestroy {
   lastSummonedMonster: any;
   listOfIds: any = [0];
   subscriptions: Subscription[] = [];
+  winnerMessage: any;
+  didYouWin: any;
 
   constructor(
     public inGameService: IngameService,
@@ -108,16 +112,22 @@ export class GameComponent implements OnInit, OnDestroy {
     this.getFieldsIDsThatCanActivateTrapCard();
     this.getFieldThatMonsterIsSummonedOn();
     this.getIfYouCanContinuePlaying();
+    this.getWinner();
     // this.getStartingDrawing();
     if (this.playerID != undefined) {
       if (this.signalrService.hubConnection.state == 'Connected') {
         this.gameService.getTurnInfoInv(Number(this.gameID), this.playerID);
       } else {
-        this.signalrService.ssSubj.subscribe((obj: any) => {
-          if (obj.type == 'HubConnStarted') {
-            this.gameService.getTurnInfoInv(Number(this.gameID), this.playerID);
-          }
-        });
+        this.subscriptions.push(
+          this.signalrService.ssSubj.subscribe((obj: any) => {
+            if (obj.type == 'HubConnStarted') {
+              this.gameService.getTurnInfoInv(
+                Number(this.gameID),
+                this.playerID
+              );
+            }
+          })
+        );
       }
     }
   }
@@ -159,6 +169,9 @@ export class GameComponent implements OnInit, OnDestroy {
   //players field is huba
   getPlayersField() {
     this.signalrService.hubConnection.on('GetYourField', (field: any) => {
+      if (field.lifePoints <= 0) {
+        field.lifePoints = 0;
+      }
       this.getPointsReduce(
         this.playersLpChange,
         this.playerField.lifePoints,
@@ -169,11 +182,15 @@ export class GameComponent implements OnInit, OnDestroy {
       console.log(this.playerField);
     });
   }
+
   //enemies field iz huba
   getEnemiesField() {
     this.signalrService.hubConnection.on(
       'GetEnemiesField',
       (enemiesField: any) => {
+        if (enemiesField.lifePoints <= 0) {
+          enemiesField.lifePoints = 0;
+        }
         this.getPointsReduce(
           this.enemiesLpChange,
           this.enemiesField.lifePoints,
@@ -182,9 +199,32 @@ export class GameComponent implements OnInit, OnDestroy {
         this.enemiesField = enemiesField;
         this.enemiesHand = enemiesField.hand;
         console.log(this.enemiesField);
+        if (this.enemiesField.lifePoints == 0 || this.playerField == 0) {
+          this.gameService.getWinnerInv(this.gameID, this.playerID);
+        }
       }
     );
   }
+
+  getWinner() {
+    this.signalrService.hubConnection.on(
+      'WinnerMessage',
+      (WinnerMessage: any) => {
+        console.log(WinnerMessage);
+        if (WinnerMessage == 'You Won') {
+          this.didYouWin = true;
+        } else {
+          this.didYouWin = false;
+        }
+        this.winnerMessage = WinnerMessage;
+        console.log(this.winnerMessage);
+        setTimeout(() => {
+          this.router.navigate(['/home']);
+        }, 2000);
+      }
+    );
+  }
+
   //ruke iz huba
   getHands() {
     this.signalrService.hubConnection.on(
@@ -208,6 +248,7 @@ export class GameComponent implements OnInit, OnDestroy {
       }
     );
   }
+
   //koristimo fju za prikaz pocetnog izvlacenja karata;targetArray=nasa ili protivnikova ruka,souceArray=nova ruka stigla sa servera
   getStartingDrawingEffect(i: any, targetArray: any, sourceArray: any) {
     var timer = setInterval(() => {
@@ -243,6 +284,7 @@ export class GameComponent implements OnInit, OnDestroy {
       this.grave = grave;
     });
   }
+
   //turnInfoIz contrlera
   getStartingTurnInfo() {
     this.subscriptions.push(
@@ -477,6 +519,7 @@ export class GameComponent implements OnInit, OnDestroy {
       }
     );
   }
+
   setAfterData(affterData: any) {
     this.areaOfClicking = affterData;
     //ako je 0 znaci da ne treba nigde da kliknemo
@@ -506,6 +549,7 @@ export class GameComponent implements OnInit, OnDestroy {
       }
     );
   }
+
   //dobijamo centar elementa
   getCenter(element: any) {
     const { left, top, width, height } = element.getBoundingClientRect();
@@ -567,6 +611,7 @@ export class GameComponent implements OnInit, OnDestroy {
       }
     );
   }
+
   //izracunavaju se centri napadackog polja i napadnutog,i ugao pod kojim mac treba da leti
   getSwordsTranslation(fieldID: any, attackedFieldID: any) {
     //da li mac jos uvek leti
@@ -632,6 +677,7 @@ export class GameComponent implements OnInit, OnDestroy {
       }
     );
   }
+
   //kad dodje do promene poena pojavljuje se ispod tj iznad zivotnih poena
   getPointsReduce(
     paragrafHtml: any,
@@ -683,6 +729,7 @@ export class GameComponent implements OnInit, OnDestroy {
       }
     );
   }
+
   onYouWantToActivateTrapCardClick() {
     this.doYouWantToActivateTrapCard = true;
   }
@@ -697,6 +744,7 @@ export class GameComponent implements OnInit, OnDestroy {
       }
     );
   }
+
   getIfYouCanContinuePlaying() {
     this.signalrService.hubConnection.on('DidTrapEffectExecuted', () => {
       console.log('bababababa');
@@ -708,12 +756,6 @@ export class GameComponent implements OnInit, OnDestroy {
       }, 1000);
     });
   }
-  ngOnDestroy(): void {
-    this.inGameService.setGameOff();
-    this.subscriptions.forEach((sub) => sub.unsubscribe());
-    this.router.navigate(['/home']);
-  }
-
   chackAreaOfCliciking() {
     if (this.areaOfClicking.areaOfClicking == 5) {
       if (this.enemiesHand.length == 0) {
@@ -739,5 +781,25 @@ export class GameComponent implements OnInit, OnDestroy {
         );
       }
     }
+  }
+  ngOnDestroy(): void {
+    this.inGameService.setGameOff();
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
+    this.signalrService.hubConnection.off('GetYourField');
+    this.signalrService.hubConnection.off('GetEnemiesField');
+    this.signalrService.hubConnection.off('WinnerMessage');
+    this.signalrService.hubConnection.off('GetCardsInYourHand');
+    this.signalrService.hubConnection.off('GetCardsInEnemiesHand');
+    this.signalrService.hubConnection.off('GetGraveData');
+    this.signalrService.hubConnection.off('GetTurnInfo');
+    this.signalrService.hubConnection.off('GetAreaOfClicking');
+    this.signalrService.hubConnection.off('GetFieldsAbleToAttack');
+    this.signalrService.hubConnection.off('GetFieldsIncludedInAttack');
+    this.signalrService.hubConnection.off('FieldsThatLostPoints');
+    this.signalrService.hubConnection.off(
+      'EnemiseFieldsThatCanActivateTrapCard'
+    );
+    this.signalrService.hubConnection.off('GetLastSummonedEnemiesMonster');
+    this.signalrService.hubConnection.off('DidTrapEffectExecuted');
   }
 }

@@ -156,6 +156,10 @@ namespace BLL.Services
 			#pragma warning disable
 			var field = new FieldDTO();
             var player = await this._unitOfWork.Player.GetPlayersField(playerID);
+            if (player.LifePoints < 0)
+            {
+                player.LifePoints = 0;
+            }
             if (player == null)
             {
                 throw new Exception("There is no player with this id");
@@ -542,6 +546,42 @@ namespace BLL.Services
 			this._unitOfWork.AttackInTurn.Update(posibleAttack);
             await this._unitOfWork.Complete();
             return difference;
+		}
+
+		public async Task<int> SetWinner(int playerID,int gameID)
+        {
+            int winner = 0;
+            var game = await this._unitOfWork.Game.GetGameWithPlayers(gameID);
+            var enemiesPlayer=game.Players.Where(x => x.ID != playerID).FirstOrDefault();
+            if (enemiesPlayer == null)
+            {
+                throw new Exception("Enemies player Error.");
+            }
+			var player = game.Players.Where(x => x.ID == playerID).FirstOrDefault();
+			if (player == null)
+			{
+				throw new Exception("Player Error.");
+			}
+			if (enemiesPlayer.LifePoints <= 0)
+            {
+                game.Winner = player.UserID;
+                game.Loser = enemiesPlayer.UserID;
+                winner = player.ID;
+            }
+            else if(player.LifePoints<=0)
+            {
+                game.Loser=player.UserID;
+				game.Winner = enemiesPlayer.UserID;
+				winner = enemiesPlayer.ID;
+			}
+            else
+            {
+                throw new Exception("You dont need to be here");
+            }
+			this._unitOfWork.Game.Update(game);
+            await this._unitOfWork.Complete();
+			return winner;
+
 		}
 
 	}
