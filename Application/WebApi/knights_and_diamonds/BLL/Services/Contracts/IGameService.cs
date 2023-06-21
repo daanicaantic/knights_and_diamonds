@@ -10,8 +10,8 @@ namespace BLL.Services.Contracts
 {
 
 	public interface IGameService
-    {
-	
+	{
+
 		struct GraveToDisplay
 		{
 			public int GraveCount { get; set; }
@@ -39,6 +39,6 @@ namespace BLL.Services.Contracts
 		Task<int> AttackEnemiesField(int attackingFieldID, int attackedFieldID, int playerID, int enemiesPlayerID, int gameID);
 		Task<List<int>> CanEnemieActivateTrapCard(string activationString, int playerID, int gameID);
 		Task<AffterPlaySpellTrapCardData> ActiveTrapCard(int gameID, int playerID, int fieldID);
-
+		Task<int> SetWinner(int playerID, int gameID);
 	}
 }

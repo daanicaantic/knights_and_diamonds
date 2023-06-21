@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
-import * as signalR from "@microsoft/signalr";
+import * as signalR from '@microsoft/signalr';
 import { MessageService } from 'primeng/api';
 import { Observable, Subject } from 'rxjs';
 import { AuthService } from './auth.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SignalrService {
-
-  constructor(private messageService: MessageService ) { }
+  constructor(private messageService: MessageService) {}
 
   hubConnection!: signalR.HubConnection;
 
@@ -22,18 +21,22 @@ export class SignalrService {
     this.hubConnection = new signalR.HubConnectionBuilder()
       .withUrl('https://localhost:7250/toastr', {
         skipNegotiation: true,
-        transport: signalR.HttpTransportType.WebSockets
+        transport: signalR.HttpTransportType.WebSockets,
       })
       .build();
 
     this.hubConnection
       .start()
       .then(() => {
-        this.ssSubj.next({ type: "HubConnStarted" })
-        console.log("dfhasdkjlfbjsdafsajdj", this.hubConnection.connectionId)
+        this.ssSubj.next({ type: 'HubConnStarted' });
+        console.log(
+          'dfhasdkjlfbjsdafsajdj',
+          this.hubConnection.connectionId,
+          this.ssSubj
+        );
       })
-      .catch(err => console.log('Error while starting connection: ' + err));
-  }
+      .catch((err) => console.log('Error while starting connection: ' + err));
+  };
 
   //   async askServer() {
   //     console.log("askServerStart");

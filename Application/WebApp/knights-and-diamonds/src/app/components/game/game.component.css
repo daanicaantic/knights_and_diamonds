@@ -474,17 +474,38 @@ p {
     top:42%;
     text-align: center;
 }
+.winner-message{
+    position: absolute;
+    z-index: 9999;
+    font-family: cursive;
+    font-size: 9vh;
+    width:100%;
+    top:42%;
+    text-align: center;
+    color:rgb(255, 96, 96);
+    -webkit-text-stroke: 0.3vh black;
+}
+.winner-message-true,.winner-message-false{
+    position: absolute;
+    z-index: 9999;
+    font-family: cursive;
+    font-size: 9vh;
+    width:100%;
+    top:42%;
+    text-align: center;
+}
+
 .card-description-container{
     display: none;
 }
-.phase-message-false{
+.phase-message-false,.winner-message-false{
     
     color:rgb(255, 96, 96);
     -webkit-text-stroke: 0.3vh black;
     
     /* color: rgb(62, 2, 0); */
 }
-.phase-message-true{
+.phase-message-true,.winner-message-true{
 
     color: rgb(0 161 255);
     -webkit-text-stroke: 0.3vh rgb(0 10 101);

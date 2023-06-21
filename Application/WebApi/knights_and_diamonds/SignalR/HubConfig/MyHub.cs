@@ -470,12 +470,45 @@ namespace SignalR.HubConfig
 			{
 				await Clients.Client(con).SendAsync("FieldsThatLostPoints", difference, fieldThatLostPoints);
 			}
-
 			var grave = await this._gameService.GetGamesGrave(gameID);
 			await Task.Delay(1000);
 			await this.GetField(connections, field);
 			await this.GetField(enemiesConnections, enemisfield);
 			await this.GetGrave(connections, grave);
+		}
+
+		public async Task GetWinner(int gameID,int playerID)
+		{
+			try
+			{
+				string yourMessage;
+				string enemiesMessage;
+				var connections = await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
+				var winner = await this._gameService.SetWinner(playerID,gameID);
+				if (winner == playerID)
+				{
+					yourMessage = "You Won";
+					enemiesMessage = "You Lost";
+				}
+				else
+				{
+					yourMessage = "You Lost";
+					enemiesMessage = "You Won";
+				}
+				foreach (var con in connections.MyConnections)
+				{
+					await Clients.Client(con).SendAsync("WinnerMessage", yourMessage);
+				}
+				foreach (var con in connections.EnemiesConnections)
+				{
+					await Clients.Client(con).SendAsync("WinnerMessage", enemiesMessage);
+				}
+			}
+			catch(Exception e)
+			{
+				throw new Exception(e.Message);
+			}
+
 		}
 		public async Task RemoveCardFromHandToGrave(int playerID,int cardID,int gameID)
 		{

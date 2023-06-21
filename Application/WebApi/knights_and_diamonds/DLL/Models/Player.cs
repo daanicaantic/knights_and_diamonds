@@ -46,7 +46,7 @@ namespace DAL.Models
 			this.Game = game;
 			this.Deck = deck;
 			this.Hand = new PlayersHand();
-			this.LifePoints = 4000;
+			this.LifePoints = 1000;
 			this.Fields = new List<CardField>();
 		}
 		public CardInDeck Draw()
