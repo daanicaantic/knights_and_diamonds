@@ -547,5 +547,19 @@ namespace SignalR.HubConfig
 				throw new Exception(ex.Message);
 			}
 		}
-	}
+        public async Task ChangeMonsterPosition(int playerID, int fieldID, int gameID)
+        {
+            try
+            {
+                var connections = await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
+                await this._gameService.ChangeMonsterPosition(playerID, fieldID, gameID);
+                var field = await this._gameService.GetPlayersField(playerID);
+                await this.GetField(connections, field);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+    }
 }

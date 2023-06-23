@@ -84,6 +84,7 @@ export class GameComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
   winnerMessage: any;
   didYouWin: any;
+  listOfFiledThatYouCanChangePosition:any[]=[];
 
   constructor(
     public inGameService: IngameService,
@@ -309,6 +310,8 @@ export class GameComponent implements OnInit, OnDestroy {
         this.phaseMessage = 'Draw Phase';
       } else if (this.turnInfo.turnPhase == 1) {
         this.phaseMessage = 'Main Phase';
+        console.log("grejala pa gradila")
+        this.fieldsThatCanChangePosition();
       } else if (this.turnInfo.turnPhase == 2) {
         this.phaseMessage = 'Battle Phase';
       } else if (this.turnInfo.turnPhase == 3) {
@@ -343,6 +346,18 @@ export class GameComponent implements OnInit, OnDestroy {
       phase.status = true;
       this.curentPhase = phase;
     }
+  }
+  fieldsThatCanChangePosition(){
+    if(this.playerField!=undefined){
+    this.playerField.cardFields.forEach((element: any) => {
+      if (element.cardOnField != null) {
+        if (element.fieldIndex < 5) {
+          this.listOfFiledThatYouCanChangePosition.push(element.fieldID);
+          console.log("ovdeeeeee",this.listOfFiledThatYouCanChangePosition)
+        }
+      }
+    });
+  }
   }
   //menjanje faze
   changePhaseInv(phase: any) {
@@ -430,7 +445,7 @@ export class GameComponent implements OnInit, OnDestroy {
   onPlayersFieldClick(field: any) {
     console.log(field);
     if (field.cardOnField != undefined) {
-      if (field.cardOnField.cardType == 'TrapCard') {
+      if (field.cardOnField.cardType == 'TrapCard' ) {
         if (this.cardActivated) {
           this.canYouActivateTrapCard = false;
           this.fieldsThatCanActivateTrapCard = undefined;
@@ -443,6 +458,13 @@ export class GameComponent implements OnInit, OnDestroy {
             field.fieldID
           );
           this.gameService.didTrapEffectExecutedInv(this.gameID, this.playerID);
+        }
+      }
+      else if(field.cardOnField.cardType=='MonsterCard' && this.curentPhase.name == 'MP' && this.isPlayerOnTurn){
+        if(this.listOfFiledThatYouCanChangePosition.includes(field.fieldID)){
+          this.gameService.changeMonsterPositionInv(this.playerID,field.fieldID,this.gameID)
+          const index = this.listOfFiledThatYouCanChangePosition.findIndex(item => item === field.fieldID);
+          this.listOfFiledThatYouCanChangePosition.splice(index,1);
         }
       }
     }

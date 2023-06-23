@@ -162,6 +162,11 @@ export class GameService {
       .invoke('GetWinner', Number(gameID), playerID)
       .catch((err) => console.error('O V D E', err));
   }
+  changeMonsterPositionInv( playerID: any,fieldID:any,gameID: any): void {
+    this.signalrService.hubConnection
+      .invoke('ChangeMonsterPosition',playerID,fieldID, Number(gameID))
+      .catch((err) => console.error('O V D E', err));
+  }
   getGame(gameID: any, userID: any) {
     return this.httpClient.get(
       `https://localhost:7250/Game/GetGame/` + `${gameID}` + `/` + `${userID}`

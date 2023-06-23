@@ -40,5 +40,7 @@ namespace BLL.Services.Contracts
 		Task<List<int>> CanEnemieActivateTrapCard(string activationString, int playerID, int gameID);
 		Task<AffterPlaySpellTrapCardData> ActiveTrapCard(int gameID, int playerID, int fieldID);
 		Task<int> SetWinner(int playerID, int gameID);
-	}
+		Task ChangeMonsterPosition(int playerID, int fieldID, int gameID);
+
+    }
 }

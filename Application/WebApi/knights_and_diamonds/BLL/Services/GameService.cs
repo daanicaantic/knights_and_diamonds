@@ -497,10 +497,8 @@ namespace BLL.Services
 				throw new Exception("There is no card on this field");
 			}
             cardField.CardPosition=!cardField.CardPosition;
-            if (cardField.CardShowen == false)
-            {
-                cardField.CardShowen = true;
-            }
+       
+            cardField.CardShowen = true;
             this._unitOfWork.CardField.Update(cardField);
             await this._unitOfWork.Complete();
 		}
