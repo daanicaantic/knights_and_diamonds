@@ -26,7 +26,6 @@ namespace BLL.Strategy
 			this._unitOfWork = new UnitOfWork(_context);
 			this._playerService = new PlayerService(_context);
 			this._gameService = new GameService(_context);
-
 		}
 		public ChooseCardsFrom SelectCardsFrom()
 

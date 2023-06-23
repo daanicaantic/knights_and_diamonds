@@ -2,12 +2,14 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { CardService } from 'src/app/services/card.service';
 import { DeckService } from 'src/app/services/deck.service';
@@ -18,12 +20,12 @@ import { PomType } from 'src/classes/type';
   templateUrl: './cards.component.html',
   styleUrls: ['./cards.component.css'],
 })
-export class CardsComponent implements OnInit {
+export class CardsComponent implements OnInit, OnDestroy {
   @ViewChild('paginator') paginator: any;
   rightListOFCards: any;
   form!: FormGroup;
   changeCardForm!: FormGroup;
-
+  subscriptions: Subscription[] = [];
   cardTypes: any[] = [];
   bigCard: any;
   startingvalue: any;
@@ -52,7 +54,9 @@ export class CardsComponent implements OnInit {
     private deckService: DeckService,
     private authService: AuthService,
     private confirmationService: ConfirmationService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private router: Router,
+
   ) {}
 
   ngOnInit(): void {
@@ -164,21 +168,23 @@ export class CardsComponent implements OnInit {
   }
 
   getCardTypes() {
-    this.cardService.getCardTypes().subscribe({
-      next: (res: any) => {
-        var pom = res;
-        pom.push({ id: 0, type: 'AllCards', imgPath: 'string' });
-        this.cardTypes = pom;
-        // res.forEach((element: any) => {
-        //   this.cardTypes.push(element);
-        //   console.log(this.cardTypes);
-        // });
-        // this.startingvalue = 'AllCards';
-      },
-      error: (err) => {
-        console.log('neuspesno ct');
-      },
-    });
+    this.subscriptions.push(
+      this.cardService.getCardTypes().subscribe({
+        next: (res: any) => {
+          var pom = res;
+          pom.push({ id: 0, type: 'AllCards', imgPath: 'string' });
+          this.cardTypes = pom;
+          // res.forEach((element: any) => {
+          //   this.cardTypes.push(element);
+          //   console.log(this.cardTypes);
+          // });
+          // this.startingvalue = 'AllCards';
+        },
+        error: (err) => {
+          console.log('neuspesno ct');
+        },
+      })
+    );
   }
 
   uploadFinished = (event: any) => {
@@ -190,37 +196,43 @@ export class CardsComponent implements OnInit {
   };
 
   getUsersDeck() {
-    this.deckService.getUsersDeck(this.userID).subscribe({
-      next: (res) => {
-        console.log(res);
-        this.middleListOfCards = res;
-      },
-      error: (err) => {
-        console.log('neuspesno getUsersDeck');
-      },
-    });
+    this.subscriptions.push(
+      this.deckService.getUsersDeck(this.userID).subscribe({
+        next: (res) => {
+          console.log(res);
+          this.middleListOfCards = res;
+        },
+        error: (err) => {
+          console.log('neuspesno getUsersDeck');
+        },
+      })
+    );
   }
 
   deckCounter() {
-    this.deckService.cardCounter(this.deckID, this.userID).subscribe({
-      next: (res) => {
-        this.stats = res;
-      },
-      error: (err) => {
-        console.log('neuspesno deckCounter');
-      },
-    });
+    this.subscriptions.push(
+      this.deckService.cardCounter(this.deckID, this.userID).subscribe({
+        next: (res) => {
+          this.stats = res;
+        },
+        error: (err) => {
+          console.log('neuspesno deckCounter');
+        },
+      })
+    );
   }
 
   cardCounter() {
-    this.cardService.cardCount().subscribe({
-      next: (res) => {
-        this.stats = res;
-      },
-      error: (err) => {
-        console.log('neuspesno cardCounter');
-      },
-    });
+    this.subscriptions.push(
+      this.cardService.cardCount().subscribe({
+        next: (res) => {
+          this.stats = res;
+        },
+        error: (err) => {
+          console.log('neuspesno cardCounter');
+        },
+      })
+    );
   }
 
   getCardsCounter() {
@@ -234,26 +246,28 @@ export class CardsComponent implements OnInit {
     this.confirmationService.confirm({
       message: 'Add this card to your deck?',
       accept: () => {
-        this.deckService.addCardToDeck(cardID, this.deckID).subscribe({
-          next: (res) => {
-            this.getUsersDeck();
-            this.getCardsCounter();
-            this.messageService.add({
-              key: 'br',
-              severity: 'success',
-              summary: 'Success',
-              detail: 'Card added!',
-            });
-          },
-          error: (err) => {
-            this.messageService.add({
-              key: 'br',
-              severity: 'error',
-              summary: 'Error',
-              detail: err.error,
-            });
-          },
-        });
+        this.subscriptions.push(
+          this.deckService.addCardToDeck(cardID, this.deckID).subscribe({
+            next: (res) => {
+              this.getUsersDeck();
+              this.getCardsCounter();
+              this.messageService.add({
+                key: 'br',
+                severity: 'success',
+                summary: 'Success',
+                detail: 'Card added!',
+              });
+            },
+            error: (err) => {
+              this.messageService.add({
+                key: 'br',
+                severity: 'error',
+                summary: 'Error',
+                detail: err.error,
+              });
+            },
+          })
+        );
       },
     });
   }
@@ -298,71 +312,84 @@ export class CardsComponent implements OnInit {
   }
 
   updateCard() {
-    this.cardService.updateCard(this.changeCardForm.getRawValue()).subscribe({
-      next: (res: any) => {
-        this.setData(1);
-        this.changeCardForm.setValue({
-          id: '',
-          cardName: '',
-          cardLevel: '',
-          imgPath: '',
-          attackPoints: '',
-          defencePoints: '',
-        });
-        this.changeReadonlyParrametar(null);
-      },
-      error: (err: any) => {},
-    });
+    this.subscriptions.push(
+      this.cardService.updateCard(this.changeCardForm.getRawValue()).subscribe({
+        next: (res: any) => {
+          this.setData(1);
+          this.changeCardForm.setValue({
+            id: '',
+            cardName: '',
+            cardLevel: '',
+            imgPath: '',
+            attackPoints: '',
+            defencePoints: '',
+          });
+          this.changeReadonlyParrametar(null);
+        },
+        error: (err: any) => {},
+      })
+    );
   }
 
   deleteCard() {
     var id=this.changeCardForm.value['id'];
     if(id!=''){
-    this.cardService.deleteCard(id).subscribe({
-      next: (res: any) => {
-        this.setData(1);
-        this.changeCardForm.setValue({
-          id: '',
-          cardName: '',
-          cardLevel: '',
-          imgPath: '',
-          attackPoints: '',
-          defencePoints: '',
-        });
-        this.changeReadonlyParrametar(null);
-        this.getCardsCounter();
-        this.bigCard = undefined;
-      },
-      error: (err: any) => {},
-    });
+      this.subscriptions.push(
+        this.cardService.deleteCard(id).subscribe({
+          next: (res: any) => {
+            this.setData(1);
+            this.changeCardForm.setValue({
+              id: '',
+              cardName: '',
+              cardLevel: '',
+              imgPath: '',
+              attackPoints: '',
+              defencePoints: '',
+            });
+            this.changeReadonlyParrametar(null);
+            this.getCardsCounter();
+            this.bigCard = undefined;
+          },
+          error: (err: any) => {},
+        })
+      );
+    }
   }
-  }
+  
   removeCardFromDeck(cardID: any) {
     this.confirmationService.confirm({
       message: 'Remove this card from your deck?',
       accept: () => {
-        this.deckService.removeCardFromDeck(cardID, this.deckID).subscribe({
-          next: (res) => {
-            this.getUsersDeck();
-            this.getCardsCounter();
-            this.messageService.add({
-              key: 'br',
-              severity: 'success',
-              summary: 'Success',
-              detail: 'Card removed!',
-            });
-          },
-          error: (err) => {
-            console.log(err.error);
-            this.messageService.add({
-              key: 'br',
-              severity: 'error',
-              summary: 'Error',
-              detail: err.error,
-            });
-          },
-        });
+        this.subscriptions.push(
+          this.deckService.removeCardFromDeck(cardID, this.deckID).subscribe({
+            next: (res) => {
+              this.getUsersDeck();
+              this.getCardsCounter();
+              this.messageService.add({
+                key: 'br',
+                severity: 'success',
+                summary: 'Success',
+                detail: 'Card removed!',
+              });
+            },
+            error: (err) => {
+              console.log(err.error);
+              this.messageService.add({
+                key: 'br',
+                severity: 'error',
+                summary: 'Error',
+                detail: err.error,
+              });
+            },
+          })
+        )
       },
     });
+  }
+  goToHome() {
+    this.router.navigate(['/home']);
+  }
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }

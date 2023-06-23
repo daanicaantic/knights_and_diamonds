@@ -6,7 +6,7 @@ import {
   HttpEventType,
   HttpErrorResponse,
 } from '@angular/common/http';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { CardService } from 'src/app/services/card.service';
 import {
   BehaviorSubject,
@@ -21,14 +21,14 @@ import {
   templateUrl: './card-create.component.html',
   styleUrls: ['./card-create.component.css'],
 })
-export class CardCreateComponent implements OnInit {
+export class CardCreateComponent implements OnInit, OnDestroy {
   card = card;
   form!: FormGroup;
   cardTypes: any;
   cardEffects: any;
   pickur: any;
   defaultType: any;
-  subscripions: Subscription[] = [];
+  subscriptions: Subscription[] = [];
   isEffectNone = false;
   isSpellOrTrapCard = false;
   imgPath: any;
@@ -124,28 +124,32 @@ export class CardCreateComponent implements OnInit {
   };
 
   getCardTypes() {
-    this.cardService.getCardTypes().subscribe({
-      next: (res) => {
-        this.cardTypes = res;
-        this.card.cardType = this.cardTypes[0].type;
-      },
-      error: (err) => {
-        console.log('neuspesno ct');
-      },
-    });
+    this.subscriptions.push(
+      this.cardService.getCardTypes().subscribe({
+        next: (res) => {
+          this.cardTypes = res;
+          this.card.cardType = this.cardTypes[0].type;
+        },
+        error: (err) => {
+          console.log('neuspesno ct');
+        },
+      })
+    );
   }
 
   getEffectTypes() {
-    this.cardService.getEffectTypes().subscribe({
-      next: (res) => {
-        console.log(res);
-        this.cardEffects = res;
-        console.log(this.cardEffects);
-      },
-      error: (err) => {
-        console.log('neuspesno ce');
-      },
-    });
+    this.subscriptions.push(
+      this.cardService.getEffectTypes().subscribe({
+        next: (res) => {
+          console.log(res);
+          this.cardEffects = res;
+          console.log(this.cardEffects);
+        },
+        error: (err) => {
+          console.log('neuspesno ce');
+        },
+      })
+    );
   }
 
   handleClick() {
@@ -153,24 +157,30 @@ export class CardCreateComponent implements OnInit {
     p.imgPath = this.imgPath;
     console.log('pikcur', p);
 
-    this.cardService.addCard(p).subscribe({
-      next: (res: any) => {
-        this.messageService.add({
-          key: 'br',
-          severity: 'success',
-          summary: 'Success',
-          detail: p.cardName + ' card added!',
-        });
-      },
-      error: (err: any) => {
-        this.messageService.add({
-          key: 'br',
-          severity: 'error',
-          summary: 'Error',
-          detail: err.error,
-        });
-        console.log(err);
-      },
-    });
+    this.subscriptions.push(
+      this.cardService.addCard(p).subscribe({
+        next: (res: any) => {
+          this.messageService.add({
+            key: 'br',
+            severity: 'success',
+            summary: 'Success',
+            detail: p.cardName + ' card added!',
+          });
+        },
+        error: (err: any) => {
+          this.messageService.add({
+            key: 'br',
+            severity: 'error',
+            summary: 'Error',
+            detail: err.error,
+          });
+          console.log(err);
+        },
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }

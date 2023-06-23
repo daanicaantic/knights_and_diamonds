@@ -47,7 +47,6 @@ namespace BLL.Services
             this._playerService = new PlayerService(_context);
             this._concreteStrategy = new ConcreteStrategy(_context);
 			this._concreteAttackingStrategy = new ConcreteAttackingStrategy(_context);
-
 		}
 
 		public async Task<List<string>> GameGroup(int gameID)

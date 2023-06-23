@@ -20,20 +20,20 @@ namespace BLL.Services
 	{
 		private readonly KnightsAndDiamondsContext _context;
 		public UnitOfWork _unitOfWork { get; set; }
-		private InGameUsers _usersingame { get; set; }
+		private InGameUsers _usersInGame { get; set; }
 		public RPSGameService(KnightsAndDiamondsContext context)
 		{
 			this._context = context;
-			_unitOfWork = new UnitOfWork(_context);
-			_usersingame = InGameUsers.GetInstance();
+			this._unitOfWork = new UnitOfWork(_context);
+			this._usersInGame = InGameUsers.GetInstance();
 		}
 
 		public int NewLobby(OnlineUserDto user, OnlineUserDto challengedUser)
 		{
-			if (!this._usersingame.UsersInGame.Contains(user.ID) && !this._usersingame.UsersInGame.Contains(challengedUser.ID))
+			if (!this._usersInGame.UsersInGame.Contains(user.ID) && !this._usersInGame.UsersInGame.Contains(challengedUser.ID))
 			{
 				Lobby lobby;
-				var lobbies = this._usersingame.Lobbies;
+				var lobbies = this._usersInGame.Lobbies;
 
 				if (lobbies.Any(x => x.User1.ID == user.ID && x.User2.ID == challengedUser.ID))
 				{
@@ -45,7 +45,7 @@ namespace BLL.Services
                     throw new Exception("This user allready challenged you");
                 }
 
-                int lobbyID = this._usersingame.lobbyID++;
+                int lobbyID = this._usersInGame.lobbyID++;
 
                 if (!lobbies.Any(x => x.ID == lobbyID))
 				{
@@ -68,7 +68,7 @@ namespace BLL.Services
 
 		public async Task<int> StartGame(int lobbyID)
 		{
-			var lobbies = this._usersingame.Lobbies;
+			var lobbies = this._usersInGame.Lobbies;
 			if (lobbies == null)
 			{
 				throw new Exception("There are no any loby");
@@ -87,7 +87,7 @@ namespace BLL.Services
 			}
 
             var user1 = await this._unitOfWork.User.GetOne(lobby.User1.ID);
-			if (this._usersingame.UsersInGame.Contains(user1.ID))
+			if (this._usersInGame.UsersInGame.Contains(user1.ID))
 			{
 				throw new Exception(user1.UserName + "is already in game.");
 			}
@@ -99,7 +99,7 @@ namespace BLL.Services
 			}
             
             var user2 = await this._unitOfWork.User.GetOne(lobby.User2.ID);
-			if (this._usersingame.UsersInGame.Contains(user2.ID))
+			if (this._usersInGame.UsersInGame.Contains(user2.ID))
 			{
 				throw new Exception(user2.UserName + "is already in game.");
 			}
@@ -120,12 +120,12 @@ namespace BLL.Services
 			Player player2 = new Player(rpsGame, cardGame, user2, deck2);
 			player2.CreateFields();
 
-			this._usersingame.UsersInGame.Add(user1.ID);
-			this._usersingame.UsersInGame.Add(user2.ID);
+			this._usersInGame.UsersInGame.Add(user1.ID);
+			this._usersInGame.UsersInGame.Add(user2.ID);
 
 			await this._unitOfWork.Player.Add(player1);
 			await this._unitOfWork.Player.Add(player2);
-			this._usersingame.Lobbies.Remove(lobby);
+			this._usersInGame.Lobbies.Remove(lobby);
 
 			await this._unitOfWork.Complete();
 
@@ -133,7 +133,7 @@ namespace BLL.Services
 		}
         public int DenyGame(int lobbyID)
         {
-            var lobbies = this._usersingame.Lobbies;
+            var lobbies = this._usersInGame.Lobbies;
 
             var lobby = lobbies.Find(x => x.ID == lobbyID);
 			if (lobby == null)
@@ -150,7 +150,7 @@ namespace BLL.Services
 		{
 			try
 			{
-				return this._usersingame.GamesIDs;
+				return this._usersInGame.GamesIDs;
 			}
 			catch
 			{
@@ -176,13 +176,13 @@ namespace BLL.Services
 
 		public List<Lobby> LobbiesPerUser(int userID)
 		{
-			var lobbies = this._usersingame.Lobbies.Where(x => x.User2.ID == userID).ToList();
+			var lobbies = this._usersInGame.Lobbies.Where(x => x.User2.ID == userID).ToList();
 			return (lobbies);
 		}
 
         public List<Lobby> LobbiesYouCreated(int userID)
         {
-            var lobbies = this._usersingame.Lobbies.Where(x => x.User1.ID == userID).ToList();
+            var lobbies = this._usersInGame.Lobbies.Where(x => x.User1.ID == userID).ToList();
             return (lobbies);
         }
 
@@ -361,9 +361,9 @@ namespace BLL.Services
 		}
 		public void RemoveUserFromUsersInGame(int userID)
         {
-			if(this._usersingame.UsersInGame.Contains(userID))
+			if(this._usersInGame.UsersInGame.Contains(userID))
 			{
-                this._usersingame.UsersInGame.Remove(userID);
+                this._usersInGame.UsersInGame.Remove(userID);
             }
         }
     }

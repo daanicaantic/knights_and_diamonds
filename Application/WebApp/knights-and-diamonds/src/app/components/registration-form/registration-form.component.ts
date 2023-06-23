@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
@@ -11,7 +11,7 @@ import { UserService } from 'src/app/services/user.service';
   templateUrl: './registration-form.component.html',
   styleUrls: ['./registration-form.component.css'],
 })
-export class RegistrationFormComponent implements OnInit {
+export class RegistrationFormComponent implements OnInit, OnDestroy {
   form!: FormGroup;
   subscriptions: Subscription[] = [];
   submitted = false;
@@ -39,24 +39,30 @@ export class RegistrationFormComponent implements OnInit {
   }
   addUser() {
     console.log(this.form.getRawValue());
-    this.userService.addUser(this.form.getRawValue()).subscribe({
-      next: (res: any) => {
-        this.messageService.add({
-          key: 'br',
-          severity: 'success',
-          summary: 'Uspešno',
-          detail: 'Registracija je uspela!',
-        });
-      },
-      error: (err: any) => {
-        console.log(err.error);
-        this.messageService.add({
-          key: 'br',
-          severity: 'error',
-          summary: 'Neuspešno',
-          detail: err.error,
-        });
-      },
-    });
+    this.subscriptions.push(
+      this.userService.addUser(this.form.getRawValue()).subscribe({
+        next: (res: any) => {
+          this.messageService.add({
+            key: 'br',
+            severity: 'success',
+            summary: 'Uspešno',
+            detail: 'Registracija je uspela!',
+          });
+        },
+        error: (err: any) => {
+          console.log(err.error);
+          this.messageService.add({
+            key: 'br',
+            severity: 'error',
+            summary: 'Neuspešno',
+            detail: err.error,
+          });
+        },
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }

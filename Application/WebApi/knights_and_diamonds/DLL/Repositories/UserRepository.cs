@@ -37,5 +37,17 @@ namespace DAL.Repositories
 			return user;
 		}
 
-	}
+        public async Task<object> WinsAndLosesForUser(int userID)
+        {
+            var winsCount = await Context?.Games?.Where(x => x.Winner == userID).CountAsync();
+            var losesCount = await Context?.Games?.Where(x => x.Loser == userID).CountAsync();
+
+            var result = new
+            {
+                WinsCount = winsCount,
+                LosesCount = losesCount,
+            };
+            return result;
+        }
+    }
 }

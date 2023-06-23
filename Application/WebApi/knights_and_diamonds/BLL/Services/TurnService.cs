@@ -27,7 +27,7 @@ namespace BLL.Services
 		public TurnService(KnightsAndDiamondsContext context)
 		{
 			this._context = context;
-			_unitOfWork = new UnitOfWork(_context);
+			this._unitOfWork = new UnitOfWork(_context);
 			this._gameService = new GameService(_context);
 			this._cardService = new CardService(_context);
 			this._playerService = new PlayerService(_context);
@@ -108,12 +108,16 @@ namespace BLL.Services
 			}
 			if (playerFields != null)
 			{
-				foreach (var field in playerFields)
-				{
-					if (field.CardOnField != null && field.CardPosition==true) {
-						var fieldAbleToAttack = new AttackInTurn(true, currentTurn.ID,field.ID);
-						await this._unitOfWork.AttackInTurn.Add(fieldAbleToAttack);
-						listOfFieldsIDsReadyToAttack.Add(fieldAbleToAttack.CardFieldID);
+                if (game.TurnNumber > 1)
+                {
+                    foreach (var field in playerFields)
+					{
+						if (field.CardOnField != null && field.CardPosition == true)
+						{
+							var fieldAbleToAttack = new AttackInTurn(true, currentTurn.ID, field.ID);
+							await this._unitOfWork.AttackInTurn.Add(fieldAbleToAttack);
+							listOfFieldsIDsReadyToAttack.Add(fieldAbleToAttack.CardFieldID);
+						}
 					}
 				}
 			}

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { Subscription } from 'rxjs';
@@ -10,7 +10,7 @@ import { UserService } from 'src/app/services/user.service';
   templateUrl: './menubar.component.html',
   styleUrls: ['./menubar.component.css']
 })
-export class MenubarComponent implements OnInit {
+export class MenubarComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
   items!: MenuItem[];
   admin: any = " ";
@@ -18,7 +18,8 @@ export class MenubarComponent implements OnInit {
   id!: number;
   userID=this.authService?.userValue?.id
   user: any;
-
+  pom:any;
+  isItShowen:any=false;
   constructor(
     public authService: AuthService,
     private router: Router,
@@ -29,23 +30,44 @@ export class MenubarComponent implements OnInit {
 
     console.log("ovdee user value:", this.authService.userValue)
     
-    if(this.userID!=undefined) {
-      this.getUser();
-    }
+    // if(this.userID!=undefined) {
+    //   this.getUser();
+    // }
+    console.log("ovde ",this.authService?.userValue.id)
+    this.subscriptions.push(
+      this.authService.loginStatusChange().subscribe(userSubject => {
+        console.log("ovdeeeeeee",userSubject);
+        if(this.authService?.userValue?.role!="Admin" && this.authService?.userValue?.role!="Player"){
+          console.log(this.authService?.userValue?.role);
+          this.pom=false;
+        }
+        else{
+          this.pom=true;
+          this.userID=this.authService.userValue.id;
+          this.getUser();
+        }
+        console.log("pomara",this.pom);
+        // console.log("userSubject")
+        // console.log(userSubject);
+        // this.user = userSubject;
 
-    this.authService.loginStatusChange().subscribe(userSubject => {});
+      })
+
+    );
   }
 
   getUser() {
-    this.userService.getUser(this.userID).subscribe({
-      next: (res: any) => {
-        this.user = res;
-        console.log(this.user)
-      },
-      error: err => {
-        console.log(err.error.text);
-      }
-    })
+    this.subscriptions.push(
+      this.userService.getUser(this.userID).subscribe({
+        next: (res: any) => {
+          this.user = res;
+          console.log("beaaaaaaaaaaaaa",this.user)
+        },
+        error: err => {
+          console.log(err.error.text);
+        }
+      })
+    );
   }
 
   onSignUp() {
@@ -61,24 +83,23 @@ export class MenubarComponent implements OnInit {
       this.router.navigate(['/home']);
     }
     else this.router.navigate(['/welcome']);
+    this.isItShowen=false;
   }
 
   onRules() {
-    if(this.user != undefined) {
-      this.router.navigate(['/home']);
-    }
-    else this.router.navigate(['/welcome']);
+    this.router.navigate(['/rules']);
+    this.isItShowen=false;
   }
 
   onCards() {
-    if(this.user != undefined) {
-      this.router.navigate(['/home']);
-    }
-    else this.router.navigate(['/welcome']);
+    this.router.navigate(['/cards']);
+    this.isItShowen=false;
   }
 
   onProfile() {
     this.router.navigate(['/profil', this.authService.userValue?.id]);
+    this.isItShowen=false;
+
   }
 
   onLogout() {
@@ -90,5 +111,10 @@ export class MenubarComponent implements OnInit {
       }
     });
   }
-
+  showenChange(){
+    this.isItShowen=!this.isItShowen;
+  }
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+  }
 }

@@ -18,15 +18,15 @@ namespace BLL.Services
 		private readonly KnightsAndDiamondsContext _context;
 		public UnitOfWork _unitOfWork { get; set; }
 		public IEffectFactory _descriptionFactory { get; set; }
-		public StrategyContext? strategyContext { get; set; }
-		public ConcreteStrategy concreteStrategy { get; set; }
+		public StrategyContext? _strategyContext { get; set; }
+		public ConcreteStrategy _concreteStrategy { get; set; }
 
 		public EffectService(KnightsAndDiamondsContext context)
 		{
 			this._context = context;
-			_unitOfWork = new UnitOfWork(_context);
+			this._unitOfWork = new UnitOfWork(_context);
 			this._descriptionFactory = new ConcreteEffectFactory();
-			this.concreteStrategy = new ConcreteStrategy(this._context);
+			this._concreteStrategy = new ConcreteStrategy(this._context);
 		}
 
 		public async Task<IList<EffectType>> GetEffectTypes()
@@ -46,8 +46,8 @@ namespace BLL.Services
 			{
 				throw new Exception("There is no effectType with this ID");
 			}
-			this.strategyContext = concreteStrategy.SetStrategyContext(effectType.Type);
-			var area = strategyContext.GetAreaOfSelectingCards();
+			this._strategyContext = _concreteStrategy.SetStrategyContext(effectType.Type);
+			var area = _strategyContext.GetAreaOfSelectingCards();
 			return area;
 		}
 	}

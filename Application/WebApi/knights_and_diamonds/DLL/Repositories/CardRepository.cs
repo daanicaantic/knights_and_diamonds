@@ -166,8 +166,8 @@ namespace DAL.Repositories
 			var count = await this.Context?.Cards?.Include(x => x.CardType)
 				.Where(x => (string.IsNullOrEmpty(cardType) || x.CardType.Type == cardType) &&
 					x.ImgPath.StartsWith("Resources/Images/")).CountAsync();
-
-			return count;
+     
+            return count;
         }
 	}
 }

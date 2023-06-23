@@ -39,6 +39,7 @@ import { DeckCreateComponent } from './components/deck-create/deck-create.compon
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { PaginatorModule } from 'primeng/paginator';
 import { CardsComponent } from './components/cards/cards.component';
+import { RulesComponent } from './components/rules/rules.component';
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ import { CardsComponent } from './components/cards/cards.component';
     LoadinscreenComponent,
     DeckCreateComponent,
     CardsComponent,
+    RulesComponent,
   ],
   imports: [
     BrowserModule,

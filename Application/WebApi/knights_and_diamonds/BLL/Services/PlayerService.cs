@@ -21,8 +21,8 @@ namespace BLL.Services
         public PlayerService(KnightsAndDiamondsContext context)
         {
             this._context = context;
-            _unitOfWork = new UnitOfWork(_context);
-            _cardService = new CardService(_context);
+            this._unitOfWork = new UnitOfWork(_context);
+            this._cardService = new CardService(_context);
         }
 
         public async Task<Player> GetPlayer(int playerID)

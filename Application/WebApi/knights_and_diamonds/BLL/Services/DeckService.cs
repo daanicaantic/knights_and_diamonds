@@ -25,12 +25,12 @@ namespace BLL.Services
     {
         private readonly KnightsAndDiamondsContext _context;
         public UnitOfWork _unitOfWork { get; set; }
-        public ICardService _cardservice { get; set; }
+        public ICardService _cardService { get; set; }
         public DeckService(KnightsAndDiamondsContext context)
         {
             this._context = context;
-            _unitOfWork = new UnitOfWork(_context);
-            _cardservice = new CardService(_context);
+            this._unitOfWork = new UnitOfWork(_context);
+            this._cardService = new CardService(_context);
         }
 
         public async Task<Deck> AddDeck(int userID)
@@ -80,7 +80,7 @@ namespace BLL.Services
             }
             cards = cards.OrderBy(x => x.CardID).ToList();
             cards = cards.OrderBy(x => x.Card.CardTypeID).ToList();
-			var deck = await this._cardservice.MapCards(cards);
+			var deck = await this._cardService.MapCards(cards);
 
 			return deck;
         }

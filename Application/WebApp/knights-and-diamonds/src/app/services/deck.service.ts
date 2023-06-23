@@ -23,4 +23,8 @@ export class DeckService {
   cardCounter(deckID: any, userID: any) {
     return this.httpClient.get(`https://localhost:7250/Deck/CardCounter/` + `${deckID}` + `/` + `${userID}`)
   }
+
+  createDeck(userID: any) {
+    return this.httpClient.post(`https://localhost:7250/Deck/AddDeck/` + `${userID}`, {});
+  }
 }

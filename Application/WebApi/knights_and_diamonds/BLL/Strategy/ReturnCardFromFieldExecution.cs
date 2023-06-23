@@ -22,7 +22,7 @@ namespace BLL.Strategy
 		{
 			this._context = context;
 			this._unitOfWork = new UnitOfWork(_context);
-			_playerService = new PlayerService(this._context);
+			this._playerService = new PlayerService(this._context);
 		}
 		public ChooseCardsFrom SelectCardsFrom()
 

@@ -1,3 +1,13 @@
+body {
+  height: 100vh;
+  background-image: url("https://localhost:7250/Resources/Images/b26.jpg");
+  background-size: cover;
+  width: 100%;
+  display: flex;
+  background-position: center;
+  justify-content: flex-end;
+}
+
 /* body{
     background-image: url("https://localhost:7250/Resources/Images/background1113.jpg");
     background-size: 100% 100%;

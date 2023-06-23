@@ -52,9 +52,19 @@ namespace knights_and_diamonds.Controllers
                 if (id > 0)
                 {
                     var user = await this._userService.GetUserByID(id);
+                    var result = new
+                    {
+                        ID = user.ID,
+                        Name = user.Name,
+                        SurName = user.SurName,
+                        UserName = user.UserName,
+                        MainDeckID = user.MainDeckID,
+                        Role = user.Role,
+                        Email = user.Email,
+                    };
                     if (user != null)
                     {
-                        return new JsonResult(user);
+                        return new JsonResult(result);
                     }
                     else
                     {
@@ -73,5 +83,20 @@ namespace knights_and_diamonds.Controllers
 
         }
 
+
+        [Route("WinsAndLosesCount/{userID}")]
+        [HttpGet]
+        public async Task<IActionResult> WinsAndLosesCount(int userID)
+        {
+            try
+            {
+                var statistcs = await this._userService.WinsAndLosesForUser(userID);
+                return Ok(statistcs);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
     }
 }

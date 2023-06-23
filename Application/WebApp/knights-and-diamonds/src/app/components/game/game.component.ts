@@ -373,11 +373,10 @@ export class GameComponent implements OnInit, OnDestroy {
         this.openSummoningMonsterWindow(card);
       }
       if (
-        card.cardType == 'SpellCard' ||
-        (card.cardType == 'TrapCard' &&
+        (card.cardType == 'SpellCard' || card.cardType == 'TrapCard') &&
           this.curentPhase.name == 'MP' &&
           this.isPlayerOnTurn)
-      ) {
+      {
         this.playSpellTrapCard(card.id, card.cardEffectID, card.cardType);
       }
     } else if (this.isPlayerOnTurn) {
@@ -580,6 +579,7 @@ export class GameComponent implements OnInit, OnDestroy {
     var counter = this.checkNumberOfMonstersOnField(
       this.enemiesField.cardFields
     );
+    field.cardShowen=true;
     //klikcemo na spellTrap polje tj napadamo direktno
     if (counter == 0 && field.fieldIndex > 5) {
       canYouAttackThisField = true;
@@ -783,8 +783,7 @@ export class GameComponent implements OnInit, OnDestroy {
     }
   }
   ngOnDestroy(): void {
-    this.inGameService.setGameOff();
-    this.subscriptions.forEach((sub) => sub.unsubscribe());
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
     this.signalrService.hubConnection.off('GetYourField');
     this.signalrService.hubConnection.off('GetEnemiesField');
     this.signalrService.hubConnection.off('WinnerMessage');

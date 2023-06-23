@@ -44,7 +44,7 @@ export class RpsGameComponent implements OnInit, OnDestroy {
   gameID: any;
   winner: any;
   user: any;
-  subscripions: Subscription[] = [];
+  subscriptions: Subscription[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -65,7 +65,7 @@ export class RpsGameComponent implements OnInit, OnDestroy {
     this.getRPSWinner();
   }
   getRpsGame() {
-    this.subscripions.push(
+    this.subscriptions.push(
       this.rpsGameService.getRPSGame(this.rpsGameID, this.userID).subscribe({
         next: (res: any) => {
           this.playerID = res.playerID;
@@ -90,7 +90,7 @@ export class RpsGameComponent implements OnInit, OnDestroy {
     console.log(this.authService.userValue);
   }
   chooseRPSMove(move: string) {
-    this.subscripions.push(
+    this.subscriptions.push(
       this.rpsGameService.playRPSMove(this.playerID, move).subscribe({
         next: (res: any) => {
           this.filterOptions(move, this.options);
@@ -172,7 +172,7 @@ export class RpsGameComponent implements OnInit, OnDestroy {
   }
 
   getEnemiesMove() {
-    this.subscripions.push(
+    this.subscriptions.push(
       this.rpsGameService.getPlayerMove(this.enemiePlayerID).subscribe({
         next: (res: any) => {
           console.log(res);
@@ -208,9 +208,10 @@ export class RpsGameComponent implements OnInit, OnDestroy {
   setGameStatus() {
     this.inGameService.setGameOn();
   }
+  
   ngOnDestroy(): void {
     clearInterval(this.progress);
-    this.subscripions.forEach((sub) => sub.unsubscribe());
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
     this.signalrService.hubConnection.off('GetRPSWinner');
   }
 }

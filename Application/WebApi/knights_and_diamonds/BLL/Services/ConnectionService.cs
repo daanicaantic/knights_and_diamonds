@@ -25,9 +25,9 @@ namespace BLL.Services
         public ConnectionService(KnightsAndDiamondsContext context)
 		{
 			this._context = context;
-			_unitOfWork = new UnitOfWork(_context);
-			_onlineUsers = OnlineUsers.GetInstance();
-			_inGameUsers = InGameUsers.GetInstance();
+			this._unitOfWork = new UnitOfWork(_context);
+			this._onlineUsers = OnlineUsers.GetInstance();
+			this._inGameUsers = InGameUsers.GetInstance();
 		}
 
 		public void AddOnlineUser(int userID, string connectionId)

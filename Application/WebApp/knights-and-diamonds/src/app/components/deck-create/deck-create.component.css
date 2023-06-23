@@ -1,3 +1,13 @@
+body {
+    height: 100vh;
+    background-image: url("https://localhost:7250/Resources/Images/b23.jpg");
+    background-size: 100% 100%;
+    width: 100%;
+    display: flex;
+    background-position: top;
+    justify-content: flex-end;
+}
+
 h2, h3 {
     font-family: 'Roboto', sans-serif;
 }
@@ -5,7 +15,6 @@ h2, h3 {
     padding-top: 60px;
     width: 100%;
     min-width: 400px;
-    
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;

@@ -19,7 +19,7 @@ namespace BLL.Services
         public UserService(KnightsAndDiamondsContext context)
         {
             this._context = context;
-            _unitOfWork = new UnitOfWork(_context);
+            this._unitOfWork = new UnitOfWork(_context);
         }
         public async Task AddUser(UserDTO u)
         {
@@ -55,6 +55,13 @@ namespace BLL.Services
             {
                 throw;
             }
+        }
+
+        public async Task<object> WinsAndLosesForUser(int userID)
+        {
+            var winsAndLoses = await this._unitOfWork.User.WinsAndLosesForUser(userID);
+
+            return winsAndLoses;
         }
     }
 }

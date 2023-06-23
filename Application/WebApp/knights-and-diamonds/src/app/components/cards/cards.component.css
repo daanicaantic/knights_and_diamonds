@@ -4,6 +4,15 @@ h2,h3{
 :root {
     --height: 400px; /* Set the desired height */
 }
+app-card{
+    cursor: pointer;
+}
+.main-container{
+    background-image: url("https://localhost:7250/Resources/Images/b23.jpg");
+    background-size: 100% 100%;
+    background-position: top;
+
+}
 .card-edit {
     color: white;
     text-align: center;
@@ -37,10 +46,10 @@ h2,h3{
 }
 .big-card{
     width: 90%;
-    /* aspect-ratio: 1/1.25; */
-    height: calc(50% + 70px);
+    aspect-ratio: 1/1.25;
+    /* height: calc(50% + 70px); */
     /* min-width: 150px; */
-    font-size: 26px;
+    font-size: 2vw;
     background-color: rgb(67,52,85);
     margin-top: 8px;
     text-align: center;

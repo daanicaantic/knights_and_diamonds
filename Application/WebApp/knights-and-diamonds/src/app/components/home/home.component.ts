@@ -12,6 +12,8 @@ import { SignalrService } from 'src/app/services/signalr.service';
 import { OnlineUsersService } from 'src/app/services/online-users.service';
 import { Router } from '@angular/router';
 import { RpsGameService } from 'src/app/services/rps-game.service';
+import { IngameService } from 'src/app/services/ingame.service';
+
 
 @Component({
   selector: 'app-home',
@@ -22,7 +24,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   public message: string = '';
   public messages: string[] = [];
   usersOnline: Array<OnlineUsers> = new Array<OnlineUsers>();
-  subscripions: Subscription[] = [];
+  subscriptions: Subscription[] = [];
   userID = this.authService?.userValue?.id;
   gameRequests!: any[];
   gameRequested!: any[];
@@ -31,20 +33,23 @@ export class HomeComponent implements OnInit, OnDestroy {
     private signalrService: SignalrService,
     private onlineUsersService: OnlineUsersService,
     private rpsGameService: RpsGameService,
-    private router: Router
+    private router: Router,
+    public inGameService: IngameService,
+
   ) {}
 
   ngOnInit(): void {
     this.getOnlineUsersList();
     this.getGameRequestsList();
     this.startGameResponse();
+    this.inGameService.setGameOff();
 
     if (this.userID != undefined) {
       this.removeUserFromGame();
       if (this.signalrService.hubConnection.state == 'Connected') {
         this.onlineUsersService.getOnlineUsersInv();
       } else {
-        this.subscripions.push(
+        this.subscriptions.push(
           this.signalrService.ssSubj.subscribe((obj: any) => {
             if (obj.type == 'HubConnStarted') {
               this.onlineUsersService.getOnlineUsersInv();
@@ -113,7 +118,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   acceptGameRequest(lobbyID: any) {
-    this.subscripions.push(
+    this.subscriptions.push(
       this.rpsGameService.startGame(lobbyID).subscribe({
         next: (res) => {
           // this.onlineUsersService.getOnlineUsersInv();
@@ -128,7 +133,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   denyGameRequest(lobbyID: any) {
-    this.subscripions.push(
+    this.subscriptions.push(
       this.rpsGameService.denyGame(lobbyID).subscribe({
         next: (res) => {
           this.onlineUsersService.getOnlineUsersInv();
@@ -145,7 +150,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
   removeUserFromGame() {
-    this.subscripions.push(
+    this.subscriptions.push(
       this.rpsGameService.removeUserFromUsersInGame(this.userID).subscribe({
         next: (res: any) => {
           console.log('res', res);
@@ -157,7 +162,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     );
   }
   ngOnDestroy(): void {
-    this.subscripions.forEach((sub) => sub.unsubscribe());
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
     this.signalrService.hubConnection.off('GetUsersFromHub');
     this.signalrService.hubConnection.off('GetGamesRequests');
     this.signalrService.hubConnection.off('RPSGameStarted');

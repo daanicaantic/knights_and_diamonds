@@ -1,0 +1,42 @@
+<body>
+    <div class="container">
+        <div class="rules-container">
+            <div class="english-rules" [ngClass]="{'text-container': showText1, 'hidden': !showText1}">
+                <p>1. Each player starts with 4000 life points.</p>
+                <p>2. The objective is to reduce your opponent's life points to 0.</p>
+                <p>3. Players take turns, consisting of four phases: Draw Phase, Main Phase, Battle Phase and End Phase.</p>
+                <p>4. Players draw one card during their Draw Phase.</p>
+                <p>5. During the Main Phase, players can summon monsters, play spells and traps, and activate card effects.</p>
+                <p>6. Monsters are summoned in face-up Attack Position or face-down Defense Position.</p>
+                <p>7. Monsters in Attack Position can attack your opponent directly or attack their monsters.</p>
+                <p>8. When attacking, compare the attacking monster's ATK (Attack Points) to the defending monster's ATK or DEF (Defense Points) to determine the outcome.</p>
+                <p>9. If a monster's ATK is higher than the defending monster's ATK, the defending monster is destroyed, and the opponent takes damage equal to the difference.</p>
+                <p>10. If a monster's ATK is lower than the defending monster's DEF, no monsters are destroyed, and no damage is dealt.</p>
+                <p>11. Players can also set spell and trap cards face-down, which can be activated later.</p>
+                <p>12. Some cards have special effects that can modify gameplay or have specific conditions for activation.</p>
+                <p>13. The player can end their turn during Main Phase by entering the End Phase.</p>
+                <p>14. If a player cannot draw a card at the start of their turn, they lose the game.</p>
+            </div>
+            <div class="serbian-rules" [ngClass]="{'text-container': !showText1, 'hidden': showText1}">
+                <p>1. Svaki igrač počinje sa 4000 životnih bodova.</p>
+                <p>2. Cilj je da se protivnikovi bodovi života smanje na 0.</p>
+                <p>3. Igrači igraju naizmenično, a potez se sastoji od četiri faza: Faza povlačenja, Glavna faza, Borbena faza i Faza završetka.</p>
+                <p>4. Igrači povlače jednu kartu tokom svoje Faze povlačenja.</p>
+                <p>5. Tokom Glavne faze, igrači mogu pozivati čudovišta, igrati čarolije i zamke i aktivirati efekte karata.</p>
+                <p>6. Čudovišta se pozivaju licem okrenutim nagore u Položaju napada ili licem okrenutim nadole u Položaju odbrane.</p>
+                <p>7. Čudovišta u Položaju napada mogu direktno napadati protivnika ili napadati njegova čudovišta.</p>
+                <p>8. Prilikom napada, upoređuje se ATK (bodovi napada) napadajućeg čudovišta sa ATK ili DEF (bodovi odbrane) čudovišta koje se brani, da bi se odredio ishod.</p>
+                <p>9. Ako je ATK napadajućeg čudovišta veći od ATK protivničkog čudovišta, ono se uništava, a protivnik trpi štetu jednaku razlici.</p>
+                <p>10. Ako je ATK napadajućeg čudovišta manji od DEF protivničkog čudovišta, nijedno čudovište se ne uništava, i nema nanete štete.</p>
+                <p>11. Igrači takođe mogu postaviti čarolije i zamke licem okrenute nadole, koje se kasnije mogu aktivirati.</p>
+                <p>12. Neke karte imaju posebne efekte koji mogu menjati tok igre ili imaju određene uslove za aktivaciju.</p>
+                <p>13. Igrač može završiti svoj potez tokom Glavne faze ulaskom u Fazu završetka.</p>
+                <p>14. Ako igrač ne može da povuče kartu na početku svog poteza, gubi igru.</p>
+            </div>
+            <div class="button-container">
+                <button class="button-translate" label="translate" (click)="translate()">Translate</button>
+            </div>
+        </div>
+
+    </div>
+</body>

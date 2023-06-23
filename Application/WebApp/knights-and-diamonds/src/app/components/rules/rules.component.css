@@ -1,0 +1,69 @@
+body {
+    min-height: 100vh;
+    background-image: url("https://localhost:7250/Resources/Images/stena.jpg");
+    background-size: 100% 100%;
+    width: 100%;
+    display: flex;
+    background-position: top;
+    font-family: 'Roboto', sans-serif;
+    justify-content: center;
+}
+
+p {
+    margin: 3px;
+}
+.rules-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    align-items: center;
+}
+.container {
+    margin-top: 70px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.english-rules, .serbian-rules {
+    display: flex;
+    flex-direction: column;
+    border-radius: 4%;
+    width: 85%;
+    padding: 2rem;
+    backdrop-filter: blur(50px);
+    background-color: rgba(255, 255, 255, 0.1);
+    font-size: 18px;
+}
+
+.hidden {
+    display: none;
+}
+
+.button-translate {
+    font-size: 20px;
+    font-weight: 500;
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(to right, #c28fb6, #847eb9);
+    padding: 10px;
+    text-align: center;
+    color: #161d2f;            
+    border-radius: 10px;
+    border: 2px solid rgb(69, 69, 69);
+    display: block;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.button-translate:hover{
+    color: white;
+    transition: 0.3 ease 0s;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+
+    /* width: 100%; */
+}

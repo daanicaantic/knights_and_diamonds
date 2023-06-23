@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { CardService } from 'src/app/services/card.service';
 import { Card } from 'src/classes/card';
 
@@ -8,8 +9,10 @@ import { Card } from 'src/classes/card';
   styleUrls: ['./deck.component.css']
 })
 
-export class DeckComponent implements OnInit {
+export class DeckComponent implements OnInit, OnDestroy {
   cards:any;
+  subscriptions: Subscription[] = [];
+
   constructor(private cardService: CardService) { }
 
   ngOnInit(): void {
@@ -17,15 +20,20 @@ export class DeckComponent implements OnInit {
   }
 
   getCards() {
-    this.cardService.getCards().subscribe({
-      next: res => {
-        this.cards=res;
-        console.log(res);
-      },
-      error: err => {
-        
-      }
-    })
+    this.subscriptions.push(
+      this.cardService.getCards().subscribe({
+        next: res => {
+          this.cards=res;
+          console.log(res);
+        },
+        error: err => {
+        }
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 
 }

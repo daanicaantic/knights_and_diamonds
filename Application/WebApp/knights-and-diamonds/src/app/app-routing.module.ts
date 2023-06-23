@@ -15,6 +15,7 @@ import { WelcomePageComponent } from './components/welcome-page/welcome-page.com
 import { LoadinscreenComponent } from './components/loadinscreen/loadinscreen.component';
 import { DeckCreateComponent } from './components/deck-create/deck-create.component';
 import { CardsComponent } from './components/cards/cards.component';
+import { RulesComponent } from './components/rules/rules.component';
 
 const routes: Routes = [
   {
@@ -28,6 +29,10 @@ const routes: Routes = [
   {
     path: 'welcome',
     component: WelcomePageComponent,
+  },
+  {
+    path: 'rules',
+    component: RulesComponent,
   },
   {
     path: 'card-create',
@@ -54,6 +59,8 @@ const routes: Routes = [
   {
     path: 'deck-create/:deckID',
     component: CardsComponent,
+    
+    
   },
   {
     path: 'rpsGame/:rpsGameID',

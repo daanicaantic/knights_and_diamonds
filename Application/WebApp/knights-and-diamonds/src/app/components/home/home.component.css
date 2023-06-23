@@ -109,11 +109,11 @@ body {
 
 body {
   height: 100vh;
-  /* background-image: url("https://localhost:7250/Resources/Images/background1113.jpg"); */
-  background-size: 100% 100%;
+  background-image: url("https://localhost:7250/Resources/Images/b23.jpg");
+  background-size: cover;
   width: 100%;
   display: flex;
-  background-position: top;
+  background-position: center;
   justify-content: flex-end;
 }
 
@@ -125,8 +125,8 @@ body {
   /* background: linear-gradient(360deg,#192b30 0%, rgba(255, 255, 255, 0) 50%, #162428 100% ); */
   /* background-color: #101618; */
   background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(5px);
   /* position: relative; */
-
 }
 
 .header {

@@ -30,10 +30,6 @@ export class LoginFormComponent implements OnInit, OnDestroy {
   });
   }
 
-  ngOnDestroy(): void {
-    this.subscriptions.forEach(sub=>sub.unsubscribe())
-  }
-
   onSubmit(){
     const userData = this.form.getRawValue();
     this.subscriptions.push(
@@ -60,6 +56,10 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 
   onMouseOut(hoverName: HTMLElement) {
     hoverName.style.color = "black";
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
   
 }

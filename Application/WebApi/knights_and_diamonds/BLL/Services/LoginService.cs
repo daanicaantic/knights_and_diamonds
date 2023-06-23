@@ -29,9 +29,9 @@ namespace BLL.Services
 		public LoginService(KnightsAndDiamondsContext context, IConfiguration config)
 		{
 			this._context = context;
-			_unitOfWork = new UnitOfWork(_context);
-			_onlineUsers = OnlineUsers.GetInstance();
-			_config = config;
+			this._unitOfWork = new UnitOfWork(_context);
+			this._onlineUsers = OnlineUsers.GetInstance();
+			this._config = config;
 		}
 
 		public async Task<TokenDTO> Login(UserInfoDTO userInfo)

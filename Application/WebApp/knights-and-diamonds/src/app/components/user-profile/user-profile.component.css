@@ -8,19 +8,16 @@ p, label{
 }
 
 .background {
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: auto;
-    flex: 1 1 auto;
-    display: flex;
-    justify-content: center;
-    background-image: url("https://localhost:7250/Resources/Images/welcome-background.jpg");
+    background-image: url("https://localhost:7250/Resources/Images/b26.jpg");
     background-size: 100% 100%;
     width: 100%;
-    display: flex; 
     background-position: top;
+    background-attachment: fixed;
+    
 }
 
 .user-profile-full {
@@ -28,7 +25,7 @@ p, label{
     display: flex;
     flex-direction: row;
     justify-content: center;
-    height: 400px;
+    /* height: 400px; */
     align-items: center;
     flex-wrap: wrap;
     -webkit-box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
@@ -41,14 +38,15 @@ p, label{
     align-items: center;
     width: auto;
     border-radius: 5px;
-    background: linear-gradient(to right, #d7a657, #6cc781);
+    background: linear-gradient(to right, #383369, #6d4965);
     height: 400px;
     min-width: 280px;
     flex-shrink: 2;
     color: #ffffff;
     padding-top: 5rem;
-    margin-bottom: 2rem;
     font-size: x-large;
+    margin-right: 2rem;
+    margin-bottom: 2rem;
 }
 
 .avatar {
@@ -80,10 +78,14 @@ p, label{
     align-items: center;
     height: 400px;
     width: 450px;
+    backdrop-filter: blur(50px); /* Adjust the blur amount as needed */
+    background-color: rgb(109, 73, 101, 0.2);
+    border-radius: 5px;
+    margin-bottom: 2rem;
 }
 
 .user-profile-info {
-    color: white;
+    color: #312b44;
     display: flex;
     flex-direction: column;
     border-radius: 5px;
@@ -103,7 +105,7 @@ hr {
 .analytics-div, .information-div {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-around;
     margin-left: 2rem;
     margin-right: 2rem;
 }
@@ -116,7 +118,7 @@ hr {
 }
 
 .info-labels {
-    color: #8ebe9f;
+    color: white;
 }
 
 .info-span {
@@ -144,7 +146,7 @@ hr {
     font-size: 20px;
     font-weight: 500;
     font-family: 'Roboto', sans-serif;
-    background: linear-gradient(to right, #6cc781, #d7a657);
+    background: linear-gradient(to right, #85597b, #534c91);
     padding: 10px;
     /* margin-top: 1rem; */
     text-align: center;
@@ -157,7 +159,7 @@ hr {
 }
 
 .button-deck-create:hover{
-    color: #d15f1c;
+    color: #8ae4da;
     transition: 0.3 ease 0s;
 }
 

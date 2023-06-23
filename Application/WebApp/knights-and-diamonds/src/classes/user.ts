@@ -18,5 +18,4 @@ export interface OnlineUsers
     userName: string,
     lobbyID: number,
     status: number;
-
 }

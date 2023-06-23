@@ -314,10 +314,14 @@ namespace SignalR.HubConfig
 		}
 		public async Task NormalSummon(int gameID, int playerID, int cardID, bool position)
 		{
-			var connections = await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
+			List<int> listOfFieldsThatCanActivateTrapCard = new List<int>();
+            var connections = await this._gameService.GameConnectionsPerPlayer(gameID, playerID);
 			var fieldID=await this._gameService.NormalSummon(gameID,playerID,cardID,position);
 			var field = await this._gameService.GetPlayersField(playerID);
-			var listOfFieldsThatCanActivateTrapCard = await this._gameService.CanEnemieActivateTrapCard("AfterMonsterIsSummoned", playerID, gameID);
+			if (position == true)
+			{
+				listOfFieldsThatCanActivateTrapCard = await this._gameService.CanEnemieActivateTrapCard("AfterMonsterIsSummoned", playerID, gameID);
+			}
 			if (field == null)
 			{
 				throw new Exception("This player has no field");

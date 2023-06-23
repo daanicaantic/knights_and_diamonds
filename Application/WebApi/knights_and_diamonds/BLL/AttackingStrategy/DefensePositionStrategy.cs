@@ -22,8 +22,8 @@ namespace BLL.AttackingStrategy
 		{
 			this._context = context;
 			this._unitOfWork = new UnitOfWork(_context);
-			_playerService = new PlayerService(this._context);
-			_gameService = new GameService(this._context);
+			this._playerService = new PlayerService(this._context);
+			this._gameService = new GameService(this._context);
 		}
 
 		public async Task<int> Attack(int gameID,CardField attackingField, CardField attackedField, MonsterCard attackingCard, MonsterCard attackedCard)

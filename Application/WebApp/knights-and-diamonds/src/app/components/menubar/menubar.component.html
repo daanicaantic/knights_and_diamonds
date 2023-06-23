@@ -25,7 +25,12 @@
 
 <div class="container">
         <header>
-                <div class="logo-and-pages">
+                <div class="menu-toggle" (click)="showenChange()">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                </div>
+                <div class="logo-and-pages logo-and-pages-{{isItShowen}}">
                         <div class="logo-and-line">
                                 <div class="logo">
                                         <p class="logo-p" (click)="onLogo()">Knights&Diamonds</p>
@@ -33,20 +38,21 @@
                                 <div class="vl"></div>
                         </div>
                         <div class="pages">
-                                <div class="home-page" (click)="onHome()">Home</div>
-                                <div class="rules-page" (click)="onRules()">Rules</div>
-                                <div class="cards-page" (click)="onCards()">Cards</div>
+                                <div class="page" (click)="onHome()">Home</div>
+                                <div class="page" (click)="onRules()">Rules</div>
+                                <div class="page" (click)="onCards()">Cards</div>
                         </div>
                 </div>
-                <div class="buttons" *ngIf="user==undefined">
+                <div class="buttons" *ngIf="pom==false">
                         <button class="button-login" [routerLink]="['/login']">Login</button>
                         <button class="button-signup" (click)="onSignUp()">Sign up</button>
                 </div>
-                <div class="buttons" *ngIf="user!=undefined">
+                <div class="buttons" *ngIf="pom==true">
                         <div class="buttons-user">
                                 <button class="button-logout" (click)="onLogout()">log out</button>
+                                
                                 <div class="avatar" (click)="onProfile()">
-                                        <p style="color: #4b3464;">{{user.name[0]}}{{user.surName[0]}}</p>
+                                        <p style="color: #4b3464;">{{user?.name[0]}}{{user?.surName[0]}}</p>
                                 </div>
                         </div>
                 </div>

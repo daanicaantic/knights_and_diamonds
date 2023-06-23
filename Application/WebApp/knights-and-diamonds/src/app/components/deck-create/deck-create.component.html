@@ -20,7 +20,8 @@
                 </div>
             </div>
             <div class="deck-data-row">
-                <div class="deck-data exit-deck"><i class="pi pi-arrow-circle-left" style="font-size: 1.5rem;"></i>
+                <div class="deck-data exit-deck" (click)="goToHome()">
+                    <i class="pi pi-arrow-circle-left" style="font-size: 1.5rem;" (click)="goToHome()"></i>
                 </div>
                 <div class="deck-data total-number-of-cards">
                     <h2>{{stats.allCardsCount}}</h2>
