@@ -365,9 +365,11 @@ p {
     /* animation: summon-card-show-dialog 4s timing-function delay iteration-count direction fill-mode; */
     position: absolute;
     z-index: 1;
-    background: linear-gradient(#4C3825 0%, #463321 50%, #4C3825 100%);
+    background-image: url("https://localhost:7250/Resources/Images/wood.jpg");
+    background-position: center;
+    background-size: 200px 200px;
     border: 2px solid #131313;
-    border-radius: 5%;
+    /* border-radius: 5%; */
     display: flex;
     /* background-color: brown; */
     text-align: center;

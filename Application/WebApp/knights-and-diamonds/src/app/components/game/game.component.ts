@@ -84,7 +84,8 @@ export class GameComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
   winnerMessage: any;
   didYouWin: any;
-  listOfFiledThatYouCanChangePosition:any[]=[];
+  listOfFiledThatYouCanChangePosition: any[] = [];
+  onCardOnFieldMouseOver: any;
 
   constructor(
     public inGameService: IngameService,
@@ -310,7 +311,8 @@ export class GameComponent implements OnInit, OnDestroy {
         this.phaseMessage = 'Draw Phase';
       } else if (this.turnInfo.turnPhase == 1) {
         this.phaseMessage = 'Main Phase';
-        console.log("grejala pa gradila")
+        console.log('grejala pa gradila');
+        this.listOfFiledThatYouCanChangePosition = [];
         this.fieldsThatCanChangePosition();
       } else if (this.turnInfo.turnPhase == 2) {
         this.phaseMessage = 'Battle Phase';
@@ -347,17 +349,23 @@ export class GameComponent implements OnInit, OnDestroy {
       this.curentPhase = phase;
     }
   }
-  fieldsThatCanChangePosition(){
-    if(this.playerField!=undefined){
-    this.playerField.cardFields.forEach((element: any) => {
-      if (element.cardOnField != null) {
-        if (element.fieldIndex < 5) {
-          this.listOfFiledThatYouCanChangePosition.push(element.fieldID);
-          console.log("ovdeeeeee",this.listOfFiledThatYouCanChangePosition)
+  fieldsThatCanChangePosition() {
+    if (this.playerField != undefined) {
+      this.playerField.cardFields.forEach((element: any) => {
+        if (element.cardOnField != null) {
+          if (element.fieldIndex < 5) {
+            var exists = this.listOfFiledThatYouCanChangePosition.some(
+              (el) => el == element.fieldID
+            );
+            console.log(exists);
+            if (!exists) {
+              this.listOfFiledThatYouCanChangePosition.push(element.fieldID);
+            }
+            console.log('ovdeeeeee', this.listOfFiledThatYouCanChangePosition);
+          }
         }
-      }
-    });
-  }
+      });
+    }
   }
   //menjanje faze
   changePhaseInv(phase: any) {
@@ -389,9 +397,9 @@ export class GameComponent implements OnInit, OnDestroy {
       }
       if (
         (card.cardType == 'SpellCard' || card.cardType == 'TrapCard') &&
-          this.curentPhase.name == 'MP' &&
-          this.isPlayerOnTurn)
-      {
+        this.curentPhase.name == 'MP' &&
+        this.isPlayerOnTurn
+      ) {
         this.playSpellTrapCard(card.id, card.cardEffectID, card.cardType);
       }
     } else if (this.isPlayerOnTurn) {
@@ -434,6 +442,18 @@ export class GameComponent implements OnInit, OnDestroy {
       this.doYouWantToActivateTrapCard == true
     ) {
       if (this.fieldsThatCanActivateTrapCard.indexOf(field.fieldID) >= 0) {
+        this.onCardOnFieldMouseOver = 'Activate';
+        this.cardActivated = true;
+      }
+    } else if (
+      this.listOfFiledThatYouCanChangePosition != undefined &&
+      this.isPlayerOnTurn &&
+      this.curentPhase.name == 'MP'
+    ) {
+      if (
+        this.listOfFiledThatYouCanChangePosition.indexOf(field.fieldID) >= 0
+      ) {
+        this.onCardOnFieldMouseOver = 'ChangePosition';
         this.cardActivated = true;
       }
     }
@@ -445,7 +465,7 @@ export class GameComponent implements OnInit, OnDestroy {
   onPlayersFieldClick(field: any) {
     console.log(field);
     if (field.cardOnField != undefined) {
-      if (field.cardOnField.cardType == 'TrapCard' ) {
+      if (field.cardOnField.cardType == 'TrapCard') {
         if (this.cardActivated) {
           this.canYouActivateTrapCard = false;
           this.fieldsThatCanActivateTrapCard = undefined;
@@ -459,12 +479,22 @@ export class GameComponent implements OnInit, OnDestroy {
           );
           this.gameService.didTrapEffectExecutedInv(this.gameID, this.playerID);
         }
-      }
-      else if(field.cardOnField.cardType=='MonsterCard' && this.curentPhase.name == 'MP' && this.isPlayerOnTurn){
-        if(this.listOfFiledThatYouCanChangePosition.includes(field.fieldID)){
-          this.gameService.changeMonsterPositionInv(this.playerID,field.fieldID,this.gameID)
-          const index = this.listOfFiledThatYouCanChangePosition.findIndex(item => item === field.fieldID);
-          this.listOfFiledThatYouCanChangePosition.splice(index,1);
+      } else if (
+        field.cardOnField.cardType == 'MonsterCard' &&
+        this.curentPhase.name == 'MP' &&
+        this.isPlayerOnTurn
+      ) {
+        if (this.listOfFiledThatYouCanChangePosition.includes(field.fieldID)) {
+          this.gameService.changeMonsterPositionInv(
+            this.playerID,
+            field.fieldID,
+            this.gameID
+          );
+          const index = this.listOfFiledThatYouCanChangePosition.findIndex(
+            (item) => item === field.fieldID
+          );
+          this.listOfFiledThatYouCanChangePosition.splice(index, 1);
+          this.cardActivated = false;
         }
       }
     }
@@ -601,7 +631,7 @@ export class GameComponent implements OnInit, OnDestroy {
     var counter = this.checkNumberOfMonstersOnField(
       this.enemiesField.cardFields
     );
-    field.cardShowen=true;
+    field.cardShowen = true;
     //klikcemo na spellTrap polje tj napadamo direktno
     if (counter == 0 && field.fieldIndex > 5) {
       canYouAttackThisField = true;
@@ -805,7 +835,7 @@ export class GameComponent implements OnInit, OnDestroy {
     }
   }
   ngOnDestroy(): void {
-    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
     this.signalrService.hubConnection.off('GetYourField');
     this.signalrService.hubConnection.off('GetEnemiesField');
     this.signalrService.hubConnection.off('WinnerMessage');
