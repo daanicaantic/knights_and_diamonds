@@ -1,0 +1,61 @@
+body, h1, h2, .text404 {
+    font-family: 'Roboto', sans-serif;
+}
+
+.background {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-size: 100% 100%;
+    width: 100%;
+    background-color: #b8c0c2;
+}
+
+.image404 {
+    width: 492px;
+    height: 614px;
+    margin-right: 5rem;
+    margin-top: 20px;
+}
+
+.text404 {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 1;
+    color: #09212a;
+}
+
+.label404 {
+    margin-bottom: 2rem;
+    font-size: 60px;
+    font-weight: 900;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.labelText {
+    margin-bottom: 5rem;
+    font-size: 28px;
+    font-weight: 900;
+}
+
+.button404 {
+    font-size: 24px;
+    font-weight: 500;
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(to right, #ada027, #18414f);
+    padding: 10px;
+    text-align: center;
+    color: white;            
+    border-radius: 10px;
+    border: 2px solid rgb(69, 69, 69);
+    display: block;
+    cursor: pointer;
+    align-self: baseline;
+}
+
+.button404:hover{
+    color: #09212a;
+    transition: 0.3 ease 0s;
+}
