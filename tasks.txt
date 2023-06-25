@@ -1,6 +1,0 @@
--napraviti add card front
--loading screen zimi zami zum
--zimi zami zum popratiti
--proveriti da li username vec postoji prilikom registracije
--proveriti zasto ne radi provera da li postoji karta sa datim imenom
--dodati da jedan img/path moze da ima samo jedna karta

@@ -45,7 +45,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("TurnID");
 
-                    b.ToTable("AttackInTurns");
+                    b.ToTable("AttackInTurns", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.Card", b =>
@@ -78,7 +78,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("EffectID");
 
-                    b.ToTable("Cards");
+                    b.ToTable("Cards", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Card");
                 });
@@ -115,7 +115,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("PlayerID");
 
-                    b.ToTable("CardFields");
+                    b.ToTable("CardFields", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.CardInDeck", b =>
@@ -153,7 +153,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("PlayersHandID");
 
-                    b.ToTable("CardInDecks");
+                    b.ToTable("CardInDecks", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.CardType", b =>
@@ -172,7 +172,7 @@ namespace DAL.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("CardTypes");
+                    b.ToTable("CardTypes", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.Deck", b =>
@@ -190,7 +190,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Decks");
+                    b.ToTable("Decks", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.Effect", b =>
@@ -217,7 +217,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("EffectTypeID");
 
-                    b.ToTable("Effects");
+                    b.ToTable("Effects", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.EffectType", b =>
@@ -234,7 +234,7 @@ namespace DAL.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("EffectTypes");
+                    b.ToTable("EffectTypes", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.Game", b =>
@@ -264,7 +264,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("GraveID");
 
-                    b.ToTable("Games");
+                    b.ToTable("Games", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.Grave", b =>
@@ -277,7 +277,7 @@ namespace DAL.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Graves");
+                    b.ToTable("Graves", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.Player", b =>
@@ -319,7 +319,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Players");
+                    b.ToTable("Players", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.PlayersHand", b =>
@@ -332,7 +332,7 @@ namespace DAL.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("PlayerHands");
+                    b.ToTable("PlayerHands", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.RockPaperScissorsGame", b =>
@@ -348,7 +348,7 @@ namespace DAL.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("RockPaperScissorsGames");
+                    b.ToTable("RockPaperScissorsGames", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.Turn", b =>
@@ -381,7 +381,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("GameID");
 
-                    b.ToTable("Turns");
+                    b.ToTable("Turns", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.User", b =>
@@ -415,7 +415,7 @@ namespace DAL.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.MonsterCard", b =>

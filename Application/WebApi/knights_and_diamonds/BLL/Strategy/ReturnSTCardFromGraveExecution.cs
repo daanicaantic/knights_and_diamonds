@@ -29,7 +29,6 @@ namespace BLL.Strategy
         }
 
 		public ChooseCardsFrom SelectCardsFrom()
-
 		{
 			Console.WriteLine("Grave ST Card");
             return ChooseCardsFrom.GraveSTCard;
@@ -55,11 +54,11 @@ namespace BLL.Strategy
 
             foreach (var cardID in listOfCardIDs)
             {
-                var card = await this._unitOfWork.Card.GetCard(cardID);
+          /*      var card = await this._unitOfWork.Card.GetCard(cardID);
                 if(card.CardType.Type == "MonsterCard")
                 {
                     throw new Exception("You can't return Monster card with this card.");
-                }
+                }*/
                 await this._playerService.TakeCardFromGraveToHand(grave, playerID, cardID);
             }
 

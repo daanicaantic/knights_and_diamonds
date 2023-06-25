@@ -17,6 +17,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   user: any;
   playerProfile: Boolean = false;
   isLogged: Boolean = false;
+  winsAndLosesCount: any;
 
   constructor(
     public authService: AuthService,
@@ -37,6 +38,8 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     if (this.id == this.authService?.userValue?.id && this.authService?.userValue?.role == 'Player') {
       this.isLogged = true
     }
+
+    this.getWinsAndLoses();
   }
 
   getUser(userID: number) {
@@ -64,6 +67,20 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         },
         error: err => {
           console.log(err.error.text);
+        }
+      })
+    );
+  }
+
+  getWinsAndLoses() {
+    this.subscriptions.push(
+      this.userService.getWinsAndLoses(this.id).subscribe({
+        next: (res: any) => {
+          this.winsAndLosesCount = res;
+          console.log("get wins and loses", this.winsAndLosesCount)
+        },
+        error: err => {
+          console.log('neuspesno get wins and loses', err.error.text);
         }
       })
     );

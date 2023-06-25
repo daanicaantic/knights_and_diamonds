@@ -96,10 +96,14 @@ export class MenubarComponent implements OnInit, OnDestroy {
     this.isItShowen=false;
   }
 
+  onCreateCard() {
+    this.router.navigate(['/card-create']);
+    this.isItShowen=false;
+  }
+
   onProfile() {
     this.router.navigate(['/profil', this.authService.userValue?.id]);
     this.isItShowen=false;
-
   }
 
   onLogout() {

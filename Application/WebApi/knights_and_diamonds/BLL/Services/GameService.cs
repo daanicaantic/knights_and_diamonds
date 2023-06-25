@@ -6,11 +6,14 @@ using DAL.DTOs;
 using DAL.Migrations;
 using DAL.Models;
 using DAL.UnitOfWork;
+using Microsoft.AspNetCore.Server.IIS.Core;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Numerics;
+using System.Reflection;
 using System.Runtime.Intrinsics.X86;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Principal;
@@ -18,6 +21,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static BLL.Services.Contracts.IGameService;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace BLL.Services
 {
@@ -578,8 +582,26 @@ namespace BLL.Services
 			this._unitOfWork.Game.Update(game);
             await this._unitOfWork.Complete();
 			return winner;
-
 		}
 
-	}
+        public async Task<object> GetGrave(int gameID, string type, int pageSize, int pageNumber)
+        {
+            var graveDatas = await this._unitOfWork.Grave.GetGraveByType(gameID, type, pageSize, pageNumber);
+            if (graveDatas.TotalItems > 0)
+            {
+                var mappedCards= await this._cardService.MapCards(graveDatas.Cards);
+                var result = new
+                {
+                    cards = mappedCards,
+                    pageSize = graveDatas.PageSize,
+                    pageNumber = graveDatas.PageNumber,
+                    totalPages = graveDatas.TotalPages,
+                    totalItems = graveDatas.TotalItems
+                };
+                return result;
+            }
+            return graveDatas;
+        }
+
+    }
 }

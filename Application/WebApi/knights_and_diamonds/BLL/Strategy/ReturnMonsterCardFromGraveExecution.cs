@@ -2,6 +2,7 @@
 using BLL.Services.Contracts;
 using BLL.Strategy.Context;
 using DAL.DataContext;
+using DAL.Migrations;
 using DAL.Models;
 using DAL.UnitOfWork;
 using System;
@@ -32,7 +33,7 @@ namespace BLL.Strategy
 
 		{
 			Console.WriteLine("Grave Monster Card");
-            return ChooseCardsFrom.GraveMonsterCard;
+			return ChooseCardsFrom.GraveMonsterCard;
 		}
 
 		public async Task ExecuteEffect(List<int> listOfCardIDs, Effect effect, int playerID, int gameID, int fieldID)
@@ -40,12 +41,6 @@ namespace BLL.Strategy
 			if (effect.NumOfCardsAffected != listOfCardIDs.Count)
 			{
 				throw new Exception("You didn't select enough cards.");
-			}
-
-			var listOfPlayersField = await this._unitOfWork.CardField.GetEmptyPlayerFields(playerID, "MonsterField");
-			if (listOfPlayersField.Count < listOfCardIDs.Count)
-			{
-				throw new Exception("Player doesn't have enough empty fields.");
 			}
 
 			var grave = await this._unitOfWork.Grave.GetGraveByGameID(gameID);
@@ -59,24 +54,47 @@ namespace BLL.Strategy
 				throw new Exception("Grave doesn't have enough cards for card effect.");
 			}
 
-            int counter = 0; 
-
-            foreach (var cardID in listOfCardIDs)
+			if(effect.EffectType.Type== "returnMonsterFromGraveToField")
 			{
-				var emptyField = listOfPlayersField[counter];
-				counter++;
-				var card = await this._unitOfWork.Card.GetCard(cardID);
-				if (card.CardType.Type == "SpellCard" || card.CardType.Type == "TrapCard")
-                {
-                    throw new Exception("You can't return Spell or Trap card with this card.");
-                }
-                this._playerService.TakeCardFromGraveToField(grave, emptyField, cardID);
-            }
+				await this.ReturnToField(listOfCardIDs, grave, playerID);
+			}
+			else if(effect.EffectType.Type == "returnMonsterFromGraveToHand")
+			{
+                await this.ReturnToHand(listOfCardIDs, grave, playerID);
 
-			await _gameService.RemoveCardFromFieldToGrave(fieldID, gameID, playerID);
+            }
+            await _gameService.RemoveCardFromFieldToGrave(fieldID, gameID, playerID);
 		}
 
-		public string WhenCanYouActivateTrapCard()
+		public async Task ReturnToHand(List<int> listOfCardIDs, Grave grave, int playerID)
+		{
+            int counter = 0;
+
+            foreach (var cardID in listOfCardIDs)
+            {
+                counter++;
+                await this._playerService.TakeCardFromGraveToHand(grave, playerID, cardID);
+            }
+        }
+
+		public async Task ReturnToField(List<int> listOfCardIDs, Grave grave, int playerID)
+		{
+            var listOfPlayersField = await this._unitOfWork.CardField.GetEmptyPlayerFields(playerID, "MonsterField");
+            if (listOfPlayersField.Count < listOfCardIDs.Count)
+            {
+                throw new Exception("Player doesn't have enough empty fields.");
+            }
+
+            int counter = 0;
+
+            foreach (var cardID in listOfCardIDs)
+            {
+                var emptyField = listOfPlayersField[counter];
+                counter++;
+                this._playerService.TakeCardFromGraveToField(grave, emptyField, cardID);
+            }
+        }
+        public string WhenCanYouActivateTrapCard()
 		{
 			throw new NotImplementedException();
 		}

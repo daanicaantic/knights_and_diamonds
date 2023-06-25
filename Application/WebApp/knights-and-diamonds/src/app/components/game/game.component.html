@@ -68,27 +68,23 @@
 
                             </div>
                         </div>
-                        <div class="cards-in-grave">
-
-                            <div class="click" *ngIf="grave.graveCount>0">
-                                <p>Back</p>
+                        <div class="grave-display" *ngIf="isGraveShown">
+                            <div *ngIf="isExitGraveShown" class="exit-grave-display">
+                                <div  class="exit-grave-div" (click)="exitGrave()"></div>
                             </div>
-                            <div class="small-card" style="margin: 10px;background-color:white;">
-                                <app-card [card]="mediumCard" [isCardShowen]="true"></app-card>
+                            <div class="cards-in-grave">
+                                <ng-container *ngFor="let card of this.graveStats?.cards">
+                                    <div class="small-card" style="margin: 10px">
+                                        <app-card [card]="card" [isCardShowen]="true"  (mouseover)="this.mediumCard=card" (click)="onGraveCardClick(card)"></app-card>
+                                    </div>
+                                </ng-container>
                             </div>
-                            <div class="small-card" style="margin: 10px;">
-                                <app-card [card]="mediumCard" [isCardShowen]="true"></app-card>
+                            <div class="grave-paginator">
+                                <p-paginator #paginator (onPageChange)="onPageChanged($event)"
+                                    [style]="{'background-color': 'transparent' ,'color': 'white'}" styleClass="pag" [first]="0"
+                                    [rows]="this.graveStats.pageSize" [showPageLinks]="false" [totalRecords]="this.graveStats.totalItems">
+                                </p-paginator>
                             </div>
-                            <div class="small-card" style="margin: 10px;">
-                                <app-card [card]="mediumCard" [isCardShowen]="true"></app-card>
-                            </div>
-                            <div class="small-card" style="margin: 10px;">
-                                <app-card [card]="mediumCard" [isCardShowen]="true"></app-card>
-                            </div>
-                            <div class="small-card" style="margin: 10px;">
-                                <app-card [card]="mediumCard" [isCardShowen]="true"></app-card>
-                            </div>
-                            <div class="click" *ngIf="grave.graveCount>5"> Next </div>
                         </div>
                         <div class="discard-card-from-hand"
                             *ngIf="this.isPhaseMassageOver==true && this.playerHand.length >=7 ">
@@ -171,7 +167,7 @@
                         <div class="grave">
                             <div class="deck graveBG">
                                 <app-card [card]="grave.lastCard" *ngIf="grave.graveCount>0" style="font-size: 3px;"
-                                    (mouseover)="this.mediumCard=grave.lastCard; this.iscardshowen=true"></app-card>
+                                    (mouseover)="this.mediumCard=grave.lastCard; this.iscardshowen=true" (click)="onGraveClick()"></app-card>
                             </div>
                             <h3 style="color:black;text-align: center;">{{grave.graveCount}}</h3>
                         </div>

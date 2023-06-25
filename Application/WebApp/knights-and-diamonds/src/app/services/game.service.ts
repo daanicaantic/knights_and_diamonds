@@ -221,4 +221,15 @@ export class GameService {
       {}
     );
   }
+
+  getGraveByType(
+    gameID: any,
+    typeFilter: any,
+    pageNumber: any,
+    pageSize: any
+    ) {
+    return this.httpClient.get(
+      `https://localhost:7250/Game/GetGraveByType?gameID=${gameID}&typeFilter=${typeFilter}&pageNumber=${pageNumber}&pageSize=${pageSize}`
+    );
+  }
 }

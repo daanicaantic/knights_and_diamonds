@@ -196,6 +196,9 @@ namespace BLL.Services
             }
 
             cardField.CardOnField = chosenCard;
+            cardField.CardPosition = true;
+            cardField.CardPosition = true;
+
             grave.ListOfCardsInGrave.Remove(chosenCard);
 
             this._unitOfWork.CardField.Update(cardField);

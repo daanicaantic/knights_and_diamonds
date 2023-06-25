@@ -15,7 +15,7 @@ namespace DAL.Repositories
 		public CardFieldRepository(KnightsAndDiamondsContext context) : base(context)
 		{
 		}
-		public KnightsAndDiamondsContext Context
+		public KnightsAndDiamondsContext? Context
 		{
 			get { return _context as KnightsAndDiamondsContext; }
 		}

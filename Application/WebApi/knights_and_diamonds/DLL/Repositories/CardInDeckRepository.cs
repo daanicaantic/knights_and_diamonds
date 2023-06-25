@@ -15,7 +15,7 @@ namespace DAL.Repositories
 		public CardInDeckRepository(KnightsAndDiamondsContext context) : base(context)
 		{
 		}
-		public KnightsAndDiamondsContext Context
+		public KnightsAndDiamondsContext? Context
 		{
 			get { return _context as KnightsAndDiamondsContext; }
 		}

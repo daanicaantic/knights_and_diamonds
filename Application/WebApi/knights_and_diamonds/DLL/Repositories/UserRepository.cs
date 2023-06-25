@@ -11,19 +11,21 @@ namespace DAL.Repositories
         {
 
         }
-        public KnightsAndDiamondsContext Context
+        public KnightsAndDiamondsContext? Context
         {
             get { return _context as KnightsAndDiamondsContext; }
         }
 
         public async Task<User> GetUserByEmail(string email)
         {
+            #pragma warning disable
             var user = await this.Context.Users?.Where(x => x.Email == email).FirstOrDefaultAsync();
 			return user;
         }
 
         public async Task<User> GetUserByUsername(string username)
         {
+            #pragma warning disable
             var user = await this.Context.Users?.Where(x => x.UserName == username).FirstOrDefaultAsync();
             return user;
         }

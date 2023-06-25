@@ -16,7 +16,7 @@ namespace DAL.Repositories
 		{
 
 		}
-		public KnightsAndDiamondsContext Context
+		public KnightsAndDiamondsContext? Context
 		{
 			get { return _context as KnightsAndDiamondsContext; }
 		}

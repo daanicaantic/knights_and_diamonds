@@ -41,6 +41,7 @@
                                 <div class="page" (click)="onHome()">Home</div>
                                 <div class="page" (click)="onRules()">Rules</div>
                                 <div class="page" (click)="onCards()">Cards</div>
+                                <div class="page" *ngIf="this.authService?.userValue?.role=='Admin'" (click)="onCreateCard()">Create</div>
                         </div>
                 </div>
                 <div class="buttons" *ngIf="pom==false">

@@ -41,6 +41,6 @@ namespace BLL.Services.Contracts
 		Task<AffterPlaySpellTrapCardData> ActiveTrapCard(int gameID, int playerID, int fieldID);
 		Task<int> SetWinner(int playerID, int gameID);
 		Task ChangeMonsterPosition(int playerID, int fieldID, int gameID);
-
+		Task<object> GetGrave(int gameID, string type, int pageSize, int pageNumber);
     }
 }

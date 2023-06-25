@@ -21,6 +21,11 @@ export class UserService {
   }
 
   getUser(userID: number): Observable<User[]> {
-    return this.httpClient.get<User[]>(`https://localhost:7250/User/GetUser?id=${userID}`)
+    return this.httpClient.get<User[]>(`https://localhost:7250/User/GetUser?id=${userID}`);
   }
+
+  getWinsAndLoses(userID: any) {
+    return this.httpClient.get(`https://localhost:7250/User/WinsAndLosesCount/` + `${userID}`);
+  }
+
 }

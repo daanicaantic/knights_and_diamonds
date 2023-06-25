@@ -6,7 +6,9 @@ using DAL.DesignPatterns.Factory;
 using DAL.DesignPatterns.Factory.Contract;
 using DAL.DTOs;
 using DAL.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 #pragma warning disable
 namespace knights_and_diamonds.Controllers
 {
@@ -30,8 +32,8 @@ namespace knights_and_diamonds.Controllers
 			_effService = new EffectService(this._context);
 		}
 
-
-		[Route("AddCard")]
+        [Authorize(Roles = "Admin")]
+        [Route("AddCard")]
 		[HttpPost]
 		public async Task<IActionResult> AddCard(CardDTO card)
 		{
@@ -88,7 +90,8 @@ namespace knights_and_diamonds.Controllers
 			}
 		}
 
-		[Route("DeleteCard/{cardID}")]
+        [Authorize(Roles = "Admin")]
+        [Route("DeleteCard/{cardID}")]
 		[HttpDelete]
 		public async Task<IActionResult> DeleteCard(int cardID)
 		{
@@ -104,7 +107,8 @@ namespace knights_and_diamonds.Controllers
 			}
 		}
 
-		[Route("UpdateCard")]
+        [Authorize(Roles = "Admin")]
+        [Route("UpdateCard")]
 		[HttpPut]
 		public async Task<IActionResult> UpdateCard([FromBody] UpdateCardDTO card)
 		{
@@ -126,7 +130,8 @@ namespace knights_and_diamonds.Controllers
 			}
 		}
 
-		[Route("AddCardType")]
+        [Authorize(Roles = "Admin")]
+        [Route("AddCardType")]
 		[HttpPost]
 		public async Task<IActionResult> AddCardType([FromBody] CardType type)
 		{

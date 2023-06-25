@@ -15,7 +15,7 @@ namespace DAL.Repositories
 		public AttackInTurnsRepository(KnightsAndDiamondsContext context) : base(context)
 		{
 		}
-		public KnightsAndDiamondsContext Context
+		public KnightsAndDiamondsContext? Context
 		{
 			get
 			{

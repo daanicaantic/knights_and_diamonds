@@ -202,5 +202,22 @@ namespace knights_and_diamonds.Controllers
 				return BadRequest(e.Message);
 			}
 		}
-	}
+
+        [Route("GetGraveByType")]
+        [HttpGet]
+        public async Task<IActionResult> GetGraveByType(int gameID, string? typeFilter = "",int pageNumber = 1, int pageSize = 10)
+        {
+            try
+            {
+				#pragma warning disable
+                var graveStats = await this._gameservice.GetGrave(gameID,typeFilter,pageSize,pageNumber);
+                return Ok(graveStats);
+
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+    }
 }

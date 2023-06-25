@@ -25,14 +25,14 @@
                     <p style="margin-bottom: 1rem;">Analytics</p>
                     <hr>
                 </div>
-                <div class="analytics-div">
+                <div class="analytics-div" *ngIf="winsAndLosesCount != undefined">
                     <span class="info-span">
                         <p class="text-info">Games won</p>
-                        <label class="info-labels">25</label>
+                        <label class="info-labels">{{winsAndLosesCount.winsCount}}</label>
                     </span>
                     <span class="info-span">
                         <p class="text-info">Games lost</p>
-                        <label class="info-labels">25</label>
+                        <label class="info-labels">{{winsAndLosesCount.losesCount}}</label>
                     </span>
                 </div>
                 <br>

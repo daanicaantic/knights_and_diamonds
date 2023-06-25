@@ -307,14 +307,6 @@ p {
     padding: 0.5%;
 }
 
-.spell-table {
-    /* background-color: #3b4f4e ; */
-}
-
-.monster-table {
-    /* background-color: #3b4f4e; */
-}
-
 .card-place-spell, .card-place-monster {
     /* background-color: antiquewhite; */
     border: 1px solid black;
@@ -327,15 +319,6 @@ p {
     margin-left: 0.3%;
     margin-right: 0.3%;
     background-image: repeating-linear-gradient(36deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 1px, transparent 0px, transparent 2px);
-}
-
-.card-place-spell {
-    /* background-color: #7ea7c1; */
-}
-
-.card-place-monster {
-    /* background-color: #f0ab7e; */
-    /* background-color: #e0c269; */
 }
 
 .card-points {
@@ -402,6 +385,13 @@ p {
     padding: 10px;
 }
 .cards-in-grave{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+}
+.grave-display {
+    min-width: 40%;
     position: absolute;
     z-index: 1;
     border: 5px solid #17120c;
@@ -411,11 +401,26 @@ p {
     background-position: center;
     background-repeat: repeat;
     align-items: center;
-    display: none;
+    display: flex;
+    flex-direction: column;
     justify-content: space-evenly;
     box-shadow:0px 0px 40px black;
-
 }
+.exit-grave-display {
+    /* background-color: red; */
+    width: 100%;
+    height: 30px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.grave-paginator{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
 .card-summoning-position-container{
     width: 100%;
     height: 50%;
@@ -446,6 +451,13 @@ p {
     top: 0;
     right: 0;
     border-radius: 5%;
+    background-size: 100% 100%;
+    background-image: url("https://localhost:7250/Resources/Images/cancel.png");
+    cursor: pointer;
+}
+.exit-grave-div{
+    height: 100%;
+    aspect-ratio: 1;
     background-size: 100% 100%;
     background-image: url("https://localhost:7250/Resources/Images/cancel.png");
     cursor: pointer;
