@@ -87,9 +87,9 @@ export class GameComponent implements OnInit, OnDestroy {
   listOfFiledThatYouCanChangePosition: any[] = [];
   onCardOnFieldMouseOver: any;
   graveStats: any;
-  isGraveShown:any=false;
+  isGraveShown: any = false;
   curentFilter: any;
-  isExitGraveShown:any=true;
+  isExitGraveShown: any = true;
   constructor(
     public inGameService: IngameService,
     public gameService: GameService,
@@ -395,8 +395,7 @@ export class GameComponent implements OnInit, OnDestroy {
         card.cardType == 'MonsterCard' &&
         this.turnInfo.isMonsterSummoned == false &&
         this.curentPhase.name == 'MP' &&
-        this.areaOfClicking ==undefined
-
+        this.areaOfClicking == undefined
       ) {
         this.openSummoningMonsterWindow(card);
       }
@@ -404,8 +403,7 @@ export class GameComponent implements OnInit, OnDestroy {
         (card.cardType == 'SpellCard' || card.cardType == 'TrapCard') &&
         this.curentPhase.name == 'MP' &&
         this.isPlayerOnTurn &&
-        this.areaOfClicking ==undefined
-        
+        this.areaOfClicking == undefined
       ) {
         this.playSpellTrapCard(card.id, card.cardEffectID, card.cardType);
       }
@@ -516,7 +514,11 @@ export class GameComponent implements OnInit, OnDestroy {
       console.log(field);
       this.attackField(field);
     }
-    if (this.areaOfClicking != undefined && field.cardOnField != undefined) {
+    if (
+      this.areaOfClicking != undefined &&
+      field.cardOnField != undefined &&
+      field.cardOnField?.cardType == 'MonsterCard'
+    ) {
       console.log(this.areaOfClicking);
       if (this.areaOfClicking.areaOfClicking == 4) {
         this.gameService.executeEffectInv(
@@ -816,10 +818,10 @@ export class GameComponent implements OnInit, OnDestroy {
     });
   }
   chackAreaOfCliciking() {
-    var check=false;
+    var check = false;
     if (this.areaOfClicking.areaOfClicking == 5) {
       if (this.enemiesHand.length == 0) {
-        check=true;
+        check = true;
       }
     } else if (this.areaOfClicking.areaOfClicking == 4) {
       var monsterOnYourField = this.checkNumberOfMonstersOnField(
@@ -829,28 +831,31 @@ export class GameComponent implements OnInit, OnDestroy {
         this.enemiesField.cardFields
       );
       if (monsterOnYourField == 5 || monstersOnEnemies == 0) {
-        check=true;
+        check = true;
       }
     }
     //monster grave
-    else if(this.areaOfClicking.areaOfClicking == 2){
-      this.getGraveByType("MonsterCard",1);
+    else if (this.areaOfClicking.areaOfClicking == 2) {
+      this.getGraveByType('MonsterCard', 1);
     }
     //st grave
-    else if(this.areaOfClicking.areaOfClicking == 3){
-      this.getGraveByType("Card",1);
+    else if (this.areaOfClicking.areaOfClicking == 3) {
+      this.getGraveByType('Card', 1);
     }
-    if(check){
+    if (check) {
       this.gameService.removeCardFromFieldToGraveInv(
         this.areaOfClicking.fieldID,
         this.playerID,
         this.gameID
       );
-      this.areaOfClicking=undefined;
+      this.areaOfClicking = undefined;
     }
   }
-  onGraveCardClick(card:any){
-    if(this.areaOfClicking.areaOfClicking == 3 || this.areaOfClicking.areaOfClicking == 2){
+  onGraveCardClick(card: any) {
+    if (
+      this.areaOfClicking.areaOfClicking == 3 ||
+      this.areaOfClicking.areaOfClicking == 2
+    ) {
       this.gameService.executeEffectInv(
         [card.id],
         this.areaOfClicking.fieldID,
@@ -858,50 +863,56 @@ export class GameComponent implements OnInit, OnDestroy {
         this.enemiesID,
         Number(this.gameID)
       );
-      this.isGraveShown=false;
+      this.isGraveShown = false;
       this.areaOfClicking = undefined;
     }
   }
-  getGraveByType(typeFilter: any, pageNumber:any ) {
-    this.curentFilter=typeFilter;
-    this.isExitGraveShown=true;
+  getGraveByType(typeFilter: any, pageNumber: any) {
+    this.curentFilter = typeFilter;
     this.subscriptions.push(
-      this.gameService.getGraveByType(this.gameID, typeFilter, pageNumber, 5).subscribe({
-        next: (res: any) => {
-          this.graveStats = res;
-          if(this.areaOfClicking?.areaOfClicking == 3 || this.areaOfClicking?.areaOfClicking == 2){
-            if(this.graveStats.totalItems==0){
+      this.gameService
+        .getGraveByType(this.gameID, typeFilter, pageNumber, 5)
+        .subscribe({
+          next: (res: any) => {
+            this.graveStats = res;
+            if (
+              this.areaOfClicking?.areaOfClicking == 3 ||
+              this.areaOfClicking?.areaOfClicking == 2
+            ) {
+              if (this.graveStats.totalItems == 0) {
                 this.gameService.removeCardFromFieldToGraveInv(
-                this.areaOfClicking.fieldID,
-                this.playerID,
-                this.gameID
-              );
-              this.areaOfClicking=undefined;
+                  this.areaOfClicking.fieldID,
+                  this.playerID,
+                  this.gameID
+                );
+                this.areaOfClicking = undefined;
+              }
+              this.isExitGraveShown = false;
+            } else {
+              this.isExitGraveShown = true;
             }
-            this.isExitGraveShown=false;
-          }
-          console.log(res);
-          if(this.graveStats.totalItems>0){
-          this.isGraveShown=true;
-          }
-        },
-        error: (err) => {
-          console.log(err.error);
-        },
-      })
+            console.log(res);
+            if (this.graveStats.totalItems > 0) {
+              this.isGraveShown = true;
+            }
+          },
+          error: (err) => {
+            console.log(err.error);
+          },
+        })
     );
   }
-  onGraveClick(){
-    console.log("baebae")
-    this.getGraveByType('',1);
+  onGraveClick() {
+    console.log('baebae');
+    this.getGraveByType('', 1);
   }
-  exitGrave(){
-    this.isGraveShown=false;
+  exitGrave() {
+    this.isGraveShown = false;
   }
-  onPageChanged(event:any){
+  onPageChanged(event: any) {
     const nextPageIndex = event.page + 1;
     event.page = 0;
-    this.getGraveByType(this.curentFilter,nextPageIndex);
+    this.getGraveByType(this.curentFilter, nextPageIndex);
   }
   ngOnDestroy(): void {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
@@ -916,7 +927,9 @@ export class GameComponent implements OnInit, OnDestroy {
     this.signalrService.hubConnection.off('GetFieldsAbleToAttack');
     this.signalrService.hubConnection.off('GetFieldsIncludedInAttack');
     this.signalrService.hubConnection.off('FieldsThatLostPoints');
-    this.signalrService.hubConnection.off('EnemiseFieldsThatCanActivateTrapCard');
+    this.signalrService.hubConnection.off(
+      'EnemiseFieldsThatCanActivateTrapCard'
+    );
     this.signalrService.hubConnection.off('GetLastSummonedEnemiesMonster');
     this.signalrService.hubConnection.off('DidTrapEffectExecuted');
   }

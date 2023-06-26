@@ -10,7 +10,7 @@
         </div>
         <div class="deck-stats">
             <ng-container *ngIf="stats!=undefined">
-            <div class="deck-data-row">
+                <div class="deck-data-row">
                     <div class="deck-data number-of-spell-cards">
                         <h3>S - {{stats.spellCardsCount}}</h3>
                     </div>
@@ -23,7 +23,8 @@
                 </div>
 
                 <div class="deck-data-row">
-                    <div class="deck-data exit-deck" (click)="goToHome()"><i class="pi pi-arrow-circle-left" style="cursor:pointer;font-size: 1.5rem;"></i>
+                    <div class="deck-data exit-deck" (click)="goToHome()"><i class="pi pi-arrow-circle-left"
+                            style="cursor:pointer;font-size: 1.5rem;"></i>
                     </div>
                     <div class="deck-data total-number-of-cards">
                         <h2>{{stats.allCardsCount}}</h2>
@@ -79,7 +80,7 @@
                     </ng-container>
                 </div>
             </ng-container>
-            <ng-container *ngIf="this.user.role=='Admin' && this.deckID==undefined">
+            <ng-container *ngIf="this.user?.role=='Admin' && this.deckID==undefined">
                 <div class="card-form-container">
                     <div class="update-form" [formGroup]="changeCardForm">
                         <div class="form-field card-edit">

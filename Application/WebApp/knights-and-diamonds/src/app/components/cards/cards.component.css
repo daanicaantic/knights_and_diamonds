@@ -152,6 +152,7 @@ app-card{
 }
 
 .data-field{
+    height: 40px;
     width: 100%;
 }
 .list-of-cards{

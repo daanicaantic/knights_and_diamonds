@@ -17,7 +17,7 @@ p, label{
     width: 100%;
     background-position: top;
     background-attachment: fixed;
-    
+    padding-top: 90px;
 }
 
 .user-profile-full {

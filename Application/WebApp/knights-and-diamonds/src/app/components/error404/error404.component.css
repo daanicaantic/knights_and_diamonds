@@ -14,9 +14,9 @@ body, h1, h2, .text404 {
 
 .image404 {
     width: 492px;
-    height: 614px;
+    height: 100%;
     margin-right: 5rem;
-    margin-top: 20px;
+    /* margin-top: 20px; */
 }
 
 .text404 {

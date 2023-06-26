@@ -183,6 +183,7 @@ p {
 }
 .enemies-hand,
 .players-hand{
+    min-height: 40px;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -358,7 +359,6 @@ p {
     text-align: center;
 }
 .card-summoning{
-    animation: summon-card-show-dialog 1.5s linear forwards;
     right: 30%;
     left: 30%;
     top: 25%;
