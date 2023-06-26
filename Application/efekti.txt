@@ -1,0 +1,20 @@
+efekti karata
+
+cudovista:
+	-unistava kartu cudovista nakon sto bude unistena
+	-unistava kartu zamke nakon sto bude unistena
+	-poziva cudoviste iz spila nakon sto bude unistena
+	-dodaje ostalim cudovistima istog tipa bodove za napad i odbranu
+	-moze da napadne 2 puta
+	-moze da napadne direktno protivnika
+zamke:
+	-unistava cudoviste nakon sto ono bude pozvano
+	-unistava jedno ili vise cudovista nakon napada
+	-unistava spel trapkartu
+spell:
+	-vraca cudoviste sa groblja
+	-dodaje poene za napad cudovistu
+	-dodaje zivotne poene igracu
+	-smanjuje poene protivniku
+	
+23karaktera za naslov
