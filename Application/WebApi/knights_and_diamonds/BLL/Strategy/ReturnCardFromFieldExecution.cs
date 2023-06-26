@@ -31,13 +31,13 @@ namespace BLL.Strategy
 			return ChooseCardsFrom.Field;
 		}
 
-		public async Task ExecuteEffect(List<int> listOfCards, Effect effect, int playerID, int gameID,int fieldI)
+		public async Task ExecuteEffect(List<int> listOfFields, Effect effect, int playerID, int gameID,int fieldI)
 		{
-			if (effect.NumOfCardsAffected != listOfCards.Count)
+			if (effect.NumOfCardsAffected != listOfFields.Count)
 			{
 				throw new Exception("You didnt sellect all cards");
 			}
-			foreach (var fieldID in listOfCards)
+			foreach (var fieldID in listOfFields)
 			{
 				var cardField = await this._unitOfWork.CardField.GetCardField(fieldID,playerID);
 				if (cardField == null)
