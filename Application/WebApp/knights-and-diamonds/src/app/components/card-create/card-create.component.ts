@@ -52,7 +52,7 @@ export class CardCreateComponent implements OnInit, OnDestroy {
       cardTypeID: '',
       numOfCardsAffected: 0,
       pointsAddedLost: 0,
-      effectTypeID: 10,
+      effectTypeID: 11,
       cardLevel: [
         0,
         [Validators.min(0), Validators.max(11), Validators.maxLength(2)],
